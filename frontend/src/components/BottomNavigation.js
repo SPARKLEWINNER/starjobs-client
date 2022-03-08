@@ -151,7 +151,7 @@ export default function SimpleBottomNavigation() {
                 className={classes.nav_item}
                 icon={<SearchIcon className={classes.icon} />}
                 component={Link}
-                to={`/client/search`}
+                to={`/gigs`}
               />
 
               <Box sx={{overflow: 'hidden'}}>

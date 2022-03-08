@@ -104,6 +104,7 @@ const UseRoutes = () => {
       path: 'gigs',
       element: <DashboardLayout />,
       children: [
+        {path: '/', element: <Gigs />},
         {path: '/:category', element: <Gigs />},
         {path: '/details/:id/:category', element: <GigDetails />},
         {path: '/edit/:id', element: <GigEdit />},

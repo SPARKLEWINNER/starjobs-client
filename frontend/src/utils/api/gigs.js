@@ -3,6 +3,8 @@ import storage from 'utils/storage'
 
 const get_gigs_categorized = (category) => request.get(`/gigs/list/${category}`)
 
+const get_gigs_no_category = () => request.get(`/gigs`)
+
 const patch_gigs_apply = (gig_id, form_data) => request.patch(`/gigs/apply/${gig_id}`, form_data)
 
 const get_gigs_history = async () => {
@@ -41,6 +43,7 @@ const patch_gig_details = (gig_id, user_id, form_data) => request.patch(`/gigs/e
 const remove_gig = (gig_id, user_id) => request.patch(`/gigs/remove/${gig_id}/${user_id}`, {status: 'Archived'})
 
 const exp_object = {
+  get_gigs_no_category,
   get_gigs_categorized,
   get_gigs_history,
   get_gigs_client,

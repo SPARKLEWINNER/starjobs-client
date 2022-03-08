@@ -224,7 +224,7 @@ const Dashboard = () => {
                   category.dynamic.map((v, k) => {
                     return (
                       v.status !== 1 && (
-                        <Grid item xs={6} sx={{textAlign: 'center', justifyContent: 'center'}} key={k}>
+                        <Grid item xs={6} sx={{textAlign: 'center', justifyContent: 'center', my: 1}} key={k}>
                           <Link
                             underline="none"
                             key={k}
@@ -240,7 +240,7 @@ const Dashboard = () => {
                                 height: 55,
                                 width: 55,
                                 mx: 'auto',
-                                my: 1,
+                                my: 2,
                                 borderRadius: 30,
                                 backgroundColor: 'primary.main',
                                 objectFit: 'cover',

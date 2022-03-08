@@ -29,7 +29,14 @@ export default function ClientTab({category}) {
   const [openFilterDialog, setOpenFilterDialog] = useState(false)
 
   const load = async () => {
-    const result = await gigs_api.get_gigs_categorized(category)
+    let result = ''
+
+    if (category) {
+      result = await gigs_api.get_gigs_categorized(category)
+    } else {
+      result = await gigs_api.get_gigs_no_category()
+    }
+
     if (!result.ok) {
       return
     }

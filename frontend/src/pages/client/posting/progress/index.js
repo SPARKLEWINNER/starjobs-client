@@ -138,8 +138,9 @@ const Dashboard = () => {
   }
 
   return (
-    <Page title="Client Dashboard |  Starjobs">
-      <MainStyle sx={{paddingLeft: {xs: 3}, paddingRight: {xs: 3}, justifyContent: 'flex-start'}}>
+    <>
+      {/* <Page title="Client Dashboard |  Starjobs"> */}
+      <MainStyle sx={{my: 4, justifyContent: 'flex-start'}}>
         <TabStyle>
           <ClientTab gigs={gigs} user={current_user} key="ClientTab" />
 
@@ -159,7 +160,8 @@ const Dashboard = () => {
           />
         </TabStyle>
       </MainStyle>
-    </Page>
+      {/*  </Page> */}
+    </>
   )
 }
 

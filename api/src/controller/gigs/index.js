@@ -18,17 +18,24 @@ const {BUCKET_URL} = process.env;
 var controllers = {
     // list of gigs
     get_gigs: async function (req, res) {
-        let gigs;
-
+        let gigs = [];
         try {
-            gigs = await Gigs.find({status: ['Waiting', 'Applying']})
+            let initial_find = await Gigs.find({
+                status: ['Waiting', 'Applying']
+            })
                 .lean()
                 .exec();
+
+            gigs = initial_find.filter((obj) => {
+                return !moment(obj.time).isBefore(moment(), 'day');
+            });
+
+            if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'});
         } catch (error) {
             console.error(error);
-            await logger.logError(error, 'Gigs.get_gigs', null, null, 'GET');
 
-            return res.status(502).json({success: false, msg: 'User not found'});
+            await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET');
+            return res.status(502).json({success: false, msg: 'Gigs not found'});
         }
 
         return res.status(200).json(gigs);

@@ -34,7 +34,6 @@ import JobsterHistoryDetails from './pages/jobster/history/details'
 
 // client
 import ClientHome from './pages/client/home'
-import ClientDashboard from './pages/client/dashboard'
 import ClientOnboard from './pages/client/onboard'
 import ClientOnboardSuccess from './pages/client/onboard/success'
 import ClientCreateGig from './pages/client/posting'
@@ -85,7 +84,6 @@ const UseRoutes = () => {
       children: [
         {path: '/', element: <Navigate to="/client/app" replace />},
         {path: '/app', element: <ClientHome />},
-        {path: '/app/gigs', element: <ClientDashboard />},
         {path: '/onboard', element: <ClientOnboard />},
         {path: '/onboard/success', element: <ClientOnboardSuccess />},
         {path: '/profile', element: <ClientProfile />},
@@ -104,6 +102,7 @@ const UseRoutes = () => {
       path: 'gigs',
       element: <DashboardLayout />,
       children: [
+        {path: '/', element: <Gigs />},
         {path: '/:category', element: <Gigs />},
         {path: '/details/:id/:category', element: <GigDetails />},
         {path: '/edit/:id', element: <GigEdit />},

@@ -1,0 +1,21 @@
+import {Link as RouterLink} from 'react-router-dom'
+import {Stack, Typography, Box} from '@material-ui/core'
+
+export default function VerifiedWelcome() {
+  return (
+    <Stack sx={{mb: 5, backgroundColor: 'starjobs.main'}}>
+      <Box sx={{display: 'flex', justifyContent: 'center', mb: 1}}>
+        <RouterLink to="/">
+          <Box component="img" src="/static/illustrations/verified.png" sx={{width: '100%', objectFit: 'contain'}} />
+        </RouterLink>
+      </Box>
+
+      <Box sx={{textAlign: 'center'}}>
+        <Typography variant="h4" color="common.white" gutterBottom>
+          Awesome! Registration is Verified
+        </Typography>
+        <Typography color="common.white">Let's setup your settings, Click the Next button.</Typography>
+      </Box>
+    </Stack>
+  )
+}

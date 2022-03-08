@@ -1,0 +1,210 @@
+import {useState, useEffect} from 'react'
+// material
+import {Box, Paper, Button, Avatar, Typography} from '@material-ui/core'
+import {LoadingButton} from '@material-ui/lab'
+import {useSnackbar} from 'notistack5'
+
+// component form
+import PersonalForm from 'components/clientOnboard/form/personalForm'
+import ContactForm from 'components/clientOnboard/form/contactForm'
+import IndustryForm from 'components/clientOnboard/form/industryForm'
+import RateForm from 'components/clientOnboard/form/rateForm'
+import ProfileForm from 'components/clientOnboard/form/profileForm'
+
+// hooks
+import storage from 'utils/storage'
+import onboard_api from 'utils/api/onboard'
+import {useNavigate} from 'react-router-dom'
+
+const image_bucket = process.env.REACT_APP_IMAGE_URL
+const steps = ['Personal Information', 'Company Contacts', 'Industry', 'Rate & Payment', 'Company Logo & Permits']
+
+export default function ClientOnboardForm() {
+  const {enqueueSnackbar} = useSnackbar()
+  const navigate = useNavigate()
+  const [activeStep, setActiveStep] = useState(0)
+  const [skipped, setSkipped] = useState(new Set())
+  const [user, setUser] = useState([])
+  const [isLoading, setLoading] = useState(false)
+  const [form, setForm] = useState({
+    personal: [],
+    contact: [],
+    industry: [],
+    rate: [],
+    photo: '',
+    documents: '',
+  })
+
+  useEffect(() => {
+    const load = async () => {
+      const local_user = await storage.getUser()
+      if (!local_user) {
+        return
+      }
+
+      const user = JSON.parse(local_user)
+      if (!user) {
+        return setLoading(false)
+      }
+
+      Object.keys(form).forEach((val) => {
+        if (localStorage.getItem(val)) {
+          let set_data = []
+          set_data[val] = JSON.parse(localStorage.getItem(val))
+          setForm((prev_state) => ({...prev_state, ...set_data}))
+        }
+      })
+      setUser(user)
+      setLoading(false)
+    }
+
+    load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const isStepSkipped = (step) => skipped.has(step)
+
+  const handleNext = () => {
+    let newSkipped = skipped
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values())
+      newSkipped.delete(activeStep)
+    }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    setSkipped(newSkipped)
+  }
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+  }
+
+  const handleFormData = (form_data, form_type) => {
+    let set_data = []
+    if (!form_data) return
+    set_data[form_type] = form_data
+    localStorage.setItem(form_type, JSON.stringify(form_data))
+    setForm((prev_state) => ({...prev_state, ...set_data}))
+  }
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    localStorage.setItem('details', JSON.stringify(form))
+
+    const form_data = {
+      ...form.personal,
+      contact: form.contact,
+      industry: form.industry,
+      rate: form.rate,
+      payment: {
+        accountPaymentType: form.rate.accountType,
+        acccountPaymentName: form.rate.accountName,
+        acccountPaymentNumber: form.rate.accountNumber,
+      },
+      photo: form.photo,
+      documents: form.documents,
+    }
+
+    const result = await onboard_api.post_client_onboard(form_data, user._id)
+    if (!result.ok) {
+      enqueueSnackbar('Unable to process your onboarding', {variant: 'error'})
+      return setLoading(false)
+    }
+    await storage.storeUser(result.data)
+    Object.keys(form).forEach((val) => {
+      localStorage.removeItem(val)
+    })
+
+    enqueueSnackbar('Onboarding process success', {variant: 'success'})
+    setLoading(false)
+    navigate('/client/onboard/success', {replace: true})
+  }
+
+  return (
+    <>
+      {activeStep === steps.length ? (
+        <>
+          <Paper sx={{p: 3, my: 3}}>
+            <Box sx={{textAlign: 'center'}}>
+              <Avatar
+                key={'Profile Picture'}
+                alt="Picture"
+                src={`${image_bucket}${form.photo}`}
+                sx={{margin: '0 auto', width: 128, height: 128}}
+              />
+              <Typography variant="h3">
+                {form.personal.firstName} {form.personal.middleInitial} {form.personal.lastName}
+              </Typography>
+            </Box>
+          </Paper>
+
+          <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
+            <LoadingButton
+              loading={isLoading}
+              size="large"
+              variant="contained"
+              sx={{width: '100%', textAlign: 'center', mt: 3, mb: 3}}
+              onClick={handleSubmit}
+            >
+              Save
+            </LoadingButton>
+            <Button
+              size="large"
+              variant="outlined"
+              sx={{width: '100%', textAlign: 'center', mb: 5}}
+              onClick={handleBack}
+            >
+              Go Back
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <>
+          {activeStep === 0 ? (
+            <PersonalForm user={user} stored={form} onNext={handleNext} onStoreData={handleFormData} />
+          ) : (
+            ''
+          )}
+          {activeStep === 1 ? (
+            <ContactForm user={form} stored={form} onNext={handleNext} onStoreData={handleFormData} />
+          ) : (
+            ''
+          )}
+          {activeStep === 2 ? (
+            <IndustryForm user={user} stored={form} onNext={handleNext} onStoreData={handleFormData} />
+          ) : (
+            ''
+          )}
+          {activeStep === 3 ? (
+            <RateForm user={user} stored={form} onNext={handleNext} onStoreData={handleFormData} />
+          ) : (
+            ''
+          )}
+          {activeStep === 4 ? <ProfileForm user={user} onNext={handleNext} onStoreData={handleFormData} /> : ''}
+
+          <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
+            {activeStep === 6 ? (
+              <Button variant="contained" size="large" sx={{width: '100%'}} onClick={handleSubmit}>
+                Submit
+              </Button>
+            ) : (
+              ''
+            )}
+            {activeStep !== 0 ? (
+              <Button
+                size="large"
+                variant="outlined"
+                sx={{width: '100%', textAlign: 'center', mt: 3, mb: 5}}
+                onClick={handleBack}
+              >
+                Go Back
+              </Button>
+            ) : (
+              ''
+            )}
+          </Box>
+        </>
+      )}
+    </>
+  )
+}

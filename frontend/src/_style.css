@@ -1,0 +1,137 @@
+body {
+  margin: 0 !important;
+  overflow-x: hidden;
+}
+
+.transition-group {
+  flex: 1;
+  position: relative;
+}
+
+.router {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translate(25px, 0);
+  z-index: 1;
+}
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transform: translate(0, 0);
+
+  transition: opacity 250ms ease-out, transform 300ms ease;
+}
+.fade-exit {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+.fade-exit.fade-exit-active {
+  opacity: 0;
+  transform: translate(30px, 0);
+
+  transition: opacity 250ms ease-out, transform 300ms ease;
+}
+
+input[type='tel'] {
+  font-family: 'Public Sans', sans-serif !important;
+}
+
+.radio-btn {
+  padding: 0.5rem 0.75rem;
+}
+
+.phone-form-container > div {
+  padding: 0;
+}
+.phone-form-container input[type='tel'] {
+  font-size: 16px;
+}
+
+.store-report-datepicker-conttainer .css-3ok8xw {
+  margin-right: 0;
+}
+
+.radio-control-group {
+  border: 1px solid #ffffff;
+  border-radius: 1.2rem;
+  width: 45%;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.radio-control-group span.MuiRadio-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 !important;
+  z-index: 1;
+  transition: all 0.4s ease;
+}
+
+.radio-control-group span.MuiTypography-root {
+  z-index: 2;
+}
+.radio-btn > span {
+  display: none;
+}
+
+.radio-control-group span.Mui-checked.radio-btn .MuiTouchRipple-root {
+  background-color: rgba(255, 255, 255, 0.5);
+  display: block !important;
+  transition: all 0.4s ease;
+  z-index: -1;
+}
+
+@media screen and (max-width: 480px) {
+  .radio-control-group {
+    display: flex;
+    width: 100%;
+  }
+  .phone-form-container input[type='tel'] {
+    width: 12% !important;
+  }
+}
+
+.react-datepicker-popper {
+  background: #ffffff !important;
+  z-index: 99 !important;
+}
+
+.react-datepicker {
+  background: #ffffff !important;
+  z-index: 99;
+  width: 100%;
+  margin: 0 8px;
+}
+
+.react-datepicker__month-container,
+.react-datepicker__time-container {
+  float: none !important;
+}
+
+.react-datepicker__time-container,
+.react-datepicker__time-box {
+  width: 100% !important;
+}
+.react-datepicker__time-container {
+  border-left: 1px solid #aeaeae;
+}

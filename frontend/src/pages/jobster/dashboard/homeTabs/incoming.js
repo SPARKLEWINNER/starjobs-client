@@ -1,0 +1,59 @@
+import {Box, Stack, Typography, Card} from '@material-ui/core'
+import moment from 'moment'
+// import {useSnackbar} from 'notistack5'
+import {IncomingCard} from 'components/freelancers/cards'
+
+export default function IncomingTab({gigs, user}) {
+  // const {enqueueSnackbar} = useSnackbar()
+
+  return (
+    <Box sx={{my: 5}}>
+      <Stack spacing={3}>
+        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+          Incoming
+        </Typography>
+      </Stack>
+      {gigs.length === 0 && (
+        <Card sx={{px: 2, py: 3, textAlign: 'center'}}>
+          <Typography variant="overline">No Incoming Gigs yet.</Typography>
+        </Card>
+      )}
+      {gigs &&
+        gigs.map((v, k) => {
+          const {status, from} = v
+          if (status === 'Accepted' || status === 'Confirm-Gig') {
+            if (moment(from).isBefore(moment(), 'day')) return ''
+            if (moment(from).isSame(moment(), 'day')) {
+              if (v.auid !== user._id) return ''
+              //if incoming in less than four hours alert the user
+              // hours remaining = gig_time - time_today
+              let hours = moment(from).diff(new Date(), 'hours', true)
+
+              if (hours <= 4) {
+                return ''
+              }
+
+              return (
+                <Box sx={{my: 1}} key={`box - ${k}`}>
+                  <IncomingCard gig={v} />
+                </Box>
+              )
+            } else {
+              if (moment(from).isBefore()) return ''
+            }
+            if (!moment(from).isBefore(moment(), 'day')) {
+              return (
+                <Box sx={{my: 2}}>
+                  <IncomingCard gig={v} />
+                </Box>
+              )
+            } else {
+              return ''
+            }
+          } else {
+            return ''
+          }
+        })}
+    </Box>
+  )
+}

@@ -82,7 +82,7 @@ const DashboardNavbar = ({location, user}) => {
       case '/client/gig/create':
         return {
           status: true,
-          name: 'Gig Form',
+          name: 'Gigs',
         }
       case '/account/change-password':
         return {

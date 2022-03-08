@@ -9,9 +9,6 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
 import DatePicker from 'react-datepicker'
 
-// api
-import category_api from 'utils/api/category'
-
 export default function GigForm({user, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
@@ -21,22 +18,7 @@ export default function GigForm({user, onNext, onStoreData}) {
   const [to, setTo] = useState()
   const current_date = new Date()
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true)
-      const result = await category_api.get_categories()
-      if (!result.ok) return setLoading(false)
-      let category_data = result.data.sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
-
-      setLoading(false)
-      setCategory(category_data.filter((obj) => obj['status'] !== 1))
-    }
-
-    load()
-  }, [])
-
   const GigSchema = Yup.object().shape({
-    category: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig category is required'),
     position: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig position is required'),
     date: Yup.string(),
     shift: Yup.string().min(2, 'Too Short!').required('Gig Shift is required'),
@@ -49,7 +31,6 @@ export default function GigForm({user, onNext, onStoreData}) {
 
   const formik = useFormik({
     initialValues: {
-      category: '',
       date: '',
       fee: '',
       position: '',
@@ -63,10 +44,6 @@ export default function GigForm({user, onNext, onStoreData}) {
     validationSchema: GigSchema,
     onSubmit: () => {
       setLoading(true)
-      if (!values.category) {
-        enqueueSnackbar('Gig category is not selected', {variant: 'error'})
-        return setLoading(false)
-      }
 
       if (!values.date) {
         values.date = moment(date).format('YYYY-MM-DD')
@@ -78,7 +55,6 @@ export default function GigForm({user, onNext, onStoreData}) {
       if (!values.position || !values.shift || !values.hours || !values.fee || !values.notes) return setLoading(false)
 
       let data = {
-        category: values.category,
         position: values.position,
         date: values.date,
         shift: values.shift,
@@ -146,37 +122,10 @@ export default function GigForm({user, onNext, onStoreData}) {
     setFieldValue('fee', parseFloat(value).toFixed(2))
   }
 
-  const handleSelectedCategory = (value) => {
-    setFieldValue('category', value)
-  }
-
   return (
     <FormikProvider value={formik}>
       <Form noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
-            <Select
-              native
-              onChange={(e) => handleSelectedCategory(e.target.value)}
-              defaultValue={values.category || ''}
-            >
-              <option value="" disabled key="initial">
-                Select Gig Category
-              </option>
-              {category &&
-                category.map((v) => {
-                  if (v.slug !== 'parcels') {
-                    return (
-                      <option key={v.slug} value={v.slug}>
-                        {v.name}
-                      </option>
-                    )
-                  } else {
-                    return ''
-                  }
-                })}
-            </Select>
-          </Stack>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
               fullWidth

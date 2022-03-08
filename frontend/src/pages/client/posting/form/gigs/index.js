@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import moment from 'moment'
+import {capitalCase} from 'change-case'
 // material
 import {Box, Button, Typography} from '@material-ui/core'
 import {LoadingButton} from '@material-ui/lab'
@@ -16,7 +17,7 @@ import gigs_api from 'utils/api/gigs'
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
 
-export default function GigCreate() {
+export default function GigCreate({category}) {
   const {enqueueSnackbar} = useSnackbar()
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set())
@@ -78,11 +79,17 @@ export default function GigCreate() {
   }
 
   const handleSubmit = async () => {
+    if (!category) {
+      enqueueSnackbar('Select category', {variant: 'error'})
+      setLoading(false)
+    }
+
     const discordHook = new webhook.Webhook(`${REACT_APP_DISCORD_URL}/${REACT_APP_DISCORD_KEY_STARJOBS}`)
 
     setLoading(true)
     setOpen(false)
     const form_data = {
+      category: category,
       ...form,
     }
 
@@ -109,7 +116,9 @@ export default function GigCreate() {
   return (
     <>
       <Box sx={{textAlign: 'center', mt: 5, mb: 3}}>
-        <Typography variant="h4"> Gig Posting</Typography>
+        <Typography variant="h4">
+          Gig Posting <br /> ({category && capitalCase(category.replace('-', ' '))}){' '}
+        </Typography>
       </Box>
       {activeStep === 0 ? <GigForm onNext={handleNext} onStoreData={handleFormData} /> : ''}
       {activeStep === 1 ? <BillingForm onNext={handleNext} storeData={form} /> : ''}

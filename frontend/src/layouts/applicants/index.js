@@ -102,7 +102,7 @@ export default function ClientApplicants() {
               {applicant &&
                 Object.values(applicant).map((v, k) => {
                   if (gig.status === 'Applying') {
-                    return <ApplicantCard data={v} key={k} onClick={handleConfirm} />
+                    return <ApplicantCard data={v} key={k} onClick={handleConfirm} type={gig.isExtended} />
                   }
                   return ''
                 })}

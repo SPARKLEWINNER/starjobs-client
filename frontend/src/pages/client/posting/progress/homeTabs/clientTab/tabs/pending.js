@@ -16,8 +16,9 @@ export default function PendingTab({gigs, selected}) {
       const data = []
       filtered_gig &&
         filtered_gig.map((value) => {
-          const {from} = value
-          if (moment(from).isBefore(moment(), 'day')) return ''
+          const {time, status} = value
+          if (status !== 'Waiting') return ''
+          if (moment(time).isBefore(moment(), 'day')) return ''
           return data.push(value)
         })
 

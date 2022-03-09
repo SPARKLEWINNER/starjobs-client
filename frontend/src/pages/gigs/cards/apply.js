@@ -11,15 +11,15 @@ import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 // components
 import Label from 'components/Label'
 
+import {calculations} from 'utils/gigComputation'
+
 const ApplyCard = ({path, gig, accountType, onClick}) => {
   let {position, hours, fee, user, time, from, category, uid} = gig
   const {location} = user[0]
   const type = category === 'parcels' ? 'parcels' : 'gig'
 
   fee = parseFloat(fee)
-  let computedGigFee = parseFloat(fee * hours)
-  let voluntaryFee = parseFloat(computedGigFee * 0.112421) / hours
-  let _total = parseFloat(fee + voluntaryFee)
+  let {jobsterTotal} = calculations(hours, fee)
 
   const handleClick = (values) => {
     onClick(values)
@@ -41,7 +41,7 @@ const ApplyCard = ({path, gig, accountType, onClick}) => {
             </Typography>
             <Label sx={{fontSize: 10, ml: 1}} color="info">
               <span>&#8369;</span>
-              {parseFloat(_total).toFixed(2)} / {type}
+              {parseFloat(jobsterTotal).toFixed(2)} / {type}
             </Label>
           </Stack>
 

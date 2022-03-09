@@ -19,10 +19,14 @@ const IconWrapperStyle = styled('div')(({theme}) => ({
   backgroundColor: alpha(theme.palette.primary.main, 0.08),
 }))
 
-export default function ApplicantCard({data, onClick, onClickApplicantId}) {
-  console.log(data)
+export default function ApplicantCard({data, onClick, type}) {
   const handleAccept = (value) => {
     onClick(value)
+  }
+
+  let applicant_id = data.uid
+  if (type) {
+    applicant_id = data.auid
   }
 
   return (
@@ -57,7 +61,7 @@ export default function ApplicantCard({data, onClick, onClickApplicantId}) {
         </Box>
 
         <IconWrapperStyle>
-          <Button variant="contained" fullWidth onClick={() => handleAccept(data.uid)}>
+          <Button variant="contained" fullWidth onClick={() => handleAccept(applicant_id)}>
             Accept
           </Button>
 

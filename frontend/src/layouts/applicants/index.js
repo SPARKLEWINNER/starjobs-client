@@ -85,7 +85,7 @@ export default function ClientApplicants() {
 
     enqueueSnackbar('Applicant accepted and notified', {variant: 'success'})
     setLoading(false)
-    navigation('/client')
+    // navigation('/client')
   }
 
   return (
@@ -102,7 +102,7 @@ export default function ClientApplicants() {
               {applicant &&
                 Object.values(applicant).map((v, k) => {
                   if (gig.status === 'Applying') {
-                    return <ApplicantCard data={v} key={k} onClick={handleConfirm} type={gig.isExtended} />
+                    return <ApplicantCard data={v} key={k} onClick={handleConfirm} gigDetails={gig} />
                   }
                   return ''
                 })}

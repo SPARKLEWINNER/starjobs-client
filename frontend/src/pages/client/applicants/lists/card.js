@@ -19,13 +19,14 @@ const IconWrapperStyle = styled('div')(({theme}) => ({
   backgroundColor: alpha(theme.palette.primary.main, 0.08),
 }))
 
-export default function ApplicantCard({data, onClick, type}) {
+export default function ApplicantCard({data, onClick, gigDetails}) {
   const handleAccept = (value) => {
     onClick(value)
   }
 
   let applicant_id = data.uid
-  if (type) {
+  if (gigDetails.isExtended) {
+    data.gid = gigDetails._id
     applicant_id = data.auid
   }
 
@@ -45,6 +46,7 @@ export default function ApplicantCard({data, onClick, type}) {
             sx={{cursor: 'pointer'}}
           >
             <Typography variant="body1">{`${data.firstName} ${data.middleInitial} ${data.lastName}`}</Typography>
+            {applicant_id}
           </Link>
           <Typography
             variant="body1"

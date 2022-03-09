@@ -20,7 +20,7 @@ import {makeStyles} from '@material-ui/styles'
 
 // components
 import Page from 'components/Page'
-import {CredentialsTab} from 'pages/client/profile/tabs'
+import {CredentialsTab, ActivityTab} from 'pages/client/profile/tabs'
 import {ApplyCard, ConfirmGig} from 'pages/gigs/cards'
 import MAvatar from 'components/@material-extend/MAvatar'
 
@@ -64,9 +64,8 @@ const useStyles = makeStyles({
     // textTransform: 'uppercase',
     fontSize: '1rem !important',
     margin: '0 8px',
-    border: '1px solid #727272',
-    borderRadius: '8px',
     minHeight: '42px',
+    color: '#000',
     '@media (max-width: 500px)': {
       maxWidth: 'auto',
       padding: '6px 0',
@@ -77,11 +76,9 @@ const useStyles = makeStyles({
       fontSize: 11,
     },
     '&.Mui-selected': {
-      // backgroundColor: '#FF3030',
+      borderBottom: '1px solid #FF3030',
       border: 'none',
       borderRadius: 0,
-      borderBottom: '1px solid #000',
-      color: '#000',
     },
   },
   icon: {
@@ -89,6 +86,11 @@ const useStyles = makeStyles({
     height: 27,
   },
 })
+
+const STATIC_TAB = [
+  {value: 2, label: 'Credentials', disabled: false},
+  {value: 3, label: 'Activity History', disabled: false},
+]
 
 const Profile = () => {
   const params = useParams()
@@ -104,6 +106,7 @@ const Profile = () => {
   const [isLoading, setLoading] = useState(false)
   const [current_user, setCurrentUser] = useState([])
   const [applyDetails, setApplyDetails] = useState(null)
+  const [SIMPLE_TAB, setTabs] = useState(STATIC_TAB)
 
   const {sendGigNotification} = useSendNotif()
   const handleChange = (event, newValue) => {
@@ -122,7 +125,12 @@ const Profile = () => {
     setNotVerified(false)
 
     const current_user = JSON.parse(local_user)
-    const client_id = location.pathname === '/client/profile' ? current_user._id : params.id
+    let client_id = current_user._id
+
+    if (location.pathname !== '/client/profile') {
+      client_id = params.id
+      setTabs(STATIC_TAB.filter((obj) => obj.value !== 3))
+    }
 
     const result = await user_api.get_user_profile_client(client_id)
 
@@ -144,8 +152,6 @@ const Profile = () => {
     load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const SIMPLE_TAB = [{value: 2, label: 'Credentials', disabled: false}]
 
   const handleClose = () => {
     setOpen(false)
@@ -199,8 +205,14 @@ const Profile = () => {
           </Box>
         </Stack>
       )
-
-    return <CredentialsTab form={current_user} />
+    switch (type) {
+      case 3:
+        if (location.pathname === '/client/profile') return <ActivityTab />
+        return ''
+      case 2:
+      default:
+        return <CredentialsTab form={current_user} />
+    }
   }
 
   return (

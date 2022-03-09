@@ -5,9 +5,6 @@ import moment from 'moment'
 import {Stack, Button, Box, Card, CardContent, Typography} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
 
-// components
-import Page from 'components/Page'
-
 // api
 import user_api from 'utils/api/users'
 import storage from 'utils/storage'
@@ -26,7 +23,7 @@ const MainStyle = styled(Stack)(({theme}) => ({
   },
 }))
 
-const ClientMyActivity = () => {
+export default function ActivityTab() {
   const [data, setData] = useState([])
   const [renderData, setRenderData] = useState([])
   const [renderLength, setRenderLength] = useState(3)
@@ -111,22 +108,23 @@ const ClientMyActivity = () => {
   }
 
   return (
-    <Page title="My Activity |  Starjobs">
-      <MainStyle alignItems="center" justify="center" sx={{my: 3, paddingLeft: {xs: 3}, paddingRight: {xs: 3}}}>
-        <Stack direction={{xs: 'column', md: 'column'}} sx={{marginBottom: 30}}>
-          {renderData &&
-            renderData.map((v, k) => {
-              return renderCard(v, k)
-            })}
-          {data.length > 5 && data.length !== renderLength && (
-            <Button variant="text" onClick={() => loadMore()} sx={{mt: 5}}>
-              Load more
-            </Button>
-          )}
-        </Stack>
-      </MainStyle>
-    </Page>
+    <MainStyle alignItems="center" justify="center" sx={{my: 3, paddingLeft: {xs: 3}, paddingRight: {xs: 3}}}>
+      <Stack spacing={3}>
+        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+          Activity History
+        </Typography>
+      </Stack>
+      <Stack direction={{xs: 'column', md: 'column'}} sx={{marginBottom: 5}}>
+        {renderData &&
+          renderData.map((v, k) => {
+            return renderCard(v, k)
+          })}
+        {data.length > 5 && data.length !== renderLength && (
+          <Button variant="text" onClick={() => loadMore()} sx={{mt: 5}}>
+            Load more
+          </Button>
+        )}
+      </Stack>
+    </MainStyle>
   )
 }
-
-export default ClientMyActivity

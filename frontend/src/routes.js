@@ -37,7 +37,6 @@ import ClientHome from './pages/client/home'
 import ClientOnboard from './pages/client/onboard'
 import ClientOnboardSuccess from './pages/client/onboard/success'
 import ClientCreateGig from './pages/client/posting'
-import ClientMyActivity from './pages/client/activity'
 import ClientProfile from './pages/client/profile'
 import ClientApplicants from './pages/client/applicants'
 import ClientApplicantProfile from './pages/client/applicantProfile'
@@ -87,7 +86,6 @@ const UseRoutes = () => {
         {path: '/onboard', element: <ClientOnboard />},
         {path: '/onboard/success', element: <ClientOnboardSuccess />},
         {path: '/profile', element: <ClientProfile />},
-        {path: '/my-activity', element: <ClientMyActivity />},
         {path: '/message', element: <Message />},
         {path: '/edit', element: <ClientEditProfile />},
         {path: '/edit/document', element: <ClientEditDocument />},

@@ -1,10 +1,18 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import {styled} from '@material-ui/core/styles'
-import {Badge, Box, Stack, AppBar, Toolbar, Typography, Button} from '@material-ui/core'
+import {
+  // Badge,
+  Box,
+  Stack,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+} from '@material-ui/core'
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined'
 
-import WorkOutlineOutlinedIcon from '@material-ui/icons/WorkOutlineOutlined'
+// import WorkOutlineOutlinedIcon from '@material-ui/icons/WorkOutlineOutlined'
 
 //
 import AccountPopover from './AccountPopover'
@@ -144,7 +152,7 @@ const DashboardNavbar = ({location, user}) => {
               </Typography>
               <Box sx={{flexGrow: 1}} />
               <Stack direction="row" alignItems="center" spacing={{xs: 0.5, sm: 1.5}}>
-                {user.accessType === '/client' && (
+                {/* {user.accessType === '/client' && (
                   <Button
                     endIcon={
                       <>
@@ -156,7 +164,7 @@ const DashboardNavbar = ({location, user}) => {
                     href={`${user.accessType}/my-activity`}
                     component="a"
                   />
-                )}
+                )} */}
                 <AccountPopover user={user} />
               </Stack>
             </>

@@ -1,9 +1,9 @@
 import * as Yup from 'yup'
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 // material
-import {Stack, TextField, Select, Typography} from '@material-ui/core'
+import {Stack, TextField, Typography} from '@material-ui/core'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
@@ -12,7 +12,6 @@ import DatePicker from 'react-datepicker'
 export default function GigForm({user, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
-  const [category, setCategory] = useState([])
   const [date, setDate] = useState(new Date())
   const [from, setFrom] = useState()
   const [to, setTo] = useState()

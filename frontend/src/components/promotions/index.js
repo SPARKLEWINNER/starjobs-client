@@ -17,14 +17,8 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const PromotionsBanner = ({banners}) => {
   const [selected, setSelected] = useState(undefined)
-  const [open, setOpen] = useState(false)
-
-  const handleOpen = () => {
-    setOpen(false)
-  }
 
   const handleClose = () => {
-    setOpen(false)
     setSelected(undefined)
   }
 
@@ -60,7 +54,7 @@ const PromotionsBanner = ({banners}) => {
       </Carousel>
       {selected && (
         <Dialog
-          open={open}
+          open={false}
           TransitionComponent={Transition}
           keepMounted
           onClose={handleClose}

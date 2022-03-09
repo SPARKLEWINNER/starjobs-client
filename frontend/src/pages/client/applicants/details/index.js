@@ -24,14 +24,6 @@ export default function GigsDetailsLayout({details, shift}) {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [hoursShift, setHrShift] = useState(undefined)
 
-  const load = async () => {
-    const result = await gigs_api.get_gigs_applicant(params.id)
-    if (!result.ok) return
-
-    setGig(result.data)
-    setHrShift(result.data.shift)
-  }
-
   const onClick = () => {
     setDeleteOpen(true)
   }
@@ -66,7 +58,6 @@ export default function GigsDetailsLayout({details, shift}) {
   }
 
   useEffect(() => {
-    // load()
     setGig(details)
     setHrShift(shift)
     // eslint-disable-next-line react-hooks/exhaustive-deps

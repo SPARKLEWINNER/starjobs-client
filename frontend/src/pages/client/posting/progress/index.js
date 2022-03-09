@@ -9,7 +9,7 @@ import {Stack} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
 
 // components
-import Page from 'components/Page'
+// import Page from 'components/Page'
 import {
   // JobsterTab,
   ClientTab,

@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
 import {useSnackbar} from 'notistack5'
-import {Box, Stack, Card, Typography, Link} from '@material-ui/core'
+import {Stack, Card, Typography, Link} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
 
 // component
@@ -34,12 +34,12 @@ export default function ListApplicants({details, applicants}) {
 
   const {sendGigNotification} = useSendNotif()
 
-  const load = async () => {
-    const result = await gigs_api.get_gigs_applicant(params.id)
-    if (!result.ok) return
-    setGig(result.data)
-    setApplicants(result.data.applicants)
-  }
+  // const load = async () => {
+  //   const result = await gigs_api.get_gigs_applicant(params.id)
+  //   if (!result.ok) return
+  //   setGig(result.data)
+  //   setApplicants(result.data.applicants)
+  // }
 
   useEffect(() => {
     // load()

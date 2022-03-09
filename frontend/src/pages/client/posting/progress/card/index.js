@@ -1,3 +1,4 @@
+import React from 'react'
 import {Icon} from '@iconify/react'
 import {capitalCase} from 'change-case'
 import {Link as RouterLink} from 'react-router-dom'
@@ -6,22 +7,21 @@ import map from '@iconify/icons-eva/map-outline'
 import {Box, Stack, Card, Avatar, Typography, Link} from '@material-ui/core'
 // component
 import Label from 'components/Label'
-import {getUser} from 'utils/hooks/auth'
-import React, {useState} from 'react'
-import useSendNotif from 'utils/hooks/useSendNotif'
+// import {getUser} from 'utils/hooks/auth'
+// import useSendNotif from 'utils/hooks/useSendNotif'
 
 const image_url = process.env.REACT_APP_IMAGE_URL
 export default function FreelancerCard({data, onClick, onClickApplicantId}) {
-  const [isSendingInterest, setIsSendingInterest] = useState(false)
-  const {sendInterestNotification} = useSendNotif()
+  // const [isSendingInterest, setIsSendingInterest] = useState(false)
+  // const {sendInterestNotification} = useSendNotif()
 
-  let user = JSON.parse(getUser())
+  // let user = JSON.parse(getUser())
 
-  const sendInterest = async () => {
-    setIsSendingInterest(true)
-    await sendInterestNotification({clientId: user._id, clientName: user.name, targetUsers: [data.uuid]})
-    setIsSendingInterest(false)
-  }
+  // const sendInterest = async () => {
+  //   setIsSendingInterest(true)
+  //   await sendInterestNotification({clientId: user._id, clientName: user.name, targetUsers: [data.uuid]})
+  //   setIsSendingInterest(false)
+  // }
 
   return (
     <Card sx={{my: 1, px: 2, py: 2}}>

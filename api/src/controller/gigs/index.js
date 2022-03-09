@@ -46,7 +46,30 @@ var controllers = {
         let gigs;
 
         try {
-            gigs = await Gigs.findById(id).lean().exec();
+            // gigs = await Gigs.findById(id).lean().exec();
+            gigs = await Gigs.aggregate([
+                {
+                    $lookup: {
+                        from: 'account',
+                        localField: 'auid',
+                        foreignField: 'uuid',
+                        as: 'account'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'history',
+                        localField: '_id',
+                        foreignField: 'gid',
+                        as: 'history'
+                    }
+                }
+            ])
+                .match({
+                    _id: mongoose.Types.ObjectId(id)
+                })
+                .sort({createdAt: -1})
+                .exec();
         } catch (error) {
             console.error(error);
 
@@ -54,7 +77,7 @@ var controllers = {
             return res.status(502).json({success: false, msg: 'User not found'});
         }
 
-        return res.status(200).json(gigs);
+        return res.status(200).json(gigs.pop());
     },
     // list of gigs by category
     get_gigs_categorized: async function (req, res) {

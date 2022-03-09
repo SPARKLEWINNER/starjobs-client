@@ -54,8 +54,9 @@ const Puller = styled(Box)(({theme}) => ({
 }))
 
 export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift}) {
-  let {history, position, hours, fee, time, from, status, category, applicant} = gig
-  const {firstName, middleInitial, lastName, photo} = applicant
+  let {history, position, hours, fee, time, from, status, category, account} = gig
+
+  const {firstName, middleInitial, lastName, photo} = account[0]
 
   let {serviceCost} = calculations(hours, fee)
 

@@ -7,10 +7,9 @@ import {calculations} from 'utils/gigComputation'
 const default_url = process.env.REACT_APP_IMAGE_URL
 
 export default function BillingCard({gig, _type}) {
-  let {position, hours, fee, time, from, _id, applicant} = gig
+  let {position, hours, fee, time, from, _id, account} = gig
   fee = parseFloat(fee)
-  const {firstName, middleInitial, lastName, photo} = applicant
-
+  const {firstName, middleInitial, lastName, photo} = account[0]
   let {serviceCost} = calculations(hours, fee)
 
   const name = `${firstName} ${middleInitial} ${lastName};`

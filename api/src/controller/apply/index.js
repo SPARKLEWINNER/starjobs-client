@@ -42,7 +42,7 @@ async function sendNotification(request, gigs, status) {
             .lean()
             .exec();
     } else if (freelancer.includes(status)) {
-        const jobster_id = {_id: Types.ObjectId(request.uid)}; // client
+        let jobster_id = {_id: Types.ObjectId(request.uid)}; // client
 
         // individual gig postings
         if (status === 'Confirm-Arrived') {

@@ -2,6 +2,7 @@ const moment = require('moment');
 
 const Gigs = require('./../../models/Gigs');
 const Client = require('./../../models/Client');
+const Account = require('./../../models/Account');
 const User = require('./../../models/User');
 const mongoose = require('mongoose');
 
@@ -248,7 +249,6 @@ var controllers = {
                             time: 1,
                             status: 1,
                             shift: 1,
-                            shift: 1,
                             fee: 1,
                             user: 1,
                             uid: 1,
@@ -258,6 +258,7 @@ var controllers = {
                             createdAt: 1,
                             date: 1,
                             dateCreated: 1,
+                            auid: 1,
                             maximumApplicants: '$extends.maximumApplicants',
                             numberofApplicants: {
                                 $filter: {
@@ -276,14 +277,32 @@ var controllers = {
                     }
                 ])
                     .match({
-                        uid: mongoose.Types.ObjectId(id),
-                        status: {$in: ['Waiting', 'Applying']}
+                        uid: mongoose.Types.ObjectId(id)
+                        // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
                     })
                     .exec();
 
                 gigs = gigs.filter((obj) => {
                     return !moment(obj.time).isBefore(moment(), 'day');
                 });
+
+                gigs = await Promise.all(
+                    gigs.map(async (obj) => {
+                        if (!obj.isExtended) {
+                            const account = await Account.find({uuid: mongoose.Types.ObjectId(obj.auid)})
+                                .lean()
+                                .exec();
+                            return {
+                                ...obj,
+                                account
+                            };
+                        } else {
+                            return obj;
+                        }
+                    })
+                );
+
+                console.log(gigs);
 
                 client = {
                     details: user.pop(),

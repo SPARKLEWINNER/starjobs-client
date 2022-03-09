@@ -50,9 +50,14 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     onEndShift(value)
   }
 
-  const handleView = (gig) => {
-    setOpenModal(true)
-    setSelectedGig(gig)
+  const handleView = async (gig) => {
+    const get_gig_details = await gigs_api.get_gig_details(gig._id)
+    if (!get_gig_details.ok) return enqueueSnackbar('Unable to get gig details', {variant: 'error'})
+    if (!get_gig_details.data.isExtended) {
+      setOpenModal(true)
+      setSelectedGig(get_gig_details.data)
+      return
+    }
   }
 
   const handleCloseView = () => {

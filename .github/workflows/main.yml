@@ -12,7 +12,7 @@ jobs:
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "sj-staging-environment"
-          heroku_email: "emquintos.sparkles@gmail.com"
+          heroku_email: "j.staana@sparkles.com.ph"
           usedocker: true
       - name: Deploy api to Heroku
         run: |

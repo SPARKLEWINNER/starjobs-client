@@ -302,8 +302,6 @@ var controllers = {
                     })
                 );
 
-                console.log(gigs);
-
                 client = {
                     details: user.pop(),
                     gigs: gigs,

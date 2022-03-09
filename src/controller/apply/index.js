@@ -18,7 +18,7 @@ const {Types} = mongoose;
 
 async function sendNotification(request, gigs, status) {
     let user;
-    const messageList = [
+    let messageList = [
         {status: 'Applying', type: '#pending', description: `Applicant has sent a gig request`},
         {status: 'Accepted', type: '#incoming', description: `Congratulations, your gig has been accepted.`},
         {status: 'Confirm-Gig', type: '#current', description: `Jobster has confirmed pushing thru the gig.`},
@@ -42,18 +42,18 @@ async function sendNotification(request, gigs, status) {
             .lean()
             .exec();
     } else if (freelancer.includes(status)) {
-        user = {_id: Types.ObjectId(request.body.uid)}; // client
+        const jobster_id = {_id: Types.ObjectId(request.uid)}; // client
 
         // individual gig postings
         if (status === 'Confirm-Arrived') {
-            user = {_id: Types.ObjectId(gigs.auid)}; // jobster
+            jobster_id = {_id: Types.ObjectId(gigs.auid)}; // jobster
         }
 
-        await User.find(user).lean().exec();
+        user = await User.find(jobster_id).lean().exec();
     }
 
     user = user.pop();
-    const message = messageList.filter((obj) => {
+    let message = messageList.filter((obj) => {
         if (obj.status === status) return obj;
     });
 
@@ -61,6 +61,7 @@ async function sendNotification(request, gigs, status) {
     if (!message) return true;
     if (!user || !user.deviceId) return true;
 
+    message = message.pop();
     try {
         await fetch('https://fcm.googleapis.com/fcm/send', {
             method: 'post',

@@ -147,7 +147,6 @@ var controllers = {
         }
 
         let {accessToken: token, refreshToken} = requestToken.create_token(result.uid);
-        console.log(result.photo);
         result = {
             ...user[0],
             photo: result.photo,

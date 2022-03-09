@@ -8,9 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Add api remote origin
-        run: |
-          git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_SERVER_APP_NAME }}.git
+      - uses: akhileshns/heroku-deploy@v3.0.0
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "sj-staging-environment"
+          heroku_email: "emquintos.sparkles@gmail.com"
+          usedocker: true
       - name: Deploy api to Heroku
         run: |
           git subtree push --prefix api heroku master

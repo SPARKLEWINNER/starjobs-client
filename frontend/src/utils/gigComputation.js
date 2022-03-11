@@ -7,7 +7,7 @@ export function calculations(hours, fee) {
   let grossVAT = parseFloat(grossGigFee * 0.12) // 12%
   let grossWithHolding = parseFloat(grossGigFee * 0.02) // 2%
   let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding)
-  let jobsterTotal = parseFloat(fee + voluntaryFee)
+  let jobsterTotal = parseFloat(fee + voluntaryFee / hours)
 
   return {
     computedFeeByHr,

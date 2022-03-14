@@ -62,8 +62,8 @@ const useStyles = makeStyles({
   },
   nav_item: {
     // textTransform: 'uppercase',
-    fontSize: '1rem !important',
-    margin: '0 8px',
+    fontSize: '0.85rem !important',
+    margin: '8px',
     minHeight: '42px',
     color: '#000',
     '@media (max-width: 500px)': {

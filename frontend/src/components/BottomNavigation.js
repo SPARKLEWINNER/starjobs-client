@@ -214,7 +214,7 @@ export default function SimpleBottomNavigation() {
                   className={[classes.nav_item, classes.main_button]}
                   icon={<FormatListNumberedRtlIcon className={classes.icon} />}
                   component={Link}
-                  to={`/freelancer/history`}
+                  to={`/freelancer/dashboard`}
                 />
               </Box>
               <BottomNavigationAction

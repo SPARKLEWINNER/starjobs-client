@@ -115,6 +115,11 @@ const DashboardNavbar = ({location, user}) => {
           status: true,
           name: 'My Activity',
         }
+      case '/freelancer/dashboard':
+        return {
+          status: false,
+          name: 'Gigs',
+        }
       case '/freelancer/app':
       case '/client/app':
         return {

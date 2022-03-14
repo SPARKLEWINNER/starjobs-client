@@ -24,12 +24,13 @@ import NotificationDetails from './pages/NotificationDetails'
 import NotFound from './pages/Page404'
 
 // jobster
+import JobsterHome from './pages/jobster/home'
 import JobsterDashboard from './pages/jobster/dashboard'
 import JobsterOnboard from './pages/jobster/onboard'
 import JobsterOnboardSuccess from './pages/jobster/onboard/success'
 import JobsterProfile from './pages/jobster/profile'
 import JobsterEditProfile from './pages/jobster/profile/editProfile'
-import JobsterHistory from './pages/jobster/history'
+// import JobsterHistory from './pages/jobster/history'
 import JobsterHistoryDetails from './pages/jobster/history/details'
 
 // client
@@ -61,12 +62,12 @@ const UseRoutes = () => {
       element: <DashboardLayout />,
       children: [
         {path: '/', element: <Navigate to="/freelancer/app" replace />},
-        {path: '/app', element: <JobsterDashboard />},
+        {path: '/app', element: <JobsterHome />},
+        {path: '/dashboard', element: <JobsterDashboard />},
         {path: '/onboard', element: <JobsterOnboard />},
         {path: '/onboard/success', element: <JobsterOnboardSuccess />},
         {path: '/profile', element: <JobsterProfile />},
         {path: '/edit', element: <JobsterEditProfile />},
-        {path: '/history', element: <JobsterHistory />},
         {path: '/message', element: <Message />},
         {path: '/search', element: <BrowseCategory />},
       ],

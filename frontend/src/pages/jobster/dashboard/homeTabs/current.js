@@ -88,7 +88,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     load()
   }, [gigs])
   return (
-    <Box sx={{my: 5}}>
+    <Box sx={{mb: 5}}>
       <Stack spacing={3}>
         <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
           Current

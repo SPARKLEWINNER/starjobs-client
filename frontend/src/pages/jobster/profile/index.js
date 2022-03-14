@@ -16,7 +16,7 @@ import envelope from '@iconify/icons-eva/email-outline'
 
 // components
 import Page from 'components/Page'
-import {AboutTab, ReviewTab, CredentialsTab} from './tabs'
+import {AboutTab, ReviewTab, CredentialsTab, MyActivitiesTab} from './tabs'
 import MAvatar from 'components/@material-extend/MAvatar'
 
 // api
@@ -49,15 +49,13 @@ const useStyles = makeStyles({
     width: 'auto',
   },
   nav_item: {
-    width: '32%',
-    maxWidth: '32%',
-    textTransform: 'uppercase',
-    margin: '0 4px',
-    border: '1px solid #727272',
-    borderRadius: '8px',
+    // textTransform: 'uppercase',
+    fontSize: '0.85rem !important',
+    margin: '8px',
     minHeight: '42px',
+    color: '#000',
+    width: '100px',
     '@media (max-width: 500px)': {
-      width: '31.33%',
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
@@ -67,9 +65,9 @@ const useStyles = makeStyles({
       fontSize: 11,
     },
     '&.Mui-selected': {
-      backgroundColor: '#FF3030',
+      borderBottom: '1px solid #FF3030',
       border: 'none',
-      color: '#FFF',
+      borderRadius: 0,
     },
   },
   icon: {
@@ -77,6 +75,13 @@ const useStyles = makeStyles({
     height: 27,
   },
 })
+
+const STATIC_TAB = [
+  {value: 1, label: 'About', disabled: false},
+  {value: 2, label: 'Reviews', disabled: false},
+  {value: 3, label: 'Credentials', disabled: false},
+  {value: 4, label: 'My Activities', disabled: false},
+]
 
 const Profile = () => {
   const classes = useStyles()
@@ -86,6 +91,8 @@ const Profile = () => {
   const [user, setUser] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [isNotVerified, setNotVerified] = useState(true)
+  const [SIMPLE_TAB, setTabs] = useState(STATIC_TAB)
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
@@ -106,7 +113,9 @@ const Profile = () => {
     } else {
       result = await user_api.get_user_profile_freelancer(params.id)
       result = {data: {...result.data[0]}, ok: result.ok}
+      setTabs(STATIC_TAB.filter((obj) => obj.value !== 4))
     }
+
     setNotVerified(false)
     if (!result.ok) return setLoading(false)
     setUser(result.data)
@@ -120,21 +129,18 @@ const Profile = () => {
 
   const renderTab = (type, current_user) => {
     switch (type) {
-      case '1':
+      case 1:
         return <AboutTab form={current_user} />
-      case '2':
+      case 2:
         return <ReviewTab />
-      case '3':
+      case 3:
         return <CredentialsTab />
+      case 4:
+        return <MyActivitiesTab />
       default:
+        return <AboutTab form={current_user} />
     }
   }
-
-  const SIMPLE_TAB = [
-    {value: '1', label: 'About', disabled: false},
-    {value: '2', label: 'Reviews', disabled: false},
-    {value: '3', label: 'Credentials', disabled: false},
-  ]
 
   return (
     <Page title="Profile - Starjobs">
@@ -231,6 +237,9 @@ const Profile = () => {
                   <TabContext value={value}>
                     <TabList
                       onChange={handleChange}
+                      variant="scrollable"
+                      scrollButtons="auto"
+                      aria-label="scrollable auto tabs example"
                       TabIndicatorProps={{
                         style: {
                           display: 'none',

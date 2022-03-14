@@ -7,7 +7,7 @@ export default function PendingTab({gigs}) {
     <Box sx={{my: 5}}>
       <Stack spacing={3}>
         <Stack direction="row" sx={{alignItems: 'center', mb: 2}}>
-          <Typography variant="h4" sx={{flexGrow: 1}}>
+          <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, flexGrow: 1}}>
             Pending{' '}
           </Typography>
           {gigs.filter(

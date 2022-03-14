@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import {useParams} from 'react-router-dom'
 // material
 import {Box, Tab, Stack} from '@material-ui/core'
@@ -9,6 +9,7 @@ import {makeStyles} from '@material-ui/styles'
 // components
 import Page from 'components/Page'
 import {FreelancerTab, ClientTab} from './gigTabs'
+import {UsersContext} from 'utils/context/users'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -62,7 +63,21 @@ const useStyles = makeStyles({
 const Gigs = () => {
   const params = useParams()
   const classes = useStyles()
+
   const [value, setValue] = useState('0')
+  const {user} = useContext(UsersContext)
+
+  useEffect(() => {
+    const load = () => {
+      console.log(user.accountType)
+      if (user.accountType === 0) return setValue('1')
+    }
+
+    load()
+
+    // eslint-disable-next-line
+  }, [])
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }

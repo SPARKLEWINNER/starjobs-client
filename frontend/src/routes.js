@@ -48,6 +48,7 @@ import ClientPublicProfile from './pages/client/publicProfile'
 // global
 import Gigs from './pages/gigs'
 import GigDetails from './pages/gigs/details'
+import GigsFullDetails from './pages/gigs/fullDetails'
 import GigApplySuccess from './pages/gigs/success'
 import GigEdit from './pages/gigs/edit'
 
@@ -103,6 +104,7 @@ const UseRoutes = () => {
       children: [
         {path: '/', element: <Gigs />},
         {path: '/:category', element: <Gigs />},
+        {path: '/det/:id', element: <GigsFullDetails />},
         {path: '/details/:id/:category', element: <GigDetails />},
         {path: '/edit/:id', element: <GigEdit />},
         {path: '/apply/success', element: <GigApplySuccess />},

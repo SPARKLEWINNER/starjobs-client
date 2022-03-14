@@ -14,7 +14,7 @@ import Label from 'components/Label'
 import {calculations} from 'utils/gigComputation'
 
 const ApplyCard = ({path, gig, accountType, onClick}) => {
-  let {position, hours, fee, user, time, from, category, uid} = gig
+  let {position, hours, fee, user, time, from, category, uid, _id} = gig
   const {location} = user[0]
   const type = category === 'parcels' ? 'parcels' : 'gig'
 
@@ -36,7 +36,9 @@ const ApplyCard = ({path, gig, accountType, onClick}) => {
                   {position}
                 </Link>
               ) : (
-                position
+                <Link underline="none" component={RouterLink} to={`/gigs/det/${_id}`}>
+                  {position}
+                </Link>
               )}
             </Typography>
             <Label sx={{fontSize: 10, ml: 1}} color="info">

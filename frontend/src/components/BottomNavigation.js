@@ -201,7 +201,7 @@ export default function SimpleBottomNavigation() {
                 className={classes.nav_item}
                 icon={<SearchIcon className={classes.icon} />}
                 component={Link}
-                to={`/freelancer/search`}
+                to={`/gigs`}
               />
               {/* <BottomNavigationAction
                 className={classes.nav_item}

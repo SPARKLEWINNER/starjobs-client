@@ -2,24 +2,8 @@ import {useEffect, useState, useContext} from 'react'
 import {useParams} from 'react-router'
 import moment from 'moment'
 // material
-import {
-  Box,
-  Tab,
-  Stack,
-  Grid,
-  Typography,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  Card,
-} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
+import {Box, Stack, Typography, CardContent, Card} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
-import {CheckCircle as CheckCircleIcon} from '@material-ui/icons'
 
 // components
 import Page from 'components/Page'
@@ -42,34 +26,11 @@ const MainStyle = styled(Stack)(({theme}) => ({
   },
 }))
 
-const useStyles = makeStyles({
-  radioItem: {
-    margin: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    color: '#000',
-    '& .MuiButtonBase-root': {
-      //   opacity: 0,
-    },
-    '& .MuiFormControlLabel-root': {
-      display: 'block',
-    },
-    '&.Mui-selected': {
-      borderBottom: '1px solid #FF3030',
-      border: 'none',
-      borderRadius: 0,
-    },
-  },
-})
-
 const FullDetails = () => {
   const params = useParams()
   const [isLoading, setLoading] = useState(false)
   const [gig, setGigDetails] = useState([])
   const {user} = useContext(UsersContext)
-  const [selectedColor, setSelectedColor] = useState('blue')
-  const classes = useStyles()
 
   const load = async () => {
     setLoading(true)
@@ -89,6 +50,7 @@ const FullDetails = () => {
     // eslint-disable-next-line
     [],
   )
+
   return (
     <Page title="Gig Full details - Starjobs">
       <MainStyle
@@ -111,51 +73,6 @@ const FullDetails = () => {
                     <span>&#8369;</span>
                     {/* {parseFloat(jobsterTotal).toFixed(2)} / {gig.type} */}
                   </Label>
-                </Stack>
-
-                <Stack>
-                  <FormControl component="fieldset">
-                    <RadioGroup
-                      aria-label="brandColor"
-                      defaultValue="blue"
-                      name="radio-buttons-group"
-                      className={classes.radioItem}
-                    >
-                      <FormControlLabel
-                        value="blue"
-                        control={<Radio />}
-                        sx={{width: 60}}
-                        label={
-                          <Box sx={{position: 'relative'}}>
-                            <Box sx={{height: 30, width: 30, borderRadius: 30, backgroundColor: '#a878'}} />
-                            <CheckCircleIcon sx={{position: 'absolute', bottom: -5, right: 15, color: '#000'}} />
-                          </Box>
-                        }
-                      />
-                      <FormControlLabel
-                        value="red"
-                        control={<Radio />}
-                        sx={{width: 60}}
-                        label={
-                          <Box sx={{position: 'relative'}}>
-                            <Box sx={{height: 30, width: 30, borderRadius: 30, backgroundColor: '#8282'}} />
-                            <CheckCircleIcon sx={{position: 'absolute', bottom: -5, right: 15, color: '#000'}} />
-                          </Box>
-                        }
-                      />
-                      <FormControlLabel
-                        value="yellow"
-                        control={<Radio />}
-                        sx={{width: 60}}
-                        label={
-                          <Box sx={{position: 'relative'}}>
-                            <Box sx={{height: 30, width: 30, borderRadius: 30, backgroundColor: '#323232'}} />
-                            <CheckCircleIcon sx={{position: 'absolute', bottom: -5, right: 15, color: '#000'}} />
-                          </Box>
-                        }
-                      />
-                    </RadioGroup>
-                  </FormControl>
                 </Stack>
 
                 <Typography variant="body2" sx={{fontSize: 13, mb: 0}}>

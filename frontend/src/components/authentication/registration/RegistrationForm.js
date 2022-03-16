@@ -33,12 +33,12 @@ import {LoadingButtonStyle, InputOutlineStyle, CheckboxWhiteStyle} from 'theme/s
 
 const freelancer_docs = [
   'https://bit.ly/3DIlnNl', // data privacy
-  'https://bit.ly/31IAxVK', // service agreements
+  'https://bit.ly/3Jfr0Gk', // service agreements
 ]
 
 const client_docs = [
   'https://bit.ly/3IBUi1R', // data privacy
-  'https://bit.ly/3IzqRxt', // service agreements
+  'https://bit.ly/35ZqTA4', // service agreements
 ]
 
 export default function StoreOnboardForm() {
@@ -389,7 +389,7 @@ export default function StoreOnboardForm() {
 
       <DialogAnimate fullScreen open={conditionsOpen} onClose={handleClose}>
         <iframe
-          src="https://drive.google.com/file/d/1iVmoWZi1OI2S8yh07cx4LAtmHmkBgHzP/preview"
+          src="https://bit.ly/3tXxUcW"
           width="100%"
           style={{height: '90vh'}}
           frameborder="0"

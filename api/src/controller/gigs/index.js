@@ -9,11 +9,11 @@ const Gigs = require('./../../models/Gigs');
 const Client = require('./../../models/Client');
 const Extends = require('./../../models/Extends');
 
-const {getSpecificData} = require('../../services/validateExisting');
+const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
 
-const {timeCal} = require('../../services/timeCalculator');
-const {BUCKET_URL} = process.env;
+const { timeCal } = require('../../services/timeCalculator');
+const { BUCKET_URL } = process.env;
 
 var controllers = {
     // list of gigs
@@ -30,19 +30,19 @@ var controllers = {
                 return !moment(obj.time).isBefore(moment(), 'day');
             });
 
-            if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'});
+            if (!initial_find) res.status(502).json({ success: false, msg: 'Gigs not found' });
         } catch (error) {
             console.error(error);
 
             await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Gigs not found'});
+            return res.status(502).json({ success: false, msg: 'Gigs not found' });
         }
 
         return res.status(200).json(gigs);
     },
     // specific gig
     get_gig: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let gigs;
 
         try {
@@ -68,20 +68,20 @@ var controllers = {
                 .match({
                     _id: mongoose.Types.ObjectId(id)
                 })
-                .sort({createdAt: -1})
+                .sort({ createdAt: -1 })
                 .exec();
         } catch (error) {
             console.error(error);
 
             await logger.logError(error, 'Gigs.get_gig', null, id, 'GET');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
 
         return res.status(200).json(gigs.pop());
     },
     // list of gigs by category
     get_gigs_categorized: async function (req, res) {
-        const {category} = req.params;
+        const { category } = req.params;
         let gigs = [];
         try {
             let initial_find = await Gigs.find({
@@ -95,24 +95,24 @@ var controllers = {
                 return !moment(obj.time).isBefore(moment(), 'day');
             });
 
-            if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'});
+            if (!initial_find) res.status(502).json({ success: false, msg: 'Gigs not found' });
         } catch (error) {
             console.error(error);
 
             await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Gigs not found'});
+            return res.status(502).json({ success: false, msg: 'Gigs not found' });
         }
 
         return res.status(200).json(gigs);
     },
     // list of gigs by history
     get_gigs_history: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         const now = new Date();
-        await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Account, 'Account', id);
+        await getSpecificData({ uuid: mongoose.Types.ObjectId(id) }, Account, 'Account', id);
         let details;
         try {
-            const check_user = await User.find({_id: mongoose.Types.ObjectId(id)})
+            const check_user = await User.find({ _id: mongoose.Types.ObjectId(id) })
                 .lean()
                 .exec();
 
@@ -155,7 +155,7 @@ var controllers = {
                     .match({
                         'history.uid': mongoose.Types.ObjectId(id)
                     })
-                    .sort({createdAt: -1})
+                    .sort({ createdAt: -1 })
                     .exec();
 
                 details = {
@@ -183,31 +183,31 @@ var controllers = {
             console.error(error);
             await logger.logError(error, 'Gigs.get_gigs_history', null, id, 'GET');
 
-            return res.status(502).json({success: false, msg: 'Unable to get history details'});
+            return res.status(502).json({ success: false, msg: 'Unable to get history details' });
         }
 
         return res.status(200).json(details);
     },
     // create gigs
     post_gig: async function (req, res) {
-        const {id} = req.params;
-        const {time, shift, hours, fee, date, category, position, from} = req.body;
+        const { id } = req.params;
+        const { time, shift, hours, fee, date, category, position, breakHr, from } = req.body;
         const now = new Date();
 
-        const isUserExists = await User.find({_id: mongoose.Types.ObjectId(id), accountType: 1})
+        const isUserExists = await User.find({ _id: mongoose.Types.ObjectId(id), accountType: 1 })
             .lean()
             .exec();
 
         if (!isUserExists || isUserExists.length === 0) {
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
 
-        const client = await Client.find({uid: mongoose.Types.ObjectId(id)})
+        const client = await Client.find({ uid: mongoose.Types.ObjectId(id) })
             .lean()
             .exec();
 
         if (!client) {
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
 
         const gigsObj = new Gigs({
@@ -228,6 +228,7 @@ var controllers = {
             date,
             category,
             position,
+            breakHr,
             uid: mongoose.Types.ObjectId(id),
             dateCreated: now.toISOString()
         });
@@ -237,21 +238,21 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Gigs.post_gig', gigsObj, client[0]._id, 'POST');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
 
         return res.status(201).json(gigsObj);
     },
     // edit gigs
     patch_gig_details: async function (req, res) {
-        const {id, uid: owner_id} = req.params;
-        const {time, shift, hours, fee, date, category, position, from, uid} = req.body;
+        const { id, uid: owner_id } = req.params;
+        const { time, shift, hours, fee, date, category, position, from, uid } = req.body;
 
-        const isGigOwner = await Gigs.find({_id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(owner_id)})
+        const isGigOwner = await Gigs.find({ _id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(owner_id) })
             .lean()
             .exec();
         if (!isGigOwner || isGigOwner.length <= 0) {
-            return res.status(502).json({success: false, msg: 'Not Gig owner'});
+            return res.status(502).json({ success: false, msg: 'Not Gig owner' });
         }
 
         try {
@@ -266,23 +267,23 @@ var controllers = {
                 position
             };
 
-            await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj);
+            await Gigs.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, gigsObj);
             return res.status(200).json(gigsObj);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'GIGS.patch_gig_details', null, null, 'PATCH');
-            return res.status(502).json({success: false, msg: 'Unable to edit gig details'});
+            return res.status(502).json({ success: false, msg: 'Unable to edit gig details' });
         }
     },
     patch_remove_gig: async function (req, res) {
-        const {id, uid: owner_id} = req.params;
-        const {status} = req.body;
+        const { id, uid: owner_id } = req.params;
+        const { status } = req.body;
 
-        const isGigOwner = await Gigs.find({_id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(owner_id)})
+        const isGigOwner = await Gigs.find({ _id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(owner_id) })
             .lean()
             .exec();
         if (!isGigOwner || isGigOwner.length <= 0) {
-            return res.status(502).json({success: false, msg: 'Not Gig owner'});
+            return res.status(502).json({ success: false, msg: 'Not Gig owner' });
         }
 
         try {
@@ -290,17 +291,17 @@ var controllers = {
                 status
             };
 
-            await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj);
+            await Gigs.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, gigsObj);
             return res.status(200).json(gigsObj);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'GIGS.patch_remove_gig', null, null, 'PATCH');
-            return res.status(502).json({success: false, msg: 'Unable to remove gig'});
+            return res.status(502).json({ success: false, msg: 'Unable to remove gig' });
         }
     },
     // ======================== ADMIN ======================
     get_admin_gigs: async function (req, res) {
-        let query = Gigs.find({}, null, {sort: {dateCreated: -1}});
+        let query = Gigs.find({}, null, { sort: { dateCreated: -1 } });
 
         const page = parseInt(req.query.page) || 1;
         const pageSize = parseInt(req.query.limit) || 100;
@@ -309,8 +310,8 @@ var controllers = {
         const reports = await Gigs.aggregate([
             {
                 $group: {
-                    _id: {$month: '$dateCreated'},
-                    numberOfGigs: {$sum: 1}
+                    _id: { $month: '$dateCreated' },
+                    numberOfGigs: { $sum: 1 }
                 }
             }
         ]);
@@ -341,15 +342,15 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'GIGS.get_admin_gigs', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     },
     patch_admin_status_gig: async function (req, res) {
-        const {id} = req.params;
-        const {status, uid} = req.body;
+        const { id } = req.params;
+        const { status, uid } = req.body;
         const now = new Date();
         try {
-            const gigs = await Gigs.find({_id: mongoose.Types.ObjectId(id)})
+            const gigs = await Gigs.find({ _id: mongoose.Types.ObjectId(id) })
                 .lean()
                 .exec();
 
@@ -361,13 +362,13 @@ var controllers = {
             });
 
             history.uid = mongoose.Types.ObjectId(uid);
-            await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {status: status});
+            await Gigs.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { status: status });
             await History.create(history);
             return res.status(200).json(gigs);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'GIGS.patch_archived_gig', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     },
     get_admin_gigs_exports: async function (req, res) {
@@ -396,11 +397,11 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'GIGS.get_admin_gigs_exports', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     },
     get_admin_search_users: async function (req, res) {
-        let query = Gigs.find({position: {$regex: '.*' + req.query.keyword + '.*'}});
+        let query = Gigs.find({ position: { $regex: '.*' + req.query.keyword + '.*' } });
         const page = parseInt(req.query.page) || 1;
         const pageSize = parseInt(req.query.limit) || 100;
         const skip = (page - 1) * pageSize;
@@ -409,8 +410,8 @@ var controllers = {
         const reports = await Gigs.aggregate([
             {
                 $group: {
-                    _id: {$month: '$dateCreated'},
-                    numberOfGigs: {$sum: 1}
+                    _id: { $month: '$dateCreated' },
+                    numberOfGigs: { $sum: 1 }
                 }
             }
         ]);
@@ -440,15 +441,15 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'USER.get_users', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     },
     patch_admin_gig_details: async function (req, res) {
-        const {id} = req.params;
-        const {time, shift, hours, fee, date, category, position, from, status, uid} = req.body;
+        const { id } = req.params;
+        const { time, shift, hours, fee, date, category, position, from, status, uid } = req.body;
         const now = new Date();
         try {
-            const gigs = await Gigs.find({_id: mongoose.Types.ObjectId(id)})
+            const gigs = await Gigs.find({ _id: mongoose.Types.ObjectId(id) })
                 .lean()
                 .exec();
 
@@ -476,12 +477,12 @@ var controllers = {
                 status
             };
 
-            await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj);
+            await Gigs.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, gigsObj);
             return res.status(200).json(gigsObj);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'GIGS.patch_archived_gig', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     }
 };

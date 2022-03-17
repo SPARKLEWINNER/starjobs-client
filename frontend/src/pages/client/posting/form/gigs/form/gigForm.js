@@ -3,7 +3,7 @@ import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 // material
-import {Stack, TextField, Typography} from '@material-ui/core'
+import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox} from '@material-ui/core'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
@@ -25,6 +25,7 @@ export default function GigForm({user, onNext, onStoreData}) {
     fee: Yup.number().min(1, 'Min value 1.').required('Gig fee is required'),
     from: Yup.string().required('Gig Start time is required'),
     to: Yup.string().required('Gig End time is required'),
+    breakHr: Yup.number().required('Break hour/s is required'),
     notes: Yup.string(),
   })
 
@@ -37,6 +38,7 @@ export default function GigForm({user, onNext, onStoreData}) {
       hours: '    ',
       from: '',
       to: '', // time
+      breakHr: 0,
       notes: '',
     },
     enableReinitialize: true,
@@ -61,6 +63,7 @@ export default function GigForm({user, onNext, onStoreData}) {
         fee: values.fee,
         time: values.to,
         from: values.from,
+        breakHr: values.break,
         notes: values.notes,
       }
       setLoading(false)
@@ -119,6 +122,17 @@ export default function GigForm({user, onNext, onStoreData}) {
 
   const handleFeeFormat = (value) => {
     setFieldValue('fee', parseFloat(value).toFixed(2))
+  }
+
+  const handleBreakTimeReduceHours = (value) => {
+    let from_hours = moment(from, 'HH:mm a')
+    let to_hours = moment(to, 'HH:mm a')
+
+    let totalHours = moment.duration(to_hours.diff(from_hours)).asHours()
+    if (totalHours < 0 || !totalHours) return
+
+    setFieldValue('hours', parseFloat(totalHours - value).toFixed(2))
+    setFieldValue('break', parseInt(value).toFixed(2))
   }
 
   return (
@@ -186,9 +200,46 @@ export default function GigForm({user, onNext, onStoreData}) {
             error={Boolean(touched.hours && errors.hours)}
             helperText={touched.hours && errors.hours}
           />
-          <Typography variant="body2" sx={{mt: '6px !important', opacity: 0.5}}>
-            Note: Adjust the break/lunch time.
-          </Typography>
+
+          <FormControl fullWidth sx={{my: 0}}>
+            <FormControlLabel
+              value="isClientUser"
+              control={
+                <Checkbox
+                  onChange={(event) => {
+                    if (!event.target.checked) {
+                      handleBreakTimeReduceHours(0)
+                    }
+                    setFieldValue('isBreak', event.target.checked)
+                  }}
+                  defaultValue="false"
+                />
+              }
+              label={
+                <>
+                  <Typography variant="body1" component="p">
+                    Break time hour/s
+                  </Typography>
+
+                  <Typography variant="body2" component="span" sx={{opacity: 0.5}}>
+                    Note: Adjust the break/lunch time.
+                  </Typography>
+                </>
+              }
+              labelPlacement="end"
+            />
+          </FormControl>
+          {values.isBreak && (
+            <TextField
+              fullWidth
+              label="No. of break hour/s"
+              type="number"
+              onChange={(event) => handleBreakTimeReduceHours(event.currentTarget.value)}
+              error={Boolean(touched.breakHr && errors.breakHr)}
+              helperText={touched.breakHr && errors.breakHr}
+            />
+          )}
+
           <TextField
             fullWidth
             label="Gig Fee"

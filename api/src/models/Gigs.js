@@ -1,26 +1,27 @@
 const mongoose = require('mongoose');
-const {Schema, Types} = mongoose;
+const { Schema, Types } = mongoose;
 const collectionName = 'gigs';
 const userSchema = new Schema(
     {
-        _id: {type: Types.ObjectId, ref: 'Client'},
+        _id: { type: Types.ObjectId, ref: 'Client' },
         location: String,
         companyName: String,
         website: String,
         thumbnail: String,
         rateType: String
     },
-    {timestamps: true}
+    { timestamps: true }
 );
 
 const gigsData = {
-    auid: {type: Types.ObjectId, ref: 'Client'},
+    auid: { type: Types.ObjectId, ref: 'Client' },
     from: String,
     time: String,
     shift: String,
     hours: String,
     fee: String,
     date: String,
+    breakHr: String,
     uid: {
         type: Types.ObjectId,
         required: true,
@@ -60,5 +61,5 @@ const gigsData = {
     }
 };
 
-const gigsSchema = new Schema(gigsData, {timestamps: true});
+const gigsSchema = new Schema(gigsData, { timestamps: true });
 module.exports = mongoose.model('Gigs', gigsSchema, collectionName);

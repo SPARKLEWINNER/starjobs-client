@@ -6,18 +6,18 @@ const Account = require('./../../models/Account');
 const User = require('./../../models/User');
 const mongoose = require('mongoose');
 
-const {getSpecificData} = require('../../services/validateExisting');
+const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
 const requestToken = require('../../services/token');
 
-const {BUCKET_URL} = process.env;
+const { BUCKET_URL } = process.env;
 
 var controllers = {
     post_client_details: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let result;
 
-        await getSpecificData({_id: mongoose.Types.ObjectId(id)}, User, 'Client', id); // validate if data exists
+        await getSpecificData({ _id: mongoose.Types.ObjectId(id) }, User, 'Client', id); // validate if data exists
 
         const {
             firstName,
@@ -61,13 +61,13 @@ var controllers = {
         try {
             result = await Client.create(clientObj);
             if (result) {
-                await User.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isActive: true});
+                await User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { isActive: true });
             }
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Client.post_client_details', accountObj, id, 'POST');
 
-            return res.status(502).json({success: false, msg: 'User to save details'});
+            return res.status(502).json({ success: false, msg: 'User to save details' });
         }
 
         clientObj.photo = BUCKET_URL + photo;
@@ -78,10 +78,10 @@ var controllers = {
 
         clientObj.documents = document_url;
 
-        const updated_user = await User.find({_id: mongoose.Types.ObjectId(id)})
+        const updated_user = await User.find({ _id: mongoose.Types.ObjectId(id) })
             .lean()
             .exec();
-        let {accessToken: token, refreshToken} = requestToken.create_token(id);
+        let { accessToken: token, refreshToken } = requestToken.create_token(id);
         result = {
             token,
             refreshToken,
@@ -91,10 +91,10 @@ var controllers = {
         return res.status(201).json(result);
     },
     patch_client_details: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let result, user;
 
-        await getSpecificData({_id: mongoose.Types.ObjectId(id)}, User, 'Client', id); // validate if data exists
+        await getSpecificData({ _id: mongoose.Types.ObjectId(id) }, User, 'Client', id); // validate if data exists
 
         const {
             firstName,
@@ -130,23 +130,23 @@ var controllers = {
             photo
         };
 
-        const oldDetails = await Client.find({_id: mongoose.Types.ObjectId(id)})
+        const oldDetails = await Client.find({ _id: mongoose.Types.ObjectId(id) })
             .lean()
             .exec();
 
         try {
-            result = await Client.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, clientObj);
-            user = await User.find({_id: mongoose.Types.ObjectId(result.uid)})
+            result = await Client.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, clientObj);
+            user = await User.find({ _id: mongoose.Types.ObjectId(result.uid) })
                 .lean()
                 .exec();
             await logger.logAccountHistory(user[0].accountType, clientObj, id, oldDetails[0]);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Client.patch_client_details', clientObj, id, 'PATCH');
-            return res.status(502).json({success: false, msg: 'User to save details'});
+            return res.status(502).json({ success: false, msg: 'User to save details' });
         }
 
-        let {accessToken: token, refreshToken} = requestToken.create_token(result.uid);
+        let { accessToken: token, refreshToken } = requestToken.create_token(result.uid);
         result = {
             ...user[0],
             photo: result.photo,
@@ -157,54 +157,54 @@ var controllers = {
         return res.status(201).json(result);
     },
     patch_client_documents: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let result, user;
 
-        await getSpecificData({_id: mongoose.Types.ObjectId(id)}, User, 'Client', id); // validate if data exists
+        await getSpecificData({ _id: mongoose.Types.ObjectId(id) }, User, 'Client', id); // validate if data exists
 
-        const {documents} = req.body;
+        const { documents } = req.body;
 
-        const oldDetails = await Client.find({uid: mongoose.Types.ObjectId(id)})
+        const oldDetails = await Client.find({ uid: mongoose.Types.ObjectId(id) })
             .lean()
             .exec();
 
         try {
-            result = await Client.findOneAndUpdate({uid: mongoose.Types.ObjectId(id)}, {documents: documents});
+            result = await Client.findOneAndUpdate({ uid: mongoose.Types.ObjectId(id) }, { documents: documents });
             console.log(result);
-            user = await User.find({_id: mongoose.Types.ObjectId(result.uid)})
+            user = await User.find({ _id: mongoose.Types.ObjectId(result.uid) })
                 .lean()
                 .exec();
-            await logger.logAccountHistory(user[0].accountType, {documents: documents}, id, oldDetails[0]);
+            await logger.logAccountHistory(user[0].accountType, { documents: documents }, id, oldDetails[0]);
         } catch (error) {
             console.error(error);
-            await logger.logError(error, 'Client.patch_client_documents', {documents: documents}, id, 'PATCH');
-            return res.status(502).json({success: false, msg: 'User to save new documents'});
+            await logger.logError(error, 'Client.patch_client_documents', { documents: documents }, id, 'PATCH');
+            return res.status(502).json({ success: false, msg: 'User to save new documents' });
         }
 
-        return res.status(200).json({msg: 'New Documents will be reviewed by our staff', status: 'success'});
+        return res.status(200).json({ msg: 'New Documents will be reviewed by our staff', status: 'success' });
     },
     get_client: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let client;
 
         try {
-            client = await getSpecificData({uid: mongoose.Types.ObjectId(id)}, Client, 'Client', id);
+            client = await getSpecificData({ uid: mongoose.Types.ObjectId(id) }, Client, 'Client', id);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Client', null, id, 'GET');
 
-            return res.status(502).json({success: false, msg: 'User to get details'});
+            return res.status(502).json({ success: false, msg: 'User to get details' });
         }
         return res.status(200).json(client);
     },
     get_client_gigs: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let gigs;
         let client;
 
         try {
-            await getSpecificData({_id: mongoose.Types.ObjectId(id)}, User, 'User', id);
-            let user = await Client.find({uid: mongoose.Types.ObjectId(id)})
+            await getSpecificData({ _id: mongoose.Types.ObjectId(id) }, User, 'User', id);
+            let user = await Client.find({ uid: mongoose.Types.ObjectId(id) })
                 .lean()
                 .exec();
 
@@ -288,7 +288,7 @@ var controllers = {
                 gigs = await Promise.all(
                     gigs.map(async (obj) => {
                         if (!obj.isExtended) {
-                            const account = await Account.find({uuid: mongoose.Types.ObjectId(obj.auid)})
+                            const account = await Account.find({ uuid: mongoose.Types.ObjectId(obj.auid) })
                                 .lean()
                                 .exec();
                             return {
@@ -311,7 +311,7 @@ var controllers = {
             console.error(error);
             await logger.logError(error, 'Client.get_client_gigs', null, id, 'GET');
 
-            return res.status(502).json({success: false, msg: 'User to get details'});
+            return res.status(502).json({ success: false, msg: 'User to get details' });
         }
 
         return res.status(200).json(client);

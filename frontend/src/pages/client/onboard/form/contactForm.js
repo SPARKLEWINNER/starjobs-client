@@ -119,6 +119,20 @@ export default function ContactForm({user, stored, onNext, onStoreData}) {
               error={Boolean(touched.city && errors.city)}
               helperText={touched.city && errors.city}
             />
+
+            <Stack sx={{mt: 5}}>
+              {errors &&
+                Object.values(errors).map((message, index) => (
+                  <Typography
+                    key={`error-${index}`}
+                    variant="subtitle2"
+                    sx={{color: 'error.main', mb: 0.5, mt: '0 !important', fontWeight: '400', fontSize: '0.75rem'}}
+                    component="p"
+                  >
+                    {message}
+                  </Typography>
+                ))}
+            </Stack>
           </Stack>
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>

@@ -113,7 +113,7 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
     },
   })
 
-  const {handleSubmit, setFieldValue, getFieldProps} = formik
+  const {errors, handleSubmit, setFieldValue, getFieldProps} = formik
 
   const handleChange = (e, checkboxKey) => {
     const {checked, value} = e.target
@@ -309,6 +309,20 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
             <Typography variant="body2" sx={{mb: 1, marginTop: '0.5rem !important'}}>
               (ex. Encoding, Excel Computations)
             </Typography>
+
+            <Stack sx={{mt: 5}}>
+              {errors &&
+                Object.values(errors).map((message, index) => (
+                  <Typography
+                    key={`error-${index}`}
+                    variant="subtitle2"
+                    sx={{color: 'error.main', mb: 0.5, mt: '0 !important', fontWeight: '400', fontSize: '0.75rem'}}
+                    component="p"
+                  >
+                    {message}
+                  </Typography>
+                ))}
+            </Stack>
           </Stack>
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>

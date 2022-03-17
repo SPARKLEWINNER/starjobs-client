@@ -1,4 +1,5 @@
 import * as Yup from 'yup'
+import {last} from 'lodash'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
@@ -15,12 +16,17 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name is required'),
     middleInitial: Yup.string().required('Middle initial is required'),
     email: Yup.string().email('Email must be a valid email address').required('Email address is required'),
+    companyName: Yup.string().required('Company name is required'),
+    location: Yup.string().required('Company location is required'),
+    brandName: Yup.string().required('Brand name is required'),
+    website: Yup.string().required('Website is required'),
+    companyPosition: Yup.string().required('Company position is required'),
   })
 
   const formik = useFormik({
     initialValues: {
-      firstName: user.name || store.firstName || '',
-      lastName: store.lastName || '',
+      firstName: (user.name && user.name.split(' ')[0]) || store.firstName || '',
+      lastName: (user.name && last(user.name.split(' '))) || store.lastName || '',
       middleInitial: store.middleInitial || '',
       email: user.email,
       companyName: store.companyName || '',
@@ -124,6 +130,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               <TextField
                 fullWidth
                 label="Company name"
+                value=""
                 {...getFieldProps('companyName')}
                 error={Boolean(touched.companyName && errors.companyName)}
                 helperText={touched.companyName && errors.companyName}
@@ -131,6 +138,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               <TextField
                 fullWidth
                 label="Brand name"
+                value=""
                 {...getFieldProps('brandName')}
                 error={Boolean(touched.brandName && errors.brandName)}
                 helperText={touched.brandName && errors.brandName}
@@ -138,6 +146,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               <TextField
                 fullWidth
                 label="Location"
+                value=""
                 {...getFieldProps('location')}
                 error={Boolean(touched.location && errors.location)}
                 helperText={touched.location && errors.location}
@@ -145,6 +154,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               <TextField
                 fullWidth
                 label="Website"
+                value=""
                 {...getFieldProps('website')}
                 error={Boolean(touched.website && errors.website)}
                 helperText={touched.website && errors.website}
@@ -152,10 +162,25 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               <TextField
                 fullWidth
                 label="Position in the company"
+                value=""
                 {...getFieldProps('companyPosition')}
                 error={Boolean(touched.companyPosition && errors.companyPosition)}
                 helperText={touched.companyPosition && errors.companyPosition}
               />
+            </Stack>
+
+            <Stack sx={{mt: 5}}>
+              {errors &&
+                Object.values(errors).map((message, index) => (
+                  <Typography
+                    key={`error-${index}`}
+                    variant="subtitle2"
+                    sx={{color: 'error.main', mb: 0.5, mt: '0 !important', fontWeight: '400', fontSize: '0.75rem'}}
+                    component="p"
+                  >
+                    {message}
+                  </Typography>
+                ))}
             </Stack>
           </Box>
 

@@ -44,8 +44,8 @@ const useStyles = makeStyles({
 })
 
 const SIMPLE_TAB = [
-  {value: 2, label: 'Create a Gig', disabled: false},
-  {value: 1, label: 'Gigs Progress', disabled: false},
+  {value: 2, label: 'Post a Gig', disabled: false},
+  {value: 1, label: 'Gig in progress', disabled: false},
 ]
 
 const GigPosting = () => {

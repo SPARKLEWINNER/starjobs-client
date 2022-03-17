@@ -21,38 +21,48 @@ import gigs_api from 'utils/api/gigs'
 
 // component
 import {WaitingCard} from '../cards'
+import ProgressCircle from 'components/progressCircle'
 
 export default function ClientTab({category}) {
   const [data, setData] = useState([])
+  const [isLoading, setLoading] = useState(false)
   const [FILTERED_DATA, setRenderData] = useState([])
   const [RENDER_LENGTH, setRenderLength] = useState(3)
   const [openFilterDialog, setOpenFilterDialog] = useState(false)
 
   const load = async () => {
     let result = ''
+    setLoading(true)
 
-    if (category) {
-      result = await gigs_api.get_gigs_categorized(category)
-    } else {
-      result = await gigs_api.get_gigs_no_category()
+    try {
+      if (category) {
+        result = await gigs_api.get_gigs_categorized(category)
+      } else {
+        result = await gigs_api.get_gigs_no_category()
+      }
+
+      let {data} = result
+      if (!data || data.length === 0) {
+        setData([])
+        setRenderData([])
+        return
+      }
+
+      data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+      const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
+
+      setData(FILTERED)
+      setRenderData(FILTERED.slice(0, 3))
+      setLoading(false)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
     }
 
     if (!result.ok) {
       return
     }
-
-    let {data} = result
-    if (!data || data.length === 0) {
-      setData([])
-      setRenderData([])
-      return
-    }
-
-    data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-    const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-
-    setData(FILTERED)
-    setRenderData(FILTERED.slice(0, 3))
   }
 
   const loadMore = () => {
@@ -140,12 +150,17 @@ export default function ClientTab({category}) {
           </Stack>
         )}
 
-        {FILTERED_DATA.length !== data.length && (
+        {isLoading && <ProgressCircle />}
+
+        {!isLoading && FILTERED_DATA.length !== data.length && (
           <Button variant="text" onClick={() => loadMore()} sx={{mt: 5}}>
             Load more
           </Button>
         )}
-        {(!FILTERED_DATA || FILTERED_DATA.length === 0) && <Typography variant="body2">No Posted Gig/s</Typography>}
+
+        {!isLoading && (!FILTERED_DATA || FILTERED_DATA.length === 0) && (
+          <Typography variant="body2">No Posted Gig/s</Typography>
+        )}
       </Stack>
 
       <Dialog open={openFilterDialog} onClose={handleFilterDialogClose} fullWidth>

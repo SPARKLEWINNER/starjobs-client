@@ -1,8 +1,9 @@
 import {useState, useEffect} from 'react'
 import {Box, Stack, Typography} from '@material-ui/core'
 import moment from 'moment'
-import LoadingScreen from 'components/LoadingScreen'
 import {PendingCard} from 'components/clients/cards'
+
+import ProgressCircle from 'components/progressCircle'
 
 const pending_status = ['Waiting', 'Applying']
 export default function PendingTab({gigs, selected}) {
@@ -17,9 +18,14 @@ export default function PendingTab({gigs, selected}) {
       filtered_gig &&
         filtered_gig.map((value) => {
           const {time, status} = value
-          if (status !== 'Waiting') return ''
-          if (moment(time).isBefore(moment(), 'day')) return ''
-          return data.push(value)
+          switch (status) {
+            case 'Waiting':
+            case 'Applying':
+              if (moment(time).isBefore(moment(), 'day')) return ''
+              return data.push(value)
+            default:
+              return ''
+          }
         })
 
       setLoading(false)
@@ -38,7 +44,7 @@ export default function PendingTab({gigs, selected}) {
         </Typography>
       </Stack>
       <Box sx={{px: 1}}>
-        {loading && <LoadingScreen />}
+        {loading && <ProgressCircle />}
         {FILTERED_DATA &&
           FILTERED_DATA.map((v, k) => {
             return <PendingCard gig={v} key={k} />

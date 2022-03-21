@@ -153,10 +153,11 @@ export default function GigForm({user, onNext, onStoreData}) {
               <MobileDatePicker
                 orientation="portrait"
                 label="Date"
-                value={date}
+                value={moment(new Date()).format('YYYY-MM-DD')}
                 minDate={current_date}
                 onChange={(newValue) => {
                   setDate(newValue)
+                  setFieldValue('date', moment(newValue).format('YYYY-MM-DD'))
                 }}
                 renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
               />
@@ -258,6 +259,20 @@ export default function GigForm({user, onNext, onStoreData}) {
             sx={{mt: 3}}
             {...getFieldProps('notes')}
           />
+
+          <Stack sx={{mt: 5}}>
+            {errors &&
+              Object.values(errors).map((message, index) => (
+                <Typography
+                  key={`error-${index}`}
+                  variant="subtitle2"
+                  sx={{color: 'error.main', mb: 0.5, mt: '0 !important', fontWeight: '400', fontSize: '0.75rem'}}
+                  component="p"
+                >
+                  {message}
+                </Typography>
+              ))}
+          </Stack>
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
             Continue

@@ -120,11 +120,11 @@ export default function GigCreate({category}) {
           Gig Posting <br /> ({category && capitalCase(category.replace('-', ' '))}){' '}
         </Typography>
       </Box>
-      {activeStep === 0 ? <GigForm onNext={handleNext} onStoreData={handleFormData} /> : ''}
-      {activeStep === 1 ? <BillingForm onNext={handleNext} storeData={form} /> : ''}
+      {activeStep === 0 && <GigForm onNext={handleNext} onStoreData={handleFormData} />}
+      {activeStep === 1 && <BillingForm onNext={handleNext} storeData={form} />}
 
       <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
-        {activeStep === 1 ? (
+        {activeStep === 1 && (
           <LoadingButton
             variant="contained"
             size="large"
@@ -134,10 +134,8 @@ export default function GigCreate({category}) {
           >
             Post a Gig
           </LoadingButton>
-        ) : (
-          ''
         )}
-        {activeStep !== 0 ? (
+        {activeStep !== 0 && (
           <Button
             size="large"
             variant="outlined"
@@ -146,8 +144,6 @@ export default function GigCreate({category}) {
           >
             Go Back
           </Button>
-        ) : (
-          ''
         )}
       </Box>
       <CreateGigDialog open={open} onConfirm={handleSubmit} handleClose={handleCancelConfirm} />

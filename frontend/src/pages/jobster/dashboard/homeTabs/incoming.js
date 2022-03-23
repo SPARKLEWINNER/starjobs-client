@@ -1,7 +1,7 @@
 import {Box, Stack, Typography, Card} from '@material-ui/core'
 import moment from 'moment'
 // import {useSnackbar} from 'notistack5'
-import {IncomingCard} from 'components/freelancers/cards'
+import {IncomingCard} from './cards'
 
 export default function IncomingTab({gigs, user}) {
   // const {enqueueSnackbar} = useSnackbar()

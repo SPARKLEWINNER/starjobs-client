@@ -5,7 +5,7 @@ import moment from 'moment'
 import {useSnackbar} from 'notistack5'
 
 // components
-import {CurrentCard, BillingCard} from 'components/clients/cards'
+import {CurrentCard, BillingCard} from '../../../cards'
 import CurrentModalPopup from '../modal'
 
 // api

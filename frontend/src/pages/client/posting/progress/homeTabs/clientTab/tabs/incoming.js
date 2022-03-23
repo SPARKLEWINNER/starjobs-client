@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {Box, Stack, Typography, Card} from '@material-ui/core'
 import moment from 'moment'
-import {IncomingCard} from 'components/clients/cards'
+import {IncomingCard} from '../../../cards'
 
 const incoming_status = ['Accepted']
 

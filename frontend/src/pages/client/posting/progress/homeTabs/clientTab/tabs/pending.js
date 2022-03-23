@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {Box, Stack, Typography} from '@material-ui/core'
 import moment from 'moment'
-import {PendingCard} from 'components/clients/cards'
+import {PendingCard} from '../../../cards'
 
 import ProgressCircle from 'components/progressCircle'
 

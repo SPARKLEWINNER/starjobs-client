@@ -36,7 +36,7 @@ const MainStyle = styled(Stack)(({theme}) => ({
 const OnboardPage = () => {
   const {enqueueSnackbar} = useSnackbar()
   const navigate = useNavigate()
-  const [activeStep, setActiveStep] = useState(0)
+  const [activeStep, setActiveStep] = useState(2)
   const [skipped, setSkipped] = useState(new Set())
   const [user, setUser] = useState([])
   const [isLoading, setLoading] = useState(false)

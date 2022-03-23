@@ -69,6 +69,7 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
             if (item !== undefined) return skillQualification.push(item.label)
           })
         } else {
+          console.log('selected.SKILL_QUALIFICATION', selected.SKILL_QUALIFICATION)
           if (selected.SKILL_QUALIFICATION.length > 0) {
             skillQualification.push(selected.SKILL_QUALIFICATION.pop().label)
           }

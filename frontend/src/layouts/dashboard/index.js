@@ -8,8 +8,6 @@ import {styled} from '@material-ui/core/styles'
 //
 import DashboardNavbar from './DashboardNavbar'
 import FixedBottomNavigation from 'components/BottomNavigation'
-// import FreelancerCompleteDialog from 'components/freelancerDialog'
-// import ClientCompleteDialog from 'components/clientDialog'
 
 import {UsersContext} from 'utils/context/users'
 // import {SocketContext} from 'utils/context/socket'

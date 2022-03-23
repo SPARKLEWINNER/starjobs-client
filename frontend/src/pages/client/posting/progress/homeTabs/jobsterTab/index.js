@@ -21,7 +21,7 @@ import {styled} from '@material-ui/core/styles'
 import user_api from 'utils/api/users'
 
 // component
-import FreelancerCard from '../../card'
+import FreelancerCard from '../../cards/interest'
 
 // variable
 const DRAWER_WIDTH = 280

@@ -1,6 +1,6 @@
 import {Box, Stack, Typography, Link, Card} from '@material-ui/core'
 import moment from 'moment'
-import {PendingCard} from 'components/freelancers/cards'
+import {PendingCard} from './cards'
 
 export default function PendingTab({gigs}) {
   return (

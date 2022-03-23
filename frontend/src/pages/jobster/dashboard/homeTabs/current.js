@@ -7,7 +7,7 @@ import AliceCarousel from 'react-alice-carousel'
 import {Box, Stack, Typography, Card} from '@material-ui/core'
 
 // component
-import {CurrentCard} from 'components/freelancers/cards'
+import {CurrentCard} from './cards'
 import CurrentModalPopup from './modal'
 
 // api

@@ -46,7 +46,7 @@ export default function App() {
           <MainProvider>
             <UsersProvider>
               {/* <SocketProvider> */}
-              <PusherProvider>
+              {/* <PusherProvider> */}
                 <NotistackProvider>
                   <RatingsProvider>
                     <TawktoPageOverlay>
@@ -57,7 +57,7 @@ export default function App() {
                     </TawktoPageOverlay>
                   </RatingsProvider>
                 </NotistackProvider>
-              </PusherProvider>
+              {/* </PusherProvider> */}
               {/* </SocketProvider> */}
             </UsersProvider>
           </MainProvider>

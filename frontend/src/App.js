@@ -16,7 +16,6 @@ import ThemePrimaryColor from './components/ThemePrimaryColor'
 import ThemeLocalization from './components/ThemeLocalization'
 import {MainProvider} from './utils/context/main'
 import {UsersProvider} from './utils/context/users'
-import {PusherProvider} from './utils/context/pusher'
 // import {SocketProvider} from './utils/context/socket'
 import {RatingsProvider} from './utils/context/rating'
 
@@ -46,18 +45,16 @@ export default function App() {
           <MainProvider>
             <UsersProvider>
               {/* <SocketProvider> */}
-              {/* <PusherProvider> */}
-                <NotistackProvider>
-                  <RatingsProvider>
-                    <TawktoPageOverlay>
-                      <ScrollToTop />
-                      <AppRoute />
-                      <FirebaseToken />
-                      <GenericNotification open={open} details={payload} handleClose={handleClose} />
-                    </TawktoPageOverlay>
-                  </RatingsProvider>
-                </NotistackProvider>
-              {/* </PusherProvider> */}
+              <NotistackProvider>
+                <RatingsProvider>
+                  <TawktoPageOverlay>
+                    <ScrollToTop />
+                    <AppRoute />
+                    <FirebaseToken />
+                    <GenericNotification open={open} details={payload} handleClose={handleClose} />
+                  </TawktoPageOverlay>
+                </RatingsProvider>
+              </NotistackProvider>
               {/* </SocketProvider> */}
             </UsersProvider>
           </MainProvider>

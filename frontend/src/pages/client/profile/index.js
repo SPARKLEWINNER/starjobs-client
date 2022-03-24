@@ -30,6 +30,9 @@ import gigs_api from 'utils/api/gigs'
 import storage from 'utils/storage'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
+// theme
+import color from 'theme/palette'
+
 // variables
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 const DRAWER_WIDTH = 280
@@ -65,7 +68,7 @@ const useStyles = makeStyles({
     fontSize: '0.85rem !important',
     margin: '8px',
     minHeight: '42px',
-    color: '#000',
+    color: `${color.common.black}`,
     '@media (max-width: 500px)': {
       maxWidth: 'auto',
       padding: '6px 0',
@@ -76,7 +79,7 @@ const useStyles = makeStyles({
       fontSize: 11,
     },
     '&.Mui-selected': {
-      borderBottom: '1px solid #FF3030',
+      borderBottom: `1px solid ${color.starjobs.main}`,
       border: 'none',
       borderRadius: 0,
     },
@@ -298,7 +301,7 @@ const Profile = () => {
                       {capitalCase(`${user.firstName} ${user.middleInitial} ${user.lastName}`)}
 
                       <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
-                        <Icon icon={checkmark} width={24} height={24} color="#FF3030" />
+                        <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
                       </Box>
                     </Typography>
                   </Grid>
@@ -316,7 +319,7 @@ const Profile = () => {
                 {/* links */}
                 <Stack direction="row" sx={{my: 1, width: '100%', textAlign: 'center'}}>
                   <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                    <Icon icon={map} width={24} height={24} color="#FF3030" />
+                    <Icon icon={map} width={24} height={24} color={`${color.starjobs.main}`} />
                     <Typography
                       variant="body2"
                       sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
@@ -325,7 +328,7 @@ const Profile = () => {
                     </Typography>
                   </Box>
                   <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                    <Icon icon={globe} width={24} height={24} color="#FF3030" />
+                    <Icon icon={globe} width={24} height={24} color={`${color.starjobs.main}`} />
                     <Typography
                       variant="body2"
                       sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
@@ -334,7 +337,7 @@ const Profile = () => {
                     </Typography>
                   </Box>
                   <Box item sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                    <Icon icon={envelope} width={24} height={24} color="#FF3030" />
+                    <Icon icon={envelope} width={24} height={24} color={`${color.starjobs.main}`} />
                     <Typography
                       variant="body2"
                       sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}

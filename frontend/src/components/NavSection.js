@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import PropTypes from 'prop-types'
-import { Icon } from '@iconify/react'
-import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom'
+import {Icon} from '@iconify/react'
+import {NavLink as RouterLink, matchPath, useLocation} from 'react-router-dom'
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill'
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
 // material
-import { alpha, useTheme, styled } from '@material-ui/core/styles'
-import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@material-ui/core'
+import {alpha, useTheme, styled} from '@material-ui/core/styles'
+import {Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton} from '@material-ui/core'
 
 // ----------------------------------------------------------------------
 
-const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(({ theme }) => ({
+const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(({theme}) => ({
   ...theme.typography.body2,
   height: 48,
   position: 'relative',
@@ -28,7 +28,7 @@ const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props
     position: 'absolute',
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.starjobs.main,
   },
 }))
 
@@ -47,10 +47,10 @@ NavItem.propTypes = {
   active: PropTypes.func,
 }
 
-function NavItem({ item, active, account }) {
+function NavItem({item, active, account}) {
   const theme = useTheme()
   const isActiveRoot = active(item.path)
-  const { title, path, icon, info, children } = item
+  const {title, path, icon, info, children} = item
   const [open, setOpen] = useState(isActiveRoot)
 
   const handleOpen = () => {
@@ -58,10 +58,10 @@ function NavItem({ item, active, account }) {
   }
 
   const activeRootStyle = {
-    color: 'primary.main',
+    color: 'starjobs.main',
     fontWeight: 'fontWeightMedium',
-    bgcolor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
-    '&:before': { display: 'block' },
+    bgcolor: alpha(theme.palette.starjobs.main, theme.palette.action.selectedOpacity),
+    '&:before': {display: 'block'},
   }
 
   const activeSubStyle = {
@@ -84,14 +84,14 @@ function NavItem({ item, active, account }) {
           <Box
             component={Icon}
             icon={open ? arrowIosDownwardFill : arrowIosForwardFill}
-            sx={{ width: 16, height: 16, ml: 1 }}
+            sx={{width: 16, height: 16, ml: 1}}
           />
         </ListItemStyle>
 
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {children.map((item) => {
-              const { title, path } = item
+              const {title, path} = item
               const isActiveSub = active(path)
 
               return (
@@ -117,7 +117,7 @@ function NavItem({ item, active, account }) {
                         transition: (theme) => theme.transitions.create('transform'),
                         ...(isActiveSub && {
                           transform: 'scale(2)',
-                          bgcolor: 'primary.main',
+                          bgcolor: 'starjobs.main',
                         }),
                       }}
                     />
@@ -151,9 +151,9 @@ NavSection.propTypes = {
   navConfig: PropTypes.array,
 }
 
-export default function NavSection({ account, navConfig, ...other }) {
-  const { pathname } = useLocation()
-  const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false)
+export default function NavSection({account, navConfig, ...other}) {
+  const {pathname} = useLocation()
+  const match = (path) => (path ? !!matchPath({path, end: false}, pathname) : false)
   return (
     <Box {...other}>
       <List disablePadding>

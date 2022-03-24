@@ -20,8 +20,12 @@ import gigs_api from 'utils/api/gigs'
 import category_api from 'utils/api/category'
 import storage from 'utils/storage'
 
+// theme
+import color from 'theme/palette'
+
 // variables
 const DRAWER_WIDTH = 280
+
 // styles
 const MainStyle = styled(Stack)(({theme}) => ({
   marginTop: '0',
@@ -206,7 +210,10 @@ const Dashboard = () => {
             {/* Search by Category */}
             <Box>
               <Stack direction="row" sx={{alignItems: 'center', mb: 2}}>
-                <Typography variant="h6" sx={{borderLeft: '4px solid #FF3030', textIndent: 16, flexGrow: 1}}>
+                <Typography
+                  variant="h6"
+                  sx={{borderLeft: `4px solid ${color.starjobs.main}`, textIndent: 16, flexGrow: 1}}
+                >
                   Search by Category
                 </Typography>
                 <Link
@@ -214,7 +221,7 @@ const Dashboard = () => {
                   component={RouterLink}
                   to={`${current_user.accountType === 1 ? '/client' : '/freelancer'}/search`}
                   sx={{textAlign: 'center', fontWeight: 'bold', fontSize: '0.85rem'}}
-                  color="primary.main"
+                  color="starjobs.main"
                 >
                   See more
                 </Link>
@@ -242,7 +249,7 @@ const Dashboard = () => {
                                 mx: 'auto',
                                 my: 2,
                                 borderRadius: 30,
-                                backgroundColor: 'primary.main',
+                                backgroundColor: 'starjobs.main',
                                 objectFit: 'cover',
                                 objectPosition: 'center',
                               }}
@@ -261,7 +268,10 @@ const Dashboard = () => {
             {/* News and Promotion */}
             <Stack sx={{py: 4}}>
               <Stack direction="row" sx={{alignItems: 'center', mb: 2}}>
-                <Typography variant="h6" sx={{flexGrow: 1, borderLeft: '4px solid #FF3030', textIndent: 16}}>
+                <Typography
+                  variant="h6"
+                  sx={{flexGrow: 1, borderLeft: `4px solid ${color.starjobs.main}`, textIndent: 16}}
+                >
                   News and Promotions
                 </Typography>
               </Stack>

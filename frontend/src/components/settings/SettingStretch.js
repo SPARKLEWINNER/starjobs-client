@@ -1,23 +1,23 @@
-import { Icon } from '@iconify/react';
-import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
-import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
+import {Icon} from '@iconify/react'
+import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill'
+import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill'
 // material
-import { Paper, CardActionArea, Stack } from '@material-ui/core';
+import {Paper, CardActionArea, Stack} from '@material-ui/core'
 // hooks
-import useSettings from 'utils/hooks/settings';
+import useSettings from 'utils/hooks/settings'
 
 // ----------------------------------------------------------------------
 
 export default function SettingStretch() {
-  const { themeStretch, onToggleStretch } = useSettings();
+  const {themeStretch, onToggleStretch} = useSettings()
 
   return (
-    <CardActionArea sx={{ color: 'primary.main', borderRadius: 1 }}>
+    <CardActionArea sx={{color: 'starjobs.main', borderRadius: 1}}>
       <Paper
         onClick={onToggleStretch}
         sx={{
           p: 2.5,
-          bgcolor: 'background.neutral'
+          bgcolor: 'background.neutral',
         }}
       >
         <Stack
@@ -36,8 +36,8 @@ export default function SettingStretch() {
             boxShadow: (theme) => theme.customShadows.z12,
             ...(themeStretch && {
               width: 1,
-              color: 'primary.main'
-            })
+              color: 'starjobs.main',
+            }),
           }}
         >
           <Icon icon={themeStretch ? arrowIosBackFill : arrowIosForwardFill} width={20} height={20} />
@@ -45,5 +45,5 @@ export default function SettingStretch() {
         </Stack>
       </Paper>
     </CardActionArea>
-  );
+  )
 }

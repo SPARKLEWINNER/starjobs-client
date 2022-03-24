@@ -1,12 +1,14 @@
-/* eslint-disable no-unused-vars */
 import {Paper, Divider, Box, Stack, Typography} from '@material-ui/core'
+
+// theme
+import color from 'theme/palette'
 
 export default function About({form}) {
   if (form.length === 0) return
   return (
     <Box>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           About
         </Typography>
       </Stack>

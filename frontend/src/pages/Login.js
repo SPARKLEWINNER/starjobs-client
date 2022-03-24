@@ -1,7 +1,7 @@
 import React, {useEffect, useContext} from 'react'
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom'
 import {styled} from '@material-ui/core/styles'
-import {Link, Stack, Container, Typography, Box} from '@material-ui/core'
+import {Link, Stack, Container, Typography} from '@material-ui/core'
 
 import Page from '../components/Page'
 import LogoOutline from 'components/LogoOutline'

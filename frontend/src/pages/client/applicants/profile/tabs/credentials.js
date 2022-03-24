@@ -2,13 +2,16 @@ import {Box, Grid, Stack, Typography} from '@material-ui/core'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'
 
+// theme
+import color from 'theme/palette'
+
 const reviews = [{name: 'DTI'}, {name: 'BIR'}, {name: 'NBI clearance'}]
 
 export default function Credentials() {
   return (
     <Box>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Reviews
         </Typography>
       </Stack>

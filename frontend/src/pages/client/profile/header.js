@@ -7,6 +7,9 @@ import globe from '@iconify/icons-eva/globe-outline'
 
 import MAvatar from 'components/@material-extend/MAvatar'
 
+// theme
+import color from 'theme/palette'
+
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 const ProfileHeader = ({user}) => {
   return (
@@ -39,27 +42,27 @@ const ProfileHeader = ({user}) => {
       </Box>
       <Box sx={{my: 1, width: '100%'}}>
         <Grid container sx={{alignItems: 'center', mb: 1, width: '100%'}}>
-          <Icon icon={checkmark} width={16} height={16} color="#FF3030" />
+          <Icon icon={checkmark} width={16} height={16} color={`${color.starjobs.main}`} />
           <Typography variant="body2" sx={{ml: 1, wordBreak: 'break-all', width: '200px'}}>
             {user.firstName} {user.middleInitial} {user.lastName}
           </Typography>
         </Grid>
         <Grid container sx={{alignItems: 'center', mb: 1, width: '100%'}}>
-          <Icon icon={map} width={16} height={16} color="#FF3030" />
+          <Icon icon={map} width={16} height={16} color={`${color.starjobs.main}`} />
           <Typography variant="body2" sx={{ml: 1, wordBreak: 'break-all', width: '200px'}}>
             {' '}
             {user.location}
           </Typography>
         </Grid>
         <Grid container sx={{alignItems: 'center', mb: 1, width: '100%'}}>
-          <Icon icon={globe} width={16} height={16} color="#FF3030" />
+          <Icon icon={globe} width={16} height={16} color={`${color.starjobs.main}`} />
           <Typography variant="body2" sx={{ml: 1, wordBreak: 'break-all', width: '200px'}}>
             {' '}
             {user.website}
           </Typography>
         </Grid>
         <Grid container sx={{alignItems: 'center', mb: 1, width: '100%'}}>
-          <Icon icon={envelope} width={16} height={16} color="#FF3030" />
+          <Icon icon={envelope} width={16} height={16} color={`${color.starjobs.main}`} />
           <Typography variant="body2" sx={{ml: 1, wordBreak: 'break-all', width: '200px'}}>
             {user.email}
           </Typography>

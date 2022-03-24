@@ -98,7 +98,7 @@ const GRADIENTS = {
 
 const palette = {
   common: {black: '#000', white: '#fff'},
-  primary: {...PRIMARY},
+  primary: {...STARJOBS},
   secondary: {...SECONDARY},
   info: {...INFO},
   success: {...SUCCESS},

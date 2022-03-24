@@ -1,11 +1,11 @@
-import Slider from 'react-slick';
-import PropTypes from 'prop-types';
-import { useState, useRef, useEffect } from 'react';
+import Slider from 'react-slick'
+import PropTypes from 'prop-types'
+import {useState, useRef, useEffect} from 'react'
 // material
-import { styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import {styled} from '@material-ui/core/styles'
+import {Box} from '@material-ui/core'
 //
-import { CarouselControlsArrowsIndex } from './controls';
+import {CarouselControlsArrowsIndex} from './controls'
 
 // ----------------------------------------------------------------------
 import faker from 'faker'
@@ -13,32 +13,32 @@ const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature()
-}));
+  image: faker.image.nature(),
+}))
 
-const THUMB_SIZE = 64;
+const THUMB_SIZE = 64
 
-const RootStyle = styled('div')(({ theme }) => {
-  const isRTL = theme.direction === 'rtl';
+const RootStyle = styled('div')(({theme}) => {
+  const isRTL = theme.direction === 'rtl'
 
   return {
     root: {
       '& .slick-slide': {
-        float: isRTL ? 'right' : 'left'
-      }
-    }
-  };
-});
+        float: isRTL ? 'right' : 'left',
+      },
+    },
+  }
+})
 
 const LargeImgStyle = styled('img')({
   top: 0,
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  position: 'absolute'
-});
+  position: 'absolute',
+})
 
-const ThumbImgStyle = styled('img')(({ theme }) => ({
+const ThumbImgStyle = styled('img')(({theme}) => ({
   opacity: 0.48,
   width: THUMB_SIZE,
   cursor: 'pointer',
@@ -47,18 +47,18 @@ const ThumbImgStyle = styled('img')(({ theme }) => ({
   borderRadius: theme.shape.borderRadiusSm,
   '&:hover': {
     opacity: 0.72,
-    transition: theme.transitions.create('opacity')
-  }
-}));
+    transition: theme.transitions.create('opacity'),
+  },
+}))
 
 // ----------------------------------------------------------------------
 
 LargeItem.propTypes = {
-  item: PropTypes.object
-};
+  item: PropTypes.object,
+}
 
-function LargeItem({ item }) {
-  const { image, title } = item;
+function LargeItem({item}) {
+  const {image, title} = item
 
   return (
     <Box
@@ -66,31 +66,31 @@ function LargeItem({ item }) {
         position: 'relative',
         paddingTop: {
           xs: '100%',
-          md: '50%'
-        }
+          md: '50%',
+        },
       }}
     >
       <LargeImgStyle alt={title} src={image} />
     </Box>
-  );
+  )
 }
 
 ThumbnailItem.propTypes = {
-  item: PropTypes.object
-};
+  item: PropTypes.object,
+}
 
-function ThumbnailItem({ item }) {
-  const { image, title } = item;
+function ThumbnailItem({item}) {
+  const {image, title} = item
 
-  return <ThumbImgStyle alt={title} src={image} />;
+  return <ThumbImgStyle alt={title} src={image} />
 }
 
 export default function CarouselThumbnail() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [nav1, setNav1] = useState(null);
-  const [nav2, setNav2] = useState(null);
-  const slider1 = useRef(null);
-  const slider2 = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [nav1, setNav1] = useState(null)
+  const [nav2, setNav2] = useState(null)
+  const slider1 = useRef(null)
+  const slider2 = useRef(null)
 
   const settings1 = {
     dots: false,
@@ -99,8 +99,8 @@ export default function CarouselThumbnail() {
     draggable: false,
     slidesToScroll: 1,
     adaptiveHeight: true,
-    beforeChange: (current, next) => setCurrentIndex(next)
-  };
+    beforeChange: (current, next) => setCurrentIndex(next),
+  }
 
   const settings2 = {
     dots: false,
@@ -110,21 +110,21 @@ export default function CarouselThumbnail() {
     focusOnSelect: true,
     variableWidth: true,
     centerPadding: '0px',
-    slidesToShow: MOCK_CAROUSELS.length > 3 ? 3 : MOCK_CAROUSELS.length
-  };
+    slidesToShow: MOCK_CAROUSELS.length > 3 ? 3 : MOCK_CAROUSELS.length,
+  }
 
   useEffect(() => {
-    setNav1(slider1.current);
-    setNav2(slider2.current);
-  }, []);
+    setNav1(slider1.current)
+    setNav2(slider2.current)
+  }, [])
 
   const handlePrevious = () => {
-    slider2.current.slickPrev();
-  };
+    slider2.current.slickPrev()
+  }
 
   const handleNext = () => {
-    slider2.current.slickNext();
-  };
+    slider2.current.slickNext()
+  }
 
   return (
     <RootStyle>
@@ -133,7 +133,7 @@ export default function CarouselThumbnail() {
           zIndex: 0,
           borderRadius: 2,
           overflow: 'hidden',
-          position: 'relative'
+          position: 'relative',
         }}
       >
         <Slider {...settings1} asNavFor={nav2} ref={slider1}>
@@ -153,15 +153,15 @@ export default function CarouselThumbnail() {
         sx={{
           mt: 3,
           mx: 'auto',
-          ...(MOCK_CAROUSELS.length === 1 && { maxWidth: THUMB_SIZE * 1 + 16 }),
-          ...(MOCK_CAROUSELS.length === 2 && { maxWidth: THUMB_SIZE * 2 + 32 }),
-          ...(MOCK_CAROUSELS.length === 3 && { maxWidth: THUMB_SIZE * 3 + 48 }),
-          ...(MOCK_CAROUSELS.length === 4 && { maxWidth: THUMB_SIZE * 3 + 48 }),
-          ...(MOCK_CAROUSELS.length === 5 && { maxWidth: THUMB_SIZE * 6 }),
+          ...(MOCK_CAROUSELS.length === 1 && {maxWidth: THUMB_SIZE * 1 + 16}),
+          ...(MOCK_CAROUSELS.length === 2 && {maxWidth: THUMB_SIZE * 2 + 32}),
+          ...(MOCK_CAROUSELS.length === 3 && {maxWidth: THUMB_SIZE * 3 + 48}),
+          ...(MOCK_CAROUSELS.length === 4 && {maxWidth: THUMB_SIZE * 3 + 48}),
+          ...(MOCK_CAROUSELS.length === 5 && {maxWidth: THUMB_SIZE * 6}),
           '& .slick-current img': {
             opacity: 1,
-            border: (theme) => `solid 3px ${theme.palette.primary.main}`
-          }
+            border: (theme) => `solid 3px ${theme.palette.starjobs.main}`,
+          },
         }}
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>
@@ -171,5 +171,5 @@ export default function CarouselThumbnail() {
         </Slider>
       </Box>
     </RootStyle>
-  );
+  )
 }

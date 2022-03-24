@@ -15,7 +15,6 @@ import gigs_api from 'utils/api/gigs'
 import {UsersContext} from 'utils/context/users'
 
 // variables
-const image_bucket = process.env.REACT_APP_IMAGE_URL
 const DRAWER_WIDTH = 280
 
 const MainStyle = styled(Stack)(({theme}) => ({

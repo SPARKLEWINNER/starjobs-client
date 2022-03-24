@@ -25,7 +25,7 @@ export default function SettingDirection() {
                 })
               }}
             >
-              <CardActionArea sx={{ color: 'primary.main' }}>
+              <CardActionArea sx={{ color: 'starjobs.main' }}>
                 <Box
                   sx={{
                     p: 1.5,

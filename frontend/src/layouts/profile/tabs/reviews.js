@@ -3,6 +3,9 @@ import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-outline'
 import starIcon from '@iconify/icons-eva/star-fill'
 
+// theme
+import color from 'theme/palette'
+
 const reviews = [
   {
     name: 'Anonymous_5592',
@@ -32,7 +35,7 @@ export default function Reviews() {
   return (
     <Box>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Ratings
         </Typography>
       </Stack>
@@ -61,7 +64,7 @@ export default function Reviews() {
           })}
       </Grid>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Reviews
         </Typography>
       </Stack>
@@ -79,7 +82,7 @@ export default function Reviews() {
                       <Typography variant="body1" sx={{pr: 1}}>
                         {v.name}
                       </Typography>
-                      <Icon icon={checkmark} width={20} height={20} color="#FF3030" />
+                      <Icon icon={checkmark} width={20} height={20} color={`${color.starjobs.main}`} />
                     </Grid>
                     <Typography variant="body2" sx={{textDecoration: 'italic'}}>
                       "{v.comment}"

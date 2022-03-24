@@ -20,7 +20,7 @@ export default function FreelancerCard({data, onClick, onClickApplicantId}) {
           <Box sx={{flexGrow: 1}}>
             <Typography
               variant="body1"
-              sx={{color: '#FF3030', fontSize: '0.85rem !important'}}
+              sx={{color: 'starjobs.main', fontSize: '0.85rem !important'}}
             >{`${data.firstName} ${data.middleInitial} ${data.lastName}`}</Typography>
 
             <Typography

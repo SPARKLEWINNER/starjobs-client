@@ -1,65 +1,65 @@
-import { merge } from 'lodash';
-import ReactApexChart from 'react-apexcharts';
+import {merge} from 'lodash'
+import ReactApexChart from 'react-apexcharts'
 // material
-import { useTheme, styled } from '@material-ui/core/styles';
-import { Card, CardHeader } from '@material-ui/core';
+import {useTheme, styled} from '@material-ui/core/styles'
+import {Card, CardHeader} from '@material-ui/core'
 // utils
-import { fNumber } from '../../../utils/formatNumber';
+import {fNumber} from '../../../utils/formatNumber'
 //
-import { BaseOptionChart } from '../../charts';
+import {BaseOptionChart} from '../../charts'
 
 // ----------------------------------------------------------------------
 
-const CHART_HEIGHT = 372;
-const LEGEND_HEIGHT = 72;
+const CHART_HEIGHT = 372
+const LEGEND_HEIGHT = 72
 
-const ChartWrapperStyle = styled('div')(({ theme }) => ({
+const ChartWrapperStyle = styled('div')(({theme}) => ({
   height: CHART_HEIGHT,
   marginTop: theme.spacing(5),
-  '& .apexcharts-canvas svg': { height: CHART_HEIGHT },
+  '& .apexcharts-canvas svg': {height: CHART_HEIGHT},
   '& .apexcharts-canvas svg,.apexcharts-canvas foreignObject': {
-    overflow: 'visible'
+    overflow: 'visible',
   },
   '& .apexcharts-legend': {
     height: LEGEND_HEIGHT,
     alignContent: 'center',
     position: 'relative !important',
     borderTop: `solid 1px ${theme.palette.divider}`,
-    top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`
-  }
-}));
+    top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`,
+  },
+}))
 
 // ----------------------------------------------------------------------
 
-const CHART_DATA = [4344, 5435, 1443, 4443];
+const CHART_DATA = [4344, 5435, 1443, 4443]
 
 export default function AppCurrentVisits() {
-  const theme = useTheme();
+  const theme = useTheme()
 
   const chartOptions = merge(BaseOptionChart(), {
     colors: [
-      theme.palette.primary.main,
+      theme.palette.starjobs.main,
       theme.palette.info.main,
       theme.palette.warning.main,
-      theme.palette.error.main
+      theme.palette.error.main,
     ],
     labels: ['America', 'Asia', 'Europe', 'Africa'],
-    stroke: { colors: [theme.palette.background.paper] },
-    legend: { floating: true, horizontalAlign: 'center' },
-    dataLabels: { enabled: true, dropShadow: { enabled: false } },
+    stroke: {colors: [theme.palette.background.paper]},
+    legend: {floating: true, horizontalAlign: 'center'},
+    dataLabels: {enabled: true, dropShadow: {enabled: false}},
     tooltip: {
       fillSeriesColor: false,
       y: {
         formatter: (seriesName) => fNumber(seriesName),
         title: {
-          formatter: (seriesName) => `#${seriesName}`
-        }
-      }
+          formatter: (seriesName) => `#${seriesName}`,
+        },
+      },
     },
     plotOptions: {
-      pie: { donut: { labels: { show: false } } }
-    }
-  });
+      pie: {donut: {labels: {show: false}}},
+    },
+  })
 
   return (
     <Card>
@@ -68,5 +68,5 @@ export default function AppCurrentVisits() {
         <ReactApexChart type="pie" series={CHART_DATA} options={chartOptions} height={280} />
       </ChartWrapperStyle>
     </Card>
-  );
+  )
 }

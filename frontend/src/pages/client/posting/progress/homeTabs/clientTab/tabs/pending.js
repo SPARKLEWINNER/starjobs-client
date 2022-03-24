@@ -5,6 +5,9 @@ import {PendingCard} from '../../../cards'
 
 import ProgressCircle from 'components/progressCircle'
 
+// theme
+import color from 'theme/palette'
+
 const pending_status = ['Waiting', 'Applying']
 export default function PendingTab({gigs, selected}) {
   const [FILTERED_DATA, setData] = useState([])
@@ -39,7 +42,7 @@ export default function PendingTab({gigs, selected}) {
   return (
     <Box sx={{my: 2}}>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Pending
         </Typography>
       </Stack>

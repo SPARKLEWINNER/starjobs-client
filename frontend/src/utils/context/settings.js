@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
-import { createContext } from 'react'
+import {createContext} from 'react'
 // hooks
 import useLocalStorage from 'utils/hooks/storage'
 // theme
-import palette from '../theme/palette'
+import palette from 'theme/palette'
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ const PRIMARY_COLOR = [
   // DEFAULT
   {
     name: 'default',
-    ...palette.light.primary,
+    ...palette.primary,
   },
   // PURPLE
   {
@@ -31,7 +31,7 @@ const PRIMARY_COLOR = [
     main: '#1CCAFF',
     dark: '#0E77B7',
     darker: '#053D7A',
-    contrastText: palette.light.grey[800],
+    contrastText: palette.grey[800],
   },
   // BLUE
   {
@@ -51,7 +51,7 @@ const PRIMARY_COLOR = [
     main: '#fda92d',
     dark: '#B66816',
     darker: '#793908',
-    contrastText: palette.light.grey[800],
+    contrastText: palette.grey[800],
   },
   // RED
   {
@@ -105,10 +105,10 @@ const initialState = {
   themeDirection: 'ltr',
   themeColor: 'cyan',
   themeStretch: false,
-  onChangeMode: () => { },
-  onChangeDirection: () => { },
-  onChangeColor: () => { },
-  onToggleStretch: () => { },
+  onChangeMode: () => {},
+  onChangeDirection: () => {},
+  onChangeColor: () => {},
+  onToggleStretch: () => {},
   setColor: PRIMARY_COLOR[5],
   colorOption: [],
 }
@@ -119,7 +119,7 @@ SettingsProvider.propTypes = {
   children: PropTypes.node,
 }
 
-function SettingsProvider({ children }) {
+function SettingsProvider({children}) {
   const [settings, setSettings] = useLocalStorage('settings', {
     themeMode: 'light',
     themeDirection: 'ltr',
@@ -179,4 +179,4 @@ function SettingsProvider({ children }) {
   )
 }
 
-export { SettingsProvider, SettingsContext }
+export {SettingsProvider, SettingsContext}

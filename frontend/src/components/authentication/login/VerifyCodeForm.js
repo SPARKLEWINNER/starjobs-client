@@ -2,7 +2,7 @@ import {useEffect} from 'react'
 import {useSnackbar} from 'notistack5'
 import {useNavigate} from 'react-router-dom'
 import {useState} from 'react'
-import {Stack, Button, Divider, Typography} from '@material-ui/core'
+import {Stack, Button} from '@material-ui/core'
 import {Form, FormikProvider, useFormik} from 'formik'
 // material
 import {LoadingButton} from '@material-ui/lab'
@@ -14,7 +14,7 @@ import storage from 'utils/storage'
 
 import SMSForm from './SMSForm'
 
-import {DividerWhite, LoadingButtonStyle} from 'theme/style'
+import {LoadingButtonStyle} from 'theme/style'
 // ----------------------------------------------------------------------
 
 const useStyles = makeStyles((theme) => ({
@@ -23,21 +23,17 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: 'inherit',
     boxSizing: 'content-box',
     background: 'none',
-    height: '1.4375em',
-    margin: theme.spacing(1),
+    height: '1rem',
     textAlign: 'center',
     display: 'block',
     minWidth: 0,
     width: '100%',
-    padding: '16.5px 14px',
     '& input': {
       color: theme.palette.common.white,
-      backgroundColor: theme.palette.starjobs.main,
-      borderBottom: '2px solid #000 !important',
-      borderTop: '0 !important',
-      borderLeft: '0 !important',
-      borderRight: '0 !important',
-      borderRadius: '0 !important',
+      backgroundColor: theme.palette.starjobs.fieldColor,
+      border: '0 !important',
+      borderRadius: '0.25rem !important',
+      height: '3rem !important',
       '&:nth-child(even)': {
         margin: '0 0.5rem',
       },
@@ -177,7 +173,7 @@ export default function VerifyCodeForm({account}) {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack direction="row" spacing={2} justifyContent="center" className={'phone-form-container'}>
+        <Stack direction="row" spacing={2} sx={{mt: 2}} justifyContent="center" className={'phone-form-container'}>
           <ReactCodeInput onComplete={(e) => setCode(e)} autoFocus={true} className={classes.inpt} />
         </Stack>
 
@@ -189,28 +185,35 @@ export default function VerifyCodeForm({account}) {
           type="submit"
           variant="contained"
           loading={isLoading}
-          sx={{mt: 3, ...LoadingButtonStyle}}
+          sx={{mt: 4, ...LoadingButtonStyle}}
         >
           Verify
         </LoadingButton>
 
-        <Stack sx={{my: 5}}>
-          <Button variant="body2" sx={{color: 'common.white'}} onClick={handleResendVerification}>
+        <Stack sx={{my: 2}}>
+          <Button
+            variant="body2"
+            sx={{color: 'starjobs.main', fontSize: '0.75rem', fontWeight: 400}}
+            onClick={handleResendVerification}
+          >
             {buttonText}
           </Button>
 
-          <Divider sx={DividerWhite}>
-            <Typography variant="body2" sx={{color: 'common.white'}}>
-              OR
-            </Typography>
-          </Divider>
           {account && account.phone && (
-            <Button variant="body2" sx={{color: 'common.white'}} onClick={() => handleResendVerification('sms')}>
+            <Button
+              variant="body2"
+              sx={{color: 'starjobs.main', fontSize: '0.75rem', fontWeight: 400}}
+              onClick={() => handleResendVerification('sms')}
+            >
               {smsButtonText}
             </Button>
           )}
           {account && !account.phone && (
-            <Button variant="body2" sx={{color: 'common.white'}} onClick={handleOpenSMSDialog}>
+            <Button
+              variant="body2"
+              sx={{color: 'starjobs.main', fontSize: '0.75rem', fontWeight: 400}}
+              onClick={handleOpenSMSDialog}
+            >
               {smsButtonText}
             </Button>
           )}

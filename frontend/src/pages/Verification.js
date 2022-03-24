@@ -12,7 +12,7 @@ import user_api from 'utils/api/users'
 import {LoadingButtonOutline} from 'theme/style'
 
 const RootStyle = styled(Page)(({theme}) => ({
-  backgroundColor: theme.palette.starjobs.main,
+  backgroundColor: theme.palette.common.white,
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
@@ -66,22 +66,33 @@ export default function VerificationPage() {
     <RootStyle title="Employee Registration - Starjobs">
       <Container maxWidth="sm">
         <ContentStyle>
-          <Stack sx={{mb: 5, textAlign: 'center'}}>
-            <Box sx={{display: 'flex', justifyContent: 'center', mb: 1}}>
+          <Stack sx={{textAlign: 'center'}}>
+            <Box sx={{display: 'flex', justifyContent: 'center'}}>
               <RouterLink to="/">
-                <Box component="img" src="/static/illustrations/email.png" sx={{width: '100%', objectFit: 'contain'}} />
+                <Box
+                  component="img"
+                  src="/static/illustrations/email.png"
+                  sx={{width: '80%', mx: 'auto', objectFit: 'contain'}}
+                />
               </RouterLink>
             </Box>
-            <Typography variant="h4" gutterBottom color="common.white">
+            <Typography variant="h6" gutterBottom color="starjobs.main" sx={{mb: 0}}>
               Account Verification
             </Typography>
 
-            <Typography color="common.white">Kindly check your email account for Six (6) Verification Code.</Typography>
+            <Typography color="starjobs.fieldLabel" variant="caption">
+              Kindly check your email account for Six (6) Verification Code.
+            </Typography>
           </Stack>
           <VerifyCodeForm account={user} />
 
-          <Stack sx={{my: 5}}>
-            <Button variant="outlined" sx={LoadingButtonOutline} onClick={handleSignOut}>
+          <Stack sx={{my: 1}}>
+            <Button
+              variant="outlined"
+              size="medium"
+              sx={{...LoadingButtonOutline, fontSize: '0.75rem'}}
+              onClick={handleSignOut}
+            >
               Sign out
             </Button>
           </Stack>

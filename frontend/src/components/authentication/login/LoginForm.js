@@ -8,7 +8,7 @@ import {Icon} from '@iconify/react'
 import eyeFill from '@iconify/icons-eva/eye-fill'
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill'
 // material
-import {Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel, Link} from '@material-ui/core'
+import {Stack, TextField, IconButton, InputAdornment, Link} from '@material-ui/core'
 import {LoadingButton} from '@material-ui/lab'
 
 import storage from 'utils/storage'
@@ -16,7 +16,7 @@ import auth_api from 'utils/api/auth'
 
 import {UsersContext} from 'utils/context/users'
 
-import {LoadingButtonStyle, InputOutlineStyle, CheckboxWhiteStyle} from 'theme/style'
+import {LoadingButtonStyle, InputOutlineStyle} from 'theme/style'
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
@@ -80,7 +80,7 @@ export default function LoginForm() {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack spacing={3}>
+        <Stack spacing={3} sx={{my: 3}}>
           <TextField
             fullWidth
             autoComplete="email"
@@ -103,8 +103,8 @@ export default function LoginForm() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} sx={{color: 'common.white'}} edge="end">
-                    <Icon icon={showPassword ? eyeFill : eyeOffFill} />
+                  <IconButton onClick={handleShowPassword} sx={{color: 'starjobs.main'}} edge="end">
+                    <Icon icon={showPassword ? eyeFill : eyeOffFill} sx={{color: 'red'}} />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -114,24 +114,22 @@ export default function LoginForm() {
           />
         </Stack>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{my: 2}}>
-          <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            sx={CheckboxWhiteStyle}
-            label="Remember me"
-          />
-
-          <Link component={RouterLink} variant="subtitle2" sx={{textDecoration: 'none'}} color="common.white" to="#">
-            Forgot password?
-          </Link>
-        </Stack>
+        <Link
+          component={RouterLink}
+          variant="subtitle2"
+          sx={{textDecoration: 'none', float: 'right', fontSize: '0.75rem'}}
+          color="starjobs.main"
+          to="#"
+        >
+          Forgot password?
+        </Link>
 
         <LoadingButton
           fullWidth
           size="large"
           type="submit"
           variant="contained"
-          sx={{...LoadingButtonStyle, my: 5}}
+          sx={{...LoadingButtonStyle, mt: 5, mb: 2}}
           loading={isLoading}
         >
           Login

@@ -78,11 +78,14 @@ const ERROR = {
 }
 
 const STARJOBS = {
-  main: '#e51030',
+  main: '#0d7bc9',
+  mainRed: '#e51030',
   // main: '#c0392b',
   // main: '#e74c3c',
   black: '#000000',
   grey: '#f8fbfb',
+  fieldColor: '#F5F7FF',
+  fieldLabel: '#76738A',
 }
 
 const GRADIENTS = {

@@ -12,8 +12,8 @@ export default function LogoOutline({sx}) {
   return (
     <Box
       component="img"
-      src="/static/favicon/starjobs-outline.png"
-      sx={{width: 120, height: 120, ...sx, objectFit: 'contain'}}
+      src="/static/favicon/starjobs-blue-outline-preloader.png"
+      sx={{width: 80, height: 80, ...sx, objectFit: 'contain', mr: 'auto', mb: 2}}
     />
   )
 }

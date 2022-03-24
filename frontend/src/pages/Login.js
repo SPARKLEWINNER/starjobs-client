@@ -1,7 +1,7 @@
 import React, {useEffect, useContext} from 'react'
 import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom'
 import {styled} from '@material-ui/core/styles'
-import {Link, Stack, Container, Typography, Divider, Box} from '@material-ui/core'
+import {Link, Stack, Container, Typography, Box} from '@material-ui/core'
 
 import Page from '../components/Page'
 import LogoOutline from 'components/LogoOutline'
@@ -9,17 +9,16 @@ import {LoginForm} from '../components/authentication/login'
 
 import {UsersContext} from 'utils/context/users'
 
-import {DividerWhite} from 'theme/style'
-
 const RootStyle = styled(Page)(({theme}) => ({
-  backgroundColor: theme.palette.starjobs.main,
+  backgroundColor: theme.palette.common.white,
+  height: '100vh',
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
-  maxWidth: 480,
+  maxWidth: 340,
   margin: 'auto',
   display: 'flex',
   flexDirection: 'column',
@@ -50,36 +49,38 @@ export default function Login() {
 
   return (
     <RootStyle title="Login - Starjobs">
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" sx={{height: 'inherit'}}>
         <ContentStyle>
-          <Stack sx={{mb: 5}}>
-            <Box sx={{display: 'flex', justifyContent: 'center', mt: 5, mb: 2}}>
-              <Box
-                component="img"
-                src="/static/illustrations/login-user.png"
-                sx={{width: 120, height: 120, objectFit: 'contain'}}
-              />
-            </Box>
+          <Stack sx={{mt: 0, mb: 3}}>
+            <LogoOutline />
           </Stack>
+
+          <Typography color="starjobs.main" style={{textTransform: 'initial', fontWeight: 600, mb: 3}} variant="h3">
+            Welcome Back!
+          </Typography>
+
+          <Typography
+            color="starjobs.fieldLabel"
+            style={{textTransform: 'initial', fontSize: '0.8rem', fontWeight: 300, mb: 2}}
+            variant="body1"
+          >
+            Enter your credentials to continue.
+          </Typography>
+
           <LoginForm />
-          <Divider sx={DividerWhite}>
-            <Typography variant="body2" sx={{color: 'common.white'}}>
-              OR
-            </Typography>
-          </Divider>
 
           <Stack direction="column" spacing={2}>
             <div style={{margin: '1rem auto', width: '100%', textAlign: 'center'}}>
               <Typography
-                color="common.white"
-                style={{textTransform: 'initial', fontSize: '0.875rem', fontWeight: 400}}
-                variant="body1"
+                color="common.black"
+                style={{textTransform: 'initial', fontSize: '0.8rem', fontWeight: 400}}
+                variant="h6"
               >
                 Don't have an account?
                 <Link
                   to={`/sign-up`}
                   component={RouterLink}
-                  color="common.black"
+                  color="starjobs.main"
                   style={{
                     marginLeft: '.25rem',
                     width: '100%',
@@ -91,13 +92,6 @@ export default function Login() {
                 </Link>
               </Typography>
             </div>
-          </Stack>
-          <Stack sx={{mt: 5}}>
-            <Box sx={{display: 'flex', justifyContent: 'center', mb: 5}}>
-              <RouterLink to="/">
-                <LogoOutline />
-              </RouterLink>
-            </Box>
           </Stack>
         </ContentStyle>
       </Container>

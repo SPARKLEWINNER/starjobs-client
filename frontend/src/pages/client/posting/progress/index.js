@@ -17,7 +17,7 @@ import {
 import {IncomingNotification, ConfirmArrivedNotification} from 'components/notifications'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 import storage from 'utils/storage'
 
 // variables

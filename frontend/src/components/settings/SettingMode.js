@@ -6,8 +6,6 @@ import {Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel} f
 // hooks
 import useSettings from 'utils/hooks/settings'
 
-// ----------------------------------------------------------------------
-
 export default function SettingMode() {
   const {themeMode, onChangeMode} = useSettings()
 

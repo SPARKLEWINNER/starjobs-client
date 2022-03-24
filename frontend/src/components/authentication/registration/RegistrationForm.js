@@ -25,12 +25,11 @@ import {DialogAnimate} from '../../animate'
 import {LoadingButton} from '@material-ui/lab'
 import {useSnackbar} from 'notistack5'
 
-import auth_api from 'utils/api/auth'
+import auth_api from 'api/auth'
 
 import {LoadingButtonStyle, InputOutlineStyle, CheckboxWhiteStyle} from 'theme/style'
 
 import color from 'theme/palette'
-// ----------------------------------------------------------------------
 
 const freelancer_docs = [
   'https://bit.ly/3DIlnNl', // data privacy

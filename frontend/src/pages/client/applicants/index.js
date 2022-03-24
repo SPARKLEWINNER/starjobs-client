@@ -10,7 +10,7 @@ import ListApplicants from './lists'
 import ClientProfile from './details'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

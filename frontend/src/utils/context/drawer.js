@@ -4,8 +4,6 @@ import {createContext, useState, useEffect} from 'react'
 import {useMediaQuery} from '@material-ui/core'
 import {useTheme} from '@material-ui/core/styles'
 
-// ----------------------------------------------------------------------
-
 const initialState = {
   collapseClick: false,
   collapseHover: false,

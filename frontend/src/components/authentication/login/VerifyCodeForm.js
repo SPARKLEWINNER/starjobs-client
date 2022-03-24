@@ -9,13 +9,12 @@ import {LoadingButton} from '@material-ui/lab'
 import ReactCodeInput from 'react-verification-code-input'
 import {makeStyles} from '@material-ui/styles'
 
-import auth_api from 'utils/api/auth'
+import auth_api from 'api/auth'
 import storage from 'utils/storage'
 
 import SMSForm from './SMSForm'
 
 import {LoadingButtonStyle} from 'theme/style'
-// ----------------------------------------------------------------------
 
 const useStyles = makeStyles((theme) => ({
   inpt: {

@@ -2,7 +2,7 @@ import {Box, Card, CardContent, Stack, Typography} from '@material-ui/core'
 import CircleIcon from '@material-ui/icons/Circle'
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 
 const NotificationCardV2 = ({
   id = '',

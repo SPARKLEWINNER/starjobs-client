@@ -19,8 +19,8 @@ import {ApplyCard, ConfirmGig} from 'components/gigCards'
 import MAvatar from 'components/@material-extend/MAvatar'
 
 // api
-import user_api from 'utils/api/users'
-import gigs_api from 'utils/api/gigs'
+import user_api from 'api/users'
+import gigs_api from 'api/gigs'
 import storage from 'utils/storage'
 import useSendNotif from 'utils/hooks/useSendNotif'
 

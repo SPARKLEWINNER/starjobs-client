@@ -14,8 +14,8 @@ import ProfileForm from 'components/editClient/form/profileForm'
 
 // hooks
 import storage from 'utils/storage'
-import onboard_api from 'utils/api/onboard'
-import user_api from 'utils/api/users'
+import onboard_api from 'api/onboard'
+import user_api from 'api/users'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 const steps = ['Personal Information', 'Company Contacts', 'Industry', 'Rate & Payment', 'Company Logo & Permits']

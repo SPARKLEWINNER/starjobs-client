@@ -19,7 +19,7 @@ import {styled} from '@material-ui/core/styles'
 import Sort from '@material-ui/icons/Sort'
 
 // api
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 
 // component
 import {FreelancerCard} from '../cards'
@@ -34,7 +34,7 @@ const MainStyle = styled(Stack)(({theme}) => ({
   },
 }))
 
-export default function FreelancerTab({category}) {
+export default function FreelancerTab() {
   const [data, setData] = useState([])
   const [renderData, setRenderData] = useState([])
   const [renderLength, setRenderLength] = useState(3)
@@ -49,15 +49,6 @@ export default function FreelancerTab({category}) {
 
   const handleFilterDialogClose = () => {
     setOpenFilterDialog(false)
-  }
-
-  const load = async () => {
-    const result = await user_api.get_user_list()
-    if (!result.ok) return
-
-    let {data} = result
-    setData(data)
-    setRenderData(data.slice(0, 5))
   }
 
   const loadMore = () => {
@@ -125,6 +116,15 @@ export default function FreelancerTab({category}) {
     handleFilterDialogClose()
   }
 
+  const load = async () => {
+    const result = await user_api.get_user_list()
+    if (!result.ok) return
+
+    let {data} = result
+    setData(data)
+    setRenderData(data.slice(0, 5))
+  }
+
   useEffect(
     () => {
       load()
@@ -154,8 +154,8 @@ export default function FreelancerTab({category}) {
             </Button>
             {renderData.length > 0 &&
               renderData.map((v, k) => {
-                if (v.details.length === 0) return ''
-                return <FreelancerCard key={k} data={v.details[0]} />
+                if (v.details.length !== 0) return <FreelancerCard key={k} data={v.details[0]} />
+                return ''
               })}
           </Stack>
         )}
@@ -165,6 +165,7 @@ export default function FreelancerTab({category}) {
           </Button>
         )}
       </Stack>
+
       <Dialog open={openFilterDialog} onClose={handleFilterDialogClose} fullWidth>
         <DialogTitle>Filter</DialogTitle>
         <DialogContent>
@@ -191,10 +192,6 @@ export default function FreelancerTab({category}) {
               }
               label="Active only"
             />
-            {/* <FormControlLabel 
-              control={<Switch checked={isAvailable} onChange={() => {setIsAvailable(!isAvailable)}}/>}
-              label="Available only"
-          /> */}
             <Typography>Rate type</Typography>
             <Select
               labelId="demo-simple-select-label"
@@ -202,8 +199,12 @@ export default function FreelancerTab({category}) {
               value={rateType}
               onChange={handleFilterRateTypeChange}
             >
-              {RATE_TYPE.map((rate) => {
-                return <MenuItem value={rate.value}>{rate.label}</MenuItem>
+              {RATE_TYPE.map((rate, key) => {
+                return (
+                  <MenuItem value={rate.value} key={key}>
+                    {rate.label}
+                  </MenuItem>
+                )
               })}
             </Select>
           </Stack>

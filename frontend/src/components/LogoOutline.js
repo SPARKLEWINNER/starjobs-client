@@ -2,8 +2,6 @@ import PropTypes from 'prop-types'
 // material
 import {Box} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
 LogoOutline.propTypes = {
   sx: PropTypes.object,
 }

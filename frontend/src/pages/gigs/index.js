@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react'
+import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 // material
 import {Box, Tab, Stack} from '@material-ui/core'
@@ -9,10 +9,10 @@ import {makeStyles} from '@material-ui/styles'
 // components
 import Page from 'components/Page'
 import {FreelancerTab, ClientTab} from './gigTabs'
-import {UsersContext} from 'utils/context/users'
 
 // theme
 import color from 'theme/palette'
+import {useAuth} from 'utils/context/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -68,11 +68,11 @@ const Gigs = () => {
   const classes = useStyles()
 
   const [value, setValue] = useState('0')
-  const {user} = useContext(UsersContext)
+  const {currentUser} = useAuth()
 
   useEffect(() => {
     const load = () => {
-      if (user.accountType === 0) return setValue('1')
+      if (currentUser.accountType === 0) return setValue('1')
     }
 
     load()
@@ -82,14 +82,6 @@ const Gigs = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
-  }
-
-  const renderTab = (type) => {
-    if (type === 2) {
-      return <ClientTab category={params.category} />
-    } else {
-      return <FreelancerTab category={params.category} />
-    }
   }
 
   return (
@@ -119,7 +111,8 @@ const Gigs = () => {
             >
               {SIMPLE_TAB.map((panel, index) => (
                 <TabPanel key={panel.value} value={String(index)} sx={{p: 0}}>
-                  {renderTab(panel.value)}
+                  {panel.value === 2 && <ClientTab category={params.category} />}
+                  {panel.value === 1 && <FreelancerTab category={params.category} />}
                 </TabPanel>
               ))}
             </Box>

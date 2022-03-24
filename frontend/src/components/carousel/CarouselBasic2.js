@@ -1,48 +1,47 @@
-import Slider from 'react-slick';
-import PropTypes from 'prop-types';
-import { useState, useRef } from 'react';
+import Slider from 'react-slick'
+import PropTypes from 'prop-types'
+import {useState, useRef} from 'react'
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { Box, Card, Typography, CardContent } from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles'
+import {Box, Card, Typography, CardContent} from '@material-ui/core'
 //
-import { CarouselControlsArrowsIndex } from './controls';
+import {CarouselControlsArrowsIndex} from './controls'
 
-// ----------------------------------------------------------------------
 import faker from 'faker'
 const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature()
-}));
+  image: faker.image.nature(),
+}))
 
 CarouselItem.propTypes = {
-  item: PropTypes.object
-};
+  item: PropTypes.object,
+}
 
-function CarouselItem({ item }) {
-  const { image, title, description } = item;
+function CarouselItem({item}) {
+  const {image, title, description} = item
 
   return (
     <>
-      <Box component="img" alt={title} src={image} sx={{ width: '100%', height: 370, objectFit: 'cover' }} />
+      <Box component="img" alt={title} src={image} sx={{width: '100%', height: 370, objectFit: 'cover'}} />
 
-      <CardContent sx={{ textAlign: 'left' }}>
+      <CardContent sx={{textAlign: 'left'}}>
         <Typography variant="h6" noWrap gutterBottom>
           {title}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+        <Typography variant="body2" sx={{color: 'text.secondary'}} noWrap>
           {description}
         </Typography>
       </CardContent>
     </>
-  );
+  )
 }
 
 export default function CarouselBasic2() {
-  const theme = useTheme();
-  const carouselRef = useRef();
-  const [currentIndex, setCurrentIndex] = useState(2);
+  const theme = useTheme()
+  const carouselRef = useRef()
+  const [currentIndex, setCurrentIndex] = useState(2)
 
   const settings = {
     dots: false,
@@ -53,16 +52,16 @@ export default function CarouselBasic2() {
     initialSlide: currentIndex,
     fade: Boolean(theme.direction !== 'rtl'),
     rtl: Boolean(theme.direction === 'rtl'),
-    beforeChange: (current, next) => setCurrentIndex(next)
-  };
+    beforeChange: (current, next) => setCurrentIndex(next),
+  }
 
   const handlePrevious = () => {
-    carouselRef.current.slickPrev();
-  };
+    carouselRef.current.slickPrev()
+  }
 
   const handleNext = () => {
-    carouselRef.current.slickNext();
-  };
+    carouselRef.current.slickNext()
+  }
 
   return (
     <Card>
@@ -77,8 +76,8 @@ export default function CarouselBasic2() {
         total={MOCK_CAROUSELS.length}
         onNext={handleNext}
         onPrevious={handlePrevious}
-        sx={{ bottom: 120 }}
+        sx={{bottom: 120}}
       />
     </Card>
-  );
+  )
 }

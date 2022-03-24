@@ -1,10 +1,9 @@
-import { useLocation } from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 
 import Login from './../../pages/Login'
 
-import useUser from 'utils/api/users'
+import useUser from 'api/users'
 
-// ----------------------------------------------------------------------
 const load = async (_url) => {
   if (!_url) return false
   const result = await useUser.get_user(_url)
@@ -12,7 +11,7 @@ const load = async (_url) => {
   return result.data
 }
 export default function AuthGuard() {
-  const { pathname } = useLocation()
+  const {pathname} = useLocation()
   const params = pathname.split('/').filter(function (e) {
     return e
   })

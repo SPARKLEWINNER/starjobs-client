@@ -1,12 +1,10 @@
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles'
+import {Box} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
-export default function DocIllustration({ ...other }) {
-  const theme = useTheme();
-  const PRIMARY_MAIN = theme.palette.primary.main;
+export default function DocIllustration({...other}) {
+  const theme = useTheme()
+  const PRIMARY_MAIN = theme.palette.primary.main
 
   return (
     <Box {...other}>
@@ -30,5 +28,5 @@ export default function DocIllustration({ ...other }) {
         </g>
       </svg>
     </Box>
-  );
+  )
 }

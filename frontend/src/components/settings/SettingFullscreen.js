@@ -6,8 +6,6 @@ import roundFullscreenExit from '@iconify/icons-ic/round-fullscreen-exit'
 import {alpha} from '@material-ui/core/styles'
 import {Button} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
 export default function SettingFullscreen() {
   const [fullscreen, setFullscreen] = useState(false)
 

@@ -1,4 +1,4 @@
-import {useEffect, useState, useContext} from 'react'
+import {useEffect, useState} from 'react'
 import {useParams} from 'react-router'
 import moment from 'moment'
 // material
@@ -11,8 +11,7 @@ import LoadingScreen from 'components/LoadingScreen'
 import Label from 'components/Label'
 
 // api
-import gigs_api from 'utils/api/gigs'
-import {UsersContext} from 'utils/context/users'
+import gigs_api from 'api/gigs'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -29,7 +28,6 @@ const FullDetails = () => {
   const params = useParams()
   const [isLoading, setLoading] = useState(false)
   const [gig, setGigDetails] = useState([])
-  const {user} = useContext(UsersContext)
 
   const load = async () => {
     setLoading(true)
@@ -37,7 +35,6 @@ const FullDetails = () => {
     const request = await gigs_api.get_gig_details(params.id)
     if (!request.ok) return setLoading(false)
 
-    console.log(user)
     setLoading(false)
     setGigDetails(request.data)
   }
@@ -88,22 +85,9 @@ const FullDetails = () => {
                 </Stack>
                 <Stack direction="row" className="d-flex p-0 align-item-center w-100">
                   <Label color="secondary" sx={{fontSize: 10}}>
-                    {' '}
                     {gig.hours} {gig.category === 'parcels' ? 'parcels' : ' hrs shift'}{' '}
                   </Label>
                 </Stack>
-
-                {/* {users.accountType !== 1 && (
-                  <Box sx={{position: 'absolute', bottom: 0, right: 16}}>
-                    <Button
-                      onClick={() => handleClick(gig)}
-                      variant="contained"
-                      sx={{textTransform: 'uppercase', fontWeight: 'bold', mb: 1, fontSize: '0.75rem'}}
-                    >
-                      Apply <Icon icon={arrowRight} width={12} height={12} sx={{ml: 2}} />
-                    </Button>
-                  </Box>
-                )} */}
               </CardContent>
             </Box>
           </Card>

@@ -18,7 +18,7 @@ import {
 import {styled} from '@material-ui/core/styles'
 
 // api
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 
 // component
 import FreelancerCard from '../../cards/interest'

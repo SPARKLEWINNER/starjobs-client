@@ -7,7 +7,7 @@ import Page from '../components/Page'
 import {VerifyCodeForm} from '../components/authentication/login'
 
 import storage from 'utils/storage'
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 
 import {LoadingButtonOutline} from 'theme/style'
 

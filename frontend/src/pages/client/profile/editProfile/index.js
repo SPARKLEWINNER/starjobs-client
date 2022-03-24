@@ -17,8 +17,8 @@ import ProfileForm from './form/profileForm'
 
 // hooks
 import storage from 'utils/storage'
-import onboard_api from 'utils/api/onboard'
-import user_api from 'utils/api/users'
+import onboard_api from 'api/onboard'
+import user_api from 'api/users'
 
 // variables
 const DRAWER_WIDTH = 280

@@ -13,7 +13,7 @@ import ProfileForm from 'components/clientOnboard/form/profileForm'
 
 // hooks
 import storage from 'utils/storage'
-import onboard_api from 'utils/api/onboard'
+import onboard_api from 'api/onboard'
 import {useNavigate} from 'react-router-dom'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL

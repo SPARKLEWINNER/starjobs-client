@@ -6,8 +6,6 @@ import {Paper, CardActionArea, Stack} from '@material-ui/core'
 // hooks
 import useSettings from 'utils/hooks/settings'
 
-// ----------------------------------------------------------------------
-
 export default function SettingStretch() {
   const {themeStretch, onToggleStretch} = useSettings()
 

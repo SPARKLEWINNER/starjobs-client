@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import {useState, useContext} from 'react'
+import {useState} from 'react'
 import {useNavigate, Link as RouterLink} from 'react-router-dom'
 import {useFormik, Form, FormikProvider} from 'formik'
 import {useSnackbar} from 'notistack5'
@@ -11,20 +11,16 @@ import eyeOffFill from '@iconify/icons-eva/eye-off-fill'
 import {Stack, TextField, IconButton, InputAdornment, Link} from '@material-ui/core'
 import {LoadingButton} from '@material-ui/lab'
 
-import storage from 'utils/storage'
-import auth_api from 'utils/api/auth'
-
-import {UsersContext} from 'utils/context/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 import {LoadingButtonStyle, InputOutlineStyle} from 'theme/style'
-// ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate()
   const {enqueueSnackbar} = useSnackbar()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setLoading] = useState(false)
-  const {setUser} = useContext(UsersContext)
+  const {signIn} = useAuth()
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -34,40 +30,19 @@ export default function LoginForm() {
     initialValues: {
       email: '',
       password: '',
-      remember: true,
     },
     validationSchema: LoginSchema,
     onSubmit: async () => {
       setLoading(true)
-      if (!values.email || !values.password) return setLoading(false)
-
-      const result = await auth_api.post_sign_in(values)
-      if (!result.ok) {
-        enqueueSnackbar('Invalid username or password', {variant: 'error'})
+      const result = await signIn(values)
+      if (!result.status) {
+        enqueueSnackbar(result.msg, {variant: 'warning'})
         return setLoading(false)
       }
-      let {data} = result
-      resetForm()
-      await storage.storeUser(data)
-      await storage.storeToken(data.token)
-      await storage.storeRefreshToken(data.refreshToken)
 
+      resetForm()
+      navigate('/dashboard')
       setLoading(false)
-      setUser(data)
-      if (!data.isVerified) return navigate(`/verification`, {replace: true})
-      if (data.accountType === 0) {
-        if (data.isActive) {
-          return navigate(`/freelancer/message`, {replace: true})
-        } else {
-          return navigate(`/freelancer/app`, {replace: true})
-        }
-      } else {
-        if (data.isActive) {
-          return navigate(`/client/gig/create`, {replace: true})
-        } else {
-          return navigate(`/client/app`, {replace: true})
-        }
-      }
     },
   })
 
@@ -83,11 +58,9 @@ export default function LoginForm() {
         <Stack spacing={3} sx={{my: 3}}>
           <TextField
             fullWidth
-            autoComplete="email"
             type="email"
             label="Email address"
             {...getFieldProps('email')}
-            // autoFocus
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
             sx={InputOutlineStyle}
@@ -95,7 +68,6 @@ export default function LoginForm() {
 
           <TextField
             fullWidth
-            autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
             label="Password"
             {...getFieldProps('password')}
@@ -104,7 +76,7 @@ export default function LoginForm() {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={handleShowPassword} sx={{color: 'starjobs.main'}} edge="end">
-                    <Icon icon={showPassword ? eyeFill : eyeOffFill} sx={{color: 'red'}} />
+                    <Icon icon={showPassword ? eyeFill : eyeOffFill} sx={{color: 'starjobs.main'}} />
                   </IconButton>
                 </InputAdornment>
               ),

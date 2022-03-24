@@ -1,7 +1,5 @@
 import {alpha} from '@material-ui/core/styles'
 
-// ----------------------------------------------------------------------
-
 function createGradient(color1, color2) {
   return `linear-gradient(to bottom, ${color1}, ${color2})`
 }

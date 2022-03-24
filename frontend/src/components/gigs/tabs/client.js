@@ -15,7 +15,7 @@ import {styled} from '@material-ui/core/styles'
 import Sort from '@material-ui/icons/Sort'
 import moment from 'moment'
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 
 // component
 import {WaitingCard} from 'components/gigCards'

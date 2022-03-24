@@ -7,7 +7,6 @@ import {Box, Container, Paper, Button, Link, MobileStepper} from '@material-ui/c
 import Page from 'components/Page'
 import {Verified, Start, Notification, Complete} from 'components/welcome'
 import {UsersContext} from 'utils/context/users'
-// ----------------------------------------------------------------------
 
 import {LoadingButtonStyle} from 'theme/style'
 const steps = ['Verified', 'Notification', 'Profile', 'Start']

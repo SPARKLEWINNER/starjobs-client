@@ -13,8 +13,6 @@ import alertCircleFill from '@iconify/icons-eva/alert-circle-fill'
 import alertTriangleFill from '@iconify/icons-eva/alert-triangle-fill'
 import checkmarkCircle2Fill from '@iconify/icons-eva/checkmark-circle-2-fill'
 
-// ----------------------------------------------------------------------
-
 const useStyles = makeStyles((theme) => {
   const isLight = theme.palette.mode === 'light'
 
@@ -58,8 +56,6 @@ const useStyles = makeStyles((theme) => {
     error: {...createStyle},
   })
 })
-
-// ----------------------------------------------------------------------
 
 SnackbarIcon.propTypes = {
   icon: PropTypes.object,

@@ -7,7 +7,6 @@ import {Box} from '@material-ui/core'
 //
 import {CarouselControlsArrowsIndex} from './controls'
 
-// ----------------------------------------------------------------------
 import faker from 'faker'
 const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
@@ -50,8 +49,6 @@ const ThumbImgStyle = styled('img')(({theme}) => ({
     transition: theme.transitions.create('opacity'),
   },
 }))
-
-// ----------------------------------------------------------------------
 
 LargeItem.propTypes = {
   item: PropTypes.object,

@@ -3,8 +3,6 @@ import {forwardRef} from 'react'
 // material
 import {Avatar, useTheme} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
 const MAvatar = forwardRef(({color = 'default', sx, children, ...other}, ref) => {
   const theme = useTheme()
 

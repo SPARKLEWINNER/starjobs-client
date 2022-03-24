@@ -5,7 +5,7 @@ import {slice} from 'lodash'
 import ActivityCard from 'components/activity/card'
 
 import storage from 'utils/storage'
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 
 const LIMIT = 3
 const MyActivities = () => {

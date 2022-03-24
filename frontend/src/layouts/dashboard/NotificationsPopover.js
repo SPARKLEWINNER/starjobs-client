@@ -31,8 +31,6 @@ import {mockImgAvatar} from '../../utils/mockImages'
 import Scrollbar from '../../components/Scrollbar'
 import MenuPopover from '../../components/MenuPopover'
 
-// ----------------------------------------------------------------------
-
 const NOTIFICATIONS = [
   {
     id: faker.datatype.uuid(),

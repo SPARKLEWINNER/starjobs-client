@@ -1,6 +1,6 @@
 import request from 'utils/header'
 import storage from 'utils/storage'
-const sign_in_email = (email, password) => request.post('/login', {email, password})
+const sign_in_email = (form_data) => request.post(`/auth/sign-in`, form_data)
 
 const sign_in_phone = (phone) => request.post('/phone', {phone: phone})
 
@@ -15,8 +15,6 @@ const facebook_login = () => request.get('/facebook')
 const sign_out = () => request.post('/signout')
 
 const post_sign_up = (form_data) => request.post(`/auth/sign-up`, form_data)
-
-const post_sign_in = (form_data) => request.post(`/auth/sign-in`, form_data)
 
 const post_resend_verification = (form_data, type) => request.post(`/auth/resend-verification?type=${type}`, form_data)
 
@@ -40,7 +38,6 @@ const _expObject = {
   verify_phone,
   sign_out,
   post_sign_up,
-  post_sign_in,
   post_resend_verification,
   post_verify,
   post_refresh_access,

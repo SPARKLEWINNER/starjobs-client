@@ -12,7 +12,7 @@ import {PendingTab, IncomingTab, CurrentTab} from './homeTabs'
 import {IncomingNotification, EndShiftNotification} from 'components/notifications'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 import storage from 'utils/storage'
 
 // variable

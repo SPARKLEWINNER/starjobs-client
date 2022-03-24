@@ -1,4 +1,4 @@
-import notif from '../api/notif'
+import notif from '../../api/notif'
 
 export default function useSendNotif() {
   const sendInterestNotification = async ({clientId, clientName, targetUsers = []}) => {

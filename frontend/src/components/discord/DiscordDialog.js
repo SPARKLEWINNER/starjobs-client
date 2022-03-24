@@ -107,7 +107,7 @@ const DiscordDialog = ({open, handleClose}) => {
                 `Starjobs Help\n**from:**\n ${data.name}\n**Email:**\n ${data.email}\n**Phone:**\n ${data.phone} \n**Issue:**\n ${data.issue}`,
               )
 
-              // if (!result.ok) return enqueueSnackbar('Unable to submit your request for assitance', {variant: 'error'})
+              if (!result.ok) return enqueueSnackbar('Unable to submit your request for assitance', {variant: 'error'})
 
               setSubmitting(false)
               handleClose()

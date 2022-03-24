@@ -54,7 +54,6 @@ export default function EmploymentForm({user, stored, onNext, onStoreData}) {
       if (!values.isFreshGraduate) {
         Object.keys(values).forEach((item) => {
           let field = values[item]
-          console.log(field)
 
           if (item === 'isFreshGraduate') return
           if (item === 'isCurrentWork') return

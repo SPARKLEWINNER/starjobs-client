@@ -61,7 +61,6 @@ const Dashboard = () => {
 
   const checkNotice = (data) => {
     const incoming = data.filter((obj) => obj['status'].includes('Accepted'))
-    console.log('incoming')
     if (!incoming) return
     Object.values(incoming).forEach((value) => {
       if (value.auid !== current_user._id) return

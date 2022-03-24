@@ -7,24 +7,24 @@ const History = require('./../../models/History');
 const User = require('./../../models/User');
 const Extends = require('../../models/Extends');
 
-const {getSpecificData} = require('../../services/validateExisting');
+const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
 
-const {FCM_SERVER_KEY} = process.env;
+const { FCM_SERVER_KEY } = process.env;
 const client = ['Applying', 'Confirm-Gig', 'On-the-way', 'Arrived', 'On-going', 'End-Shift', 'Cancelled'];
 const freelancer = ['Accepted', 'Confirm-End-Shift', 'Confirm-Arrived'];
 
-const {Types} = mongoose;
+const { Types } = mongoose;
 
 async function sendNotification(request, gigs, status) {
     let user;
     let messageList = [
-        {status: 'Applying', type: '#pending', description: `Applicant has sent a gig request`},
-        {status: 'Accepted', type: '#incoming', description: `Congratulations, your gig has been accepted.`},
-        {status: 'Confirm-Gig', type: '#current', description: `Jobster has confirmed pushing thru the gig.`},
-        {status: 'Arrived', type: '#current', description: `The jobster has arrived.`},
-        {status: 'Confirm-Arrived', type: '#current', description: `The client have confirmed your arrival.`},
-        {status: 'End-Shift', type: '#current', description: `The jobster have Ended the shift`},
+        { status: 'Applying', type: '#pending', description: `Applicant has sent a gig request` },
+        { status: 'Accepted', type: '#incoming', description: `Congratulations, your gig has been accepted.` },
+        { status: 'Confirm-Gig', type: '#current', description: `Jobster has confirmed pushing thru the gig.` },
+        { status: 'Arrived', type: '#current', description: `The jobster has arrived.` },
+        { status: 'Confirm-Arrived', type: '#current', description: `The client have confirmed your arrival.` },
+        { status: 'End-Shift', type: '#current', description: `The jobster have Ended the shift` },
         {
             status: 'Confirm-End-Shift',
             type: '#pending',
@@ -38,15 +38,15 @@ async function sendNotification(request, gigs, status) {
     ];
 
     if (client.includes(status)) {
-        user = await User.find({_id: Types.ObjectId(gigs.uid)})
+        user = await User.find({ _id: Types.ObjectId(gigs.uid) })
             .lean()
             .exec();
     } else if (freelancer.includes(status)) {
-        let jobster_id = {_id: Types.ObjectId(request.uid)}; // client
+        let jobster_id = { _id: Types.ObjectId(request.uid) }; // client
 
         // individual gig postings
         if (status === 'Confirm-Arrived') {
-            jobster_id = {_id: Types.ObjectId(gigs.auid)}; // jobster
+            jobster_id = { _id: Types.ObjectId(gigs.auid) }; // jobster
         }
 
         user = await User.find(jobster_id).lean().exec();
@@ -87,9 +87,9 @@ async function sendNotification(request, gigs, status) {
 
 var controllers = {
     gig_apply: async function (req, res) {
-        const {uid, status} = req.body;
-        const {id} = req.params;
-        await getSpecificData({uuid: Types.ObjectId(uid)}, Account, 'Account', uid);
+        const { uid, status } = req.body;
+        const { id } = req.params;
+        await getSpecificData({ uuid: Types.ObjectId(uid) }, Account, 'Account', uid);
 
         const now = new Date();
         let updatedGig;
@@ -102,19 +102,18 @@ var controllers = {
         };
 
         try {
-            let gigs = await Gigs.find({_id: Types.ObjectId(id)})
+            let gigs = await Gigs.find({ _id: Types.ObjectId(id) })
                 .lean()
                 .exec();
 
-            if (!gigs) res.status(400).json({success: false, msg: 'Gig not found'}); // gig not found
+            if (!gigs) res.status(400).json({ success: false, msg: 'Gig not found' }); // gig not found
             gigs = gigs.pop();
 
             if (gigs.isExtended) {
                 // gig multiple applicants
                 history_details.isExtended = true;
 
-                const {maximumApplicants, applicants, additionalFees} = gigs;
-                console.log(additionalFees);
+                const { maximumApplicants, applicants, additionalFees } = gigs;
 
                 const acceptedApplicant =
                     applicants &&
@@ -130,7 +129,7 @@ var controllers = {
 
                 if (status !== 'Accepted') {
                     await Extends.findOneAndUpdate(
-                        {gigId: Types.ObjectId(gigs._id)},
+                        { gigId: Types.ObjectId(gigs._id) },
                         {
                             $push: {
                                 applicants: {
@@ -157,18 +156,17 @@ var controllers = {
                 // gig individual acceptance
                 if (status === 'Accepted') {
                     await Gigs.findOneAndUpdate(
-                        {_id: Types.ObjectId(id)},
+                        { _id: Types.ObjectId(id) },
                         {
                             auid: Types.ObjectId(uid),
                             status: status
                         }
                     );
                 } else {
-                    await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {status: status});
+                    await Gigs.findOneAndUpdate({ _id: Types.ObjectId(id) }, { status: status });
                 }
             }
 
-            console.log(history_details);
             let history = new History(history_details);
             await History.create(history);
 
@@ -178,7 +176,7 @@ var controllers = {
             console.error(error);
             await logger.logError(error, 'Apply.gig_apply', req.body, id, 'PATCH');
 
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
 
         return res.status(200).json(updatedGig);

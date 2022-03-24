@@ -1,7 +1,6 @@
 import {Dialog, DialogTitle, DialogActions, Button, Typography, Stack} from '@material-ui/core'
 
 export default function EndShiftNotification({open, gig, onCommit, onReject, handleClose}) {
-  console.log(gig)
   const handleCommit = (value) => {
     let data = {
       new_status: 'End-Shift',

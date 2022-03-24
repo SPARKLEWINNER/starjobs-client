@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   Button,
   CircularProgress,
@@ -10,13 +10,13 @@ import {
   TextField,
 } from '@material-ui/core'
 import storage from 'utils/storage'
-import { Formik, useField } from 'formik'
+import {Formik, useField} from 'formik'
 import * as yup from 'yup'
 
-import { useSnackbar } from 'notistack5'
+import {useSnackbar} from 'notistack5'
 
-const { REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY } = process.env
-const webhook = require("webhook-discord")
+const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY} = process.env
+const webhook = require('webhook-discord')
 
 const validationSchema = yup.object({
   name: yup.string().max(50, 'Too long').required(),
@@ -25,7 +25,7 @@ const validationSchema = yup.object({
   issue: yup.string().required(),
 })
 
-const CustomTextField = ({ type, label, placeholder, InputProps, ...props }) => {
+const CustomTextField = ({type, label, placeholder, InputProps, ...props}) => {
   const [field, meta] = useField(props)
   const errorText = meta.error && meta.touched ? meta.error : ''
   return (
@@ -45,7 +45,7 @@ const CustomTextField = ({ type, label, placeholder, InputProps, ...props }) => 
   )
 }
 
-const CustomMultiLineTextField = ({ type, label, placeholder, InputProps, ...props }) => {
+const CustomMultiLineTextField = ({type, label, placeholder, InputProps, ...props}) => {
   const [field, meta] = useField(props)
   const errorText = meta.error && meta.touched ? meta.error : ''
   return (
@@ -67,15 +67,15 @@ const CustomMultiLineTextField = ({ type, label, placeholder, InputProps, ...pro
   )
 }
 
-const DiscordDialog = ({ open, handleClose }) => {
+const DiscordDialog = ({open, handleClose}) => {
   const discordHook = new webhook.Webhook(`${REACT_APP_DISCORD_URL}/${REACT_APP_DISCORD_KEY}`)
-  const { enqueueSnackbar } = useSnackbar()
+  const {enqueueSnackbar} = useSnackbar()
   const [user, setUser] = useState([])
 
   useEffect(() => {
     const load = async () => {
       const local_user = await storage.getUser()
-      if (!local_user) return enqueueSnackbar('Unable to proceed, Kindly Re-log again', { variant: 'warning' })
+      if (!local_user) return enqueueSnackbar('Unable to proceed, Kindly Re-log again', {variant: 'warning'})
       const user = JSON.parse(local_user)
       setUser(user)
     }
@@ -99,20 +99,22 @@ const DiscordDialog = ({ open, handleClose }) => {
               phone: ``,
             }}
             validationSchema={validationSchema}
-            onSubmit={async (data, { setSubmitting }) => {
+            onSubmit={async (data, {setSubmitting}) => {
               setSubmitting(true)
 
-              const result = await discordHook.info(`Starjobs Help `, `Starjobs Help\n**from:**\n ${data.name}\n**Email:**\n ${data.email}\n**Phone:**\n ${data.phone} \n**Issue:**\n ${data.issue}`)
-              console.log(result)
+              const result = await discordHook.info(
+                `Starjobs Help `,
+                `Starjobs Help\n**from:**\n ${data.name}\n**Email:**\n ${data.email}\n**Phone:**\n ${data.phone} \n**Issue:**\n ${data.issue}`,
+              )
 
               // if (!result.ok) return enqueueSnackbar('Unable to submit your request for assitance', {variant: 'error'})
 
               setSubmitting(false)
               handleClose()
-              return enqueueSnackbar('Thank you for your patience, we will contact you ASAP.', { variant: 'success' })
+              return enqueueSnackbar('Thank you for your patience, we will contact you ASAP.', {variant: 'success'})
             }}
           >
-            {({ values, handleChange, handleSubmit, isSubmitting }) => (
+            {({values, handleChange, handleSubmit, isSubmitting}) => (
               <form onSubmit={handleSubmit}>
                 <CustomTextField
                   autoFocus

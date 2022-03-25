@@ -73,7 +73,7 @@ export default function Settings() {
                 width: 40,
                 height: 40,
                 transition: (theme) => theme.transitions.create('all'),
-                '&:hover': { color: 'primary.main', bgcolor: 'transparent' }
+                '&:hover': { color: 'starjobs.main', bgcolor: 'transparent' }
               }}
             >
               <Icon icon={open ? closeFill : options2Fill} width={20} height={20} />

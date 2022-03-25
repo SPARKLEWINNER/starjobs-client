@@ -2,12 +2,15 @@ import {Box, Stack, Typography, Link, Card} from '@material-ui/core'
 import moment from 'moment'
 import {PendingCard} from './cards'
 
+// theme
+import color from 'theme/palette'
+
 export default function PendingTab({gigs}) {
   return (
     <Box sx={{my: 5}}>
       <Stack spacing={3}>
         <Stack direction="row" sx={{alignItems: 'center', mb: 2}}>
-          <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, flexGrow: 1}}>
+          <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, flexGrow: 1}}>
             Pending{' '}
           </Typography>
           {gigs.filter(

@@ -1,25 +1,25 @@
-import { useState } from 'react';
-import { Icon } from '@iconify/react';
-import roundFullscreen from '@iconify/icons-ic/round-fullscreen';
-import roundFullscreenExit from '@iconify/icons-ic/round-fullscreen-exit';
+import {useState} from 'react'
+import {Icon} from '@iconify/react'
+import roundFullscreen from '@iconify/icons-ic/round-fullscreen'
+import roundFullscreenExit from '@iconify/icons-ic/round-fullscreen-exit'
 // material
-import { alpha } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import {alpha} from '@material-ui/core/styles'
+import {Button} from '@material-ui/core'
 
 // ----------------------------------------------------------------------
 
 export default function SettingFullscreen() {
-  const [fullscreen, setFullscreen] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false)
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setFullscreen(true);
+      document.documentElement.requestFullscreen()
+      setFullscreen(true)
     } else if (document.exitFullscreen) {
-      document.exitFullscreen();
-      setFullscreen(false);
+      document.exitFullscreen()
+      setFullscreen(false)
     }
-  };
+  }
 
   return (
     <Button
@@ -32,11 +32,11 @@ export default function SettingFullscreen() {
       sx={{
         fontSize: 14,
         ...(fullscreen && {
-          bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity)
-        })
+          bgcolor: (theme) => alpha(theme.palette.starjobs.main, theme.palette.action.selectedOpacity),
+        }),
       }}
     >
       {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
     </Button>
-  );
+  )
 }

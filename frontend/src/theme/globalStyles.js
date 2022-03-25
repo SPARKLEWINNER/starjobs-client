@@ -36,7 +36,7 @@ const GlobalStyles = withStyles((theme) => ({
       '&:-ms-input-placeholder': {color: theme.palette.text.disabled},
       '&::placeholder': {color: theme.palette.text.disabled},
     },
-    a: {color: theme.palette.primary.main},
+    a: {color: theme.palette.starjobs.main},
     img: {display: 'block', maxWidth: '100%'},
     '.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium ': {
       bottom: '0',

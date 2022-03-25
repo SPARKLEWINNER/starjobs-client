@@ -1,15 +1,15 @@
-import { Icon } from '@iconify/react';
-import moonFill from '@iconify/icons-eva/moon-fill';
-import sunFill from '@iconify/icons-eva/sun-fill';
+import {Icon} from '@iconify/react'
+import moonFill from '@iconify/icons-eva/moon-fill'
+import sunFill from '@iconify/icons-eva/sun-fill'
 // material
-import { Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel } from '@material-ui/core';
+import {Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel} from '@material-ui/core'
 // hooks
-import useSettings from 'utils/hooks/settings';
+import useSettings from 'utils/hooks/settings'
 
 // ----------------------------------------------------------------------
 
 export default function SettingMode() {
-  const { themeMode, onChangeMode } = useSettings();
+  const {themeMode, onChangeMode} = useSettings()
 
   return (
     <RadioGroup name="themeMode" value={themeMode} onChange={onChangeMode}>
@@ -24,11 +24,11 @@ export default function SettingMode() {
                 position: 'relative',
                 bgcolor: mode === 'dark' ? 'grey.900' : 'common.white',
                 ...(themeMode === mode && {
-                  boxShadow: (theme) => theme.customShadows.z12
-                })
+                  boxShadow: (theme) => theme.customShadows.z12,
+                }),
               }}
             >
-              <CardActionArea sx={{ color: 'primary.main' }}>
+              <CardActionArea sx={{color: 'starjobs.main'}}>
                 <Box
                   sx={{
                     py: 4,
@@ -36,8 +36,8 @@ export default function SettingMode() {
                     color: 'text.disabled',
                     justifyContent: 'center',
                     ...(themeMode === mode && {
-                      color: 'primary.main'
-                    })
+                      color: 'starjobs.main',
+                    }),
                   }}
                 >
                   <Icon icon={index === 0 ? sunFill : moonFill} width={24} height={24} />
@@ -46,13 +46,13 @@ export default function SettingMode() {
                 <FormControlLabel
                   label=""
                   value={mode}
-                  control={<Radio sx={{ display: 'none' }} />}
+                  control={<Radio sx={{display: 'none'}} />}
                   sx={{
                     top: 0,
                     margin: 0,
                     width: '100%',
                     height: '100%',
-                    position: 'absolute'
+                    position: 'absolute',
                   }}
                 />
               </CardActionArea>
@@ -61,5 +61,5 @@ export default function SettingMode() {
         ))}
       </Grid>
     </RadioGroup>
-  );
+  )
 }

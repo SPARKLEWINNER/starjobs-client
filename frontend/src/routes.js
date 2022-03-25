@@ -136,7 +136,6 @@ const UseRoutes = () => {
       children: [
         {path: '/', element: <Navigate to="/login" replace />},
         {path: '/login', element: <Login />},
-        {path: '/login', element: <Login />},
         {path: '/verification', element: <Verification />},
         {path: '/sign-up', element: <Registration />},
         {path: '404', element: <NotFound />},

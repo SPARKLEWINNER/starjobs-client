@@ -29,6 +29,7 @@ import auth_api from 'utils/api/auth'
 
 import {LoadingButtonStyle, InputOutlineStyle, CheckboxWhiteStyle} from 'theme/style'
 
+import color from 'theme/palette'
 // ----------------------------------------------------------------------
 
 const freelancer_docs = [
@@ -134,7 +135,7 @@ export default function StoreOnboardForm() {
     },
   })
 
-  const {errors, touched, handleSubmit, setFieldValue, getFieldProps} = formik
+  const {values, errors, touched, handleSubmit, setFieldValue, getFieldProps} = formik
 
   const handleTerms = (event) => {
     setTerms(event.target.checked)
@@ -230,7 +231,7 @@ export default function StoreOnboardForm() {
                   <InputAdornment position="end">
                     <IconButton
                       edge="end"
-                      sx={{color: 'common.white'}}
+                      sx={{color: 'starjobs.main'}}
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       <Icon icon={showPassword ? eyeFill : eyeOffFill} />
@@ -258,10 +259,10 @@ export default function StoreOnboardForm() {
                 component="legend"
                 sx={{
                   textAlign: 'center',
-                  mb: 2,
                   mt: 3,
-                  color: '#FFFFFF !important',
-                  fontWeight: 600,
+                  color: `${color.starjobs.fieldLabel} !important`,
+                  fontWeight: 400,
+                  fontSize: '0.75rem !important',
                 }}
               >
                 Allow us to know you
@@ -276,7 +277,7 @@ export default function StoreOnboardForm() {
                   control={<Radio className="radio-btn" />}
                   label="I am a Jobster"
                   sx={{
-                    border: '0.15rem solid #FFFFFF',
+                    border: `0.05rem solid ${color.starjobs.fieldLabel} !important`,
                     borderRadius: '1.2rem !important',
                     width: {xs: '100%', sm: '45%', md: '45%'},
                     my: {xs: 2, sm: 0, md: 0},
@@ -284,25 +285,25 @@ export default function StoreOnboardForm() {
                     justifyContent: 'center',
                     padding: '0.5rem 0.75rem',
                     transition: 'all 0.4s ease',
-                    color: '#FFFFFF !important',
+                    color: `${color.starjobs.fieldLabel} !important`,
                   }}
-                  className="radio-control-group"
+                  className={`radio-control-group ${values.accountType === '0' ? 'active-button' : ''}`}
                 />
                 <FormControlLabel
                   value="1"
                   control={<Radio className="radio-btn" />}
                   label="I am a Client"
                   sx={{
-                    border: '0.15rem solid #FFFFFF',
+                    order: `0.05rem solid ${color.starjobs.fieldLabel} !important`,
                     borderRadius: '1.2rem',
                     width: {xs: '100%', sm: '45%', md: '45%'},
                     m: {xs: 0, sm: 1, md: 1},
                     justifyContent: 'center',
                     padding: '0.5rem 0.75rem',
                     transition: 'all 0.4s ease',
-                    color: '#FFFFFF !important',
+                    color: `${color.starjobs.fieldLabel} !important`,
                   }}
-                  className="radio-control-group"
+                  className={`radio-control-group ${values.accountType === '1' ? 'active-button' : ''}`}
                 />
               </RadioGroup>
             </FormControl>
@@ -312,7 +313,12 @@ export default function StoreOnboardForm() {
               sx={CheckboxWhiteStyle}
               label={
                 <>
-                  <Typography variant="body2" align="left" color="common.white" sx={{mt: 2}}>
+                  <Typography
+                    variant="body2"
+                    align="left"
+                    color="starjobs.fieldLabel"
+                    sx={{mt: 0, fontSize: '0.75rem !important', fontWeight: 400}}
+                  >
                     Yes, send me useful email every now and then to help me get the latest job openings from Starjobs
                   </Typography>
                 </>
@@ -324,33 +330,38 @@ export default function StoreOnboardForm() {
               sx={CheckboxWhiteStyle}
               label={
                 <>
-                  <Typography variant="body2" color="common.white" align="left" sx={{mt: 2}}>
+                  <Typography
+                    variant="body2"
+                    color="starjobs.fieldLabel"
+                    align="left"
+                    sx={{fontWeight: 400, fontSize: '0.75rem  !important'}}
+                  >
                     Yes, I understand and agree to the&nbsp;
                     <Typography
                       variant="text"
-                      sx={{p: 0, fontWeight: 600}}
+                      sx={{p: 0, fontSize: '0.75rem !important', fontWeight: 400}}
                       onClick={handleTermsConditions}
                       underline="none"
-                      color="common.black"
+                      color="starjobs.main"
                     >
                       Terms & Conditions of Starjobs
                     </Typography>
                     , &nbsp; including the &nbsp;
                     <Typography
                       variant="text"
-                      sx={{p: 0, wordBreak: 'break-all', fontWeight: 600}}
+                      sx={{p: 0, wordBreak: 'break-all', fontSize: '0.75rem !important', fontWeight: 400}}
                       onClick={handleConditions}
                       underline="none"
-                      color="common.black"
+                      color="starjobs.main"
                     >
                       Cooperation Agreement, Forward Together
                     </Typography>
                     &nbsp; and &nbsp;
                     <Typography
                       variant="text"
-                      sx={{p: 0, fontWeight: 600}}
+                      sx={{p: 0, fontSize: '0.75rem !important', fontWeight: 400}}
                       underline="none"
-                      color="common.black"
+                      color="starjobs.main"
                       onClick={handleDataPrivacy}
                     >
                       Data Privacy Policy
@@ -382,7 +393,7 @@ export default function StoreOnboardForm() {
           frameborder="0"
           title="data-privacy-policy"
         ></iframe>
-        <Button onClick={handleClose} variant="contained" size="large">
+        <Button onClick={handleClose} variant="contained" size="large" sx={{backgroundColor: 'starjobs.main'}}>
           Close
         </Button>
       </DialogAnimate>
@@ -395,7 +406,7 @@ export default function StoreOnboardForm() {
           frameborder="0"
           title="terms-conditions"
         ></iframe>
-        <Button onClick={handleClose} variant="contained" size="large">
+        <Button onClick={handleClose} variant="contained" size="large" sx={{backgroundColor: 'starjobs.main'}}>
           Close
         </Button>
       </DialogAnimate>
@@ -408,7 +419,7 @@ export default function StoreOnboardForm() {
           frameborder="0"
           title="service-agreement"
         ></iframe>
-        <Button onClick={handleClose} variant="contained" size="large">
+        <Button onClick={handleClose} variant="contained" size="large" sx={{backgroundColor: 'starjobs.main'}}>
           Close
         </Button>
       </DialogAnimate>

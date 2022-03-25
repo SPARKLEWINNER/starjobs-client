@@ -12,9 +12,6 @@ import {
 } from '@material-ui/core'
 import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined'
 
-// import WorkOutlineOutlinedIcon from '@material-ui/icons/WorkOutlineOutlined'
-
-//
 import AccountPopover from './AccountPopover'
 const DRAWER_WIDTH = 280
 const APPBAR_MOBILE = 48
@@ -26,7 +23,6 @@ const RootStyle = styled(AppBar)(({theme}) => ({
   backdropFilter: 'blur(6px)',
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
   borderBottom: 'solid 1px rgba(0, 0, 0, 0.08)',
-  // backgroundColor: alpha(theme.palette.background.default, 0.72),
   left: 0,
   margin: '0 auto',
   [theme.breakpoints.up('lg')]: {
@@ -157,19 +153,6 @@ const DashboardNavbar = ({location, user}) => {
               </Typography>
               <Box sx={{flexGrow: 1}} />
               <Stack direction="row" alignItems="center" spacing={{xs: 0.5, sm: 1.5}}>
-                {/* {user.accessType === '/client' && (
-                  <Button
-                    endIcon={
-                      <>
-                        <Badge badgeContent={0} color="error">
-                          <WorkOutlineOutlinedIcon sx={{color: 'common.white'}} />
-                        </Badge>
-                      </>
-                    }
-                    href={`${user.accessType}/my-activity`}
-                    component="a"
-                  />
-                )} */}
                 <AccountPopover user={user} />
               </Stack>
             </>

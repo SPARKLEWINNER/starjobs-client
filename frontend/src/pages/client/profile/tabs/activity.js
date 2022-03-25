@@ -10,6 +10,9 @@ import user_api from 'utils/api/users'
 import storage from 'utils/storage'
 import {calculations} from 'utils/gigComputation'
 
+// theme
+import color from 'theme/palette'
+
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
@@ -110,7 +113,7 @@ export default function ActivityTab() {
   return (
     <MainStyle alignItems="center" justify="center" sx={{my: 3, paddingLeft: {xs: 3}, paddingRight: {xs: 3}}}>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Activity History
         </Typography>
       </Stack>

@@ -11,6 +11,9 @@ import Page from 'components/Page'
 import {FreelancerTab, ClientTab} from './gigTabs'
 import {UsersContext} from 'utils/context/users'
 
+// theme
+import color from 'theme/palette'
+
 // variables
 const DRAWER_WIDTH = 280
 const SIMPLE_TAB = [
@@ -49,9 +52,9 @@ const useStyles = makeStyles({
       fontSize: 11,
     },
     '&.Mui-selected': {
-      backgroundColor: '#FF3030',
+      backgroundColor: `${color.starjobs.main}`,
       border: 'none',
-      color: '#FFF',
+      color: `${color.common.white}`,
     },
   },
   icon: {
@@ -69,7 +72,6 @@ const Gigs = () => {
 
   useEffect(() => {
     const load = () => {
-      console.log(user.accountType)
       if (user.accountType === 0) return setValue('1')
     }
 

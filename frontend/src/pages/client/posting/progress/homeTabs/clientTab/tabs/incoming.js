@@ -3,6 +3,9 @@ import {Box, Stack, Typography, Card} from '@material-ui/core'
 import moment from 'moment'
 import {IncomingCard} from '../../../cards'
 
+// theme
+import color from 'theme/palette'
+
 const incoming_status = ['Accepted']
 
 export default function IncomingTab({gigs, selected}) {
@@ -28,7 +31,7 @@ export default function IncomingTab({gigs, selected}) {
   return (
     <Box sx={{my: 2}}>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Incoming
         </Typography>
       </Stack>

@@ -20,6 +20,9 @@ import gigs_api from 'utils/api/gigs'
 import category_api from 'utils/api/category'
 import storage from 'utils/storage'
 
+// theme
+import color from 'theme/palette'
+
 // variables
 const DRAWER_WIDTH = 280
 // styles
@@ -176,10 +179,10 @@ const Dashboard = () => {
     <Page title="Client Dashboard |  Starjobs">
       <BannerStyle direction="row">
         <Box sx={{width: '80%', paddingLeft: {xs: 3}}}>
-          <Typography variant="body1" sx={{letterSpacing: 'initial', color: 'common.black'}}>
+          <Typography variant="body2" sx={{letterSpacing: 'initial', color: 'common.black'}}>
             Hello
           </Typography>
-          <Typography variant="h5" sx={{fontWeight: 'bold', color: 'common.black', letterSpacing: 'initial'}}>
+          <Typography variant="body1" sx={{fontWeight: 'bold', color: 'common.black', letterSpacing: 'initial'}}>
             {current_user.name}
           </Typography>
           <Box component="div" sx={{mb: 8}} />
@@ -206,7 +209,10 @@ const Dashboard = () => {
             {/* Search by Category */}
             <Box>
               <Stack direction="row" sx={{alignItems: 'center', mb: 2}}>
-                <Typography variant="h6" sx={{borderLeft: '4px solid #FF3030', textIndent: 16, flexGrow: 1}}>
+                <Typography
+                  variant="h6"
+                  sx={{borderLeft: `4px solid ${color.starjobs.main}`, textIndent: 16, flexGrow: 1}}
+                >
                   Search by Category
                 </Typography>
                 <Link
@@ -214,7 +220,7 @@ const Dashboard = () => {
                   component={RouterLink}
                   to={`${current_user.accountType === 1 ? '/client' : '/freelancer'}/search`}
                   sx={{textAlign: 'center', fontWeight: 'bold', fontSize: '0.85rem'}}
-                  color="primary.main"
+                  color="starjobs.main"
                 >
                   See more
                 </Link>
@@ -240,14 +246,14 @@ const Dashboard = () => {
                                 height: 55,
                                 width: 55,
                                 mx: 'auto',
-                                my: 2,
+                                my: 1,
                                 borderRadius: 30,
-                                backgroundColor: 'primary.main',
+                                backgroundColor: 'starjobs.main',
                                 objectFit: 'cover',
                                 objectPosition: 'center',
                               }}
                             />
-                            <Typography variant="body2" sx={{fontWeight: 'bold', color: 'common.black', flexGrow: 1}}>
+                            <Typography variant="caption" sx={{fontWeight: 400, color: 'common.black', flexGrow: 1}}>
                               {v.name}
                             </Typography>
                           </Link>
@@ -261,7 +267,10 @@ const Dashboard = () => {
             {/* News and Promotion */}
             <Stack sx={{py: 4}}>
               <Stack direction="row" sx={{alignItems: 'center', mb: 2}}>
-                <Typography variant="h6" sx={{flexGrow: 1, borderLeft: '4px solid #FF3030', textIndent: 16}}>
+                <Typography
+                  variant="h6"
+                  sx={{flexGrow: 1, borderLeft: `4px solid ${color.starjobs.main}`, textIndent: 16}}
+                >
                   News and Promotions
                 </Typography>
               </Stack>

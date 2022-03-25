@@ -11,6 +11,9 @@ import CurrentModalPopup from '../modal'
 // api
 import gigs_api from 'utils/api/gigs'
 
+// theme
+import color from 'theme/palette'
+
 // status
 const current_status = [
   'Confirm-Gig',
@@ -86,7 +89,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
       <Stack spacing={3}>
         <Grid container>
           <Grid item xs={6} md={6}>
-            <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+            <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
               Current
             </Typography>
           </Grid>
@@ -96,7 +99,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
               component={RouterLink}
               to={`/client/my-activity`}
               sx={{textAlign: 'center', fontWeight: 'bold', fontSize: '0.85rem'}}
-              color="primary.main"
+              color="starjobs.main"
             >
               See all
             </Link>

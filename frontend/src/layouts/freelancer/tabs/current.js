@@ -9,6 +9,9 @@ import CurrentModalPopup from './../modal'
 // api
 import gigs_api from 'utils/api/gigs'
 
+// theme
+import color from 'theme/palette'
+
 const responsive = {
   0: {items: 1},
   568: {items: 1},
@@ -86,7 +89,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
   return (
     <Box sx={{my: 5}}>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Current
         </Typography>
       </Stack>

@@ -12,11 +12,11 @@ const IconWrapperStyle = styled('div')(({theme}) => ({
   borderRadius: '50%',
   alignItems: 'center',
   justifyContent: 'center',
-  color: theme.palette.primary.main,
+  color: theme.palette.starjobs.main,
   position: 'absolute',
   bottom: '1rem',
   right: '1rem',
-  backgroundColor: alpha(theme.palette.primary.main, 0.08),
+  backgroundColor: alpha(theme.palette.starjobs.main, 0.08),
 }))
 
 export default function ApplicantCard({data, onClick, gigDetails}) {

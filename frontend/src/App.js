@@ -13,10 +13,7 @@ import FirebaseToken from './components/fcm'
 import ScrollToTop from './components/ScrollToTop'
 import NotistackProvider from './components/NotistackProvider'
 import ThemePrimaryColor from './components/ThemePrimaryColor'
-import ThemeLocalization from './components/ThemeLocalization'
-import {MainProvider} from './utils/context/main'
 import {UsersProvider} from './utils/context/users'
-// import {SocketProvider} from './utils/context/socket'
 import {RatingsProvider} from './utils/context/rating'
 
 import TawktoPageOverlay from 'layouts/tawkto/tawkto_page_overlay'
@@ -41,24 +38,18 @@ export default function App() {
   return (
     <ThemeConfig>
       <ThemePrimaryColor>
-        <ThemeLocalization>
-          <MainProvider>
-            <UsersProvider>
-              {/* <SocketProvider> */}
-              <NotistackProvider>
-                <RatingsProvider>
-                  <TawktoPageOverlay>
-                    <ScrollToTop />
-                    <AppRoute />
-                    <FirebaseToken />
-                    <GenericNotification open={open} details={payload} handleClose={handleClose} />
-                  </TawktoPageOverlay>
-                </RatingsProvider>
-              </NotistackProvider>
-              {/* </SocketProvider> */}
-            </UsersProvider>
-          </MainProvider>
-        </ThemeLocalization>
+        <UsersProvider>
+          <NotistackProvider>
+            <RatingsProvider>
+              <TawktoPageOverlay>
+                <ScrollToTop />
+                <AppRoute />
+                <FirebaseToken />
+                <GenericNotification open={open} details={payload} handleClose={handleClose} />
+              </TawktoPageOverlay>
+            </RatingsProvider>
+          </NotistackProvider>
+        </UsersProvider>
       </ThemePrimaryColor>
     </ThemeConfig>
   )

@@ -10,7 +10,7 @@ import {RegistrationForm} from '../components/authentication/registration'
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({theme}) => ({
-  backgroundColor: theme.palette.starjobs.main,
+  backgroundColor: theme.palette.common.white,
   [theme.breakpoints.up('md')]: {
     display: 'flex',
   },
@@ -27,27 +27,42 @@ const ContentStyle = styled('div')(({theme}) => ({
 
 // ----------------------------------------------------------------------
 
-export default function StoreRegistration() {
+export default function Registration() {
   return (
     <RootStyle title="Registration - Starjobs">
       <Container maxWidth="sm">
         <ContentStyle>
-          <Box sx={{display: 'flex', justifyContent: 'flex-start', mt: 5, mb: 5}}>
-            <Typography variant="h2" color="common.white">
-              Sign up
+          <Box sx={{display: 'flex', justifyContent: 'flex-start', mt: 0, mb: 5}}>
+            <Typography
+              color="starjobs.main"
+              style={{textTransform: 'initial', fontWeight: 'bold', mb: 3, width: '75%', lineHeight: 'initial'}}
+              variant="h3"
+            >
+              Let's create your account
             </Typography>
           </Box>
 
           <RegistrationForm />
 
           <div style={{margin: '2rem auto', width: '100%', textAlign: 'center'}}>
-            <Link to={`/login`} component={RouterLink}>
-              <Typography color="common.white" style={{textTransform: 'initial'}} variant="body1" component="p">
+            <Link to={`/login`} component={RouterLink} sx={{textDecoration: 'none'}}>
+              <Typography
+                color="starjobs.fieldLabel"
+                style={{textTransform: 'initial', fontSize: '0.8rem', fontWeight: 400}}
+                variant="body1"
+                component="p"
+              >
                 I already have an account{' '}
                 <Typography
                   component="span"
-                  color="common.black"
-                  style={{marginLeft: '.25rem', width: '100%', textDecoration: 'none', fontWeight: 600}}
+                  color="starjobs.main"
+                  style={{
+                    marginLeft: '.25rem',
+                    fontSize: '0.8rem',
+                    width: '100%',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                  }}
                 >
                   Go back
                 </Typography>

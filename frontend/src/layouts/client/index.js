@@ -24,6 +24,9 @@ import gigs_api from 'utils/api/gigs'
 import storage from 'utils/storage'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
+// theme
+import color from 'theme/palette'
+
 // variables
 const DRAWER_WIDTH = 280
 const APPBAR_DESKTOP = 200
@@ -49,7 +52,6 @@ const useStyles = makeStyles({
     width: 'auto',
   },
   nav_item: {
-    // textTransform: 'uppercase',
     fontSize: '1rem !important',
     margin: '0 8px',
     border: '1px solid #727272',
@@ -65,11 +67,10 @@ const useStyles = makeStyles({
       fontSize: 11,
     },
     '&.Mui-selected': {
-      // backgroundColor: '#FF3030',
       border: 'none',
       borderRadius: 0,
-      borderBottom: '1px solid #000',
-      color: '#000',
+      borderBottom: `1px solid ${color.common.black}`,
+      color: `${color.common.black}`,
     },
   },
   icon: {
@@ -268,7 +269,7 @@ export default function TabsComponent() {
                   <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative'}}>
                     {user.firstName} {user.middleInitial} {user.lastName}
                     <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
-                      <Icon icon={checkmark} width={24} height={24} color="#FF3030" />
+                      <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
                     </Box>
                   </Typography>
                 </Grid>
@@ -283,7 +284,7 @@ export default function TabsComponent() {
               <Divider sx={{mb: 3}} />
               <Stack direction="row" sx={{my: 1, width: '100%', textAlign: 'center'}}>
                 <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                  <Icon icon={map} width={24} height={24} color="#FF3030" />
+                  <Icon icon={map} width={24} height={24} color={`${color.starjobs.main}`} />
                   <Typography
                     variant="body2"
                     sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
@@ -292,7 +293,7 @@ export default function TabsComponent() {
                   </Typography>
                 </Box>
                 <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                  <Icon icon={globe} width={24} height={24} color="#FF3030" />
+                  <Icon icon={globe} width={24} height={24} color={`${color.starjobs.main}`} />
                   <Typography
                     variant="body2"
                     sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
@@ -301,7 +302,7 @@ export default function TabsComponent() {
                   </Typography>
                 </Box>
                 <Box item sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                  <Icon icon={envelope} width={24} height={24} color="#FF3030" />
+                  <Icon icon={envelope} width={24} height={24} color={`${color.starjobs.main}`} />
                   <Typography
                     variant="body2"
                     sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}

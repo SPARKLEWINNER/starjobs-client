@@ -1,13 +1,19 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 // material
-import { Box } from '@material-ui/core';
+import {Box} from '@material-ui/core'
 
 // ----------------------------------------------------------------------
 
 Logo.propTypes = {
-  sx: PropTypes.object
-};
+  sx: PropTypes.object,
+}
 
-export default function Logo({ sx }) {
-  return <Box component="img" src="/static/favicon/starjobs.png" sx={{ width: 120, height: 120, ...sx, objectFit: 'contain' }} />;
+export default function Logo({sx}) {
+  return (
+    <Box
+      component="img"
+      src="/static/favicon/starjobs-outline-preloader.png"
+      sx={{width: 120, height: 120, ...sx, objectFit: 'contain'}}
+    />
+  )
 }

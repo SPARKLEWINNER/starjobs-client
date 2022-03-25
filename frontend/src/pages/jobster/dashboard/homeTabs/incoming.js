@@ -3,13 +3,16 @@ import moment from 'moment'
 // import {useSnackbar} from 'notistack5'
 import {IncomingCard} from './cards'
 
+// theme
+import color from 'theme/palette'
+
 export default function IncomingTab({gigs, user}) {
   // const {enqueueSnackbar} = useSnackbar()
 
   return (
     <Box sx={{my: 5}}>
       <Stack spacing={3}>
-        <Typography variant="h4" sx={{borderLeft: '4px solid #FF3030', pl: 2, mb: 2}}>
+        <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Incoming
         </Typography>
       </Stack>

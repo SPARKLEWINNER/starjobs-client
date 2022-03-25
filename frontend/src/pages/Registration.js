@@ -7,8 +7,6 @@ import {Link as RouterLink} from 'react-router-dom'
 import Page from '../components/Page'
 import {RegistrationForm} from '../components/authentication/registration'
 
-// ----------------------------------------------------------------------
-
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.common.white,
   [theme.breakpoints.up('md')]: {
@@ -24,8 +22,6 @@ const ContentStyle = styled('div')(({theme}) => ({
   justifyContent: 'center',
   padding: theme.spacing(3, 0),
 }))
-
-// ----------------------------------------------------------------------
 
 export default function Registration() {
   return (

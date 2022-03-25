@@ -7,7 +7,7 @@ import Page from 'components/Page'
 import LoadingScreen from 'components/LoadingScreen'
 
 import storage from 'utils/storage'
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 import NotificationCardV2 from 'components/notifications/card_v2'
 
 const RootStyle = styled(Page)(({theme}) => ({

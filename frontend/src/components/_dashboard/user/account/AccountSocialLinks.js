@@ -1,36 +1,34 @@
-import { Icon } from '@iconify/react';
-import { useSnackbar } from 'notistack5';
-import { useFormik, Form, FormikProvider } from 'formik';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import instagramFilled from '@iconify/icons-ant-design/instagram-filled';
-import { Stack, Card, TextField, InputAdornment } from '@material-ui/core';
-import { LoadingButton } from '@material-ui/lab';
+import {Icon} from '@iconify/react'
+import {useSnackbar} from 'notistack5'
+import {useFormik, Form, FormikProvider} from 'formik'
+import twitterFill from '@iconify/icons-eva/twitter-fill'
+import linkedinFill from '@iconify/icons-eva/linkedin-fill'
+import facebookFill from '@iconify/icons-eva/facebook-fill'
+import instagramFilled from '@iconify/icons-ant-design/instagram-filled'
+import {Stack, Card, TextField, InputAdornment} from '@material-ui/core'
+import {LoadingButton} from '@material-ui/lab'
 
 const SOCIAL_LINKS_OPTIONS = [
   {
     value: 'facebookLink',
-    icon: <Icon icon={facebookFill} height={24} />
+    icon: <Icon icon={facebookFill} height={24} />,
   },
   {
     value: 'instagramLink',
-    icon: <Icon icon={instagramFilled} height={24} />
+    icon: <Icon icon={instagramFilled} height={24} />,
   },
   {
     value: 'linkedinLink',
-    icon: <Icon icon={linkedinFill} height={24} />
+    icon: <Icon icon={linkedinFill} height={24} />,
   },
   {
     value: 'twitterLink',
-    icon: <Icon icon={twitterFill} height={24} />
-  }
-];
-
-// ----------------------------------------------------------------------
+    icon: <Icon icon={twitterFill} height={24} />,
+  },
+]
 
 export default function AccountSocialLinks() {
-  const { enqueueSnackbar } = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar()
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -40,18 +38,18 @@ export default function AccountSocialLinks() {
       linkedinLink: '',
       twitterLink: '',
     },
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values, {setSubmitting}) => {
       // await fakeRequest(500);
-      setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
-      enqueueSnackbar('Save success', { variant: 'success' });
-    }
-  });
+      setSubmitting(false)
+      alert(JSON.stringify(values, null, 2))
+      enqueueSnackbar('Save success', {variant: 'success'})
+    },
+  })
 
-  const { handleSubmit, isSubmitting, getFieldProps } = formik;
+  const {handleSubmit, isSubmitting, getFieldProps} = formik
 
   return (
-    <Card sx={{ p: 3 }}>
+    <Card sx={{p: 3}}>
       <FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
           <Stack spacing={3} alignItems="flex-end">
@@ -61,7 +59,7 @@ export default function AccountSocialLinks() {
                 fullWidth
                 {...getFieldProps(link.value)}
                 InputProps={{
-                  startAdornment: <InputAdornment position="start">{link.icon}</InputAdornment>
+                  startAdornment: <InputAdornment position="start">{link.icon}</InputAdornment>,
                 }}
               />
             ))}
@@ -73,5 +71,5 @@ export default function AccountSocialLinks() {
         </Form>
       </FormikProvider>
     </Card>
-  );
+  )
 }

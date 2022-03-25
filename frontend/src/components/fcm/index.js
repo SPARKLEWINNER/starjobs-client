@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { getToken } from './../../firebase'
+import React, {useState, useEffect} from 'react'
+import {getToken} from './../../firebase'
 
-import fcm_api from 'utils/api/fcm'
-import user_api from 'utils/api/users'
+import fcm_api from 'api/fcm'
+import user_api from 'api/users'
 
 export default function Notifications() {
   const [isTokenFound, setTokenFound] = useState(false)
@@ -48,7 +48,6 @@ export default function Notifications() {
         })
     })
   }
-
 
   useEffect(() => {
     let token

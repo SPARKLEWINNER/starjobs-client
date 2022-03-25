@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 // material
-import { styled } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import {styled} from '@material-ui/core/styles'
+import {Box} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
-const RootStyle = styled('ul')(({ theme }) => ({
+const RootStyle = styled('ul')(({theme}) => ({
   display: 'flex',
   listStyle: 'none',
   alignItems: 'center',
@@ -17,17 +15,15 @@ const RootStyle = styled('ul')(({ theme }) => ({
     height: 18,
     opacity: 0.32,
     cursor: 'pointer',
-    '&.slick-active': { opacity: 1 }
-  }
-}));
-
-// ----------------------------------------------------------------------
+    '&.slick-active': {opacity: 1},
+  },
+}))
 
 CarouselControlsPaging1.propTypes = {
-  color: PropTypes.string
-};
+  color: PropTypes.string,
+}
 
-export default function CarouselControlsPaging1({ color, ...other }) {
+export default function CarouselControlsPaging1({color, ...other}) {
   return {
     appendDots: (dots) => (
       <>
@@ -41,7 +37,7 @@ export default function CarouselControlsPaging1({ color, ...other }) {
           height: 1,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <Box
@@ -50,10 +46,10 @@ export default function CarouselControlsPaging1({ color, ...other }) {
             width: 8,
             height: 8,
             borderRadius: '50%',
-            bgcolor: color || 'common.white'
+            bgcolor: color || 'common.white',
           }}
         />
       </Box>
-    )
-  };
+    ),
+  }
 }

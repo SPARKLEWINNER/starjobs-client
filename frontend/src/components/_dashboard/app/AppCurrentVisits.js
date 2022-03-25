@@ -8,8 +8,6 @@ import {fNumber} from '../../../utils/formatNumber'
 //
 import {BaseOptionChart} from '../../charts'
 
-// ----------------------------------------------------------------------
-
 const CHART_HEIGHT = 372
 const LEGEND_HEIGHT = 72
 
@@ -28,8 +26,6 @@ const ChartWrapperStyle = styled('div')(({theme}) => ({
     top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`,
   },
 }))
-
-// ----------------------------------------------------------------------
 
 const CHART_DATA = [4344, 5435, 1443, 4443]
 

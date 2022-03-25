@@ -1,24 +1,14 @@
-import { Icon } from '@iconify/react';
-import { useState } from 'react';
-import searchFill from '@iconify/icons-eva/search-fill';
+import {Icon} from '@iconify/react'
+import {useState} from 'react'
+import searchFill from '@iconify/icons-eva/search-fill'
 // material
-import { styled, alpha } from '@material-ui/core/styles';
-import {
-  Box,
-  Input,
-  Slide,
-  Button,
-  InputAdornment,
-  ClickAwayListener,
-  IconButton
-} from '@material-ui/core';
+import {styled, alpha} from '@material-ui/core/styles'
+import {Box, Input, Slide, Button, InputAdornment, ClickAwayListener, IconButton} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
+const APPBAR_MOBILE = 64
+const APPBAR_DESKTOP = 92
 
-const APPBAR_MOBILE = 64;
-const APPBAR_DESKTOP = 92;
-
-const SearchbarStyle = styled('div')(({ theme }) => ({
+const SearchbarStyle = styled('div')(({theme}) => ({
   top: 0,
   left: 0,
   zIndex: 99,
@@ -34,22 +24,20 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
   backgroundColor: `${alpha(theme.palette.background.default, 0.72)}`,
   [theme.breakpoints.up('md')]: {
     height: APPBAR_DESKTOP,
-    padding: theme.spacing(0, 5)
-  }
-}));
-
-// ----------------------------------------------------------------------
+    padding: theme.spacing(0, 5),
+  },
+}))
 
 export default function Searchbar() {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false)
 
   const handleOpen = () => {
-    setOpen((prev) => !prev);
-  };
+    setOpen((prev) => !prev)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
@@ -69,14 +57,10 @@ export default function Searchbar() {
               placeholder="Search…"
               startAdornment={
                 <InputAdornment position="start">
-                  <Box
-                    component={Icon}
-                    icon={searchFill}
-                    sx={{ color: 'text.disabled', width: 20, height: 20 }}
-                  />
+                  <Box component={Icon} icon={searchFill} sx={{color: 'text.disabled', width: 20, height: 20}} />
                 </InputAdornment>
               }
-              sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
+              sx={{mr: 1, fontWeight: 'fontWeightBold'}}
             />
             <Button variant="contained" onClick={handleClose}>
               Search
@@ -85,5 +69,5 @@ export default function Searchbar() {
         </Slide>
       </div>
     </ClickAwayListener>
-  );
+  )
 }

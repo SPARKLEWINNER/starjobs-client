@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import {styled} from '@material-ui/core/styles'
 import {Box} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
 const RootStyle = styled('ul')({
   display: 'flex',
   listStyle: 'none',
@@ -33,8 +31,6 @@ const DotStyle = styled('span')(({theme}) => ({
     duration: 360,
   }),
 }))
-
-// ----------------------------------------------------------------------
 
 CarouselControlsPaging2.propTypes = {
   color: PropTypes.string,

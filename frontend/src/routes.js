@@ -17,6 +17,7 @@ import Verification from './pages/Verification'
 import Welcome from './pages/Welcome'
 
 // global
+import Dashboard from './pages/Dashboard'
 import ChangePassword from './pages/ChangePassword'
 import BrowseCategory from './pages/BrowseCategory'
 import Message from './pages/Message'
@@ -128,6 +129,11 @@ const UseRoutes = () => {
       path: 'notification',
       element: <DashboardLayout />,
       children: [{path: '/details/:id/:hid', element: <NotificationDetails />}],
+    },
+    {
+      path: 'dashboard',
+      element: <DashboardLayout />,
+      children: [{path: '/', element: <Dashboard />}],
     },
     // non-signed accounts
     {

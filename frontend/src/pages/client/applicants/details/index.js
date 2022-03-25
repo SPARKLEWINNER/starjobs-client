@@ -14,7 +14,7 @@ import ConfirmDeleteGig from './confirmDelete'
 
 // api
 import storage from 'utils/storage'
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 
 export default function GigsDetailsLayout({details, shift}) {
   const params = useParams()

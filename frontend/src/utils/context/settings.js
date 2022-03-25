@@ -5,8 +5,6 @@ import useLocalStorage from 'utils/hooks/storage'
 // theme
 import palette from 'theme/palette'
 
-// ----------------------------------------------------------------------
-
 const PRIMARY_COLOR = [
   // DEFAULT
   {

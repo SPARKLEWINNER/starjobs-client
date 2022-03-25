@@ -13,7 +13,7 @@ import {PendingTab, IncomingTab, CurrentTab} from './tabs'
 import {IncomingNotification, ConfirmEndShiftNotification} from 'components/notifications'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 import storage from 'utils/storage'
 
 export default function TabsComponent() {

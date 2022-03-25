@@ -7,7 +7,6 @@ import useSettings from 'utils/hooks/settings'
 //
 import componentsOverride from 'theme/overrides'
 
-// ----------------------------------------------------------------------
 
 ThemePrimaryColor.propTypes = {
   children: PropTypes.node,
@@ -16,8 +15,6 @@ ThemePrimaryColor.propTypes = {
 export default function ThemePrimaryColor({children}) {
   const defaultTheme = useTheme()
   const {setColor} = useSettings()
-
-  console.log(setColor)
 
   const themeOptions = useMemo(
     () => ({

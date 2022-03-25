@@ -1,13 +1,11 @@
 // material
-import { useTheme } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles'
+import {Box} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
-export default function MaintenanceIllustration({ ...other }) {
-  const theme = useTheme();
-  const PRIMARY_MAIN = theme.palette.primary.main;
-  const PRIMARY_DARKER = theme.palette.primary.darker;
+export default function MaintenanceIllustration({...other}) {
+  const theme = useTheme()
+  const PRIMARY_MAIN = theme.palette.primary.main
+  const PRIMARY_DARKER = theme.palette.primary.darker
 
   return (
     <Box {...other}>
@@ -161,5 +159,5 @@ export default function MaintenanceIllustration({ ...other }) {
         </g>
       </svg>
     </Box>
-  );
+  )
 }

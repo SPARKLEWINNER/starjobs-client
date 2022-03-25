@@ -1,13 +1,11 @@
-import React, {useEffect, useContext} from 'react'
-import {Link as RouterLink, useLocation, useNavigate} from 'react-router-dom'
+import React from 'react'
+import {Link as RouterLink} from 'react-router-dom'
 import {styled} from '@material-ui/core/styles'
 import {Link, Stack, Container, Typography} from '@material-ui/core'
 
 import Page from '../components/Page'
 import LogoOutline from 'components/LogoOutline'
 import {LoginForm} from '../components/authentication/login'
-
-import {UsersContext} from 'utils/context/users'
 
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.common.white,
@@ -27,26 +25,6 @@ const ContentStyle = styled('div')(({theme}) => ({
 }))
 
 export default function Login() {
-  const navigate = useNavigate()
-  const {check_login} = useContext(UsersContext)
-  const location = useLocation()
-
-  const load = async () => {
-    const user = await check_login()
-    if (!user) return
-    navigate(`${user.accessType}`)
-  }
-
-  useEffect(() => {
-    load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname])
-
   return (
     <RootStyle title="Login - Starjobs">
       <Container maxWidth="sm" sx={{height: 'inherit'}}>

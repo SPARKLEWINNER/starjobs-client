@@ -13,8 +13,6 @@ import {
 // utils
 import {fDateTime} from '../../../utils/formatTime'
 
-// ----------------------------------------------------------------------
-
 const TIMELINES = [
   {
     title: '1983, orders, $4220',
@@ -42,8 +40,6 @@ const TIMELINES = [
     type: 'order5',
   },
 ]
-
-// ----------------------------------------------------------------------
 
 OrderItem.propTypes = {
   item: PropTypes.object,

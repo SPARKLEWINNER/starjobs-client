@@ -13,10 +13,12 @@ import FirebaseToken from './components/fcm'
 import ScrollToTop from './components/ScrollToTop'
 import NotistackProvider from './components/NotistackProvider'
 import ThemePrimaryColor from './components/ThemePrimaryColor'
-import {UsersProvider} from './utils/context/users'
 import {RatingsProvider} from './utils/context/rating'
 
 import TawktoPageOverlay from 'layouts/tawkto/tawkto_page_overlay'
+
+import {AuthProvider} from 'utils/context/AuthContext'
+import {SessionProvider} from 'utils/context/SessionContext'
 
 export default function App() {
   const [open, setOpen] = useState(false)
@@ -38,18 +40,20 @@ export default function App() {
   return (
     <ThemeConfig>
       <ThemePrimaryColor>
-        <UsersProvider>
-          <NotistackProvider>
-            <RatingsProvider>
-              <TawktoPageOverlay>
-                <ScrollToTop />
-                <AppRoute />
-                <FirebaseToken />
-                <GenericNotification open={open} details={payload} handleClose={handleClose} />
-              </TawktoPageOverlay>
-            </RatingsProvider>
-          </NotistackProvider>
-        </UsersProvider>
+        <AuthProvider>
+          <SessionProvider>
+            <NotistackProvider>
+              <RatingsProvider>
+                <TawktoPageOverlay>
+                  <ScrollToTop />
+                  <AppRoute />
+                  <FirebaseToken />
+                  <GenericNotification open={open} details={payload} handleClose={handleClose} />
+                </TawktoPageOverlay>
+              </RatingsProvider>
+            </NotistackProvider>
+          </SessionProvider>
+        </AuthProvider>
       </ThemePrimaryColor>
     </ThemeConfig>
   )

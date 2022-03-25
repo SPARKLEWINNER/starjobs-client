@@ -9,7 +9,7 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
 import DatePicker from 'react-datepicker'
 // api
-import category_api from 'utils/api/category'
+import category_api from 'api/category'
 
 export default function GigForm({user, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()

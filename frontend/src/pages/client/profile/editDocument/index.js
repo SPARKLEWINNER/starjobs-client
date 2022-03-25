@@ -1,6 +1,3 @@
-// react
-import {useContext} from 'react'
-
 // material
 import {Stack} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
@@ -9,7 +6,7 @@ import {styled} from '@material-ui/core/styles'
 import Page from 'components/Page'
 import DocumentsForm from './form'
 // context
-import {UsersContext} from 'utils/context/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
@@ -21,12 +18,12 @@ const MainStyle = styled(Stack)(({theme}) => ({
 }))
 
 const EditDocument = () => {
-  const {user} = useContext(UsersContext)
+  const {currentUser} = useAuth()
 
   return (
     <Page title="Edit Documents - Starjobs">
       <MainStyle alignItems="center" justify="center" sx={{my: 3, paddingLeft: {xs: 3}, paddingRight: {xs: 3}}}>
-        {user.accountType === 1 && <DocumentsForm />}
+        {currentUser.accountType === 1 && <DocumentsForm />}
       </MainStyle>
     </Page>
   )

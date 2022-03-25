@@ -8,7 +8,7 @@ import {styled} from '@material-ui/core/styles'
 import Page from 'components/Page'
 import ActivityDetailsCard from 'components/activity/details'
 
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

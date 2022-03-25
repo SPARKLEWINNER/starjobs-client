@@ -6,7 +6,7 @@ import {Stack, Button, Box, Card, CardContent, Typography} from '@material-ui/co
 import {styled} from '@material-ui/core/styles'
 
 // api
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 import storage from 'utils/storage'
 import {calculations} from 'utils/gigComputation'
 

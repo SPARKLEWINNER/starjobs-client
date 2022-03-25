@@ -9,7 +9,7 @@ import {styled} from '@material-ui/core/styles'
 import Page from '../components/Page'
 
 // api
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 import storage from 'utils/storage'
 import {calculations} from 'utils/gigComputation'
 

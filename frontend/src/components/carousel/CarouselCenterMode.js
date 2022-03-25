@@ -1,28 +1,25 @@
-import { useRef } from 'react';
-import Slider from 'react-slick';
-import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import { Link as RouterLink } from 'react-router-dom';
-import arrowForwardFill from '@iconify/icons-eva/arrow-forward-fill';
+import {useRef} from 'react'
+import Slider from 'react-slick'
+import PropTypes from 'prop-types'
+import {Icon} from '@iconify/react'
+import {Link as RouterLink} from 'react-router-dom'
+import arrowForwardFill from '@iconify/icons-eva/arrow-forward-fill'
 // material
-import { alpha, useTheme, styled } from '@material-ui/core/styles';
-import { Box, Paper, Link, Typography, CardContent } from '@material-ui/core';
+import {alpha, useTheme, styled} from '@material-ui/core/styles'
+import {Box, Paper, Link, Typography, CardContent} from '@material-ui/core'
 // utils
 //
-import { CarouselControlsArrowsBasic2 } from './controls';
-
-// ----------------------------------------------------------------------
+import {CarouselControlsArrowsBasic2} from './controls'
 
 import faker from 'faker'
 const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature()
-}));
+  image: faker.image.nature(),
+}))
 
-
-const RootStyle = styled('div')(({ theme }) => ({
+const RootStyle = styled('div')(({theme}) => ({
   overflow: 'hidden',
   position: 'relative',
   '&:before, &:after': {
@@ -36,33 +33,31 @@ const RootStyle = styled('div')(({ theme }) => ({
     position: 'absolute',
     backgroundImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
     [theme.breakpoints.up(480)]: {
-      display: 'block'
-    }
+      display: 'block',
+    },
   },
   '&:after': {
     right: 0,
     left: 'auto',
-    transform: 'scaleX(-1)'
-  }
-}));
+    transform: 'scaleX(-1)',
+  },
+}))
 
-const CarouselImgStyle = styled('img')(({ theme }) => ({
+const CarouselImgStyle = styled('img')(({theme}) => ({
   top: 0,
   width: '100%',
   height: '100%',
   objectFit: 'cover',
   position: 'absolute',
-  transition: theme.transitions.create('all')
-}));
-
-// ----------------------------------------------------------------------
+  transition: theme.transitions.create('all'),
+}))
 
 CarouselItem.propTypes = {
-  item: PropTypes.object
-};
+  item: PropTypes.object,
+}
 
-function CarouselItem({ item }) {
-  const { image, title } = item;
+function CarouselItem({item}) {
+  const {image, title} = item
 
   return (
     <Paper
@@ -74,8 +69,8 @@ function CarouselItem({ item }) {
         position: 'relative',
         '&:hover img': {
           width: '120%',
-          height: '120%'
-        }
+          height: '120%',
+        },
       }}
     >
       <CarouselImgStyle alt={title} src={image} />
@@ -88,7 +83,7 @@ function CarouselItem({ item }) {
           position: 'absolute',
           color: 'common.white',
           backgroundImage: (theme) =>
-            `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(theme.palette.grey[900], 0)} 100%)`
+            `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(theme.palette.grey[900], 0)} 100%)`,
         }}
       >
         <Typography variant="h4" paragraph>
@@ -104,20 +99,20 @@ function CarouselItem({ item }) {
             alignItems: 'center',
             display: 'inline-flex',
             transition: (theme) => theme.transitions.create('opacity'),
-            '&:hover': { opacity: 1 }
+            '&:hover': {opacity: 1},
           }}
         >
           learn More
-          <Box component={Icon} icon={arrowForwardFill} sx={{ width: 16, height: 16, ml: 1 }} />
+          <Box component={Icon} icon={arrowForwardFill} sx={{width: 16, height: 16, ml: 1}} />
         </Link>
       </CardContent>
     </Paper>
-  );
+  )
 }
 
 export default function CarouselCenterMode() {
-  const carouselRef = useRef();
-  const theme = useTheme();
+  const carouselRef = useRef()
+  const theme = useTheme()
 
   const settings = {
     slidesToShow: 3,
@@ -127,26 +122,26 @@ export default function CarouselCenterMode() {
     responsive: [
       {
         breakpoint: 1024,
-        settings: { slidesToShow: 2 }
+        settings: {slidesToShow: 2},
       },
       {
         breakpoint: 600,
-        settings: { slidesToShow: 2 }
+        settings: {slidesToShow: 2},
       },
       {
         breakpoint: 480,
-        settings: { slidesToShow: 1, centerPadding: '0' }
-      }
-    ]
-  };
+        settings: {slidesToShow: 1, centerPadding: '0'},
+      },
+    ],
+  }
 
   const handlePrevious = () => {
-    carouselRef.current.slickPrev();
-  };
+    carouselRef.current.slickPrev()
+  }
 
   const handleNext = () => {
-    carouselRef.current.slickNext();
-  };
+    carouselRef.current.slickNext()
+  }
 
   return (
     <RootStyle>
@@ -157,5 +152,5 @@ export default function CarouselCenterMode() {
       </Slider>
       <CarouselControlsArrowsBasic2 onNext={handleNext} onPrevious={handlePrevious} />
     </RootStyle>
-  );
+  )
 }

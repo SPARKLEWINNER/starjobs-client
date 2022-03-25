@@ -1,5 +1,4 @@
-import React, {useEffect, useState, useContext, createContext} from 'react'
-import PropTypes from 'prop-types'
+import React, {useEffect, useState, createContext} from 'react'
 
 // components
 import {Box, Typography, SwipeableDrawer, Stack, Button} from '@material-ui/core'
@@ -15,7 +14,7 @@ import closeIcon from '@iconify/icons-eva/close-circle-outline'
 import {FreelancerRating} from 'components/gigRatings'
 
 // hooks
-import {UsersContext} from './users'
+import {useAuth} from 'utils/context/AuthContext'
 
 // variables
 const drawerBleeding = 56
@@ -38,7 +37,7 @@ const Puller = styled(Box)(({theme}) => ({
 const RatingsContext = createContext()
 
 const RatingsProvider = ({children}) => {
-  let {user} = useContext(UsersContext)
+  const {currentUser} = useAuth()
   const [open, setOpen] = useState(false)
   const [rating, setRatings] = useState([])
   const [GIG_ID, setGigId] = useState(undefined)
@@ -132,7 +131,9 @@ const RatingsProvider = ({children}) => {
               </Typography>
             </Box>
             <Box sx={{py: 2, '& > legend': {mt: 2}}}>
-              {user.accountType === 1 && <FreelancerRating user={user} gigId={GIG_ID} onClose={closeRatingModal} />}
+              {currentUser.accountType === 1 && (
+                <FreelancerRating user={currentUser} gigId={GIG_ID} onClose={closeRatingModal} />
+              )}
             </Box>
           </StyledBox>
 
@@ -143,10 +144,6 @@ const RatingsProvider = ({children}) => {
       </Box>
     </RatingsContext.Provider>
   )
-}
-
-RatingsProvider.propTypes = {
-  children: PropTypes.array,
 }
 
 export {RatingsContext, RatingsProvider}

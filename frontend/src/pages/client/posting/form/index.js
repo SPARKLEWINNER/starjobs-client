@@ -7,7 +7,7 @@ import CreatGigForm from './gigs'
 import CreateParcelForm from './parcel'
 
 // api
-import category_api from 'utils/api/category'
+import category_api from 'api/category'
 
 const GigsForm = () => {
   const [category, setCategory] = useState([])

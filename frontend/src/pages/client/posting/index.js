@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 // material
 import {Stack, Tab} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
@@ -11,7 +11,7 @@ import LoadingScreen from 'components/LoadingScreen'
 import GigForm from './form'
 import GigProgress from './progress'
 
-import {UsersContext} from 'utils/context/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
@@ -51,7 +51,8 @@ const SIMPLE_TAB = [
 const GigPosting = () => {
   const classes = useStyles()
   const [value, setValue] = useState('1')
-  const {user} = useContext(UsersContext)
+  const {currentUser} = useAuth()
+
   const [isLoading, setLoading] = useState(true)
 
   const handleChange = (event, newValue) => {
@@ -60,7 +61,7 @@ const GigPosting = () => {
 
   useEffect(() => {
     setLoading(false)
-  }, [user])
+  }, [currentUser])
 
   const renderGigForm = () => {
     return <GigForm />

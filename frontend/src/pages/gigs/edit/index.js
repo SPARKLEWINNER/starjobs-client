@@ -14,7 +14,7 @@ import EditDialog from './dialog'
 
 // hooks
 import storage from 'utils/storage'
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

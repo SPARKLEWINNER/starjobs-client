@@ -1,6 +1,5 @@
 import {last} from 'lodash'
 
-import {useContext} from 'react'
 import {Outlet, useLocation} from 'react-router-dom'
 // material
 import PullToRefresh from 'react-simple-pull-to-refresh'
@@ -9,10 +8,8 @@ import {styled} from '@material-ui/core/styles'
 import DashboardNavbar from './DashboardNavbar'
 import FixedBottomNavigation from 'components/BottomNavigation'
 
-import {UsersContext} from 'utils/context/users'
+import {useAuth} from 'utils/context/AuthContext'
 // import {SocketContext} from 'utils/context/socket'
-
-// ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64
 const APP_BAR_DESKTOP = 92
@@ -41,31 +38,9 @@ const MainStyle = styled('div')(({theme}) => ({
   },
 }))
 
-// ----------------------------------------------------------------------
-
 export default function DashboardLayout() {
   const location = useLocation()
-  const {user} = useContext(UsersContext)
-  // const socket = useContext(SocketContext)
-
-  // const check_account = () => {
-  //   let {name, _id} = user
-  //   socket.emit('connected', {name, _id}, (error) => {
-  //     if (error) {
-  //       console.log(error)
-  //     }
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   check_account()
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
-
-  // useEffect(() => {
-  //   check_account()
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [location.pathname])
+  const {currentUser} = useAuth()
 
   const handleRefresh = () => {
     window.location.reload()
@@ -92,7 +67,7 @@ export default function DashboardLayout() {
   return (
     <>
       <RootStyle>
-        <DashboardNavbar location={location.pathname} user={user} />
+        <DashboardNavbar location={location.pathname} user={currentUser} />
         {(renderContainer(location.pathname) || !renderContainer(location.pathname)) && (
           <MainStyle sx={{...(last(location.pathname.split('/')) === 'app' ? {paddingTop: 6} : {})}}>
             <PullToRefresh onRefresh={handleRefresh}>

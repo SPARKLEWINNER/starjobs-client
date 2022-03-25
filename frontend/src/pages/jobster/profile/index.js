@@ -20,7 +20,7 @@ import {AboutTab, ReviewTab, CredentialsTab, MyActivitiesTab} from './tabs'
 import MAvatar from 'components/@material-extend/MAvatar'
 
 // api
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 import storage from 'utils/storage'
 
 // theme

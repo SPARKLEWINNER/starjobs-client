@@ -8,8 +8,6 @@ import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
 import {alpha, useTheme, styled} from '@material-ui/core/styles'
 import {Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
 const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(({theme}) => ({
   ...theme.typography.body2,
   height: 48,
@@ -39,8 +37,6 @@ const ListItemIconStyle = styled(ListItemIcon)({
   alignItems: 'center',
   justifyContent: 'center',
 })
-
-// ----------------------------------------------------------------------
 
 NavItem.propTypes = {
   item: PropTypes.object,

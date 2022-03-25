@@ -1,4 +1,4 @@
-import {useContext, useState, useCallback, useEffect} from 'react'
+import {useState, useCallback, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 
 // material
@@ -8,23 +8,22 @@ import {useSnackbar} from 'notistack5'
 // components
 import {UploadMultiFile} from 'components/upload'
 
-import {UsersContext} from 'utils/context/users'
-
-import users_api from 'utils/api/users'
-import onboard_api from 'utils/api/onboard'
+import users_api from 'api/users'
+import onboard_api from 'api/onboard'
+import {useAuth} from 'utils/context/AuthContext'
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 export default function EditDocument({onNext, onStoreData}) {
   const navigate = useNavigate()
   const {enqueueSnackbar} = useSnackbar()
   const [files, setFiles] = useState([])
   const [isLoading, setLoading] = useState(false)
-  const {user} = useContext(UsersContext)
+  const {currentUser} = useAuth()
 
   const [EXISTING_DOCUMENTS, setDocuments] = useState([])
 
   useEffect(() => {
     const load = async () => {
-      const request = await users_api.get_user_profile_client(user._id)
+      const request = await users_api.get_user_profile_client(currentUser._id)
 
       if (!request.ok) {
         return
@@ -38,7 +37,9 @@ export default function EditDocument({onNext, onStoreData}) {
       setDocuments(documents)
     }
     load()
-  }, [user])
+
+    // eslint-disable-next-line
+  }, [])
 
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {
@@ -96,7 +97,7 @@ export default function EditDocument({onNext, onStoreData}) {
       documents: format_document,
     }
 
-    const result = await onboard_api.patch_client_documents(form_data, user._id)
+    const result = await onboard_api.patch_client_documents(form_data, currentUser._id)
     if (!result.ok) {
       enqueueSnackbar('Unable to process your edit documents', {variant: 'error'})
       return setLoading(false)

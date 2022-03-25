@@ -8,7 +8,7 @@ import {fData} from 'utils/formatNumber'
 // components
 import {UploadAvatar} from 'components/upload'
 
-import onboard_api from 'utils/api/onboard'
+import onboard_api from 'api/onboard'
 export default function Upload({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [avatarUrl, setAvatarUrl] = useState('')

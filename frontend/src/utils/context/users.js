@@ -3,8 +3,8 @@ import {useNavigate, useLocation} from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 
 import storage from 'utils/storage'
-import user_api from 'utils/api/users'
-import auth_api from 'utils/api/auth'
+import user_api from 'api/users'
+import auth_api from 'api/auth'
 
 const UsersContext = createContext()
 

@@ -1,18 +1,18 @@
-import {useContext, useState} from 'react'
+import {useState} from 'react'
 import * as Yup from 'yup'
 import {useSnackbar} from 'notistack5'
 import {useFormik, Form, FormikProvider} from 'formik'
 import {Stack, Card, TextField, Grid, Typography} from '@material-ui/core'
 import {LoadingButton} from '@material-ui/lab'
 
-import user_api from 'utils/api/users'
-import {UsersContext} from 'utils/context/users'
+import user_api from 'api/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 import color from 'theme/palette'
 
 export default function AccountChangePassword() {
   const {enqueueSnackbar} = useSnackbar()
-  const {user} = useContext(UsersContext)
+  const {currentUser} = useAuth()
   const [isLoading, setLoading] = useState(false)
 
   const ChangePassWordSchema = Yup.object().shape({
@@ -30,7 +30,7 @@ export default function AccountChangePassword() {
     validationSchema: ChangePassWordSchema,
     onSubmit: async (values) => {
       setLoading(true)
-      const result = await user_api.patch_user_password(user._id, values)
+      const result = await user_api.patch_user_password(currentUser._id, values)
       if (!result.ok) {
         setLoading(false)
         return enqueueSnackbar(result.data.msg, {variant: 'error'})

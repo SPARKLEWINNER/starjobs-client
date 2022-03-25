@@ -7,8 +7,6 @@ import roundFilterList from '@iconify/icons-ic/round-filter-list'
 import {styled} from '@material-ui/core/styles'
 import {Box, Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment} from '@material-ui/core'
 
-// ----------------------------------------------------------------------
-
 const RootStyle = styled(Toolbar)(({theme}) => ({
   height: 96,
   display: 'flex',
@@ -28,8 +26,6 @@ const SearchStyle = styled(OutlinedInput)(({theme}) => ({
     borderColor: `${theme.palette.grey[500_32]} !important`,
   },
 }))
-
-// ----------------------------------------------------------------------
 
 UserListToolbar.propTypes = {
   numSelected: PropTypes.number,

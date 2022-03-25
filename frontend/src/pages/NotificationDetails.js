@@ -1,5 +1,5 @@
 // material
-import {useEffect, useState, useContext} from 'react'
+import {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
 import {Stack, Typography} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
@@ -8,9 +8,9 @@ import {styled} from '@material-ui/core/styles'
 import Page from 'components/Page'
 import NotificationsDetailsCard from 'components/notifications/details'
 
-import user_api from 'utils/api/users'
+import user_api from 'api/users'
 
-import {UsersContext} from 'utils/context/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
@@ -24,7 +24,7 @@ const MainStyle = styled(Stack)(({theme}) => ({
 const NotificationDetailsPage = () => {
   const params = useParams()
   const [data, setData] = useState([])
-  const {user} = useContext(UsersContext)
+  const {currentUser} = useAuth()
 
   const load = async () => {
     if (!params) return false
@@ -33,9 +33,7 @@ const NotificationDetailsPage = () => {
     if (!result.ok) return false
     let {data} = result.data
     setData(data[0])
-    if (user) {
-      await user_api.patch_user_notification_read(params.hid, user._id)
-    }
+    await user_api.patch_user_notification_read(params.hid, currentUser._id)
   }
 
   useEffect(() => {

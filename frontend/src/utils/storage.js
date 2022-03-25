@@ -24,6 +24,7 @@ const storeRefreshToken = (token) => {
 }
 
 const storeUser = (data) => {
+  console.log(data)
   try {
     ls.set(user, JSON.stringify(data))
   } catch (error) {
@@ -39,9 +40,9 @@ const getToken = () => {
   }
 }
 
-const getUser = async () => {
+const getUser = () => {
   try {
-    return await ls.get(user)
+    return ls.get(user)
   } catch (error) {
     console.log('Error getting the user', error)
     return false

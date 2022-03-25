@@ -1,44 +1,42 @@
-import { useState, useEffect } from 'react';
-import { Icon } from '@iconify/react';
-import closeFill from '@iconify/icons-eva/close-fill';
-import options2Fill from '@iconify/icons-eva/options-2-fill';
+import {useState, useEffect} from 'react'
+import {Icon} from '@iconify/react'
+import closeFill from '@iconify/icons-eva/close-fill'
+import options2Fill from '@iconify/icons-eva/options-2-fill'
 // material
-import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@material-ui/core';
+import {Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack} from '@material-ui/core'
 //
-import Scrollbar from '../Scrollbar';
-import { MIconButton } from '../@material-extend';
-import SettingMode from './SettingMode';
-import SettingColor from './SettingColor';
-import SettingStretch from './SettingStretch';
-import SettingDirection from './SettingDirection';
-import SettingFullscreen from './SettingFullscreen';
+import Scrollbar from '../Scrollbar'
+import {MIconButton} from '../@material-extend'
+import SettingMode from './SettingMode'
+import SettingColor from './SettingColor'
+import SettingStretch from './SettingStretch'
+import SettingDirection from './SettingDirection'
+import SettingFullscreen from './SettingFullscreen'
 
-// ----------------------------------------------------------------------
-
-const DRAWER_WIDTH = 260;
+const DRAWER_WIDTH = 260
 
 export default function Settings() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (open) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = 'unset'
     }
-  }, [open]);
+  }, [open])
 
   const handleToggle = () => {
-    setOpen((prev) => !prev);
-  };
+    setOpen((prev) => !prev)
+  }
 
   const handleClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <>
-      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open} onClick={handleClose} />
+      <Backdrop sx={{zIndex: (theme) => theme.zIndex.drawer + 1}} open={open} onClick={handleClose} />
 
       <Box
         sx={{
@@ -47,7 +45,7 @@ export default function Settings() {
           right: 0,
           position: 'fixed',
           zIndex: 2001,
-          ...(open && { right: 12 })
+          ...(open && {right: 12}),
         }}
       >
         <Box
@@ -61,7 +59,7 @@ export default function Settings() {
             position: 'absolute',
             bgcolor: 'common.white',
             borderRadius: '24px 0 16px 24px',
-            boxShadow: (theme) => theme.customShadows.z12
+            boxShadow: (theme) => theme.customShadows.z12,
           }}
         >
           <Tooltip title="Settings">
@@ -73,7 +71,7 @@ export default function Settings() {
                 width: 40,
                 height: 40,
                 transition: (theme) => theme.transitions.create('all'),
-                '&:hover': { color: 'starjobs.main', bgcolor: 'transparent' }
+                '&:hover': {color: 'starjobs.main', bgcolor: 'transparent'},
               }}
             >
               <Icon icon={open ? closeFill : options2Fill} width={20} height={20} />
@@ -88,10 +86,10 @@ export default function Settings() {
             overflow: 'hidden',
             boxShadow: (theme) => theme.customShadows.z24,
             transition: (theme) => theme.transitions.create('width'),
-            ...(open && { width: DRAWER_WIDTH })
+            ...(open && {width: DRAWER_WIDTH}),
           }}
         >
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ py: 2, pr: 1, pl: 2.5 }}>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{py: 2, pr: 1, pl: 2.5}}>
             <Typography variant="subtitle1">Settings</Typography>
             <MIconButton onClick={handleClose}>
               <Icon icon={closeFill} width={20} height={20} />
@@ -99,8 +97,8 @@ export default function Settings() {
           </Stack>
           <Divider />
 
-          <Scrollbar sx={{ height: 1 }}>
-            <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
+          <Scrollbar sx={{height: 1}}>
+            <Stack spacing={4} sx={{pt: 3, px: 3, pb: 15}}>
               <Stack spacing={1.5}>
                 <Typography variant="subtitle2">Mode</Typography>
                 <SettingMode />
@@ -127,5 +125,5 @@ export default function Settings() {
         </Paper>
       </Box>
     </>
-  );
+  )
 }

@@ -1,11 +1,9 @@
-import { Box, Grid, Paper, Radio, RadioGroup, CardActionArea, FormControlLabel } from '@material-ui/core';
+import {Box, Grid, Paper, Radio, RadioGroup, CardActionArea, FormControlLabel} from '@material-ui/core'
 // hooks
-import useSettings from 'utils/hooks/settings';
-
-// ----------------------------------------------------------------------
+import useSettings from 'utils/hooks/settings'
 
 export default function SettingDirection() {
-  const { themeDirection, onChangeDirection } = useSettings();
+  const {themeDirection, onChangeDirection} = useSettings()
 
   return (
     <RadioGroup name="themeDirection" value={themeDirection} onChange={onChangeDirection}>
@@ -21,17 +19,17 @@ export default function SettingDirection() {
                 overflow: 'hidden',
                 position: 'relative',
                 ...(themeDirection === direction && {
-                  boxShadow: (theme) => theme.customShadows.z12
-                })
+                  boxShadow: (theme) => theme.customShadows.z12,
+                }),
               }}
             >
-              <CardActionArea sx={{ color: 'starjobs.main' }}>
+              <CardActionArea sx={{color: 'starjobs.main'}}>
                 <Box
                   sx={{
                     p: 1.5,
                     display: 'flex',
                     flexDirection: 'column',
-                    ...(index === 1 && { alignItems: 'flex-end' })
+                    ...(index === 1 && {alignItems: 'flex-end'}),
                   }}
                 >
                   {[56, 36, 24].map((size, index) => (
@@ -43,9 +41,9 @@ export default function SettingDirection() {
                         height: size / 2.5,
                         borderRadius: 0.75,
                         bgcolor: themeDirection === direction ? 'primary.main' : 'grey.500',
-                        ...(index === 0 && { opacity: 0.64 }),
-                        ...(index === 1 && { opacity: 0.32, borderRadius: '4px' }),
-                        ...(index === 2 && { opacity: 0.16, borderRadius: '3px' })
+                        ...(index === 0 && {opacity: 0.64}),
+                        ...(index === 1 && {opacity: 0.32, borderRadius: '4px'}),
+                        ...(index === 2 && {opacity: 0.16, borderRadius: '3px'}),
                       }}
                     />
                   ))}
@@ -53,13 +51,13 @@ export default function SettingDirection() {
                 <FormControlLabel
                   label=""
                   value={direction}
-                  control={<Radio sx={{ display: 'none' }} />}
+                  control={<Radio sx={{display: 'none'}} />}
                   sx={{
                     top: 0,
                     margin: 0,
                     width: '100%',
                     height: '100%',
-                    position: 'absolute'
+                    position: 'absolute',
                   }}
                 />
               </CardActionArea>
@@ -68,5 +66,5 @@ export default function SettingDirection() {
         ))}
       </Grid>
     </RadioGroup>
-  );
+  )
 }

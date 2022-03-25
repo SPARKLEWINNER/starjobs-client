@@ -9,10 +9,11 @@ import {CurrentCard, BillingCard} from '../../../cards'
 import CurrentModalPopup from '../modal'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 
 // theme
 import color from 'theme/palette'
+
 
 // status
 const current_status = [

@@ -1,21 +1,23 @@
 import * as Yup from 'yup'
-import { useState } from 'react'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { useFormik, Form, FormikProvider } from 'formik'
+import {useState} from 'react'
+import {Link as RouterLink, useNavigate} from 'react-router-dom'
+import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import { Link, Stack, Checkbox, TextField, FormControlLabel } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
+import {Link, Stack, Checkbox, TextField, FormControlLabel} from '@material-ui/core'
+import {LoadingButton} from '@material-ui/lab'
 
 import storage from 'utils/storage'
-import useAuth from 'utils/api/auth'
-// ----------------------------------------------------------------------
+import useAuth from 'api/auth'
 
-export default function LoginForm({ currentStep }) {
+export default function LoginForm({currentStep}) {
   const navigate = useNavigate()
   const [isLoading, setLoading] = useState(false)
 
   const LoginSchema = Yup.object().shape({
-    phone: Yup.string().min(11, 'Not a valid phone number! (ex. 091523468790)').max(11, 'Not a valid phone number! (ex. 091523468790)').required('Phone number is required'),
+    phone: Yup.string()
+      .min(11, 'Not a valid phone number! (ex. 091523468790)')
+      .max(11, 'Not a valid phone number! (ex. 091523468790)')
+      .required('Phone number is required'),
   })
 
   const formik = useFormik({
@@ -35,7 +37,7 @@ export default function LoginForm({ currentStep }) {
         return setLoading(false)
       }
 
-      let { data } = result
+      let {data} = result
       data.sid = data.store_id
       await storage.storeUser(data)
       await storage.storeToken(data.token)
@@ -55,7 +57,7 @@ export default function LoginForm({ currentStep }) {
     },
   })
 
-  const { errors, touched, values, handleSubmit, getFieldProps } = formik
+  const {errors, touched, values, handleSubmit, getFieldProps} = formik
 
   return (
     <FormikProvider value={formik}>
@@ -64,7 +66,7 @@ export default function LoginForm({ currentStep }) {
           <TextField
             fullWidth
             type="tel"
-            inputProps={{ maxLength: 11, minLength: 11 }}
+            inputProps={{maxLength: 11, minLength: 11}}
             label="Phone number"
             autoFocus
             {...getFieldProps('phone')}
@@ -73,7 +75,7 @@ export default function LoginForm({ currentStep }) {
           />
         </Stack>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{my: 2}}>
           <FormControlLabel
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
             label="Remember me"

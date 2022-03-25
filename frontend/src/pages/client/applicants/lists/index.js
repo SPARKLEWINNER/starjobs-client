@@ -9,7 +9,7 @@ import ApplicantCard from './card'
 import {ConfirmDialog} from './dialog'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
 // variables

@@ -31,7 +31,7 @@ export default function FreelancerCard({key, data, onClick, onClickApplicantId})
   }
 
   return (
-    <Card sx={{my: 1, px: 2, py: 2}}>
+    <Card sx={{my: 1, px: 2, py: 2}} key={`card-${key}`}>
       <Stack direction="row" alignItems="flex-start" spacing={2}>
         <Avatar
           alt={`${data.firstName} ${data.middleInitial} ${data.lastName}`}
@@ -75,7 +75,11 @@ export default function FreelancerCard({key, data, onClick, onClickApplicantId})
           <Box>
             {data.expertise.skillOffer &&
               data.expertise.skillOffer.split('=>').map((v, k) => {
-                return <Label color="default">{v}</Label>
+                return (
+                  <Label color="default" key={`label-${k}`}>
+                    {v}
+                  </Label>
+                )
               })}
           </Box>
           {user.accountType === 1 && (

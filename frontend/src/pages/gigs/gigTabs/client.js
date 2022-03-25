@@ -17,7 +17,7 @@ import {
 import Sort from '@material-ui/icons/Sort'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 
 // component
 import {WaitingCard} from '../cards'

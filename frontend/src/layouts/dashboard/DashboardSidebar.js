@@ -1,36 +1,34 @@
 import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { alpha, styled } from '@material-ui/core/styles'
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack, Tooltip, CardActionArea } from '@material-ui/core'
+import {useEffect, useState} from 'react'
+import {Link as RouterLink, useLocation} from 'react-router-dom'
+import {alpha, styled} from '@material-ui/core/styles'
+import {Box, Link, Button, Drawer, Typography, Avatar, Stack, Tooltip, CardActionArea} from '@material-ui/core'
 import Logo from '../../components/Logo'
 import Scrollbar from '../../components/Scrollbar'
 import NavSection from '../../components/NavSection'
-import { MHidden } from '../../components/@material-extend'
+import {MHidden} from '../../components/@material-extend'
 import SidebarConfigStore from './SidebarConfigStore'
 import SidebarConfigEmployee from './SidebarConfigEmployee'
 import useCollapseDrawer from 'utils/hooks/drawer'
-import { DocIllustration } from '../../assets'
-import discord_api from 'utils/api/discord'
+import {DocIllustration} from '../../assets'
+import discord_api from 'api/discord'
 const DRAWER_WIDTH = 280
 const COLLAPSE_WIDTH = 102
 
-const RootStyle = styled('div')(({ theme }) => ({
+const RootStyle = styled('div')(({theme}) => ({
   [theme.breakpoints.up('lg')]: {
     flexShrink: 0,
     width: DRAWER_WIDTH,
   },
 }))
 
-const AccountStyle = styled('div')(({ theme }) => ({
+const AccountStyle = styled('div')(({theme}) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: theme.shape.borderRadiusSm,
   backgroundColor: theme.palette.grey[200],
 }))
-
-// ----------------------------------------------------------------------
 
 DashboardSidebar.propTypes = {
   isOpenSidebar: PropTypes.bool,
@@ -42,7 +40,7 @@ IconCollapse.propTypes = {
   collapseClick: PropTypes.bool,
 }
 
-function IconCollapse({ onToggleCollapse, collapseClick }) {
+function IconCollapse({onToggleCollapse, collapseClick}) {
   return (
     <Tooltip title="Mini Menu">
       <CardActionArea
@@ -80,9 +78,9 @@ function IconCollapse({ onToggleCollapse, collapseClick }) {
   )
 }
 
-export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar, account }) {
-  const { isCollapse, collapseClick, collapseHover, onHoverEnter, onHoverLeave } = useCollapseDrawer()
-  const { pathname } = useLocation()
+export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account}) {
+  const {isCollapse, collapseClick, collapseHover, onHoverEnter, onHoverLeave} = useCollapseDrawer()
+  const {pathname} = useLocation()
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar()
@@ -90,24 +88,25 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar, accoun
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, account])
 
-
   const handleHelpCenterClick = async (e) => {
-    var message = '';
-    message = prompt("How can we help you? - <name/phone#/email - branch - [issue/feedback]>", "Input name/phone#/email - branch - [issue/problem/inquiry/feedback]")
+    var message = ''
+    message = prompt(
+      'How can we help you? - <name/phone#/email - branch - [issue/feedback]>',
+      'Input name/phone#/email - branch - [issue/problem/inquiry/feedback]',
+    )
 
     if (message === null) return
 
     let params = JSON.stringify({
-      username: "Captain Sparkle",
-      avatar_url: "https://www.sparkles.com.ph/static/2629bb8535ba6ae5406fc9385dadc2e0/497c6/Spark--noodles.png",
-      content: `Starjobs Help - Version 1 \n**Issue:**\n ${message}`
+      username: 'Captain Sparkle',
+      avatar_url: 'https://www.sparkles.com.ph/static/2629bb8535ba6ae5406fc9385dadc2e0/497c6/Spark--noodles.png',
+      content: `Starjobs Help - Version 1 \n**Issue:**\n ${message}`,
     })
 
-    const result = await discord_api.send_message(params);
+    const result = await discord_api.send_message(params)
 
-    if (!result.ok) return alert("Unable to submit your request for assistance");
+    if (!result.ok) return alert('Unable to submit your request for assistance')
     return alert('Thank you for your patience, we will contact you ASAP.')
-
   }
 
   const renderContent = (
@@ -133,46 +132,55 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar, accoun
         }}
       >
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
+          <Box component={RouterLink} to="/" sx={{display: 'inline-flex'}}>
             <Logo />
           </Box>
-
         </Stack>
 
         {isCollapse ? (
-          <Avatar sx={{ mx: 'auto', mb: 2 }} src={account.image} />
+          <Avatar sx={{mx: 'auto', mb: 2}} src={account.image} />
         ) : (
           <Link underline="none" component={RouterLink} to={`/stores/app`}>
             <AccountStyle>
               <Avatar src={account.image} />
-              <Box sx={{ ml: 2 }}>
-                <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
+              <Box sx={{ml: 2}}>
+                <Typography variant="subtitle2" sx={{color: 'text.primary'}}>
                   {account?.displayName}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2" sx={{color: 'text.secondary'}}>
                   {account?.role === 1 || account?.role === 4 ? 'Store' : 'Employee'}
                 </Typography>
               </Box>
             </AccountStyle>
           </Link>
         )}
-
       </Stack>
 
-
-      {account.role === 0 ? <NavSection account={account} navConfig={SidebarConfigEmployee} isShow={!isCollapse} /> : ''}
-      {account.role === 1 ? <NavSection account={account} navConfig={SidebarConfigStore._configWOBranch} isShow={!isCollapse} /> : ''}
-      {account.role === 4 ? <NavSection account={account} navConfig={SidebarConfigStore._config} isShow={!isCollapse} /> : ''}
-      <Box sx={{ flexGrow: 1 }} />
+      {account.role === 0 ? (
+        <NavSection account={account} navConfig={SidebarConfigEmployee} isShow={!isCollapse} />
+      ) : (
+        ''
+      )}
+      {account.role === 1 ? (
+        <NavSection account={account} navConfig={SidebarConfigStore._configWOBranch} isShow={!isCollapse} />
+      ) : (
+        ''
+      )}
+      {account.role === 4 ? (
+        <NavSection account={account} navConfig={SidebarConfigStore._config} isShow={!isCollapse} />
+      ) : (
+        ''
+      )}
+      <Box sx={{flexGrow: 1}} />
       {!isCollapse && (
-        <Stack spacing={3} alignItems="center" sx={{ px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center' }}>
-          <DocIllustration sx={{ width: 1 }} />
+        <Stack spacing={3} alignItems="center" sx={{px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center'}}>
+          <DocIllustration sx={{width: 1}} />
 
           <div>
             <Typography gutterBottom variant="subtitle1">
               Hi, {account?.displayName}
             </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            <Typography variant="body2" sx={{color: 'text.secondary'}}>
               Need help?
               <br /> Send us an message
             </Typography>
@@ -201,7 +209,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar, accoun
           open={isOpenSidebar}
           onClose={onCloseSidebar}
           PaperProps={{
-            sx: { width: DRAWER_WIDTH },
+            sx: {width: DRAWER_WIDTH},
           }}
         >
           {renderContent}

@@ -1,27 +1,25 @@
-import Slider from 'react-slick';
-import PropTypes from 'prop-types';
-import { useRef } from 'react';
-import { Icon } from '@iconify/react';
-import moreHorizontalFill from '@iconify/icons-eva/more-horizontal-fill';
+import Slider from 'react-slick'
+import PropTypes from 'prop-types'
+import {useRef} from 'react'
+import {Icon} from '@iconify/react'
+import moreHorizontalFill from '@iconify/icons-eva/more-horizontal-fill'
 // material
-import { alpha, useTheme, styled } from '@material-ui/core/styles';
-import { Box, Card, Typography } from '@material-ui/core';
+import {alpha, useTheme, styled} from '@material-ui/core/styles'
+import {Box, Card, Typography} from '@material-ui/core'
 //
-import { CarouselControlsArrowsBasic2 } from './controls';
+import {CarouselControlsArrowsBasic2} from './controls'
 //
-import { MIconButton } from '../@material-extend';
-
-// ----------------------------------------------------------------------
+import {MIconButton} from '../@material-extend'
 
 import faker from 'faker'
 const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature()
-}));
+  image: faker.image.nature(),
+}))
 
-const ContentItemStyle = styled('div')(({ theme }) => ({
+const ContentItemStyle = styled('div')(({theme}) => ({
   bottom: 0,
   zIndex: 9,
   width: '100%',
@@ -35,45 +33,43 @@ const ContentItemStyle = styled('div')(({ theme }) => ({
   borderBottomRightRadius: 16,
   justifyContent: 'space-between',
   backgroundColor: alpha(theme.palette.grey[900], 0.72),
-  flexDirection: theme.direction === 'rtl' ? 'row-reverse' : 'row'
-}));
-
-// ----------------------------------------------------------------------
+  flexDirection: theme.direction === 'rtl' ? 'row-reverse' : 'row',
+}))
 
 CarouselItem.propTypes = {
-  item: PropTypes.object
-};
+  item: PropTypes.object,
+}
 
-function CarouselItem({ item }) {
-  const { image, title } = item;
+function CarouselItem({item}) {
+  const {image, title} = item
 
   return (
-    <Box sx={{ position: 'relative', zIndex: 0 }}>
-      <Box component="img" alt={title} src={image} sx={{ width: '100%', height: 480, objectFit: 'cover' }} />
+    <Box sx={{position: 'relative', zIndex: 0}}>
+      <Box component="img" alt={title} src={image} sx={{width: '100%', height: 480, objectFit: 'cover'}} />
 
       <ContentItemStyle>
-        <Typography variant="h6" sx={{ color: 'common.white' }}>
+        <Typography variant="h6" sx={{color: 'common.white'}}>
           {item.title}
         </Typography>
         <MIconButton
-          onClick={() => { }}
+          onClick={() => {}}
           sx={{
             color: 'common.white',
             '&:hover': {
-              bgcolor: (theme) => alpha(theme.palette.common.white, theme.palette.action.hoverOpacity)
-            }
+              bgcolor: (theme) => alpha(theme.palette.common.white, theme.palette.action.hoverOpacity),
+            },
           }}
         >
           <Icon icon={moreHorizontalFill} />
         </MIconButton>
       </ContentItemStyle>
     </Box>
-  );
+  )
 }
 
 export default function CarouselBasic4() {
-  const theme = useTheme();
-  const carouselRef = useRef();
+  const theme = useTheme()
+  const carouselRef = useRef()
 
   const settings = {
     dots: false,
@@ -82,16 +78,16 @@ export default function CarouselBasic4() {
     slidesToShow: 1,
     slidesToScroll: 1,
     fade: Boolean(theme.direction !== 'rtl'),
-    rtl: Boolean(theme.direction === 'rtl')
-  };
+    rtl: Boolean(theme.direction === 'rtl'),
+  }
 
   const handlePrevious = () => {
-    carouselRef.current.slickPrev();
-  };
+    carouselRef.current.slickPrev()
+  }
 
   const handleNext = () => {
-    carouselRef.current.slickNext();
-  };
+    carouselRef.current.slickNext()
+  }
 
   return (
     <Card>
@@ -102,5 +98,5 @@ export default function CarouselBasic4() {
       </Slider>
       <CarouselControlsArrowsBasic2 onNext={handleNext} onPrevious={handlePrevious} />
     </Card>
-  );
+  )
 }

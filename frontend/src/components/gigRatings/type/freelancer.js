@@ -7,7 +7,7 @@ import {LoadingButton} from '@material-ui/lab'
 import {useSnackbar} from 'notistack5'
 
 // api
-import gigs_api from 'utils/api/gigs'
+import gigs_api from 'api/gigs'
 
 import {fCamelCase} from 'utils/formatCase'
 

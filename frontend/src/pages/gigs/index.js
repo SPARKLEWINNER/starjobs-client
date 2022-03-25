@@ -14,6 +14,7 @@ import {FreelancerTab, ClientTab} from './gigTabs'
 import color from 'theme/palette'
 import {useAuth} from 'utils/context/AuthContext'
 
+
 // variables
 const DRAWER_WIDTH = 280
 const SIMPLE_TAB = [

@@ -1,6 +1,27 @@
-export function calculations(hours, fee) {
+let pronvicialRate = {
+  sss: 4.3365385,
+  pagibig: 0.7211538,
+  philhealth: 0.4807692,
+}
+
+let ncrRate = {
+  sss: 5.7692308,
+  pagibig: 1.0096154,
+  philhealth: 0.4807692,
+}
+
+export function calculations(hours, fee, locationRate) {
   let computedFeeByHr = parseFloat(hours * fee)
-  let voluntaryFee = parseFloat(computedFeeByHr * 0.0838884) // 0.1109569 v1 // 0.0838884
+  let voluntaryFee =
+    parseFloat(hours * ncrRate.sss) + parseFloat(hours * ncrRate.pagibig) + parseFloat(hours * ncrRate.philhealth)
+
+  if (locationRate === 'Provincial') {
+    voluntaryFee =
+      parseFloat(hours * pronvicialRate.sss) +
+      parseFloat(hours * pronvicialRate.pagibig) +
+      parseFloat(hours * pronvicialRate.philhealth)
+  }
+
   let premiumFee = parseFloat(computedFeeByHr * 0.018622) // 0.018622
   let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + premiumFee) * 0.1 // 10%
   let grossGigFee = parseFloat(computedFeeByHr + voluntaryFee + premiumFee + transactionFee)

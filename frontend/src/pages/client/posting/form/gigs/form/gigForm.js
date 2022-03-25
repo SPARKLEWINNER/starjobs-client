@@ -3,13 +3,14 @@ import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 // material
-import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox} from '@material-ui/core'
+import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox, Select} from '@material-ui/core'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
 import DatePicker from 'react-datepicker'
 
-export default function GigForm({user, onNext, onStoreData}) {
+export default function GigForm({user, formData, onNext, onStoreData}) {
+  console.log(formData);
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [date, setDate] = useState(new Date())
@@ -26,20 +27,22 @@ export default function GigForm({user, onNext, onStoreData}) {
     from: Yup.string().required('Gig Start time is required'),
     to: Yup.string().required('Gig End time is required'),
     breakHr: Yup.number().required('Break hour/s is required'),
+    locationRate: Yup.string().required('Gig location rate'),
     notes: Yup.string(),
   })
 
   const formik = useFormik({
     initialValues: {
-      date: '',
-      fee: '',
-      position: '',
-      shift: '',
-      hours: '    ',
-      from: '',
-      to: '', // time
-      breakHr: 0,
-      notes: '',
+      date: formData.date || '',
+      fee: formData.fee || '',
+      position: formData.position || '',
+      shift: formData.shift ||'',
+      hours: formData.hours || '',
+      from: formData.from || '',
+      to: formData.time || '', // time
+      breakHr: formData.breakHr || 0,
+      notes: formData.notes || '',
+      locationRate: formData.locationRate || '',
     },
     enableReinitialize: true,
     validationSchema: GigSchema,
@@ -65,6 +68,7 @@ export default function GigForm({user, onNext, onStoreData}) {
         from: values.from,
         breakHr: values.break,
         notes: values.notes,
+        locationRate: values.locationRate,
       }
       setLoading(false)
       onStoreData(data)
@@ -249,6 +253,19 @@ export default function GigForm({user, onNext, onStoreData}) {
             error={Boolean(touched.fee && errors.fee)}
             helperText={touched.fee && errors.fee}
           />
+
+          <Select native onChange={(e) => setFieldValue('locationRate', e.target.value)} defaultValue={''}>
+            <option value="" disabled key="initial">
+              Select Gig Location Rate
+            </option>
+
+            <option key="ncr-key" value="NCR">
+              NCR/Manila Rate
+            </option>
+            <option key="provincial-key" value="Provincial">
+              Provincial Rate
+            </option>
+          </Select>
 
           <TextField
             label="Special Instruction"

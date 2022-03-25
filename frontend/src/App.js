@@ -1,4 +1,4 @@
-ximport {useState} from 'react'
+import {useState} from 'react'
 
 // firebase
 import {onMessageListener} from './firebase'

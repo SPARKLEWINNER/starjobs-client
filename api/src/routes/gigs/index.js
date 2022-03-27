@@ -7,7 +7,7 @@ const default_uri = '/api/internal/v1/gigs';
 
 const createAccountLimiter = rateLimit({
     windowMs: 1 * 20 * 1000, // 1 minute
-    max: 1, // Limit each IP to 5 create account requests per `window` (here, per hour)
+    max: 5, // Limit each IP to 5 create account requests per `window` (here, per hour)
     message: 'Too many request',
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false // Disable the `X-RateLimit-*` headers

@@ -13,7 +13,6 @@ import FirebaseToken from './components/fcm'
 import ScrollToTop from './components/ScrollToTop'
 import NotistackProvider from './components/NotistackProvider'
 import ThemePrimaryColor from './components/ThemePrimaryColor'
-
 import {RatingsProvider} from './utils/context/rating'
 
 import TawktoPageOverlay from 'layouts/tawkto/tawkto_page_overlay'

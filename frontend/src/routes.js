@@ -141,6 +141,7 @@ const UseRoutes = () => {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
+        {path: '/', element: <Navigate to="/" replace />},
         {path: '/', element: <SplashScreen />},
         {path: '/login', element: <Login />},
         {path: '/verification', element: <Verification />},

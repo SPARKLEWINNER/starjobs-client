@@ -54,11 +54,11 @@ const Puller = styled(Box)(({theme}) => ({
 }))
 
 export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift}) {
-  let {history, position, hours, fee, time, from, status, category, account} = gig
+  let {history, position, hours, fee, time, from, status, category, account, locationRate} = gig
 
   const {firstName, middleInitial, lastName, photo} = account[0]
 
-  let {serviceCost} = calculations(hours, fee)
+  let {serviceCost} = calculations(hours, fee, locationRate)
 
   const name = `${firstName} ${middleInitial} ${lastName};`
   fee = parseFloat(fee)

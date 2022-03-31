@@ -11,7 +11,6 @@ import DatePicker from 'react-datepicker'
 import {calculations} from 'utils/gigComputation'
 
 export default function GigForm({user, formData, onNext, onStoreData}) {
-  console.log(formData)
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [date, setDate] = useState(new Date())

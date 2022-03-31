@@ -4933,9 +4933,9 @@
     "lodash.uniq" "^4.5.0"
 
 "caniuse-lite@^1.0.0", "caniuse-lite@^1.0.30000981", "caniuse-lite@^1.0.30001109", "caniuse-lite@^1.0.30001125", "caniuse-lite@^1.0.30001251":
-  "integrity" "sha512-HOe1r+9VkU4TFmnU70z+r7OLmtR+/chB1rdcJUeQlAinjEeb0cKL20tlAtOagNZhbrtLnCvV19B4FmF1rgzl6A=="
-  "resolved" "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001251.tgz"
-  "version" "1.0.30001251"
+  "integrity" "sha512-neRmrmIrCGuMnxGSoh+x7zYtQFFgnSY2jaomjU56sCkTA6JINqQrxutF459JpWcWRajvoyn95sOXq4Pqrnyjew=="
+  "resolved" "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001322.tgz"
+  "version" "1.0.30001322"
 
 "capital-case@^1.0.4":
   "integrity" "sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A=="
@@ -16032,6 +16032,11 @@
   "resolved" "https://registry.npmjs.org/workbox-core/-/workbox-core-5.1.4.tgz"
   "version" "5.1.4"
 
+"workbox-core@6.5.2":
+  "integrity" "sha512-IlxLGQf+wJHCR+NM0UWqDh4xe/Gu6sg2i4tfZk6WIij34IVk9BdOQgi6WvqSHd879jbQIUgL2fBdJUJyAP5ypQ=="
+  "resolved" "https://registry.npmjs.org/workbox-core/-/workbox-core-6.5.2.tgz"
+  "version" "6.5.2"
+
 "workbox-expiration@^5.1.4":
   "integrity" "sha512-oDO/5iC65h2Eq7jctAv858W2+CeRW5e0jZBMNRXpzp0ZPvuT6GblUiHnAsC5W5lANs1QS9atVOm4ifrBiYY7AQ=="
   "resolved" "https://registry.npmjs.org/workbox-expiration/-/workbox-expiration-5.1.4.tgz"
@@ -16063,6 +16068,15 @@
   dependencies:
     "workbox-core" "^5.1.4"
 
+"workbox-precaching@^6.5.2":
+  "integrity" "sha512-OZAlQ8AAT20KugGKKuJMHdQ8X1IyNQaLv+mPTHj+8Dmv8peBq5uWNzs4g/1OSFmXsbXZ6a1CBC6YtQWVPhJQ9w=="
+  "resolved" "https://registry.npmjs.org/workbox-precaching/-/workbox-precaching-6.5.2.tgz"
+  "version" "6.5.2"
+  dependencies:
+    "workbox-core" "6.5.2"
+    "workbox-routing" "6.5.2"
+    "workbox-strategies" "6.5.2"
+
 "workbox-range-requests@^5.1.4":
   "integrity" "sha512-1HSujLjgTeoxHrMR2muDW2dKdxqCGMc1KbeyGcmjZZAizJTFwu7CWLDmLv6O1ceWYrhfuLFJO+umYMddk2XMhw=="
   "resolved" "https://registry.npmjs.org/workbox-range-requests/-/workbox-range-requests-5.1.4.tgz"
@@ -16077,6 +16091,13 @@
   dependencies:
     "workbox-core" "^5.1.4"
 
+"workbox-routing@6.5.2":
+  "integrity" "sha512-nR1w5PjF6IVwo0SX3oE88LhmGFmTnqqU7zpGJQQPZiKJfEKgDENQIM9mh3L1ksdFd9Y3CZVkusopHfxQvit/BA=="
+  "resolved" "https://registry.npmjs.org/workbox-routing/-/workbox-routing-6.5.2.tgz"
+  "version" "6.5.2"
+  dependencies:
+    "workbox-core" "6.5.2"
+
 "workbox-strategies@^5.1.4":
   "integrity" "sha512-VVS57LpaJTdjW3RgZvPwX0NlhNmscR7OQ9bP+N/34cYMDzXLyA6kqWffP6QKXSkca1OFo/v6v7hW7zrrguo6EA=="
   "resolved" "https://registry.npmjs.org/workbox-strategies/-/workbox-strategies-5.1.4.tgz"
@@ -16084,6 +16105,13 @@
   dependencies:
     "workbox-core" "^5.1.4"
     "workbox-routing" "^5.1.4"
+
+"workbox-strategies@6.5.2":
+  "integrity" "sha512-fgbwaUMxbG39BHjJIs2y2X21C0bmf1Oq3vMQxJ1hr6y5JMJIm8rvKCcf1EIdAr+PjKdSk4ddmgyBQ4oO8be4Uw=="
+  "resolved" "https://registry.npmjs.org/workbox-strategies/-/workbox-strategies-6.5.2.tgz"
+  "version" "6.5.2"
+  dependencies:
+    "workbox-core" "6.5.2"
 
 "workbox-streams@^5.1.4":
   "integrity" "sha512-xU8yuF1hI/XcVhJUAfbQLa1guQUhdLMPQJkdT0kn6HP5CwiPOGiXnSFq80rAG4b1kJUChQQIGPrq439FQUNVrw=="

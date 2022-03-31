@@ -58,6 +58,22 @@ const gigsData = {
     },
     statusMessage: {
         type: String
+    },
+    locationRate: {
+        default: 'NCR',
+        type: String,
+        enum: ['NCR', 'Provincial']
+    },
+    fees: {
+        computedFeeByHr: String,
+        voluntaryFee: String,
+        appFee: String,
+        transactionFee: String,
+        grossGigFee: String,
+        grossVAT: String,
+        grossWithHolding: String,
+        serviceCost: String,
+        jobsterTotal: String
     }
 };
 

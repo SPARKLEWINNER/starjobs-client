@@ -147,7 +147,7 @@ export default function SimpleBottomNavigation() {
 
           <Box sx={{overflow: 'hidden'}}>
             <BottomNavigationAction
-              className={[classes.nav_item, classes.main_button]}
+              className={classes.main_button}
               icon={<AddBoxIcon className={classes.icon} />}
               component={Link}
               to="/client/gig/create"

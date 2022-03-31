@@ -28,9 +28,9 @@ const ListWrapperStyle = styled(Paper)(() => ({
 const NotificationDetailsCard = ({details}) => {
   if (!details || details === undefined) return ''
 
-  let {_id, status, position, from, time, fee, hours, history} = details
+  let {_id, status, position, from, time, fee, hours, history, locationRate} = details
 
-  let {serviceCost} = calculations(hours, fee)
+  let {serviceCost} = calculations(hours, fee, locationRate)
 
   return (
     <Stack sx={{mt: 3, mb: 5}}>

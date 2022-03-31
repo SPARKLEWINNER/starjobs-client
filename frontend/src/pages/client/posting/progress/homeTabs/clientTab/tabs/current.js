@@ -14,7 +14,6 @@ import gigs_api from 'api/gigs'
 // theme
 import color from 'theme/palette'
 
-
 // status
 const current_status = [
   'Confirm-Gig',

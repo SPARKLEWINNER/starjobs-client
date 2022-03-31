@@ -8,9 +8,9 @@ import {calculations} from 'utils/gigComputation'
 const ActivityDetailsCard = ({details}) => {
   if (!details || details === undefined) return ''
 
-  let {_id, position, from, time, fee, hours} = details
+  let {_id, position, from, time, fee, hours, locationRate} = details
 
-  let {serviceCost} = calculations(hours, fee)
+  let {serviceCost} = calculations(hours, fee, locationRate)
 
   return (
     <Stack sx={{mb: 5}}>

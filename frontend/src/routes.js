@@ -11,6 +11,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout'
 import SignedLayout from './layouts/LogoOnlyLayout'
 
 // account
+import SplashScreen from './pages/SplashScreen'
 import Login from './pages/Login'
 import Registration from './pages/Registration'
 import Verification from './pages/Verification'
@@ -140,7 +141,7 @@ const UseRoutes = () => {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        {path: '/', element: <Navigate to="/login" replace />},
+        {path: '/', element: <SplashScreen />},
         {path: '/login', element: <Login />},
         {path: '/verification', element: <Verification />},
         {path: '/sign-up', element: <Registration />},

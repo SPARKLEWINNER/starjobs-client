@@ -62,21 +62,18 @@ const gigsData = {
     locationRate: {
         default: 'NCR',
         type: String,
-        enum: [
-            'NCR',
-            'Provincial'
-        ]
+        enum: ['NCR', 'Provincial']
     },
     fees: {
         computedFeeByHr: String,
         voluntaryFee: String,
-        premiumFee: String,
+        appFee: String,
         transactionFee: String,
         grossGigFee: String,
         grossVAT: String,
         grossWithHolding: String,
         serviceCost: String,
-        jobsterTotal: String,
+        jobsterTotal: String
     }
 };
 

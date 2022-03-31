@@ -22,9 +22,9 @@ export function calculations(hours, fee, locationRate) {
       parseFloat(hours * pronvicialRate.philhealth)
   }
 
-  let premiumFee = parseFloat(computedFeeByHr * 0.018622) // 0.018622
-  let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + premiumFee) * 0.1 // 10%
-  let grossGigFee = parseFloat(computedFeeByHr + voluntaryFee + premiumFee + transactionFee)
+  let appFee = parseFloat(hours * 1.25)
+  let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.1 // 10%
+  let grossGigFee = parseFloat(computedFeeByHr + voluntaryFee + appFee + transactionFee)
   let grossVAT = parseFloat(grossGigFee * 0.12) // 12%
   let grossWithHolding = parseFloat(grossGigFee * 0.02) // 2%
   let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding)
@@ -33,7 +33,7 @@ export function calculations(hours, fee, locationRate) {
   return {
     computedFeeByHr,
     voluntaryFee,
-    premiumFee,
+    appFee,
     transactionFee,
     grossGigFee,
     grossVAT,

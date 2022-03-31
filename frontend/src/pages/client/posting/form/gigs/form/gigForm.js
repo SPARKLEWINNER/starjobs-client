@@ -8,9 +8,10 @@ import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-u
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
 import DatePicker from 'react-datepicker'
+import {calculations} from 'utils/gigComputation'
 
 export default function GigForm({user, formData, onNext, onStoreData}) {
-  console.log(formData);
+  console.log(formData)
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [date, setDate] = useState(new Date())
@@ -36,7 +37,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
       date: formData.date || '',
       fee: formData.fee || '',
       position: formData.position || '',
-      shift: formData.shift ||'',
+      shift: formData.shift || '',
       hours: formData.hours || '',
       from: formData.from || '',
       to: formData.time || '', // time
@@ -58,6 +59,18 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
 
       if (!values.position || !values.shift || !values.hours || !values.fee || !values.notes) return setLoading(false)
 
+      const {
+        computedFeeByHr,
+        voluntaryFee,
+        appFee,
+        transactionFee,
+        grossGigFee,
+        grossVAT,
+        grossWithHolding,
+        serviceCost,
+        jobsterTotal,
+      } = calculations(values.hours, values.fee, values.locationRate)
+
       let data = {
         position: values.position,
         date: values.date,
@@ -69,6 +82,17 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
         breakHr: values.break,
         notes: values.notes,
         locationRate: values.locationRate,
+        fees: {
+          computedFeeByHr: computedFeeByHr,
+          voluntaryFee: voluntaryFee,
+          appFee: appFee,
+          transactionFee: transactionFee,
+          grossGigFee: grossGigFee,
+          grossVAT: grossVAT,
+          grossWithHolding: grossWithHolding,
+          serviceCost: serviceCost,
+          jobsterTotal: jobsterTotal,
+        },
       }
       setLoading(false)
       onStoreData(data)

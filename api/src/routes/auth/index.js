@@ -8,4 +8,6 @@ module.exports = function (app) {
     app.route(`${default_uri}/sign-out`).post(auth.sign_out);
     app.route(`${default_uri}/verify`).post(auth.require_sign_in, auth.verify_code);
     app.route(`${default_uri}/resend-verification`).post(auth.require_sign_in, auth.resend_verification);
+    app.route(`${default_uri}/forgot-password`).post(auth.forgot_password);
+    
 };

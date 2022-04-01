@@ -46,7 +46,7 @@ export default function ForgotPassword() {
     onSubmit: async () => {
       setLoading(true)
       const result = await auth_api.post_forgot_password(values)
-      if (!result.status) {
+      if (!result.ok) {
         enqueueSnackbar(result.msg, {variant: 'warning'})
         return setLoading(false)
       }

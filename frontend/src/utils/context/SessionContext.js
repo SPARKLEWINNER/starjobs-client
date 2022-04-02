@@ -9,7 +9,7 @@ import storage from '../../utils/storage'
 import jwt_decode from 'jwt-decode'
 const SessionContext = createContext({})
 
-const unauthenticatedPages = ['login', 'register', 'forgot-password', 'reset-password']
+const unauthenticatedPages = [' ', 'login', 'register', 'forgot-password', 'reset-password']
 
 export function SessionProvider({children}) {
   const navigation = useNavigate()

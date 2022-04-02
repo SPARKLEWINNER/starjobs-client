@@ -71,7 +71,7 @@ export default function ActivityTab() {
     if (!v) return ''
 
     v.fee = parseFloat(v.fee)
-    let {serviceCost} = calculations(v.hours, v.fee)
+    let {serviceCost} = calculations(v.hours, v.fee, v.locationRate)
     const hrShift = parseInt(v.hours) > 1 ? v.hours + ' hrs' : v.hours + ' hr'
 
     return (

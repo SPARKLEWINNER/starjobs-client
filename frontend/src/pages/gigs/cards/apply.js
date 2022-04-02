@@ -14,12 +14,12 @@ import Label from 'components/Label'
 import {calculations} from 'utils/gigComputation'
 
 const ApplyCard = ({path, gig, accountType, onClick}) => {
-  let {position, hours, fee, user, time, from, category, uid, _id} = gig
+  let {position, hours, fee, user, time, from, category, uid, _id, locationRate} = gig
   const {location} = user[0]
   const type = category === 'parcels' ? 'parcels' : 'gig'
 
   fee = parseFloat(fee)
-  let {jobsterTotal} = calculations(hours, fee)
+  let {jobsterTotal} = calculations(hours, fee, locationRate)
 
   const handleClick = (values) => {
     onClick(values)

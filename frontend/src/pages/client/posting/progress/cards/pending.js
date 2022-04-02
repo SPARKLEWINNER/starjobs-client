@@ -20,9 +20,9 @@ export default function PendingCard({gig}) {
         : `${gig?.numberofApplicants} ${gig?.numberofApplicants.length > 0 ? `applicants` : `applicant`}`
   }
 
-  const {position, _id, hours, fee, from, date, status, time} = gig
+  const {position, _id, hours, fee, from, date, status, time, locationRate} = gig
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
-  let {serviceCost} = calculations(hours, fee)
+  let {serviceCost} = calculations(hours, fee, locationRate)
 
   return (
     <Card sx={{p: 1, display: 'flex', mb: 2}}>

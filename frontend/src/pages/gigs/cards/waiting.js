@@ -7,12 +7,12 @@ import Label from 'components/Label'
 
 import {calculations} from 'utils/gigComputation'
 export default function WaitingCard({gig, _type, category}) {
-  let {position, uid, hours, fee, user, from, time} = gig
+  let {position, uid, hours, fee, user, from, time, locationRate} = gig
   const {thumbnail, location} = user[0]
 
   const type = category === 'parcels' ? 'parcels' : 'hr/s'
   fee = parseFloat(fee)
-  let {jobsterTotal} = calculations(hours, fee)
+  let {jobsterTotal} = calculations(hours, fee, locationRate)
 
   return (
     <Card sx={{p: 0, display: 'flex', my: 2, position: 'relative'}}>

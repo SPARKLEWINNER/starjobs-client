@@ -7,7 +7,6 @@ import Logo from 'components/Logo'
 import color from 'theme/palette'
 import {useEffect} from 'react'
 
-import {useAuth} from 'utils/context/AuthContext'
 import {useNavigate} from 'react-router'
 
 const RootStyle = styled('div')(({theme}) => ({
@@ -43,23 +42,11 @@ const letter = {
 
 const titleLine1 = 'Connect. Engage. Accelerate'
 export default function SplashScreen({...other}) {
-  const {isSigned} = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
-    let mounted = true
-
-    if (mounted)
-      setTimeout(() => {
-        if (!isSigned) return navigate('/login')
-        return navigate('/dashboard')
-      }, 2000)
-
-    return () => {
-      mounted = false
-    }
-
-    //eslint-disable-next-line
+    navigate('/dashboard', {replace: true})
+    // eslint-disable-next-line
   }, [])
 
   return (

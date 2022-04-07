@@ -26,6 +26,7 @@ import useSendNotif from 'utils/hooks/useSendNotif'
 
 // theme
 import color from 'theme/palette'
+import {useAuth} from 'utils/context/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -80,6 +81,7 @@ const useStyles = makeStyles({
 })
 
 export default function TabsComponent() {
+  const {currentUser} = useAuth()
   const params = useParams()
   const location = useLocation()
   const navigate = useNavigate()
@@ -363,9 +365,8 @@ export default function TabsComponent() {
                               path={location.pathname}
                               key={k}
                               gig={v}
-                              accountType={current_user.accountType}
-                              isActive={current_user.isActive}
                               onClick={handleClick}
+                              currentUser={currentUser}
                             />
                           )
                         } else {
@@ -380,9 +381,8 @@ export default function TabsComponent() {
                               path={location.pathname}
                               key={k}
                               gig={v}
-                              accountType={current_user.accountType}
-                              isActive={current_user.isActive}
                               onClick={handleClick}
+                              currentUser={currentUser}
                             />
                           )
                         } else {

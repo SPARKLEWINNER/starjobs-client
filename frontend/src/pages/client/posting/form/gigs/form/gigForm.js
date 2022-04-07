@@ -235,6 +235,7 @@ export default function GigForm({user, onNext, onStoreData}) {
               fullWidth
               label="No. of break hour/s"
               type="number"
+              InputProps={{inputProps: {min: 0}}}
               onChange={(event) => handleBreakTimeReduceHours(event.currentTarget.value)}
               error={Boolean(touched.breakHr && errors.breakHr)}
               helperText={touched.breakHr && errors.breakHr}

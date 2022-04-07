@@ -55,7 +55,7 @@ export default function BillingForm({storeData}) {
         </Grid>
         <Grid container>
           <Grid item xs={6} md={6}>
-            <Typography variant="body1">Premium</Typography>
+            <Typography variant="body1">App Fee</Typography>
           </Grid>
           <Grid item xs={6} md={6} sx={{textAlign: 'right'}}>
             <Typography variant="body1" sx={{fontWeight: 'bold'}}>

@@ -13,8 +13,16 @@ import Label from 'components/Label'
 
 import {calculations} from 'utils/gigComputation'
 
-const ApplyCard = ({path, gig, accountType, onClick}) => {
+const ApplyCard = ({path, gig, currentUser, onClick}) => {
   let {position, hours, fee, user, time, from, category, uid, _id} = gig
+  const isApplied =
+    gig.applicants &&
+    gig.applicants.length > 0 &&
+    gig.applicants.filter((obj) => {
+      if (obj.uid === currentUser._id && obj.status === 'Applying') return true
+      return false
+    })
+
   const {location} = user[0]
   const type = category === 'parcels' ? 'parcels' : 'gig'
 
@@ -26,7 +34,7 @@ const ApplyCard = ({path, gig, accountType, onClick}) => {
   }
 
   return (
-    <Card sx={{py: 2, px: 3, display: 'flex', my: 2}}>
+    <Card sx={{py: 3, px: 3, display: 'flex', my: 2}}>
       <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', p: 0}}>
         <CardContent sx={{flex: '1 0 auto', px: 0, pt: 0, alignItems: 'flex-start', paddingBottom: '0 !important'}}>
           <Stack direction="row" sx={{alignItems: 'center', mb: 1}}>
@@ -65,16 +73,37 @@ const ApplyCard = ({path, gig, accountType, onClick}) => {
               {hours} {category === 'parcels' ? 'parcels' : ' hrs shift'}{' '}
             </Label>
           </Stack>
-
-          {accountType !== 1 && (
-            <Box sx={{position: 'absolute', bottom: 0, right: 16}}>
-              <Button
-                onClick={() => handleClick(gig)}
-                variant="contained"
-                sx={{textTransform: 'uppercase', fontWeight: 'bold', mb: 1, fontSize: '0.75rem'}}
+          {currentUser.isActive && currentUser.accountType !== 1 && (
+            <Box sx={{position: 'absolute', bottom: 10, right: 16}}>
+              {!isApplied ? (
+                <Button
+                  onClick={() => handleClick(gig)}
+                  variant="contained"
+                  sx={{textTransform: 'uppercase', fontWeight: 'bold', mb: 1, fontSize: '0.75rem'}}
+                >
+                  Apply <Icon icon={arrowRight} width={12} height={12} sx={{ml: 2}} />
+                </Button>
+              ) : (
+                <Typography variant="overline" component="h6" color="primary.main" sx={{mb: 1, mr: 1}}>
+                  For client review
+                </Typography>
+              )}
+            </Box>
+          )}
+          {!currentUser.isActive && currentUser.accountType !== 1 && (
+            <Box sx={{position: 'absolute', bottom: 10, right: 16}}>
+              <Link
+                sx={{textDecoration: 'none'}}
+                component={RouterLink}
+                to={user.accountType === 1 ? '/client/onboard' : '/freelancer/onboard'}
               >
-                Apply <Icon icon={arrowRight} width={12} height={12} sx={{ml: 2}} />
-              </Button>
+                <Button
+                  variant="contained"
+                  sx={{textTransform: 'uppercase', fontWeight: 'bold', mb: 1, fontSize: '0.75rem'}}
+                >
+                  Apply <Icon icon={arrowRight} width={12} height={12} sx={{ml: 2}} />
+                </Button>
+              </Link>
             </Box>
           )}
         </CardContent>

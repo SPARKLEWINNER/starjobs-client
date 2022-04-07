@@ -243,7 +243,7 @@ export default function GigForm({user, onNext, onStoreData}) {
 
           <TextField
             fullWidth
-            label="Gig Fee"
+            label="Gig Fee per hour"
             type="number"
             onChange={(value) => handleFeeFormat(value.target.value)}
             error={Boolean(touched.fee && errors.fee)}

@@ -245,7 +245,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
             <Box sx={{width: '100%', display: 'block !important'}}>
               <TextField
                 fullWidth
-                label="Gig Fee"
+                label="Gig Fee per hour"
                 type="number"
                 {...getFieldProps('fee')}
                 InputLabelProps={{

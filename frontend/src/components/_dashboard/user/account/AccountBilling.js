@@ -54,7 +54,7 @@ export default function AccountBilling() {
             <Typography variant="overline" sx={{mb: 3, display: 'block', color: 'text.secondary'}}>
               Your Plan
             </Typography>
-            <Typography variant="h4">Premium</Typography>
+            <Typography variant="h4">App Fee</Typography>
             <Box
               sx={{
                 mt: {xs: 2, sm: 0},

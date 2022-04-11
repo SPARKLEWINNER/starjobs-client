@@ -157,7 +157,7 @@ const Profile = () => {
   const handleApply = async () => {
     let data = {
       status: 'Applying',
-      uid: current_user._id,
+      uid: currentUser._id,
     }
     const result = await gigs_api.patch_gigs_apply(applyDetails._id, data)
 

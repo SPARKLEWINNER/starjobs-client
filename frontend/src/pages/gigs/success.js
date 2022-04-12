@@ -57,7 +57,7 @@ export default function GigApplySuccess() {
               </Typography>
               <Typography variant="body1" sx={{color: 'text.secondary', mb: 3}}>
                 View updates on your{' '}
-                <Link component={RouterLink} underline="none" to={`${accountType}/app`}>
+                <Link component={RouterLink} underline="none" to={`${accountType}/dashboard`}>
                   My Gigs
                 </Link>{' '}
                 page.

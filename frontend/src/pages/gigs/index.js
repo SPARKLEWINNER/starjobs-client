@@ -14,7 +14,6 @@ import {FreelancerTab, ClientTab} from './gigTabs'
 import color from 'theme/palette'
 import {useAuth} from 'utils/context/AuthContext'
 
-
 // variables
 const DRAWER_WIDTH = 280
 const SIMPLE_TAB = [
@@ -112,8 +111,8 @@ const Gigs = () => {
             >
               {SIMPLE_TAB.map((panel, index) => (
                 <TabPanel key={panel.value} value={String(index)} sx={{p: 0}}>
-                  {panel.value === 2 && <ClientTab category={params.category} />}
-                  {panel.value === 1 && <FreelancerTab category={params.category} />}
+                  {panel.value === 2 && <ClientTab category={params.category} key="teste" />}
+                  {panel.value === 1 && <FreelancerTab category={params.category} key="test" />}
                 </TabPanel>
               ))}
             </Box>

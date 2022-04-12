@@ -130,7 +130,7 @@ const Profile = () => {
     if (!result.ok) return
 
     let {details, gigs} = result.data
-    if (details.length <= 0) {
+    if (details && details.length <= 0) {
       enqueueSnackbar('Kindly complete your account details to in order to proceed', {variant: 'warning'})
       return
     }
@@ -155,9 +155,11 @@ const Profile = () => {
   }
 
   const handleApply = async () => {
+    console.log('currentUser', currentUser)
+    console.log('applyDetails', applyDetails)
     let data = {
       status: 'Applying',
-      uid: current_user._id,
+      uid: currentUser._id,
     }
     const result = await gigs_api.patch_gigs_apply(applyDetails._id, data)
 
@@ -249,7 +251,7 @@ const Profile = () => {
             <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
               <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
                 <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '200px'}}>
-                  {capitalCase(`${user.firstName} ${user.middleInitial} ${user.lastName}`)}
+                  {capitalCase(`${user && user.firstName} ${user && user.middleInitial} ${user && user.lastName}`)}
 
                   <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
                     <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
@@ -274,7 +276,7 @@ const Profile = () => {
                   variant="body2"
                   sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                 >
-                  {user.location}
+                  {user && user.location}
                 </Typography>
               </Box>
               <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
@@ -283,7 +285,7 @@ const Profile = () => {
                   variant="body2"
                   sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                 >
-                  {user.website}
+                  {user && user.website}
                 </Typography>
               </Box>
               <Box item sx={{textAlign: 'center', mb: 1, width: '100%'}}>
@@ -292,7 +294,7 @@ const Profile = () => {
                   variant="body2"
                   sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                 >
-                  {user.email}
+                  {user && user.email}
                 </Typography>
               </Box>
             </Stack>

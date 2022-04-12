@@ -153,8 +153,13 @@ export default function FreelancerTab() {
               Filter/Sort
             </Button>
             {renderData.length > 0 &&
-              renderData.map((v, k) => {
-                if (v.details.length !== 0) return <FreelancerCard key={k} data={v.details[0]} />
+              renderData.map((v, index) => {
+                if (v.details.length !== 0)
+                  return (
+                    <div key={index}>
+                      <FreelancerCard data={v.details[0]} />
+                    </div>
+                  )
                 return ''
               })}
           </Stack>

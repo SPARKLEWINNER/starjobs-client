@@ -142,7 +142,7 @@ export default function FreelancerTabComponent() {
         {renderData &&
           renderData.map((v, k) => {
             if (v.details.length === 0) return ''
-            return <FreelancerCard key={k} data={v.details[0]} />
+            return <FreelancerCard data={v.details[0]} />
           })}
 
         {data.length > 5 && data.length !== renderLength && (

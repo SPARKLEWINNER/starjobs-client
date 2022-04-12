@@ -1,1 +1,6 @@
 /.github
+
+
+/api-chat/.env
+/api/.env
+/frontend/.env

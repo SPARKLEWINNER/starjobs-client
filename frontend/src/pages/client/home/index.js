@@ -18,10 +18,11 @@ import {IncomingNotification, ConfirmArrivedNotification} from 'components/notif
 // api
 import gigs_api from 'api/gigs'
 import category_api from 'api/category'
-import storage from 'utils/storage'
 
 // theme
 import color from 'theme/palette'
+
+import {useAuth} from 'utils/context/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -62,23 +63,27 @@ const BannerStyle = styled(Stack)(({theme}) => ({
 
 const mockBanner = [
   {
-    title: 'banner-1',
-    image: '/static/illustrations/profile-banner.jpg',
+    title: 'banner-one',
+    image: '/static/home/banner/client/banner-one.png',
   },
   {
-    title: 'banner-2',
-    image: '/static/illustrations/profile-banner.jpg',
+    title: 'banner-two',
+    image: '/static/home/banner/client/banner-two.png',
   },
   {
-    title: 'banner-3',
-    image: '/static/illustrations/profile-banner.jpg',
+    title: 'banner-three',
+    image: '/static/home/banner/client/banner-three.png',
+  },
+  {
+    title: 'banner-four',
+    image: '/static/home/banner/client/banner-four.png',
   },
 ]
 
 const Dashboard = () => {
+  const {currentUser} = useAuth()
   const {enqueueSnackbar} = useSnackbar()
   const [gigPop, setGigPop] = useState([])
-  const [current_user, setUser] = useState([])
   const [open, setOpen] = useState(false)
   const [confirmArrivedOpen, setConfirmArrivedOpen] = useState(false)
   const [category, setCategory] = useState([
@@ -90,12 +95,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const user = JSON.parse(local_user)
-      setUser(user)
-
       const result = await gigs_api.get_gigs_client()
       if (!result.ok) {
         enqueueSnackbar('Unable to load your Gig History', {variant: 'error'})
@@ -124,7 +123,7 @@ const Dashboard = () => {
     const arrived = data.filter((obj) => obj['status'].includes('Arrived'))
     if (!arrived) return
     Object.values(arrived).forEach((value) => {
-      if (value.uid !== current_user._id) return
+      if (value.uid !== currentUser._id) return
       if (moment(value.date).isBefore(moment(), 'day')) return
       if (moment(value.date).isSame(moment(), 'day')) {
         handleNotice(value)
@@ -146,7 +145,7 @@ const Dashboard = () => {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -163,7 +162,7 @@ const Dashboard = () => {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -185,19 +184,19 @@ const Dashboard = () => {
             Hello
           </Typography>
           <Typography variant="h5" sx={{fontWeight: 'bold', color: 'common.black', letterSpacing: 'initial'}}>
-            {current_user.name}
+            {currentUser.name}
           </Typography>
           <Box component="div" sx={{mb: 8}} />
         </Box>
-        <Box sx={{justifyContent: 'center'}}>
+        <Box sx={{justifyContent: 'center', mr: 2}}>
           <Avatar
             key={'Profile Picture'}
             alt="Picture"
-            src="/static/favicon/icon-72x72.png"
+            src="/static/favicon/starjobs-outline.png"
             sx={{
               margin: '0 auto',
-              width: 120,
-              height: 120,
+              width: 100,
+              height: 100,
               borderRadius: '0 !important ',
               objectFit: 'contain',
               objectPosition: 'center',
@@ -220,7 +219,7 @@ const Dashboard = () => {
                 <Link
                   underline="none"
                   component={RouterLink}
-                  to={`${current_user.accountType === 1 ? '/client' : '/freelancer'}/search`}
+                  to={`${currentUser.accountType === 1 ? '/client' : '/freelancer'}/search`}
                   sx={{textAlign: 'center', fontWeight: 'bold', fontSize: '0.85rem'}}
                   color="starjobs.main"
                 >

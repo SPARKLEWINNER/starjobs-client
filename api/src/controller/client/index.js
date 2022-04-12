@@ -3,6 +3,7 @@ const moment = require('moment');
 const Gigs = require('./../../models/Gigs');
 const Client = require('./../../models/Client');
 const Account = require('./../../models/Account');
+const History = require('./../../models/History');
 const User = require('./../../models/User');
 const mongoose = require('mongoose');
 
@@ -291,6 +292,26 @@ var controllers = {
                             const account = await Account.find({ uuid: mongoose.Types.ObjectId(obj.auid) })
                                 .lean()
                                 .exec();
+
+                            // add applicant list since to prevent re-apply of jobsters
+                            if (obj.status === 'Applying' || obj.status === 'Waiting') {
+                                const history = await History.find(
+                                    {
+                                        gid: mongoose.Types.ObjectId(obj._id),
+                                        status: ['Waiting', 'Applying']
+                                    },
+                                    { uid: 1, status: 1, _id: 1, createdAt: 1 }
+                                )
+                                    .find()
+                                    .lean();
+
+                                return {
+                                    ...obj,
+                                    applicants: history,
+                                    account
+                                };
+                            }
+
                             return {
                                 ...obj,
                                 account

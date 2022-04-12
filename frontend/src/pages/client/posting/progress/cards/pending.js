@@ -15,9 +15,9 @@ export default function PendingCard({gig}) {
         : `${gig?.numberofApplicants.length} ${gig?.numberofApplicants.length > 0 ? `applicants` : `applicant`}`
   } else {
     applicants =
-      gig?.numberofApplicants === null
+      gig?.applicants.length === 0
         ? `0 Applicant`
-        : `${gig?.numberofApplicants} ${gig?.numberofApplicants.length > 0 ? `applicants` : `applicant`}`
+        : `${gig.applicants.length} ${gig.applicants.length > 1 ? `applicants` : `applicant`}`
   }
 
   const {position, _id, hours, fee, from, date, status, time, locationRate} = gig

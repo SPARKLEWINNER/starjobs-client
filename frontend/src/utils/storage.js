@@ -24,7 +24,6 @@ const storeRefreshToken = (token) => {
 }
 
 const storeUser = (data) => {
-  console.log(data)
   try {
     ls.set(user, JSON.stringify(data))
   } catch (error) {

@@ -262,6 +262,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
               fullWidth
               label="No. of break hour/s"
               type="number"
+              InputProps={{inputProps: {min: 0}}}
               onChange={(event) => handleBreakTimeReduceHours(event.currentTarget.value)}
               error={Boolean(touched.breakHr && errors.breakHr)}
               helperText={touched.breakHr && errors.breakHr}
@@ -270,7 +271,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
 
           <TextField
             fullWidth
-            label="Gig Fee"
+            label="Gig Fee per hour"
             type="number"
             onChange={(value) => handleFeeFormat(value.target.value)}
             error={Boolean(touched.fee && errors.fee)}

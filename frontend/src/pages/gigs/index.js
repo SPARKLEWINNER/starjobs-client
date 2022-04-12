@@ -111,8 +111,8 @@ const Gigs = () => {
             >
               {SIMPLE_TAB.map((panel, index) => (
                 <TabPanel key={panel.value} value={String(index)} sx={{p: 0}}>
-                  {panel.value === 2 && <ClientTab category={params.category} />}
-                  {panel.value === 1 && <FreelancerTab category={params.category} />}
+                  {panel.value === 2 && <ClientTab category={params.category} key="teste" />}
+                  {panel.value === 1 && <FreelancerTab category={params.category} key="test" />}
                 </TabPanel>
               ))}
             </Box>

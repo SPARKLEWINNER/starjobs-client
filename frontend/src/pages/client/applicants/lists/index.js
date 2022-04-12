@@ -27,7 +27,6 @@ export default function ListApplicants({details, applicants}) {
   const {enqueueSnackbar} = useSnackbar()
   const navigation = useNavigate()
   const params = useParams()
-  const [applicant, setApplicants] = useState(applicants)
   const [open, setOpen] = useState(false)
   const [applicantId, setApplicantId] = useState('')
   const [gig, setGig] = useState([])
@@ -43,12 +42,8 @@ export default function ListApplicants({details, applicants}) {
 
   useEffect(() => {
     // load()
+    if (applicants && applicants.length === 0) return
     setGig(details)
-    setApplicants(applicants)
-
-    if (!details.isExtended) {
-      console.log(details)
-    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applicants])
@@ -85,48 +80,48 @@ export default function ListApplicants({details, applicants}) {
   }
 
   return (
-    <>
-      <>
-        <MainStyle>
-          <Stack>
-            {applicant &&
-              Object.values(applicant).map((v, k) => {
-                if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying')) {
-                  return <ApplicantCard data={v} key={k} onClick={handleConfirm} gigDetails={gig} />
-                }
+    <MainStyle>
+      <Stack>
+        {applicants &&
+          applicants.length > 0 &&
+          [applicants].map((v, k) => {
+            if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying'))
+              return (
+                <div key={k}>
+                  <ApplicantCard data={v} onClick={handleConfirm} gigDetails={gig} />
+                </div>
+              )
 
-                return ''
-              })}
+            return ''
+          })}
 
-            {gig.status !== 'Applying' ||
-              (Object.values(applicant).length <= 0 && (
-                <Card
-                  sx={{
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    px: 3,
-                    py: 10,
-                  }}
+        {gig.status !== 'Applying' ||
+          (applicants && [applicants].length <= 0 && (
+            <Card
+              sx={{
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: 3,
+                py: 10,
+              }}
+            >
+              <Typography variant="h6">
+                No applicants{' '}
+                <Link
+                  component={RouterLink}
+                  to="/client/app"
+                  underline="none"
+                  sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
                 >
-                  <Typography variant="h6">
-                    No applicants{' '}
-                    <Link
-                      component={RouterLink}
-                      to="/client/app"
-                      underline="none"
-                      sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
-                    >
-                      Go back
-                    </Link>
-                  </Typography>
-                </Card>
-              ))}
-          </Stack>
-        </MainStyle>
-      </>
+                  Go back
+                </Link>
+              </Typography>
+            </Card>
+          ))}
+      </Stack>
       <ConfirmDialog open={open} handleClose={handleClose} onConfirm={handleSubmit} />
-    </>
+    </MainStyle>
   )
 }

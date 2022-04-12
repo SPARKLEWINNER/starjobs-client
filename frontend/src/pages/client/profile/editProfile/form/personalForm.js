@@ -109,6 +109,9 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             autoComplete="email"
             type="email"
             label="Email address"
+            InputLabelProps={{
+              shrink: true,
+            }}
             {...getFieldProps('email')}
             disabled
             error={Boolean(touched.email && errors.email)}

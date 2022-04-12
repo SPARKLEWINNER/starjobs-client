@@ -17,7 +17,7 @@ import useSendNotif from 'utils/hooks/useSendNotif'
 // variables
 const image_url = process.env.REACT_APP_IMAGE_URL
 
-export default function FreelancerCard({key, data, onClick, onClickApplicantId}) {
+const FreelancerCard = ({data, onClick, onClickApplicantId}) => {
   const [isSendingInterest, setIsSendingInterest] = useState(false)
 
   const {sendInterestNotification} = useSendNotif()
@@ -31,7 +31,7 @@ export default function FreelancerCard({key, data, onClick, onClickApplicantId})
   }
 
   return (
-    <Card sx={{my: 1, px: 2, py: 2}} key={`card-${key}`}>
+    <Card sx={{my: 1, px: 2, py: 2}} key={data._id}>
       <Stack direction="row" alignItems="flex-start" spacing={2}>
         <Avatar
           alt={`${data.firstName} ${data.middleInitial} ${data.lastName}`}
@@ -39,13 +39,7 @@ export default function FreelancerCard({key, data, onClick, onClickApplicantId})
           sx={{borderRadius: '4px', height: '60px', width: '60px', objectFit: 'cover'}}
         />
         <Box sx={{flexGrow: 1}}>
-          <Link
-            key={key}
-            underline="none"
-            component={RouterLink}
-            to={`/client/jobster/${data.uuid}`}
-            sx={{cursor: 'pointer'}}
-          >
+          <Link underline="none" component={RouterLink} to={`/client/jobster/${data.uuid}`} sx={{cursor: 'pointer'}}>
             <Typography
               variant="body1"
               sx={{
@@ -55,7 +49,7 @@ export default function FreelancerCard({key, data, onClick, onClickApplicantId})
                 wordBreak: 'break-all',
                 width: '200px',
               }}
-            >{`${data.firstName} ${data.middleInitial} ${data.lastName}`}</Typography>
+            >{`${data.firstName} ${data.lastName}`}</Typography>
           </Link>
 
           <Typography
@@ -109,3 +103,5 @@ export default function FreelancerCard({key, data, onClick, onClickApplicantId})
     </Card>
   )
 }
+
+export default FreelancerCard

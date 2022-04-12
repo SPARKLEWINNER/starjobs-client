@@ -21,13 +21,10 @@ async function individual_gig(id, details) {
     if (details) {
         gig = await Promise.all(
             history.map(async (h) => {
-                let users;
-                console.log(h);
-                users = await Account.find({ uuid: mongoose.Types.ObjectId(h.uid) })
+                let users = await Account.find({ uuid: mongoose.Types.ObjectId(h.uid) })
                     .lean()
                     .exec();
-
-                if (users && users.length > 0) {
+                if (users.length > 0) {
                     users[0].photo = BUCKET_URL + users[0].photo;
                     return {
                         ...h,
@@ -36,9 +33,9 @@ async function individual_gig(id, details) {
                 }
             })
         );
-    } else {
-        gig = [];
     }
+
+    if (gig.includes(undefined)) return {};
 
     return {
         history,
@@ -72,7 +69,7 @@ async function extended_gig(id) {
             }
         })
     );
-    // );
+
     return {
         gigExtended,
         gig

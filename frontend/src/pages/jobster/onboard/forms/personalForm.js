@@ -8,7 +8,6 @@ import {LoadingButton} from '@material-ui/lab'
 import {useSnackbar} from 'notistack5'
 
 import {fCamelCase} from 'utils/formatCase'
-import {last} from 'lodash'
 
 export default function PersonalForm({user, stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()

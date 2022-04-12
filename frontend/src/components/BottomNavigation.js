@@ -144,17 +144,15 @@ export default function SimpleBottomNavigation() {
             to={`/gigs`}
             key="client-gigs"
           />
-
           <Box sx={{overflow: 'hidden'}}>
             <BottomNavigationAction
-              className={[classes.nav_item, classes.main_button]}
+              className={classes.main_button}
               icon={<AddBoxIcon className={classes.icon} />}
               component={Link}
               to="/client/gig/create"
               key="client-gig-create"
             />
           </Box>
-
           <BottomNavigationAction
             className={classes.nav_item}
             icon={
@@ -166,7 +164,6 @@ export default function SimpleBottomNavigation() {
             to={`/client/message`}
             key="client-message"
           />
-
           <BottomNavigationAction
             className={classes.nav_item}
             icon={<PersonIcon className={classes.icon} />}
@@ -174,6 +171,7 @@ export default function SimpleBottomNavigation() {
             to={`/client/profile`}
             key="client-profile"
           />
+          */}
         </BottomNavigation>
       </>
     )

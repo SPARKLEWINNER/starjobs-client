@@ -26,7 +26,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
   const formik = useFormik({
     initialValues: {
       firstName: (user.name && user.name.split(' ')[0]) || store.firstName || '',
-      lastName: (user.name && last(user.name.split(' '))) || store.lastName || '',
+      lastName: user.name || store.lastName || '',
       middleInitial: store.middleInitial || '',
       email: user.email,
       companyName: store.companyName || '',

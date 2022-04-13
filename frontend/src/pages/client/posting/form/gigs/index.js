@@ -120,7 +120,7 @@ export default function GigCreate({category}) {
           Gig Posting <br /> ({category && capitalCase(category.replace('-', ' '))}){' '}
         </Typography>
       </Box>
-      {activeStep === 0 && <GigForm onNext={handleNext} onStoreData={handleFormData} />}
+      {activeStep === 0 && <GigForm onNext={handleNext} formData={form} onStoreData={handleFormData} />}
       {activeStep === 1 && <BillingForm onNext={handleNext} storeData={form} />}
 
       <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>

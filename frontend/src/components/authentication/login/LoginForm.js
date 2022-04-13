@@ -91,7 +91,7 @@ export default function LoginForm() {
           variant="subtitle2"
           sx={{textDecoration: 'none', float: 'right', fontSize: '0.75rem'}}
           color="starjobs.main"
-          to="#"
+          to="/forgot-password"
         >
           Forgot password?
         </Link>

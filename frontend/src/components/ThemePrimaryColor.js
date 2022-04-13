@@ -7,7 +7,6 @@ import useSettings from 'utils/hooks/settings'
 //
 import componentsOverride from 'theme/overrides'
 
-
 ThemePrimaryColor.propTypes = {
   children: PropTypes.node,
 }

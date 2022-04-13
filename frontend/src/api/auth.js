@@ -29,6 +29,10 @@ const post_refresh_access = async () => {
   return await request.post(`/auth/refresh`, {id: _id, refreshToken: refreshToken})
 }
 
+const post_forgot_password = (form_data) => request.post('/auth/forgot-password', form_data)
+
+const post_reset_password = (form_data) => request.post('/auth/set-password', form_data)
+
 const _expObject = {
   google_login,
   facebook_login,
@@ -41,5 +45,7 @@ const _expObject = {
   post_resend_verification,
   post_verify,
   post_refresh_access,
+  post_forgot_password,
+  post_reset_password,
 }
 export default _expObject

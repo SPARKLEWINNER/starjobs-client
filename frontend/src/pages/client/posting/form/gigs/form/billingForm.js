@@ -3,18 +3,10 @@ import {calculations} from 'utils/gigComputation'
 export default function BillingForm({storeData}) {
   if (!storeData) return
 
-  const {fee, hours} = storeData
+  const {fee, hours, locationRate} = storeData
 
-  let {
-    computedFeeByHr,
-    voluntaryFee,
-    premiumFee,
-    transactionFee,
-    grossGigFee,
-    grossVAT,
-    grossWithHolding,
-    serviceCost,
-  } = calculations(hours, fee)
+  let {computedFeeByHr, voluntaryFee, appFee, transactionFee, grossGigFee, grossVAT, grossWithHolding, serviceCost} =
+    calculations(hours, fee, locationRate)
 
   return (
     <Stack>
@@ -59,7 +51,7 @@ export default function BillingForm({storeData}) {
           </Grid>
           <Grid item xs={6} md={6} sx={{textAlign: 'right'}}>
             <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-              {premiumFee.toFixed(2)}
+              {appFee.toFixed(2)}
             </Typography>
           </Grid>
         </Grid>

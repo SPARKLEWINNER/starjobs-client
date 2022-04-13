@@ -52,9 +52,10 @@ const BannerStyle = styled(Stack)(({theme}) => ({
   backgroundImage: 'url(/static/home-banner.png)',
   backgroundRepeat: 'no-repeat',
   backgroundSize: '100%',
-  backgroundPosition: 'center',
+  backgroundPosition: '100% -110%',
   height: 170,
   alignItems: 'center',
+  marginBottom: 24,
   [theme.breakpoints.up('lg')]: {},
 }))
 
@@ -183,7 +184,7 @@ const Dashboard = () => {
     <Page title="Client Dashboard |  Starjobs">
       <BannerStyle direction="row">
         <Box sx={{width: '80%', paddingLeft: {xs: 3}}}>
-          <Typography variant="body2" sx={{letterSpacing: 'initial', color: 'common.black'}}>
+          <Typography variant="body2" sx={{letterSpacing: 'initial', color: 'common.black', mt: 4}}>
             Hello
           </Typography>
           <Typography variant="body1" sx={{fontWeight: 'bold', color: 'common.black', letterSpacing: 'initial'}}>

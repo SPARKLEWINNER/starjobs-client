@@ -11,9 +11,12 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout'
 import SignedLayout from './layouts/LogoOnlyLayout'
 
 // account
+// import SplashScreen from './pages/SplashScreen'
 import Login from './pages/Login'
 import Registration from './pages/Registration'
 import Verification from './pages/Verification'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import Welcome from './pages/Welcome'
 
 // global
@@ -144,6 +147,8 @@ const UseRoutes = () => {
         {path: '/login', element: <Login />},
         {path: '/verification', element: <Verification />},
         {path: '/sign-up', element: <Registration />},
+        {path: '/forgot-password', element: <ForgotPassword />},
+        {path: '/reset-password', element: <ResetPassword />},
         {path: '404', element: <NotFound />},
       ],
     },

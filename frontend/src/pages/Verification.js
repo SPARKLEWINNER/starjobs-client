@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import {useNavigate, Link as RouterLink} from 'react-router-dom'
 import {styled} from '@material-ui/core/styles'
 import {Stack, Container, Typography, Button, Box} from '@material-ui/core'
@@ -7,7 +7,7 @@ import Page from '../components/Page'
 import {VerifyCodeForm} from '../components/authentication/login'
 
 import storage from 'utils/storage'
-import user_api from 'api/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 import {LoadingButtonOutline} from 'theme/style'
 
@@ -30,7 +30,7 @@ const ContentStyle = styled('div')(({theme}) => ({
 
 export default function VerificationPage() {
   const navigate = useNavigate()
-  const [user, setUser] = useState()
+  const {currentUser} = useAuth()
 
   const handleSignOut = async (e) => {
     e.preventDefault()
@@ -40,23 +40,8 @@ export default function VerificationPage() {
 
   useEffect(() => {
     const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const check_user = await user_api.get_user(JSON.parse(local_user)._id)
-      if (!check_user.ok) {
-        return navigate('/login')
-      }
-
-      let user = check_user.data
-      user.token = JSON.parse(local_user).token
-
-      await storage.storeUser(user)
-      if (user.isVerified) {
-        if (user.accountType === 0) return navigate(`/freelancer/app`, {replace: true})
-        return navigate(`/client/app`, {replace: true})
-      }
-      setUser(user)
+      if (!currentUser) return navigate('/login')
+      if (currentUser.isVerified) return navigate(`/dashboard`, {replace: true})
     }
     load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,7 +69,7 @@ export default function VerificationPage() {
               Kindly check your email account for Six (6) Verification Code.
             </Typography>
           </Stack>
-          <VerifyCodeForm account={user} />
+          <VerifyCodeForm account={currentUser} />
 
           <Stack sx={{my: 1}}>
             <Button

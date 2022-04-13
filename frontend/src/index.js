@@ -48,7 +48,7 @@ ReactDOM.render(
 // If you want to enable client cache, register instead.
 serviceWorkerRegistration.register({
   onUpdate: () => {
-    if (window.confirm('Sparkle has been updated. Do you wish to reload the app to get the new data?')) {
+    if (window.confirm('Starjobs has been updated. Do you wish to reload the app to get the new data?')) {
       window.location.reload(true)
     }
   },

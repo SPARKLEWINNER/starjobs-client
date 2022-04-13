@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 import {styled} from '@material-ui/core/styles'
 // material
@@ -7,7 +7,6 @@ import {Box, Container, Paper, Button, Link, MobileStepper} from '@material-ui/c
 import Page from 'components/Page'
 import {Verified, Start, Notification, Complete} from 'components/welcome'
 import {useAuth} from 'utils/context/AuthContext'
-import {UsersContext} from 'utils/context/users'
 
 import {LoadingButtonStyle} from 'theme/style'
 const steps = ['Verified', 'Notification', 'Profile', 'Start']

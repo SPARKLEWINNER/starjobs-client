@@ -1,7 +1,7 @@
 {
   "name": "Starjobs",
   "short_name": "Starjobs",
-  "start_url": "/",
+  "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#fff",
   "theme_color": "#000",

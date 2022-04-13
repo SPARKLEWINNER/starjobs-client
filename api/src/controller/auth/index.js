@@ -8,6 +8,8 @@ const mailer = require('../../services/mailer');
 const sms = require('../../services/sms');
 const logger = require('../../services/logger');
 const requestToken = require('../../services/token');
+const uuid = require('uuid').v1;
+const crypto = require('crypto');
 
 var controllers = {
     require_sign_in: function (req, res, next) {
@@ -181,8 +183,8 @@ var controllers = {
                 });
             }
 
-            sms.send_sms(phone, `Starjobs verification code ${code}`);
-            mailer.send_mail({ email, verifyCode: code, type: 'sign_up' });
+            // sms.send_sms(phone, `Starjobs verification code ${code}`);
+            // mailer.send_mail({ email, verifyCode: code, type: 'sign_up' });
 
             let { accessToken: token, refreshToken } = requestToken.create_token(result._doc._id);
             res.json({ ...result._doc, token, refreshToken });
@@ -298,14 +300,50 @@ var controllers = {
                 success: false,
                 msg: `` // Email doesn't exists
             });
-            
+
         let token = requestToken.reset_token(email);
 
-        await User.findOneAndUpdate({email: email}, {hashed_password: null, salt: null, resetToken: token.resetToken}).lean().exec()
+        await User.findOneAndUpdate(
+            { email: email },
+            { hashed_password: null, salt: null, resetToken: token.resetToken }
+        )
+            .lean()
+            .exec();
 
         try {
             await mailer.send_mail({ email, token, type: 'forgot_password' });
             return res.json({ success: true, msg: 'Email for reset password sent.' });
+        } catch (err) {
+            console.log(err);
+        }
+    },
+    reset_password: async function (req, res) {
+        const { token, password: newPassword } = req.body;
+        if (!token)
+            return res.status(400).json({
+                success: false,
+                msg: `Reset token expired`
+            });
+
+        const current_user = await User.find({ resetToken: token }).lean().exec();
+        if (current_user.length === 0)
+            return res.status(400).json({
+                success: false,
+                msg: `` // Email doesn't exists
+            });
+
+        const user_salt = uuid();
+        const encrypt_password = crypto.createHmac('sha1', user_salt).update(newPassword).digest('hex');
+
+        await User.findOneAndUpdate(
+            { resetToken: token },
+            { hashed_password: encrypt_password, salt: user_salt, resetToken: null }
+        )
+            .lean()
+            .exec();
+
+        try {
+            return res.json({ success: true, msg: 'Change password success.' });
         } catch (err) {
             console.log(err);
         }

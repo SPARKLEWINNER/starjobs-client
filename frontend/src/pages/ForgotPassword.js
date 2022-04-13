@@ -45,15 +45,10 @@ export default function ForgotPassword() {
     validationSchema: LoginSchema,
     onSubmit: async () => {
       setLoading(true)
-      const result = await auth_api.post_forgot_password(values)
-      if (!result.ok) {
-        enqueueSnackbar(result.msg, {variant: 'warning'})
-        return setLoading(false)
-      }
-
+      await auth_api.post_forgot_password(values)
+      enqueueSnackbar('We have sent a change password link to your email address', {variant: 'success'})
       resetForm()
-      enqueueSnackbar(result.msg, {variant: 'warning'})
-      setLoading(false)
+      return setLoading(false)
     },
   })
 

@@ -46,7 +46,13 @@ ReactDOM.render(
 )
 
 // If you want to enable client cache, register instead.
-serviceWorkerRegistration.register()
+serviceWorkerRegistration.register({
+  onUpdate: () => {
+    if (window.confirm('Sparkle has been updated. Do you wish to reload the app to get the new data?')) {
+      window.location.reload(true)
+    }
+  },
+})
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

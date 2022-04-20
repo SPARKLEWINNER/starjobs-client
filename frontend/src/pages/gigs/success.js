@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 
 // animation
@@ -13,7 +13,7 @@ import {Container, Typography, Link, Box} from '@material-ui/core'
 import Page from 'components/Page'
 
 // hooks
-import storage from 'utils/storage'
+import {useAuth} from 'utils/context/AuthContext'
 
 // styles
 const RootStyle = styled(Page)(({theme}) => ({
@@ -25,21 +25,9 @@ const RootStyle = styled(Page)(({theme}) => ({
 }))
 
 export default function GigApplySuccess() {
-  const [user, setUser] = useState([])
+  const {currentUser} = useAuth()
+  const accountType = currentUser.accountType === 0 ? '/freelancer' : '/client'
 
-  useEffect(() => {
-    const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const user = JSON.parse(local_user)
-      setUser(user)
-    }
-
-    load()
-  }, [])
-
-  const accountType = user.accountType === 0 ? '/freelancer' : '/client'
   return (
     <RootStyle title="Application to Gig Posted! - Starjobs">
       <Container>

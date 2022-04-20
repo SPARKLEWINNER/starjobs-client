@@ -6,7 +6,7 @@ import moment from 'moment'
 import {Box, Stack, Typography, Card} from '@material-ui/core'
 
 // component
-import {CurrentCard} from './cards'
+import {BillingCard} from './cards'
 import CurrentModalPopup from './modal'
 
 // api
@@ -69,7 +69,6 @@ export default function CurrentTab({gigs, user, onEndShift}) {
             case 'On-going':
             case 'End-Shift':
             case 'Confirm-End-Shift':
-              if (status === 'Confirm-End-Shift') return false
               const diff = moment(from).diff(now)
 
               //express as a duration
@@ -84,10 +83,10 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     load()
   }, [gigs])
   return (
-    <Box sx={{mb: 5}}>
+    <Box>
       <Stack spacing={3}>
         <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
-          Current
+          For Payment
         </Typography>
       </Stack>
 
@@ -98,16 +97,19 @@ export default function CurrentTab({gigs, user, onEndShift}) {
       )}
 
       {FILTERED_GIGS.length > 0 &&
-        FILTERED_GIGS.map((v, k) => (
-          <CurrentCard
-            key={k}
-            gig={v}
-            onClick={handleAction}
-            isLoading={isLoading}
-            onView={() => handleView(v)}
-            onEndShift={handleEndShift}
-          />
-        ))}
+        FILTERED_GIGS.map((v, k) => {
+          if (v.status !== 'Confirm-End-Shift') return ''
+          return (
+            <BillingCard
+              key={k}
+              gig={v}
+              onClick={handleAction}
+              isLoading={isLoading}
+              onView={() => handleView(v)}
+              onEndShift={handleEndShift}
+            />
+          )
+        })}
       {SELECTED_GIG.length !== 0 && (
         <CurrentModalPopup
           gig={SELECTED_GIG || []}

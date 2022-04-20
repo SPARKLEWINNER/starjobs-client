@@ -8,8 +8,9 @@ import CreateParcelForm from './parcel'
 
 // api
 import category_api from 'api/category'
-
+import {useAuth} from 'utils/context/AuthContext'
 const GigsForm = () => {
+  const {currentUser} = useAuth()
   const [category, setCategory] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
 
@@ -18,15 +19,21 @@ const GigsForm = () => {
   }
 
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
       const result = await category_api.get_categories()
       if (!result.ok) return
       let category_data = result.data.sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
-
-      setCategory(category_data.filter((obj) => obj['status'] !== 1))
+      if (componentMounted) {
+        setCategory(category_data.filter((obj) => obj['status'] !== 1))
+      }
     }
 
     load()
+
+    return () => {
+      componentMounted = false
+    }
   }, [])
 
   const renderTab = (type) => {
@@ -39,9 +46,9 @@ const GigsForm = () => {
 
     switch (type) {
       case 'parcels':
-        return <CreateParcelForm category={selectedCategory} />
+        return <CreateParcelForm user={currentUser} category={selectedCategory} />
       default:
-        return <CreatGigForm category={selectedCategory} />
+        return <CreatGigForm user={currentUser} category={selectedCategory} />
     }
   }
 

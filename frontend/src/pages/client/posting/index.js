@@ -12,6 +12,7 @@ import GigForm from './form'
 import GigProgress from './progress'
 
 import {useAuth} from 'utils/context/AuthContext'
+import {useLocation} from 'react-router'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
@@ -49,6 +50,7 @@ const SIMPLE_TAB = [
 ]
 
 const GigPosting = () => {
+  const params = useLocation()
   const classes = useStyles()
   const [value, setValue] = useState('1')
   const {currentUser} = useAuth()
@@ -60,8 +62,21 @@ const GigPosting = () => {
   }
 
   useEffect(() => {
-    setLoading(false)
-  }, [currentUser])
+    let componentMounted = true
+    const load = () => {
+      if (componentMounted) {
+        if (params.search) {
+          setValue('2')
+        }
+
+        setLoading(false)
+      }
+    }
+    load()
+    return () => {
+      componentMounted = false
+    }
+  }, [params.search, currentUser])
 
   const renderGigForm = () => {
     return <GigForm />

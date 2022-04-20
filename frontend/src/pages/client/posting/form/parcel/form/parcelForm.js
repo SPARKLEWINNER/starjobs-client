@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 // material
-import {Stack, TextField, Select} from '@material-ui/core'
+import {Stack, TextField, MenuItem, Select} from '@material-ui/core'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-ui/lab'
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
@@ -11,30 +11,34 @@ import DatePicker from 'react-datepicker'
 // api
 import category_api from 'api/category'
 
-export default function GigForm({user, onNext, onStoreData}) {
+export default function ParcelForm({onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
-  const [category, setCategory] = useState([])
+  const [categories, setCategory] = useState([])
   const [date, setDate] = useState(new Date())
   const [from, setFrom] = useState()
   const [to, setTo] = useState()
   const current_date = new Date()
 
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
       setLoading(true)
       const result = await category_api.get_categories()
       if (!result.ok) return setLoading(false)
       let category_data = result.data.sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
-
-      setLoading(false)
-      setCategory(category_data.filter((obj) => obj['status'] !== 1))
+      if (componentMounted) {
+        setLoading(false)
+        setCategory(category_data.filter((obj) => obj['status'] !== 1))
+      }
     }
-
     load()
+    return () => {
+      componentMounted = false
+    }
   }, [])
 
-  const GigSchema = Yup.object().shape({
+  const Schema = Yup.object().shape({
     category: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig category is required'),
     position: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig position is required'),
     date: Yup.string(),
@@ -53,13 +57,13 @@ export default function GigForm({user, onNext, onStoreData}) {
       fee: '',
       position: '',
       shift: '',
-      hours: '    ',
+      hours: '',
       from: '',
       to: '', // time
       notes: '',
     },
     enableReinitialize: true,
-    validationSchema: GigSchema,
+    validationSchema: Schema,
     onSubmit: () => {
       setLoading(true)
       if (!values.category) {
@@ -141,49 +145,50 @@ export default function GigForm({user, onNext, onStoreData}) {
     setFieldValue('fee', parseFloat(value).toFixed(2))
   }
 
-  const handleSelectedCategory = (value) => {
-    setFieldValue('category', value)
-  }
-
-  const handleParcelSize = (value) => {
-    setFieldValue('position', value)
-  }
-
   return (
     <FormikProvider value={formik}>
       <Form noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <Select
-              native
-              onChange={(e) => handleSelectedCategory(e.target.value)}
-              defaultValue={values.category || ''}
+              {...getFieldProps('category')}
+              labelId="select-category"
+              label="*Select Category"
+              value={values.category ?? ''}
+              error={Boolean(touched.category && errors.category)}
             >
-              <option value="" disabled key="initial">
+              <MenuItem value="" disabled>
                 Select Category
-              </option>
-              {category &&
-                category.map((v, k) => {
-                  if (v.slug !== 'parcels') return ''
+              </MenuItem>
+              {categories &&
+                categories.map((category) => {
+                  if (category.slug !== 'parcels') return ''
                   return (
-                    <option key={v.slug} value={v.slug}>
-                      {v.name}
-                    </option>
+                    <MenuItem key={category.slug} value={category.slug}>
+                      {category.name}
+                    </MenuItem>
                   )
                 })}
             </Select>
           </Stack>
+
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
-            <Select native onChange={(e) => handleParcelSize(e.target.value)} defaultValue={values.position || ''}>
-              <option value="" disabled key="initial">
+            <Select
+              {...getFieldProps('position')}
+              labelId="select-position"
+              label="*Select Parcel Size"
+              value={values.position ?? ''}
+              error={Boolean(touched.position && errors.position)}
+            >
+              <MenuItem value="" disabled>
                 Select Parcel Size
-              </option>
-              <option value="Small Parcel" key="initial">
+              </MenuItem>
+              <MenuItem value="Small Parcel" key="small-parcel">
                 Small size Parcel
-              </option>
-              <option value="Large Parcel" key="initial">
+              </MenuItem>
+              <MenuItem value="Large Parcel" key="large-parcel">
                 Large size Parcel
-              </option>
+              </MenuItem>
             </Select>
           </Stack>
 

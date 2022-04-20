@@ -9,15 +9,27 @@ import {
   Stack,
   Box,
 } from '@material-ui/core'
+import {useNavigate} from 'react-router-dom'
+import {useState} from 'react'
+import {useAuth} from 'utils/context/AuthContext'
 
 export default function GenericNotification({open, details, handleClose}) {
+  const {currentUser} = useAuth()
+  const navigate = useNavigate()
+  const [show, setShow] = useState(open ?? false)
+
   const handleOk = () => {
-    window.location.reload()
+    setShow(false)
+    if (currentUser.accountType === 1) {
+      navigate(`/client/gig/create?tab=${details.click_action}`)
+    } else {
+      navigate(`/freelancer/dashboard?tab=${details.click_action}`)
+    }
   }
 
   return (
     <div>
-      <Dialog open={open} handleClose={handleClose}>
+      <Dialog open={show} handleClose={handleClose}>
         <DialogTitle sx={{textAlign: 'center', pt: 5}}>
           <Typography variant="h6" sx={{fontWeight: 'normal'}}>
             Notification!
@@ -26,7 +38,7 @@ export default function GenericNotification({open, details, handleClose}) {
         <DialogContent>
           <DialogContentText>
             <Box sx={{textAlign: 'center'}}>
-              <Typography variant="h6" sx={{fontWeight: 'bold'}} color="#000">
+              <Typography variant="h6" sx={{fontWeight: 'bold'}} color="common.black">
                 {details && details.notification ? details.notification.title : ''}
               </Typography>
               {/* <Typography variant="h6" sx={{ fontWeight: 'bold' }} color="#000">{details ? `${getFormattedDate(new Date(gig.date))} ${tConvert(gig.time)}` : ''} </Typography> */}

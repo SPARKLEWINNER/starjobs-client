@@ -5,11 +5,16 @@ import {Icon} from '@iconify/react'
 import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 import moment from 'moment'
 import Label from 'components/Label'
-export default function WaitingCard({gig}) {
-  let applicants =
-    typeof gig?.numberofApplicants === 'undefined' || gig?.numberofApplicants === 0
-      ? `0 Applicant`
-      : `${gig?.numberofApplicants} ${gig?.numberofApplicants.length > 0 ? `applicants` : `applicant`}`
+export default function IncomingCard({gig}) {
+  let applicants
+  if (gig && gig.numberofApplicants > 0) {
+    applicants = `${gig.numberofApplicants} ${
+      gig && gig.numberofApplicants && gig.numberofApplicants.length > 0 ? 'applicants' : 'applicant'
+    }`
+  } else {
+    applicants = '0 Applicant'
+  }
+
   const {position, _id, hours, fee, from, date, status, time, locationRate} = gig
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
   let {serviceCost} = calculations(hours, fee, locationRate)

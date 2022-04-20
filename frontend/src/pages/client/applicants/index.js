@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 // material
-import {Stack, Divider, Typography} from '@material-ui/core'
+import {Divider, Typography, Box} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
 
 // components
@@ -13,7 +13,7 @@ import ClientProfile from './details'
 import gigs_api from 'api/gigs'
 
 const DRAWER_WIDTH = 280
-const MainStyle = styled(Stack)(({theme}) => ({
+const MainStyle = styled(Box)(({theme}) => ({
   marginTop: '0',
   marginLeft: 'auto',
   marginRight: 'auto',
@@ -32,14 +32,21 @@ const Applicants = () => {
     shift: undefined,
   })
 
-  const load = async () => {
-    const result = await gigs_api.get_gigs_applicant(params.id)
-    if (!result.ok) return
-    setData({details: result.data, shift: result.data.shift, applicants: result.data.applicants})
-  }
-
   useEffect(() => {
+    let componentMounted = true
+    const load = async () => {
+      const result = await gigs_api.get_gigs_applicant(params.id)
+      if (!result.ok) return
+
+      if (componentMounted) {
+        setData({details: result.data, shift: result.data.shift, applicants: result.data.applicants})
+      }
+    }
     load()
+    return () => {
+      componentMounted = false
+    }
+
     // eslint-disable-next-line
   }, [])
 

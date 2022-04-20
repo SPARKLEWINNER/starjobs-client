@@ -1,8 +1,7 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
 import {useSnackbar} from 'notistack5'
-import {Stack, Card, Typography, Link} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Card, Typography, Link} from '@material-ui/core'
 
 // component
 import ApplicantCard from './card'
@@ -12,25 +11,12 @@ import {ConfirmDialog} from './dialog'
 import gigs_api from 'api/gigs'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
-// variables
-const DRAWER_WIDTH = 280
-
-const MainStyle = styled(Stack)(({theme}) => ({
-  marginHorizontal: 'auto',
-  marginTop: 20,
-  [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
-}))
-
-export default function ListApplicants({details, applicants}) {
+const ListApplicants = ({details: gig, applicants}) => {
   const {enqueueSnackbar} = useSnackbar()
   const navigation = useNavigate()
   const params = useParams()
   const [open, setOpen] = useState(false)
   const [applicantId, setApplicantId] = useState('')
-  const [gig, setGig] = useState([])
-
   const {sendGigNotification} = useSendNotif()
 
   // const load = async () => {
@@ -39,14 +25,6 @@ export default function ListApplicants({details, applicants}) {
   //   setGig(result.data)
   //   setApplicants(result.data.applicants)
   // }
-
-  useEffect(() => {
-    // load()
-    if (applicants && applicants.length === 0) return
-    setGig(details)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applicants])
 
   const handleClose = () => {
     setOpen(false)
@@ -76,12 +54,12 @@ export default function ListApplicants({details, applicants}) {
     })
 
     enqueueSnackbar('Applicant accepted and notified', {variant: 'success'})
-    navigation('/client')
+    navigation('/client/gig/create?tab=1')
   }
 
   return (
-    <MainStyle>
-      <Stack>
+    <>
+      <>
         {applicants &&
           applicants.length > 0 &&
           [applicants].map((v, k) => {
@@ -120,8 +98,10 @@ export default function ListApplicants({details, applicants}) {
               </Typography>
             </Card>
           ))}
-      </Stack>
+      </>
       <ConfirmDialog open={open} handleClose={handleClose} onConfirm={handleSubmit} />
-    </MainStyle>
+    </>
   )
 }
+
+export default ListApplicants

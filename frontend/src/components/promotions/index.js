@@ -1,15 +1,7 @@
 import {useState, forwardRef} from 'react'
 import Carousel from 'nuka-carousel'
-import {
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button,
-  Slide,
-} from '@material-ui/core'
+import {HighlightOff as HighlightOffIcon} from '@material-ui/icons'
+import {Box, Dialog, DialogActions, DialogContent, Button, Slide} from '@material-ui/core'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -17,6 +9,12 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const PromotionsBanner = ({banners}) => {
   const [selected, setSelected] = useState(undefined)
+  const [selectedBanner, setSelectedBanner] = useState(null)
+
+  const handleOpen = (bannerLink) => {
+    setSelected(true)
+    setSelectedBanner(bannerLink)
+  }
 
   const handleClose = () => {
     setSelected(undefined)
@@ -46,7 +44,7 @@ const PromotionsBanner = ({banners}) => {
                   }}
                   src={banner.image}
                   alt={banner.title}
-                  // onClick={() =>  {}}}
+                  onClick={() => handleOpen(banner.image)}
                 />
               </Box>
             )
@@ -54,22 +52,30 @@ const PromotionsBanner = ({banners}) => {
       </Carousel>
       {selected && (
         <Dialog
-          open={false}
+          open={selected}
           TransitionComponent={Transition}
           keepMounted
           onClose={handleClose}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
+          sx={{overflow: 'hidden'}}
         >
-          <DialogTitle id="alert-dialog-slide-title">{'Do you wish to proceed with this action?'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              Once action processed you may not be able to retrieve the data.
-            </DialogContentText>
+          <DialogContent sx={{p: 0, height: '50vh', overflow: 'hidden'}}>
+            <Box component="img" src={selectedBanner} sx={{height: '100%', width: '100%', objectFit: 'cover'}} />
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              No
+          <DialogActions
+            sx={{
+              mb: -10,
+              textAlign: 'center',
+              bgColor: 'rgba(255,255,255,0)',
+              zIndex: 20,
+              position: 'absolute',
+              top: 0,
+              right: -15,
+            }}
+          >
+            <Button onClick={handleClose} color="primary" sx={{mx: 'auto'}}>
+              <HighlightOffIcon sx={{color: 'common.white', fontSize: 32}} />
             </Button>
           </DialogActions>
         </Dialog>

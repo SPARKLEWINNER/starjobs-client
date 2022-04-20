@@ -2,21 +2,32 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
-  Button,
   Typography,
   Stack,
   DialogContent,
   DialogContentText,
   Box,
 } from '@material-ui/core'
+import {LoadingButton} from '@material-ui/lab'
+import {useState} from 'react'
 
 export default function ConfirmEndShiftNotification({open, gig, onCommit, onReject, handleClose}) {
+  const [loading, setLoading] = useState(false)
   const handleCommit = (value) => {
-    let data = {
-      new_status: 'Confirm-End-Shift',
-      ...value,
+    setLoading(true)
+    try {
+      let data = {
+        new_status: 'Confirm-End-Shift',
+        ...value,
+      }
+      onCommit(data)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 3000)
     }
-    onCommit(data)
   }
 
   return (
@@ -46,12 +57,12 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, onReje
             please confirm.
           </Typography>
           <Stack row>
-            <Button color="primary" variant="contained" onClick={() => handleCommit(gig)}>
+            <LoadingButton color="primary" variant="contained" onClick={() => handleCommit(gig)} loading={loading}>
               Confirm End Shift
-            </Button>
-            <Button onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}}>
+            </LoadingButton>
+            <LoadingButton onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}} loading={loading}>
               No
-            </Button>
+            </LoadingButton>
           </Stack>
         </DialogActions>
       </Dialog>

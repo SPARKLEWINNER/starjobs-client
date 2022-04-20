@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import moment from 'moment'
 import {capitalCase} from 'change-case'
 // material
@@ -11,40 +11,18 @@ import {GigForm, BillingForm} from './form'
 import {CreateGigDialog} from './dialog'
 
 // hooks
-import storage from 'utils/storage'
 import gigs_api from 'api/gigs'
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
 
-export default function GigCreate({category}) {
+export default function CreatGigForm({user, category}) {
   const {enqueueSnackbar} = useSnackbar()
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set())
-  const [user, setUser] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState([])
-
-  useEffect(() => {
-    const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) {
-        return
-      }
-
-      const user = JSON.parse(local_user)
-      if (!user) {
-        return setLoading(false)
-      }
-
-      setUser(user)
-      setLoading(false)
-    }
-
-    load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
 

@@ -3,37 +3,70 @@ import {useSnackbar} from 'notistack5'
 import moment from 'moment'
 
 // material
-import {Stack} from '@material-ui/core'
+import {Stack, Tab} from '@material-ui/core'
+import {makeStyles} from '@material-ui/styles'
+import {TabContext, TabList, TabPanel} from '@material-ui/lab'
 
 // context
 import {RatingsContext} from 'utils/context/rating'
 
 // component
-import {PendingTab, IncomingTab, CurrentTab} from './tabs'
+import {PendingTab, IncomingTab, CurrentTab, BillingTab} from './tabs'
 import {IncomingNotification, ConfirmEndShiftNotification} from 'components/notifications'
 
 // api
 import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
+import {useAuth} from 'utils/context/AuthContext'
+
+import {useLocation} from 'react-router-dom'
+
+const useStyles = makeStyles({
+  nav_item: {
+    textTransform: 'uppercase',
+    margin: '0 4px',
+    borderRadius: '8px',
+    minHeight: '42px',
+    '@media (max-width: 500px)': {
+      padding: '6px 0',
+      margin: '0 3px',
+      fontSize: 12,
+    },
+    '@media (max-width: 475px)': {
+      fontSize: 11,
+    },
+  },
+})
+
+const SIMPLE_TAB = [
+  {value: 0, label: 'Current ', disabled: false},
+  {value: 1, label: 'Incoming ', disabled: false},
+  {value: 2, label: 'Pending ', disabled: false},
+  {value: 3, label: 'For Billing', disabled: false},
+]
 
 export default function TabsComponent() {
+  const {currentUser} = useAuth()
+  const params = useLocation()
+  const classes = useStyles()
   const {toggleDrawer} = useContext(RatingsContext)
+  const [value, setValue] = useState('1')
   const {enqueueSnackbar} = useSnackbar()
   const [gigs, setGigs] = useState([])
   const [gigPop, setGigPop] = useState([])
-  const [current_user, setUser] = useState([])
   const [open, setOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const user = JSON.parse(local_user)
-      setUser(user)
-
+      if (params?.search) {
+        setValue(params?.search?.split('?tab=')[1])
+      }
       const result = await gigs_api.get_gigs_client()
       if (!result.ok) {
         enqueueSnackbar('Unable to load your Gig History', {variant: 'error'})
@@ -43,11 +76,16 @@ export default function TabsComponent() {
       const data = result.data.gigs.sort((a, b) =>
         moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1,
       )
-      checkNotice(data)
-      setGigs(data)
+      if (componentMounted) {
+        checkNotice(data)
+        setGigs(data)
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -56,7 +94,7 @@ export default function TabsComponent() {
     const arrived = data.filter((obj) => obj['status'] && obj['status'].includes('Arrived'))
     if (!arrived) return
     Object.values(arrived).forEach((value) => {
-      if (value.auid !== current_user._id) return
+      if (value.auid !== currentUser._id) return
       if (moment(value.date).isBefore(moment(), 'day')) return
       if (moment(value.date).isSame(moment(), 'day')) {
         handleNotice(value)
@@ -76,7 +114,7 @@ export default function TabsComponent() {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -93,7 +131,7 @@ export default function TabsComponent() {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -133,13 +171,35 @@ export default function TabsComponent() {
     setOpen(false)
   }
 
+  const renderTab = (type) => {
+    if (type === 1) return <IncomingTab gigs={gigs} user={currentUser} key="incoming" />
+    if (type === 2) return <PendingTab gigs={gigs} key="pending" />
+    if (type === 3) return <BillingTab gigs={gigs} key="billing" />
+
+    return <CurrentTab gigs={gigs} user={currentUser} key="current" onEndShift={handleEndShift} />
+  }
+
   return (
     <>
-      <Stack spacing={3} sx={{width: '100%', mb: 20}} direction="column">
-        <CurrentTab gigs={gigs} user={current_user} key="current" onEndShift={handleEndShift} />
-        <IncomingTab gigs={gigs} user={current_user} key="incoming" />
-        <PendingTab gigs={gigs} key="pending" />
-      </Stack>
+      <TabContext value={value}>
+        <TabList
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable auto tabs example"
+        >
+          {SIMPLE_TAB.map((tab, index) => (
+            <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
+          ))}
+        </TabList>
+        {SIMPLE_TAB.map((panel, index) => (
+          <TabPanel key={panel.value} value={String(index + 1)} sx={{p: '0 !important'}}>
+            {renderTab(panel.value)}
+          </TabPanel>
+        ))}
+      </TabContext>
+
+      <Stack spacing={3} sx={{width: '100%', mb: 20}} direction="column"></Stack>
 
       <ConfirmEndShiftNotification
         open={confirmOpen}

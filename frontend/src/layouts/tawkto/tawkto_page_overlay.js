@@ -67,16 +67,9 @@ const TawktoPageOverlay = ({children}) => {
             </Fab>
           </Draggable>
           <Dialog open={open} keepMounted onClose={handleClose} fullWidth TransitionComponent={Transition}>
-            {isLoading && <LoadingScreen />}
-            <iframe
-              title="tawkto"
-              src={process.env.REACT_APP_TAWK_TO}
-              height={height - 200}
-              frameBorder={0}
-              onLoad={() => {
-                setisLoading(false)
-              }}
-            ></iframe>
+            <object data={process.env.REACT_APP_TAWK_TO} height={height - 200} type="text/html">
+              Alternative Content
+            </object>
           </Dialog>
         </>
       )}

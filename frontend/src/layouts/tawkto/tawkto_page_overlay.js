@@ -1,6 +1,5 @@
 import {useLocation} from 'react-router-dom'
 import {Dialog, Fab, Slide, Box} from '@material-ui/core'
-import LoadingScreen from 'components/LoadingScreen'
 import React, {useState} from 'react'
 
 import Draggable from 'react-draggable'
@@ -17,7 +16,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const TawktoPageOverlay = ({children}) => {
   const {height} = useWindowDimensions()
   const {pathname} = useLocation()
-  const [isLoading, setisLoading] = useState(true)
 
   const [open, setOpen] = useState(false)
 

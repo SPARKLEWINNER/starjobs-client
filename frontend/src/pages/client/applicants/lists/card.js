@@ -22,8 +22,6 @@ const IconWrapperStyle = styled('div')(({theme}) => ({
 export default function ApplicantCard({data, onClick, gigDetails}) {
   if (!data && data.length === 0) return ''
 
-  data = data[0]
-
   const handleAccept = (value) => {
     onClick(value)
   }

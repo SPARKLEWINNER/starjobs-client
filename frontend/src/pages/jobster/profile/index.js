@@ -122,10 +122,10 @@ const Profile = () => {
         setTabs(STATIC_TAB.filter((obj) => obj.value !== 4))
       }
 
-      setNotVerified(false)
-      if (!result.ok) return setLoading(false)
-
       if (componentMounted) {
+        setNotVerified(false)
+        if (!result.ok) return setLoading(false)
+
         setUser(result.data)
         setLoading(false)
       }

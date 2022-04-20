@@ -84,7 +84,7 @@ const Gigs = () => {
     }
 
     // eslint-disable-next-line
-  }, [])
+  }, [currentUser])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)

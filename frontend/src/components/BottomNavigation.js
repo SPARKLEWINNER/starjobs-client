@@ -117,7 +117,7 @@ export default function SimpleBottomNavigation() {
     }
 
     // eslint-disable-next-line
-  }, [])
+  }, [currentUser])
 
   const renderClientNavigation = () => {
     return (

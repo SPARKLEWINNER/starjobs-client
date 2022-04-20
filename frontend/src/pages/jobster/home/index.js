@@ -122,7 +122,7 @@ const Dashboard = () => {
       componentMounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [currentUser])
 
   const checkNotice = (data) => {
     const arrived = data.filter((obj) => obj['status'].includes('Arrived'))

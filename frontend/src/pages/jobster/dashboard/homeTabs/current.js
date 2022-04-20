@@ -68,8 +68,6 @@ export default function CurrentTab({gigs, user, onEndShift}) {
             case 'Confirm-Arrived':
             case 'On-going':
             case 'End-Shift':
-            case 'Confirm-End-Shift':
-              if (status === 'Confirm-End-Shift') return false
               const diff = moment(from).diff(now)
 
               //express as a duration

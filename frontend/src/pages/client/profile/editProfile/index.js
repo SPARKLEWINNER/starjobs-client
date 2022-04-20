@@ -19,6 +19,7 @@ import ProfileForm from './form/profileForm'
 import storage from 'utils/storage'
 import onboard_api from 'api/onboard'
 import user_api from 'api/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -35,6 +36,7 @@ const MainStyle = styled(Stack)(({theme}) => ({
 }))
 
 const EditProfile = () => {
+  const {currentUser} = useAuth()
   const {enqueueSnackbar} = useSnackbar()
   const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0)
@@ -51,13 +53,10 @@ const EditProfile = () => {
   })
 
   useEffect(() => {
-    const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) {
-        return setLoading(false)
-      }
+    let componentMounted = true
 
-      const user = await user_api.get_user_profile_client(JSON.parse(local_user)._id)
+    const load = async () => {
+      const user = await user_api.get_user_profile_client(currentUser['_id'])
       if (!user.ok) {
         return setLoading(false)
       }
@@ -130,13 +129,18 @@ const EditProfile = () => {
         setForm(form_data)
       }
 
-      setUsers(details[0])
-      setLoading(false)
+      if (componentMounted) {
+        setUsers(details[0])
+        setLoading(false)
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [currentUser])
 
   const isStepSkipped = (step) => skipped.has(step)
 

@@ -21,9 +21,11 @@ async function individual_gig(id, details) {
     if (details) {
         gig = await Promise.all(
             history.map(async (h) => {
+                console.log('history', h);
                 let users = await Account.find({ uuid: mongoose.Types.ObjectId(h.uid) })
                     .lean()
                     .exec();
+                console.log('gig', users);
                 if (users.length > 0) {
                     users[0].photo = BUCKET_URL + users[0].photo;
                     return {
@@ -89,10 +91,10 @@ var controllers = {
             if (!gigs) return res.status(502).json({ success: false, msg: 'Gig not found' });
             gigs = gigs.pop();
 
-            if (gigs.isExtended) {
-                details = await extended_gig(id);
-            } else {
+            if (gigs.isExtended === undefined) {
                 details = await individual_gig(id, gigs);
+            } else {
+                details = await extended_gig(id);
             }
 
             details = {

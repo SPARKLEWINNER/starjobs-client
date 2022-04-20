@@ -62,7 +62,7 @@ const ListApplicants = ({details: gig, applicants}) => {
       <>
         {applicants &&
           applicants.length > 0 &&
-          [applicants].map((v, k) => {
+          applicants.map((v, k) => {
             if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying'))
               return (
                 <div key={k}>
@@ -74,7 +74,7 @@ const ListApplicants = ({details: gig, applicants}) => {
           })}
 
         {gig.status !== 'Applying' ||
-          (applicants && [applicants].length <= 0 && (
+          (applicants && applicants.length <= 0 && (
             <Card
               sx={{
                 textAlign: 'center',

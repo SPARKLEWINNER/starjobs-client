@@ -203,6 +203,8 @@ var controllers = {
         let gigs;
         let client;
 
+        if (!id) res.status(502).json({ success: false, msg: 'User id missing' });
+
         try {
             await getSpecificData({ _id: mongoose.Types.ObjectId(id) }, User, 'User', id);
             let user = await Client.find({ uid: mongoose.Types.ObjectId(id) })

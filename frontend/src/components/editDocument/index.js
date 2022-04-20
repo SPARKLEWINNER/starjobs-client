@@ -38,7 +38,7 @@ export default function EditDocument({onNext, onStoreData}) {
       setDocuments(documents)
     }
     load()
-  }, [])
+  }, [currentUser])
 
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {

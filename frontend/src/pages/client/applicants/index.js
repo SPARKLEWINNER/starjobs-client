@@ -46,7 +46,6 @@ const Applicants = () => {
     return () => {
       componentMounted = false
     }
-
     // eslint-disable-next-line
   }, [])
 

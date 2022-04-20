@@ -27,6 +27,7 @@ import MAvatar from 'components/@material-extend/MAvatar'
 // api
 import user_api from 'api/users'
 import gigs_api from 'api/gigs'
+import storage from 'utils/storage'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
 // theme
@@ -123,6 +124,8 @@ const Profile = () => {
         setUser(currentUser)
       }
 
+      const user = JSON.parse(storage.getUser())
+
       // set tabs to active if
       if (location.pathname !== '/client/profile') {
         currentUser._id = params.id
@@ -130,6 +133,7 @@ const Profile = () => {
       }
 
       const result = await user_api.get_user_profile_client(currentUser._id)
+
       if (!result.ok) return
 
       let {details, gigs} = result.data
@@ -139,8 +143,8 @@ const Profile = () => {
       }
 
       if (componentMounted) {
-        setCurrentUser(currentUser)
-        setUser(details)
+        setCurrentUser(user)
+        setUser(user)
         setGigs(gigs)
       }
     }
@@ -150,7 +154,7 @@ const Profile = () => {
       componentMounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [currentUser])
 
   const handleClose = () => {
     setOpen(false)
@@ -164,7 +168,7 @@ const Profile = () => {
   const handleApply = async () => {
     let data = {
       status: 'Applying',
-      uid: currentUser._id,
+      uid: current_user._id,
     }
     const result = await gigs_api.patch_gigs_apply(applyDetails._id, data)
 

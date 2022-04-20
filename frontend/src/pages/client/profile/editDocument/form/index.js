@@ -39,7 +39,7 @@ export default function EditDocument({onNext, onStoreData}) {
     load()
 
     // eslint-disable-next-line
-  }, [])
+  }, [currentUser])
 
   const handleDropMultiFile = useCallback(
     (acceptedFiles) => {

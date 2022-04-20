@@ -7,7 +7,7 @@ import color from 'theme/palette'
 
 export default function PendingTab({gigs}) {
   return (
-    <Box sx={{my: 5}}>
+    <Box>
       <Stack spacing={3}>
         <Stack direction="row" sx={{alignItems: 'center', mb: 2}}>
           <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, flexGrow: 1}}>

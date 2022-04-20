@@ -65,6 +65,7 @@ const Dashboard = () => {
   const [value, setValue] = useState('1')
 
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
       if (params?.search) {
         const get_tab = params?.search?.split('?tab=')[1]
@@ -84,11 +85,17 @@ const Dashboard = () => {
       const data = result.data.gigs.sort((a, b) =>
         moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1,
       )
-      checkNotice(data)
-      setGigs(data)
+
+      if (componentMounted) {
+        checkNotice(data)
+        setGigs(data)
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

@@ -22,7 +22,7 @@ import MAvatar from 'components/@material-extend/MAvatar'
 // api
 import user_api from 'api/users'
 import storage from 'utils/storage'
-
+import {nameInitials} from 'utils/formatCase'
 // theme
 import color from 'theme/palette'
 
@@ -100,33 +100,41 @@ const Profile = () => {
     setValue(newValue)
   }
 
-  const load = async () => {
-    setLoading(true)
-    const local_user = await storage.getUser()
-    if (!local_user) return setLoading(false)
-    const user = JSON.parse(local_user)
-    if (!user.isActive) {
-      setUser(user)
-
-      return
-    }
-    let result
-    if (location.pathname === '/freelancer/profile') {
-      result = await user_api.get_user_profile()
-    } else {
-      result = await user_api.get_user_profile_freelancer(params.id)
-      result = {data: {...result.data[0]}, ok: result.ok}
-      setTabs(STATIC_TAB.filter((obj) => obj.value !== 4))
-    }
-
-    setNotVerified(false)
-    if (!result.ok) return setLoading(false)
-    setUser(result.data)
-    setLoading(false)
-  }
-
   useEffect(() => {
+    let componentMounted = true
+
+    const load = async () => {
+      setLoading(true)
+      const local_user = await storage.getUser()
+      if (!local_user) return setLoading(false)
+      const user = JSON.parse(local_user)
+      if (!user.isActive) {
+        setUser(user)
+
+        return
+      }
+      let result
+      if (location.pathname === '/freelancer/profile') {
+        result = await user_api.get_user_profile()
+      } else {
+        result = await user_api.get_user_profile_freelancer(params.id)
+        result = {data: {...result.data[0]}, ok: result.ok}
+        setTabs(STATIC_TAB.filter((obj) => obj.value !== 4))
+      }
+
+      setNotVerified(false)
+      if (!result.ok) return setLoading(false)
+
+      if (componentMounted) {
+        setUser(result.data)
+        setLoading(false)
+      }
+    }
+
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -189,7 +197,7 @@ const Profile = () => {
                         variant="h3"
                         sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '240px'}}
                       >
-                        {capitalCase(`${user.firstName} ${user.middleInitial} ${user.lastName}`)}
+                        {capitalCase(`${user.firstName} ${nameInitials(user.middleInitial)} ${user.lastName}`)}
                         <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
                           <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
                         </Box>
@@ -214,11 +222,11 @@ const Profile = () => {
                         sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                       >
                         {!user.permanentCity ? (
-                          <Typography variant="body2" sx={{mb: 3}}>
+                          <Typography variant="body2" sx={{mb: 3}} component="span">
                             {user.presentCity}
                           </Typography>
                         ) : (
-                          <Typography variant="body2" sx={{ml: 1}}>
+                          <Typography variant="body2" sx={{ml: 1}} component="span">
                             {user.permanentCity}
                           </Typography>
                         )}

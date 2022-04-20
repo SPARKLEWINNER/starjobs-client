@@ -60,8 +60,6 @@ var controller = {
                     },
                     Source: SG_EMAIL // replace with your source email};
                 };
-
-                console.log(mail);
                 break;
             default:
                 mail = {

@@ -83,7 +83,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     load()
   }, [gigs])
   return (
-    <Box sx={{mb: 5}}>
+    <Box>
       <Stack spacing={3}>
         <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           For Payment

@@ -184,7 +184,7 @@ var controllers = {
             }
 
             sms.send_sms(phone, `Starjobs verification code ${code}`);
-            mailer.send_mail({ email, verifyCode: code, type: 'sign_up' });
+            await mailer.send_mail({ email, verifyCode: code, type: 'sign_up' });
 
             let { accessToken: token, refreshToken } = requestToken.create_token(result._doc._id);
             res.json({ ...result._doc, token, refreshToken });

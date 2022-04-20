@@ -58,8 +58,9 @@ const PromotionsBanner = ({banners}) => {
           onClose={handleClose}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
+          sx={{overflow: 'hidden'}}
         >
-          <DialogContent sx={{p: 0, height: '50vh', bgColor: 'red'}}>
+          <DialogContent sx={{p: 0, height: '50vh', overflow: 'hidden'}}>
             <Box component="img" src={selectedBanner} sx={{height: '100%', width: '100%', objectFit: 'cover'}} />
           </DialogContent>
           <DialogActions
@@ -74,7 +75,7 @@ const PromotionsBanner = ({banners}) => {
             }}
           >
             <Button onClick={handleClose} color="primary" sx={{mx: 'auto'}}>
-              <HighlightOffIcon sx={{color: 'starjobs.main', fontSize: 32}} />
+              <HighlightOffIcon sx={{color: 'common.white', fontSize: 32}} />
             </Button>
           </DialogActions>
         </Dialog>

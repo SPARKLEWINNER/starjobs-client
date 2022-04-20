@@ -23,7 +23,12 @@ export default function About({form}) {
                 {form.expertise.skillQualification &&
                   form.expertise.skillQualification.split('=>').map((im, ix) => {
                     return (
-                      <Typography key={ix} variant="body2" sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}>
+                      <Typography
+                        key={ix}
+                        variant="body2"
+                        sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
+                        component="span"
+                      >
                         - {im}
                       </Typography>
                     )
@@ -37,7 +42,12 @@ export default function About({form}) {
                 {form.expertise.skillOffer &&
                   form.expertise.skillOffer.split('=>').map((im, ix) => {
                     return (
-                      <Typography key={ix} variant="body2" sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}>
+                      <Typography
+                        key={ix}
+                        variant="body2"
+                        sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
+                        component="span"
+                      >
                         - {im}
                       </Typography>
                     )

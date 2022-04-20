@@ -25,7 +25,6 @@ async function individual_gig(id, details) {
                 let users = await Account.find({ uuid: mongoose.Types.ObjectId(h.uid) })
                     .lean()
                     .exec();
-                console.log('gig', users);
                 if (users.length > 0) {
                     users[0].photo = BUCKET_URL + users[0].photo;
                     return {

@@ -9,11 +9,11 @@ export default function Dashboard() {
 
   const signedUser = () => {
     if (currentUser.accountType === 0) {
-      navigate('/freelancer/message')
+      navigate('/freelancer/app')
     }
 
     if (currentUser.accountType === 1) {
-      navigate('/client/gig/create')
+      navigate('/client/app')
     }
   }
 

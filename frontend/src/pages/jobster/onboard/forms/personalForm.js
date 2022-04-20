@@ -1,15 +1,16 @@
 import * as Yup from 'yup'
-import { useState } from 'react'
-import { useFormik, Form, FormikProvider } from 'formik'
+import {useState} from 'react'
+import {useFormik, Form, FormikProvider} from 'formik'
+
 // material
-import { Stack, TextField, FormControlLabel, Box, Typography, Checkbox, Select } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
-import { useSnackbar } from 'notistack5'
+import {Stack, TextField, FormControlLabel, Box, Typography, Checkbox, Select} from '@material-ui/core'
+import {LoadingButton} from '@material-ui/lab'
+import {useSnackbar} from 'notistack5'
 
-import { fCamelCase } from 'utils/formatCase';
+import {fCamelCase} from 'utils/formatCase'
 
-export default function PersonalForm({ user, stored, onNext, onStoreData }) {
-  const { enqueueSnackbar } = useSnackbar()
+export default function PersonalForm({user, stored, onNext, onStoreData}) {
+  const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const store = stored.personal ? stored.personal : undefined
 
@@ -45,7 +46,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
   const formik = useFormik({
     initialValues: {
       firstName: user.name || store.firstName || '',
-      lastName: store.lastName || '',
+      lastName: user.name || store.lastName || '',
       middleInitial: store.middleInitial || '',
       email: user.email || store.email || '',
       gender: store.gender || '',
@@ -70,7 +71,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
     validateOnBlur: false,
     onSubmit: async (values) => {
       setLoading(true)
-      let isComplete = true;
+      let isComplete = true
       if (
         !values.firstName ||
         !values.lastName ||
@@ -91,25 +92,22 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
         return setLoading(false)
 
       if (!values.samePermanentAddress) {
-
         Object.keys(values).forEach((item) => {
-          let field = values[item];
+          let field = values[item]
 
           if (item === 'samePermanentAddress') return
 
           if (!field) {
-            isComplete = false;
-            enqueueSnackbar(`Required field ${fCamelCase(item)}`, { variant: 'warning' });
+            isComplete = false
+            enqueueSnackbar(`Required field ${fCamelCase(item)}`, {variant: 'warning'})
           }
-
-        });
-        setLoading(false);
+        })
+        setLoading(false)
       }
 
       if (!isComplete) {
         return
       }
-
 
       let data = {
         firstName: values.firstName,
@@ -145,15 +143,15 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
     },
   })
 
-  const { values, errors, touched, handleSubmit, getFieldProps } = formik
+  const {values, errors, touched, handleSubmit, getFieldProps} = formik
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Typography variant="body1" sx={{ mb: 3, mt: 3, fontWeight: 'bold' }}>
+        <Typography variant="body1" sx={{mb: 3, mt: 3, fontWeight: 'bold'}}>
           Personal Information
         </Typography>
         <Stack spacing={3}>
-          <Stack direction={{ xs: 'column', sm: 'column' }} spacing={2}>
+          <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
               autoFocus
               fullWidth
@@ -165,7 +163,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
             />
           </Stack>
 
-          <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
+          <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
             <TextField
               fullWidth
               autoComplete="name"
@@ -238,20 +236,20 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
           />
 
           <Box>
-            <Typography variant="body1" sx={{ mt: 3, fontWeight: 'bold' }}>
+            <Typography variant="body1" sx={{mt: 3, fontWeight: 'bold'}}>
               Present Address
             </Typography>
             <FormControlLabel
-              sx={{ mb: 3 }}
+              sx={{mb: 3}}
               control={<Checkbox color="primary" {...getFieldProps('samePermanentAddress')} />}
               label={
-                <Typography variant="body2" align="left" sx={{ color: 'text.secondary' }}>
+                <Typography variant="body2" align="left" sx={{color: 'text.secondary'}}>
                   Same as Permanent Address
                 </Typography>
               }
             />
 
-            <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
+            <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
                 fullWidth
                 label="Blk. No."
@@ -287,10 +285,10 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
           {!values.samePermanentAddress ? (
             <>
               <Box>
-                <Typography variant="body1" sx={{ mb: 3, mt: 3, fontWeight: 'bold' }}>
+                <Typography variant="body1" sx={{mb: 3, mt: 3, fontWeight: 'bold'}}>
                   Permanent Address
                 </Typography>
-                <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
+                <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
                   <TextField
                     fullWidth
                     label="Blk. No."
@@ -329,10 +327,10 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
           )}
 
           <Box>
-            <Typography variant="body1" sx={{ mb: 3, mt: 3, fontWeight: 'bold' }}>
+            <Typography variant="body1" sx={{mb: 3, mt: 3, fontWeight: 'bold'}}>
               Emergency Contact person
             </Typography>
-            <Stack direction={{ xs: 'column', sm: 'column' }} spacing={2}>
+            <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
                 fullWidth
                 label="Name (ex. Juan Dela Cruz)"

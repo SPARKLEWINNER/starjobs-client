@@ -1,14 +1,17 @@
 import {useEffect, useState} from 'react'
 import {useParams} from 'react-router'
 import moment from 'moment'
+
 // material
-import {Box, Stack, Typography, CardContent, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Card, Grid} from '@material-ui/core'
 import {styled} from '@material-ui/core/styles'
+import {CalendarTodayOutlined, LocationOnOutlined} from '@material-ui/icons'
 
 // components
 import Page from 'components/Page'
 import LoadingScreen from 'components/LoadingScreen'
 import Label from 'components/Label'
+import {capitalCase} from 'change-case'
 
 // api
 import gigs_api from 'api/gigs'
@@ -48,39 +51,51 @@ const FullDetails = () => {
   )
 
   return (
-    <Page title="Gig Full details - Starjobs">
-      <MainStyle
-        alignItems="center"
-        justify="center"
-        sx={{my: 3, paddingLeft: {xs: 3}, paddingRight: {xs: 3}, width: '100%'}}
-      >
-        {isLoading && <LoadingScreen />}
-        {!isLoading && (
-          <Card sx={{py: 2, px: 3, display: 'flex', my: 2}}>
+    <>
+      {isLoading && <LoadingScreen />}
+      {!isLoading && gig && (
+        <Page title={`${gig.position} Gig - Starjobs`}>
+          <Box
+            sx={{
+              height: 120,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="h4" color="primary.main" sx={{fontWeight: 'bold', textAlign: 'center'}}>
+              {capitalCase(gig.position)}
+            </Typography>
+          </Box>
+          <MainStyle
+            alignItems="center"
+            justify="center"
+            sx={{my: 3, paddingLeft: {xs: 3}, paddingRight: {xs: 3}, width: '100%'}}
+          >
             <Box sx={{flexDirection: 'column', width: '100%', p: 0}}>
-              <CardContent
-                sx={{flex: '1 0 auto', px: 0, pt: 0, alignItems: 'flex-start', paddingBottom: '0 !important'}}
-              >
-                <Stack direction="row" sx={{alignItems: 'center', mb: 1}}>
-                  <Typography variant="overline" sx={{fontWeight: 'bold'}}>
-                    {gig.position}
+              <Card>
+                <Grid container spacing={2}>
+                  <Grid items xs={4}>
+                    <CalendarTodayOutlined />
+                  </Grid>
+                  <Grid items xs={8}></Grid>
+                  <Grid items xs={4}>
+                    <LocationOnOutlined />
+                  </Grid>
+                  <Grid items xs={8}>
+                    <Typography variant="body2" sx={{mb: 0}}>
+                      {gig.location}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Card>
+              <Card sx={{flex: '1 0 auto', px: 0, pt: 0, alignItems: 'flex-start', paddingBottom: '0 !important'}}>
+                <Stack sx={{my: 1}}>
+                  <Typography variant="body2" color="default">
+                    Start date & time: {moment(gig.from).format('MMM-DD hh:mm A')}
                   </Typography>
-                  <Label sx={{fontSize: 10, ml: 1}} color="info">
-                    <span>&#8369;</span>
-                    {/* {parseFloat(jobsterTotal).toFixed(2)} / {gig.type} */}
-                  </Label>
-                </Stack>
-
-                <Typography variant="body2" sx={{fontSize: 13, mb: 0}}>
-                  Location: {gig.location}
-                </Typography>
-
-                <Stack direction="row" sx={{my: 1}}>
-                  <Typography variant="overline" color="default" sx={{fontSize: 10}}>
-                    Start: {moment(gig.from).format('MMM-DD hh:mm A')}
-                  </Typography>
-                  <Typography variant="overline" color="default" sx={{fontSize: 10, ml: 2}}>
-                    End: {moment(gig.time).format('MMM-DD hh:mm A')}
+                  <Typography variant="body2" color="default">
+                    End date & time: {moment(gig.time).format('MMM-DD hh:mm A')}
                   </Typography>
                 </Stack>
                 <Stack direction="row" className="d-flex p-0 align-item-center w-100">
@@ -88,12 +103,12 @@ const FullDetails = () => {
                     {gig.hours} {gig.category === 'parcels' ? 'parcels' : ' hrs shift'}{' '}
                   </Label>
                 </Stack>
-              </CardContent>
+              </Card>
             </Box>
-          </Card>
-        )}
-      </MainStyle>
-    </Page>
+          </MainStyle>
+        </Page>
+      )}
+    </>
   )
 }
 

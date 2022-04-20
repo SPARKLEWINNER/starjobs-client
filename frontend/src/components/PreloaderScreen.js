@@ -79,7 +79,7 @@ export default function LoadingScreen({...other}) {
           repeat: Infinity,
         }}
       >
-        <Logo sx={{width: 128, height: 128}} />
+        <Logo sx={{width: 64, height: 64}} />
       </motion.div>
 
       <Box

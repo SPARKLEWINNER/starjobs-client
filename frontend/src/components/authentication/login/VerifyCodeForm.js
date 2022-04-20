@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 0,
     width: '100%',
     '& input': {
-      color: theme.palette.common.white,
+      color: theme.palette.common.black,
       backgroundColor: theme.palette.starjobs.fieldColor,
       border: '0 !important',
       borderRadius: '0.25rem !important',
@@ -63,17 +63,8 @@ export default function VerifyCodeForm({account}) {
       setLoading(true)
       if (!code) return setLoading(false)
 
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const user = JSON.parse(local_user)
-
-      if (!user) {
-        return setLoading(false)
-      }
-
       let form_data = {
-        email: user.email,
+        email: account.email,
         code: code,
       }
 
@@ -84,10 +75,9 @@ export default function VerifyCodeForm({account}) {
       }
 
       let {data} = result
-      data.token = user.token
+      data.token = account.token
 
       await storage.storeUser(data)
-      await storage.storeToken(data.token)
 
       setLoading(false)
       enqueueSnackbar('Verify success', {variant: 'success'})

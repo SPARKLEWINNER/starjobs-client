@@ -137,6 +137,7 @@
     "react-slick": "^0.28.0",
     "react-spreadsheet": "^0.5.14",
     "react-spring": "^9.2.4",
+    "react-toastify": "^8.2.0",
     "react-transition-group": "^4.4.2",
     "react-verification-code-input": "^1.2.9",
     "react-window": "^1.8.6",

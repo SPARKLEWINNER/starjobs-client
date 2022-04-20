@@ -59,40 +59,46 @@ const ListApplicants = ({details: gig, applicants}) => {
 
   return (
     <>
-      {applicants &&
-        Object.values(applicants).map((v, k) => {
-          if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying')) {
-            return <ApplicantCard data={v} key={k} onClick={handleConfirm} gigDetails={gig} />
-          }
+      <>
+        {applicants &&
+          applicants.length > 0 &&
+          [applicants].map((v, k) => {
+            if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying'))
+              return (
+                <div key={k}>
+                  <ApplicantCard data={v} onClick={handleConfirm} gigDetails={gig} />
+                </div>
+              )
 
-          return ''
-        })}
+            return ''
+          })}
 
-      {gig.status !== 'Applying' ||
-        (Object.values(applicants).length <= 0 && (
-          <Card
-            sx={{
-              textAlign: 'center',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              px: 3,
-              py: 10,
-            }}
-          >
-            <Typography variant="h6">
-              No applicants{' '}
-              <Link
-                component={RouterLink}
-                to="/client/app"
-                underline="none"
-                sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
-              >
-                Go back
-              </Link>
-            </Typography>
-          </Card>
-        ))}
+        {gig.status !== 'Applying' ||
+          (applicants && [applicants].length <= 0 && (
+            <Card
+              sx={{
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: 3,
+                py: 10,
+              }}
+            >
+              <Typography variant="h6">
+                No applicants{' '}
+                <Link
+                  component={RouterLink}
+                  to="/client/app"
+                  underline="none"
+                  sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
+                >
+                  Go back
+                </Link>
+              </Typography>
+            </Card>
+          ))}
+      </>
       <ConfirmDialog open={open} handleClose={handleClose} onConfirm={handleSubmit} />
     </>
   )

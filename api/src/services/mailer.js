@@ -1,22 +1,11 @@
-const AWS = require('aws-sdk');
 require('dotenv').config();
-const request = require('request');
-const HttpsProxyAgent = require('https-proxy-agent');
+
+const AWS = require('aws-sdk');
 const logger = require('./../services/logger');
 const forgotPassword = require('./emailTemplates/forgot.template.js');
-// const sgMail = require('@sendgrid/mail');
-// sgMail.setApiKey(SG_KEY);
-// const agent = new HttpsProxyAgent(
-//     'http://u72febijyv5ebi:qd7pvxhq1xng42a7o3tgcjhnkl@us-east-static-07.quotaguard.com:9293'
-// );
-const { SG_EMAIL, MAILER, SG_KEY, QUOTASTATIC_USERNAME, QUOTASTATIC_PROXY } = process.env;
+const signUp = require('./emailTemplates/signup.template.js');
 
-// function callback(error, response, body) {
-//     console.log('error', error);
-//     if (!error && response.statusCode == 200) {
-//         console.log(body);
-//     }
-// }
+const { SG_EMAIL } = process.env;
 
 const ses = new AWS.SES({
     accessKeyId: 'AKIA3GMN5RL2MXPORLXK',
@@ -24,44 +13,36 @@ const ses = new AWS.SES({
     region: 'us-east-1'
 });
 
-let params = {
-    Destination: {
-        ToAddresses: ['eduardo.quintos23@gmail.com'] // replace with your destination email
-    },
-    Message: {
-        Body: {
-            Html: {
-                // HTML Content for email
-                Charset: 'UTF-8',
-                Data: forgotPassword()
-            }
-        },
-        Subject: {
-            // Subject for email
-            Charset: 'UTF-8',
-            Data: 'SES email sending tutorial'
-        }
-    },
-    Source: 'no-reply@starjobs.com.ph' // replace with your source email
-};
-
 var controller = {
     send_mail: async function (data) {
         let mail = {};
         switch (data.type) {
             case 'sign_up':
                 mail = {
-                    to: data.email,
-                    from: `StarJobs Account Verification <${SG_EMAIL}>`,
-                    subject: 'StarJobs Verification Code',
-                    text: 'Some useless text',
-                    html: `<p>Your verification code is ${data.verifyCode} \n\n  Have a Sparkling day.\n </p>`
+                    Destination: {
+                        ToAddresses: [data.email] // replace with your destination email
+                    },
+                    Message: {
+                        Body: {
+                            Html: {
+                                // HTML Content for email
+                                Charset: 'UTF-8',
+                                Data: signUp(data.verifyCode)
+                            }
+                        },
+                        Subject: {
+                            // Subject for email
+                            Charset: 'UTF-8',
+                            Data: 'Verification code - Starjobs'
+                        }
+                    },
+                    Source: SG_EMAIL // replace with your source email};
                 };
                 break;
             case 'forgot_password':
                 mail = {
                     Destination: {
-                        ToAddresses: ["eduardo.quintos23@gmail.com"] // replace with your destination email
+                        ToAddresses: [data.email] // replace with your destination email
                     },
                     Message: {
                         Body: {
@@ -74,13 +55,13 @@ var controller = {
                         Subject: {
                             // Subject for email
                             Charset: 'UTF-8',
-                            Data: 'SES email sending tutorial'
+                            Data: 'Forgot password Request- Starjobs'
                         }
                     },
                     Source: SG_EMAIL // replace with your source email};
                 };
 
-                console.log(mail)
+                console.log(mail);
                 break;
             default:
                 mail = {
@@ -93,32 +74,6 @@ var controller = {
                 break;
         }
         try {
-            /*
-            sgMail
-                .send(mail)
-                .then((res) => {
-                    console.log(res);
-                    return res[0].statusCode;
-                })
-                .catch(async (error) => {
-                    console.log(error);
-                    await logger.logError(error, 'MAILER.send_mail.SEND_GRID', data, null, 'POST');
-                    return;
-                });
-
-            var options = {
-                method: 'POST',
-                url: 'https://api.sendgrid.com/v3/mail/send',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${SG_KEY}`
-                },
-                body: JSON.stringify(mail)
-            };
-
-            await request.post(options, callback);
-                */
-
             const sendEmail = ses.sendEmail(mail).promise();
 
             sendEmail

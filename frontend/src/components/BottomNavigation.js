@@ -100,12 +100,7 @@ export default function SimpleBottomNavigation() {
     const {data} = result.data
     if (data.length === 0) return
 
-    let unread
-    if (currentUser.accountType === 1) {
-      unread = data.filter((obj) => obj.readAuthor === false)
-    } else {
-      unread = data.filter((obj) => obj.readUser === false)
-    }
+    let unread = data.filter((obj) => obj.isRead === false)
 
     setNotifications(unread.length)
   }
@@ -144,7 +139,6 @@ export default function SimpleBottomNavigation() {
             to={`/gigs`}
             key="client-gigs"
           />
-
           <Box sx={{overflow: 'hidden'}}>
             <BottomNavigationAction
               className={classes.main_button}
@@ -154,7 +148,6 @@ export default function SimpleBottomNavigation() {
               key="client-gig-create"
             />
           </Box>
-
           <BottomNavigationAction
             className={classes.nav_item}
             icon={
@@ -166,7 +159,6 @@ export default function SimpleBottomNavigation() {
             to={`/client/message`}
             key="client-message"
           />
-
           <BottomNavigationAction
             className={classes.nav_item}
             icon={<PersonIcon className={classes.icon} />}
@@ -174,6 +166,7 @@ export default function SimpleBottomNavigation() {
             to={`/client/profile`}
             key="client-profile"
           />
+          */}
         </BottomNavigation>
       </>
     )

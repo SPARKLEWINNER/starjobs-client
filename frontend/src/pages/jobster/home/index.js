@@ -61,16 +61,20 @@ const BannerStyle = styled(Stack)(({theme}) => ({
 
 const mockBanner = [
   {
-    title: 'banner-1',
-    image: '/static/illustrations/profile-banner.jpg',
+    title: 'banner-one',
+    image: '/static/home/banner/jobster/banner-one.png',
   },
   {
-    title: 'banner-2',
-    image: '/static/illustrations/profile-banner.jpg',
+    title: 'banner-two',
+    image: '/static/home/banner/jobster/banner-two.png',
   },
   {
-    title: 'banner-3',
-    image: '/static/illustrations/profile-banner.jpg',
+    title: 'banner-three',
+    image: '/static/home/banner/jobster/banner-three.png',
+  },
+  {
+    title: 'banner-four',
+    image: '/static/home/banner/jobster/banner-four.png',
   },
 ]
 
@@ -189,15 +193,15 @@ const Dashboard = () => {
           </Typography>
           <Box component="div" sx={{mb: 8}} />
         </Box>
-        <Box sx={{justifyContent: 'center'}}>
+        <Box sx={{justifyContent: 'center', mr: 2}}>
           <Avatar
             key={'Profile Picture'}
             alt="Picture"
-            src="/static/favicon/icon-72x72.png"
+            src="/static/favicon/starjobs-outline.png"
             sx={{
               margin: '0 auto',
-              width: 120,
-              height: 120,
+              width: 100,
+              height: 100,
               borderRadius: '0 !important ',
               objectFit: 'contain',
               objectPosition: 'center',

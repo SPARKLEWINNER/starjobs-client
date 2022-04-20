@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 import {styled} from '@material-ui/core/styles'
 // material
@@ -6,7 +6,7 @@ import {Box, Container, Paper, Button, Link, MobileStepper} from '@material-ui/c
 
 import Page from 'components/Page'
 import {Verified, Start, Notification, Complete} from 'components/welcome'
-import {UsersContext} from 'utils/context/users'
+import {useAuth} from 'utils/context/AuthContext'
 
 import {LoadingButtonStyle} from 'theme/style'
 const steps = ['Verified', 'Notification', 'Profile', 'Start']
@@ -32,18 +32,7 @@ const ContentStyle = styled('div')(({theme}) => ({
 export default function Welcome() {
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set())
-  const {check_login} = useContext(UsersContext)
-  const [user, setUser] = useState([])
-
-  useEffect(() => {
-    const load = async () => {
-      const request = await check_login()
-      setUser(request)
-    }
-
-    load()
-    // eslint-disable-next-line
-  }, [])
+  const {currentUser} = useAuth()
 
   const isStepOptional = (step) => step === 2
 
@@ -88,7 +77,7 @@ export default function Welcome() {
               <Paper sx={{p: 1, backgroundColor: 'starjobs.main'}}>
                 {activeStep === 0 && <Verified />}
                 {activeStep === 1 && <Notification />}
-                {activeStep === 2 && <Complete user={user} />}
+                {activeStep === 2 && <Complete user={currentUser} />}
                 {activeStep === 3 && <Start />}
               </Paper>
             </>
@@ -116,7 +105,7 @@ export default function Welcome() {
                     Skip
                   </Button>
                 ) : activeStep === steps.length - 1 ? (
-                  <Link component={RouterLink} to={`${user.accessType}`} sx={{textDecoration: 'none'}}>
+                  <Link component={RouterLink} to={`/dashboard`} sx={{textDecoration: 'none'}}>
                     <Button variant="contained" sx={LoadingButtonStyle} onClick={handleNext}>
                       Let's Go!
                     </Button>

@@ -7,12 +7,17 @@ import Label from 'components/Label'
 import {calculations} from 'utils/gigComputation'
 
 function numberOfApplicants(gig) {
-  if (gig && gig.numberofApplicants > 0)
-    return `${gig.numberofApplicants} ${
-      gig && gig.numberofApplicants && gig.numberofApplicants.length > 0 ? 'applicants' : 'applicant'
-    }`
+  if (gig.isExtended) {
+    if (gig && gig.numberofApplicants > 0)
+      return `${gig.numberofApplicants} ${
+        gig && gig.numberofApplicants && gig.numberofApplicants.length > 0 ? 'applicants' : 'applicant'
+      }`
 
-  return '0 Applicant'
+    return '0 Applicant'
+  } else {
+    if (gig && gig.applicants > 0)
+      return `${gig.applicants} ${gig && gig.applicants && gig.applicants.length > 0 ? 'applicants' : 'applicant'}`
+  }
 }
 
 export default function PendingCard({gig}) {

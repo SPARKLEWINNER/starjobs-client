@@ -1,1 +1,7 @@
 /.github
+
+.github/workflows
+
+/api-chat/.env
+/api/.env
+/frontend/.env

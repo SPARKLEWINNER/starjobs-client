@@ -87,28 +87,34 @@ export default function SimpleBottomNavigation() {
   const [value, setValue] = useState(0)
   const [notification, setNotifications] = useState(0)
 
-  const load = async () => {
-    let result
-    if (currentUser.accountType === 1) {
-      result = await user_api.get_user_notifications_client(currentUser._id)
-    } else {
-      result = await user_api.get_user_notifications(currentUser._id)
+  useEffect(() => {
+    let componentMounted = true
+
+    const load = async () => {
+      let result
+      if (currentUser.accountType === 1) {
+        result = await user_api.get_user_notifications_client(currentUser._id)
+      } else {
+        result = await user_api.get_user_notifications(currentUser._id)
+      }
+
+      if (!result.ok) return
+
+      const {data} = result.data
+      if (data.length === 0) return
+
+      let unread = data.filter((obj) => obj.isRead === false)
+      const tab = sessionStorage.getItem('tab')
+      if (componentMounted) {
+        setNotifications(unread.length)
+        setValue(JSON.parse(tab))
+      }
     }
 
-    if (!result.ok) return
-
-    const {data} = result.data
-    if (data.length === 0) return
-
-    let unread = data.filter((obj) => obj.isRead === false)
-
-    setNotifications(unread.length)
-  }
-
-  useEffect(() => {
     load()
-    const tab = sessionStorage.getItem('tab')
-    setValue(JSON.parse(tab))
+    return () => {
+      componentMounted = false
+    }
 
     // eslint-disable-next-line
   }, [])

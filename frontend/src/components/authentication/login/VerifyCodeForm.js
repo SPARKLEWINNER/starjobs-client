@@ -94,6 +94,7 @@ export default function VerifyCodeForm({account}) {
   }
 
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
       const local_user = await storage.getUser()
       if (!local_user) {
@@ -105,11 +106,16 @@ export default function VerifyCodeForm({account}) {
         return setLoading(false)
       }
 
-      setUser(user)
-      setLoading(false)
+      if (componentMounted) {
+        setUser(user)
+        setLoading(false)
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

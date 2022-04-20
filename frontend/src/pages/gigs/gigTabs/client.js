@@ -30,41 +30,6 @@ export default function ClientTab({category}) {
   const [RENDER_LENGTH, setRenderLength] = useState(3)
   const [openFilterDialog, setOpenFilterDialog] = useState(false)
 
-  const load = async () => {
-    let result = ''
-    setLoading(true)
-
-    try {
-      if (category) {
-        result = await gigs_api.get_gigs_categorized(category)
-      } else {
-        result = await gigs_api.get_gigs_no_category()
-      }
-
-      let {data} = result
-      if (!data || data.length === 0) {
-        setData([])
-        setRenderData([])
-        return
-      }
-
-      data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-      const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-
-      setData(FILTERED)
-      setRenderData(FILTERED.slice(0, 3))
-      setLoading(false)
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setLoading(false)
-    }
-
-    if (!result.ok) {
-      return
-    }
-  }
-
   const loadMore = () => {
     let renderCount = RENDER_LENGTH
     renderCount += 5
@@ -110,7 +75,48 @@ export default function ClientTab({category}) {
 
   useEffect(
     () => {
+      let componentMounted = true
+
+      const load = async () => {
+        let result = ''
+        setLoading(true)
+
+        try {
+          if (category) {
+            result = await gigs_api.get_gigs_categorized(category)
+          } else {
+            result = await gigs_api.get_gigs_no_category()
+          }
+
+          let {data} = result
+          if (!data || data.length === 0) {
+            setData([])
+            setRenderData([])
+            return
+          }
+
+          data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+          const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
+
+          if (componentMounted) {
+            setData(FILTERED)
+            setRenderData(FILTERED.slice(0, 3))
+            setLoading(false)
+          }
+        } catch (err) {
+          console.log(err)
+        } finally {
+          setLoading(false)
+        }
+
+        if (!result.ok) {
+          return
+        }
+      }
       load()
+      return () => {
+        componentMounted = false
+      }
     },
     // eslint-disable-next-line
     [],

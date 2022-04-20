@@ -115,33 +115,40 @@ const Profile = () => {
     setValue(newValue)
   }
 
-  const load = async () => {
-    if (!currentUser.isActive) {
-      setUser(currentUser)
-    }
-
-    // set tabs to active if
-    if (location.pathname !== '/client/profile') {
-      currentUser._id = params.id
-      setTabs(STATIC_TAB.filter((obj) => obj.value !== 3))
-    }
-
-    const result = await user_api.get_user_profile_client(currentUser._id)
-    if (!result.ok) return
-
-    let {details, gigs} = result.data
-    if (details && details.length <= 0) {
-      enqueueSnackbar('Kindly complete your account details to in order to proceed', {variant: 'warning'})
-      return
-    }
-
-    setCurrentUser(currentUser)
-    setUser(details)
-    setGigs(gigs)
-  }
-
   useEffect(() => {
+    let componentMounted = true
+
+    const load = async () => {
+      if (!currentUser.isActive) {
+        setUser(currentUser)
+      }
+
+      // set tabs to active if
+      if (location.pathname !== '/client/profile') {
+        currentUser._id = params.id
+        setTabs(STATIC_TAB.filter((obj) => obj.value !== 3))
+      }
+
+      const result = await user_api.get_user_profile_client(currentUser._id)
+      if (!result.ok) return
+
+      let {details, gigs} = result.data
+      if (details && details.length <= 0) {
+        enqueueSnackbar('Kindly complete your account details to in order to proceed', {variant: 'warning'})
+        return
+      }
+
+      if (componentMounted) {
+        setCurrentUser(currentUser)
+        setUser(details)
+        setGigs(gigs)
+      }
+    }
     load()
+
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -155,8 +162,6 @@ const Profile = () => {
   }
 
   const handleApply = async () => {
-    console.log('currentUser', currentUser)
-    console.log('applyDetails', applyDetails)
     let data = {
       status: 'Applying',
       uid: currentUser._id,

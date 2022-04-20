@@ -7,19 +7,20 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const {currentUser} = useAuth()
 
-  const signedUser = () => {
-    if (currentUser.accountType === 0) {
-      navigate('/freelancer/app')
-    }
-
-    if (currentUser.accountType === 1) {
-      navigate('/client/app')
-    }
-  }
-
   useEffect(
     () => {
+      const signedUser = () => {
+        if (currentUser.accountType === 0) {
+          navigate('/freelancer/app')
+        }
+
+        if (currentUser.accountType === 1) {
+          navigate('/client/app')
+        }
+      }
+
       if (!currentUser.isVerified) return navigate(`/verification`, {replace: true})
+
       signedUser()
     },
 

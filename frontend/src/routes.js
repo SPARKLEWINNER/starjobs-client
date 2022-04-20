@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Navigate, useRoutes, useLocation} from 'react-router-dom'
 import {TransitionGroup, CSSTransition} from 'react-transition-group'
-
+import {useAuth} from 'utils/context/AuthContext'
 // material
 import {Stack} from '@material-ui/core'
 
@@ -60,6 +60,13 @@ import GigEdit from './pages/gigs/edit'
 import LoadingScreen from './components/LoadingScreen'
 
 const UseRoutes = () => {
+  const {currentUser} = useAuth()
+  const params = useLocation()
+
+  if (currentUser) {
+    localStorage.setItem('last_screen', params.pathname)
+  }
+
   return useRoutes([
     // jobster routes
     {
@@ -168,10 +175,9 @@ const AppRoute = () => {
   useEffect(() => {
     let mounted = true
 
-    if (mounted)
-      setTimeout(() => {
-        setLoaded(true)
-      }, 2000)
+    if (mounted) {
+      setLoaded(true)
+    }
 
     return () => {
       mounted = false

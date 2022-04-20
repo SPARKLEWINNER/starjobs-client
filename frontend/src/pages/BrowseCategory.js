@@ -35,16 +35,22 @@ export default function BrowseCategory() {
   ])
   const [isLoading, setLoading] = useState(false)
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
       setLoading(true)
       const result = await category_api.get_categories()
       if (!result.ok) return setLoading(false)
       let category_data = result.data.sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
-      setLoading(false)
-      setCategory({initial: category_data, dynamic: category_data})
+      if (componentMounted) {
+        setLoading(false)
+        setCategory({initial: category_data, dynamic: category_data})
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
   }, [])
 
   const handleSearch = (f) => {

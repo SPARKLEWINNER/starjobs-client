@@ -39,11 +39,17 @@ export default function VerificationPage() {
   }
 
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
-      if (!currentUser) return navigate('/login')
-      if (currentUser.isVerified) return navigate(`/dashboard`, {replace: true})
+      if (componentMounted) {
+        if (!currentUser) return navigate('/login')
+        if (currentUser.isVerified) return navigate(`/dashboard`, {replace: true})
+      }
     }
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

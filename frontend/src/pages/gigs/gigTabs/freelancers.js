@@ -116,18 +116,24 @@ export default function FreelancerTab() {
     handleFilterDialogClose()
   }
 
-  const load = async () => {
-    const result = await user_api.get_user_list()
-    if (!result.ok) return
-
-    let {data} = result
-    setData(data)
-    setRenderData(data.slice(0, 5))
-  }
-
   useEffect(
     () => {
+      let componentMounted = true
+
+      const load = async () => {
+        const result = await user_api.get_user_list()
+        if (!result.ok) return
+
+        let {data} = result
+        if (componentMounted) {
+          setData(data)
+          setRenderData(data.slice(0, 5))
+        }
+      }
       load()
+      return () => {
+        componentMounted = false
+      }
     },
     // eslint-disable-next-line
     [],

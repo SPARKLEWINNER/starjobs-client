@@ -71,11 +71,17 @@ const Gigs = () => {
   const {currentUser} = useAuth()
 
   useEffect(() => {
+    let componentMounted = true
     const load = () => {
-      if (currentUser.accountType === 0) return setValue('1')
+      if (componentMounted) {
+        if (currentUser.accountType === 0) return setValue('1')
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
 
     // eslint-disable-next-line
   }, [])

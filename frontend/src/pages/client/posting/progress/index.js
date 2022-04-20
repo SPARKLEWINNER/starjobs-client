@@ -18,7 +18,7 @@ import {IncomingNotification, ConfirmArrivedNotification} from 'components/notif
 
 // api
 import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
+import {useAuth} from 'utils/context/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -43,21 +43,16 @@ const TabStyle = styled(Stack)(({theme}) => ({
 }))
 
 const Dashboard = () => {
+  const {currentUser} = useAuth()
   const {enqueueSnackbar} = useSnackbar()
   const [gigs, setGigs] = useState([])
   const [gigPop, setGigPop] = useState([])
-  const [current_user, setUser] = useState([])
   const [open, setOpen] = useState(false)
   const [confirmArrivedOpen, setConfirmArrivedOpen] = useState(false)
 
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const user = JSON.parse(local_user)
-      setUser(user)
-
       const result = await gigs_api.get_gigs_client()
       if (!result.ok) {
         enqueueSnackbar('Unable to load your Gig History', {variant: 'error'})
@@ -67,12 +62,16 @@ const Dashboard = () => {
       const data = result.data.gigs.sort((a, b) =>
         moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1,
       )
-
-      checkNotice(data)
-      setGigs(data)
+      if (componentMounted) {
+        checkNotice(data)
+        setGigs(data)
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -80,7 +79,7 @@ const Dashboard = () => {
     const arrived = data.filter((obj) => obj['status'].includes('Arrived'))
     if (!arrived) return
     Object.values(arrived).forEach((value) => {
-      if (value.uid !== current_user._id) return
+      if (value.uid !== currentUser._id) return
       if (moment(value.date).isBefore(moment(), 'day')) return
       if (moment(value.date).isSame(moment(), 'day')) {
         handleNotice(value)
@@ -102,7 +101,7 @@ const Dashboard = () => {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -119,7 +118,7 @@ const Dashboard = () => {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -135,10 +134,9 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* <Page title="Client Dashboard |  Starjobs"> */}
       <MainStyle sx={{my: 2, justifyContent: 'flex-start'}}>
         <TabStyle>
-          <ClientTab gigs={gigs} user={current_user} key="ClientTab" />
+          <ClientTab gigs={gigs} user={currentUser} key="ClientTab" />
 
           <ConfirmArrivedNotification
             open={confirmArrivedOpen}
@@ -156,7 +154,6 @@ const Dashboard = () => {
           />
         </TabStyle>
       </MainStyle>
-      {/*  </Page> */}
     </>
   )
 }

@@ -11,12 +11,12 @@ import {TabContext, TabList, TabPanel} from '@material-ui/lab'
 
 // component
 import Page from 'components/Page'
-import {PendingTab, IncomingTab, CurrentTab} from './homeTabs'
+import {PendingTab, IncomingTab, CurrentTab, ReceiveTab} from './homeTabs'
 import {IncomingNotification, EndShiftNotification} from 'components/notifications'
 
 // api
 import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
+import {useAuth} from 'utils/context/AuthContext'
 
 // variable
 const DRAWER_WIDTH = 280
@@ -48,17 +48,17 @@ const SIMPLE_TAB = [
   {value: 0, label: 'Current ', disabled: false},
   {value: 1, label: 'Incoming ', disabled: false},
   {value: 2, label: 'Pending ', disabled: false},
-  {value: 3, label: 'For Receive', disabled: false},
+  {value: 3, label: 'For Payment', disabled: false},
 ]
 
 const Dashboard = () => {
+  const {currentUser} = useAuth()
   const navigate = useNavigate()
   const params = useLocation()
   const classes = useStyles()
   const {enqueueSnackbar} = useSnackbar()
   const [gigs, setGigs] = useState([])
   const [gigPop, setGigPop] = useState([])
-  const [current_user, setUser] = useState([])
   const [open, setOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
@@ -74,12 +74,6 @@ const Dashboard = () => {
           setValue(get_tab)
         }
       }
-
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const user = JSON.parse(local_user)
-      setUser(user)
 
       const result = await gigs_api.get_gigs_history()
       if (!result.ok) {
@@ -102,7 +96,7 @@ const Dashboard = () => {
     const incoming = data.filter((obj) => obj['status'].includes('Accepted'))
     if (!incoming) return
     Object.values(incoming).forEach((value) => {
-      if (value.auid !== current_user._id) return
+      if (value.auid !== currentUser._id) return
       if (moment(value.date).isBefore(moment(), 'day')) return
       if (moment(value.date).isSame(moment(), 'day')) {
         handleNotice(value)
@@ -122,7 +116,7 @@ const Dashboard = () => {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -139,7 +133,7 @@ const Dashboard = () => {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -184,9 +178,10 @@ const Dashboard = () => {
   }
 
   const renderTab = (type) => {
-    if (type === 1) return <IncomingTab gigs={gigs} user={current_user} key="incoming" />
+    if (type === 1) return <IncomingTab gigs={gigs} user={currentUser} key="incoming" />
     if (type === 2) return <PendingTab gigs={gigs} key="pending" />
-    return <CurrentTab gigs={gigs} user={current_user} key="current" onEndShift={handleEndShift} />
+    if (type === 3) return <ReceiveTab gigs={gigs} key="receive" />
+    return <CurrentTab gigs={gigs} user={currentUser} key="current" onEndShift={handleEndShift} />
   }
 
   return (

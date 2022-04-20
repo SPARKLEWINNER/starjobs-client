@@ -14,7 +14,7 @@ import category_api from 'api/category'
 export default function ParcelForm({onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
-  const [category, setCategory] = useState([])
+  const [categories, setCategory] = useState([])
   const [date, setDate] = useState(new Date())
   const [from, setFrom] = useState()
   const [to, setTo] = useState()
@@ -57,7 +57,7 @@ export default function ParcelForm({onNext, onStoreData}) {
       fee: '',
       position: '',
       shift: '',
-      hours: '    ',
+      hours: '',
       from: '',
       to: '', // time
       notes: '',
@@ -160,12 +160,12 @@ export default function ParcelForm({onNext, onStoreData}) {
               <MenuItem value="" disabled>
                 Select Category
               </MenuItem>
-              {category &&
-                category.map((v, k) => {
-                  if (v.slug !== 'parcels') return ''
+              {categories &&
+                categories.map((category) => {
+                  if (category.slug !== 'parcels') return ''
                   return (
-                    <MenuItem key={v.slug} value={v.slug}>
-                      {v.name}
+                    <MenuItem key={category.slug} value={category.slug}>
+                      {category.name}
                     </MenuItem>
                   )
                 })}
@@ -180,7 +180,7 @@ export default function ParcelForm({onNext, onStoreData}) {
               value={values.position ?? ''}
               error={Boolean(touched.position && errors.position)}
             >
-              <MenuItem value="" selected disabled>
+              <MenuItem value="" disabled>
                 Select Parcel Size
               </MenuItem>
               <MenuItem value="Small Parcel" key="small-parcel">

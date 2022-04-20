@@ -6,6 +6,18 @@ import {Box, Card, CardContent, Typography, Stack} from '@material-ui/core'
 // component
 import Label from 'components/Label'
 
+function change_label_by_status(status) {
+  switch (status) {
+    case 'Confirm-Gig':
+      return 'Jobster confirmed the gig'
+    case 'Confirm-Arrived':
+      return 'Jobster working'
+    case 'End-Shift':
+      return 'Jobster shift ended'
+    default:
+      return status
+  }
+}
 export default function CurrentCard({gig, onView}) {
   let {position, hours, fee, time, from, status, category} = gig
 
@@ -39,7 +51,7 @@ export default function CurrentCard({gig, onView}) {
 
           <Box sx={{position: 'absolute', bottom: 15, right: 20}}>
             <Typography variant="overline" sx={{fontWeight: 'bold', fontSize: 8}}>
-              {status}
+              {change_label_by_status(status)}
             </Typography>
           </Box>
         </CardContent>

@@ -25,12 +25,19 @@ export default function IncomingNotification({open, gig, onCommit, onReject}) {
 
   const handleCommit = (value) => {
     setLoading(true)
-    let data = {
-      new_status: 'Confirm-Gig',
-      ...value,
+    try {
+      let data = {
+        new_status: 'Confirm-Gig',
+        ...value,
+      }
+      onCommit(data)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 3000)
     }
-    onCommit(data)
-    setLoading(false)
   }
 
   const handleReject = (value) => {

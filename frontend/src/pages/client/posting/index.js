@@ -62,14 +62,20 @@ const GigPosting = () => {
   }
 
   useEffect(() => {
+    let componentMounted = true
     const load = () => {
-      if (params.search) {
-        setValue('2')
-      }
+      if (componentMounted) {
+        if (params.search) {
+          setValue('2')
+        }
 
-      setLoading(false)
+        setLoading(false)
+      }
     }
     load()
+    return () => {
+      componentMounted = false
+    }
   }, [params.search, currentUser])
 
   const renderGigForm = () => {

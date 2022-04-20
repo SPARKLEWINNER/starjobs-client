@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Global} from '@emotion/react'
 import {styled} from '@material-ui/styles'
 import {grey} from '@material-ui/core/colors'
@@ -26,6 +26,7 @@ const Puller = styled(Box)(({theme}) => ({
 }))
 
 export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift}) {
+  const [loading, setLoading] = useState(false)
   let {user, shift, position, hours, fee, time, from, status, category} = gig
 
   fee = parseFloat(fee)
@@ -34,7 +35,16 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
   let _total = parseFloat(fee + voluntaryFee)
 
   const handleEndShift = (value) => {
-    onEndShift(value)
+    setLoading(true)
+    try {
+      onEndShift(value)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 3000)
+    }
   }
 
   const _label = (_status) => {
@@ -57,11 +67,18 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
   }
 
   const handleClick = (value) => {
-    let form_data = {
-      new_status: _label(value.status),
-      ...value,
+    setLoading(true)
+    try {
+      let form_data = {
+        new_status: _label(value.status),
+        ...value,
+      }
+      onClick(form_data)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-    onClick(form_data)
   }
 
   const onOpen = () => {}
@@ -214,7 +231,12 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
                   {status === 'On-the-way' ||
                     (status === 'Accepted' && (
                       <Stack sx={{mt: 3, mb: 5}}>
-                        <LoadingButton size="large" variant="contained" onClick={() => handleClick(gig)}>
+                        <LoadingButton
+                          size="large"
+                          variant="contained"
+                          onClick={() => handleClick(gig)}
+                          loading={loading}
+                        >
                           {_label(status)}
                         </LoadingButton>
                       </Stack>
@@ -222,7 +244,12 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
 
                   {status === 'Confirm-Arrived' && (
                     <Stack sx={{mt: 3, mb: 5}}>
-                      <LoadingButton size="large" variant="contained" onClick={() => handleEndShift(gig)}>
+                      <LoadingButton
+                        size="large"
+                        variant="contained"
+                        onClick={() => handleEndShift(gig)}
+                        loading={loading}
+                      >
                         {_label(status)}
                       </LoadingButton>
                     </Stack>
@@ -236,14 +263,12 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
                     </Stack>
                   )}
 
-                  {status === 'End-Shift' ? (
+                  {status === 'End-Shift' && (
                     <Stack sx={{mt: 3, mb: 5}}>
                       <Button size="large" variant="text">
                         Waiting for Client to Confirm
                       </Button>
                     </Stack>
-                  ) : (
-                    ''
                   )}
                 </CardContent>
               </Box>

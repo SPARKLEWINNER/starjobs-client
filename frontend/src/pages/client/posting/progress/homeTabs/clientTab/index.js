@@ -16,7 +16,8 @@ import {IncomingNotification, ConfirmEndShiftNotification} from 'components/noti
 
 // api
 import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
+import {useAuth} from 'utils/context/AuthContext'
+
 import {useLocation} from 'react-router-dom'
 
 const useStyles = makeStyles({
@@ -44,6 +45,7 @@ const SIMPLE_TAB = [
 ]
 
 export default function TabsComponent() {
+  const {currentUser} = useAuth()
   const params = useLocation()
   const classes = useStyles()
   const {toggleDrawer} = useContext(RatingsContext)
@@ -51,7 +53,6 @@ export default function TabsComponent() {
   const {enqueueSnackbar} = useSnackbar()
   const [gigs, setGigs] = useState([])
   const [gigPop, setGigPop] = useState([])
-  const [current_user, setUser] = useState([])
   const [open, setOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
@@ -61,17 +62,11 @@ export default function TabsComponent() {
   }
 
   useEffect(() => {
+    let componentMounted = true
     const load = async () => {
       if (params?.search) {
         setValue(params?.search?.split('?tab=')[1])
       }
-
-      const local_user = await storage.getUser()
-      if (!local_user) return
-
-      const user = JSON.parse(local_user)
-      setUser(user)
-
       const result = await gigs_api.get_gigs_client()
       if (!result.ok) {
         enqueueSnackbar('Unable to load your Gig History', {variant: 'error'})
@@ -81,11 +76,16 @@ export default function TabsComponent() {
       const data = result.data.gigs.sort((a, b) =>
         moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1,
       )
-      checkNotice(data)
-      setGigs(data)
+      if (componentMounted) {
+        checkNotice(data)
+        setGigs(data)
+      }
     }
 
     load()
+    return () => {
+      componentMounted = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -94,7 +94,7 @@ export default function TabsComponent() {
     const arrived = data.filter((obj) => obj['status'] && obj['status'].includes('Arrived'))
     if (!arrived) return
     Object.values(arrived).forEach((value) => {
-      if (value.auid !== current_user._id) return
+      if (value.auid !== currentUser._id) return
       if (moment(value.date).isBefore(moment(), 'day')) return
       if (moment(value.date).isSame(moment(), 'day')) {
         handleNotice(value)
@@ -114,7 +114,7 @@ export default function TabsComponent() {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -131,7 +131,7 @@ export default function TabsComponent() {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: current_user._id,
+      uid: currentUser._id,
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -172,11 +172,11 @@ export default function TabsComponent() {
   }
 
   const renderTab = (type) => {
-    if (type === 1) return <IncomingTab gigs={gigs} user={current_user} key="incoming" />
+    if (type === 1) return <IncomingTab gigs={gigs} user={currentUser} key="incoming" />
     if (type === 2) return <PendingTab gigs={gigs} key="pending" />
     if (type === 3) return <BillingTab gigs={gigs} key="billing" />
 
-    return <CurrentTab gigs={gigs} user={current_user} key="current" onEndShift={handleEndShift} />
+    return <CurrentTab gigs={gigs} user={currentUser} key="current" onEndShift={handleEndShift} />
   }
 
   return (

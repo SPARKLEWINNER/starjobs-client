@@ -1,6 +1,22 @@
 import {Box, Card, CardContent, Typography, Stack} from '@material-ui/core'
 import moment from 'moment'
 import Label from 'components/Label'
+
+function change_label_by_status(status) {
+  switch (status) {
+    case 'Applying':
+      return 'Waiting for client approval'
+    case 'Confirm-Gig':
+      return 'Client will confirm your arrival'
+    case 'Confirm-Arrived':
+      return 'Client confirmed your arrival'
+    case 'End-Shift':
+      return "You've ended your shift"
+    default:
+      return status
+  }
+}
+
 export default function CurrentCard({gig, onView}) {
   let {position, hours, fee, time, from, status, category} = gig
   fee = parseFloat(fee)
@@ -45,7 +61,7 @@ export default function CurrentCard({gig, onView}) {
 
           <Box sx={{position: 'absolute', bottom: 15, right: 20}}>
             <Typography variant="overline" sx={{fontWeight: 'bold', fontSize: 8}}>
-              {status}
+              {change_label_by_status(status)}
             </Typography>
           </Box>
         </CardContent>

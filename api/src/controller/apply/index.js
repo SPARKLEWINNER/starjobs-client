@@ -18,51 +18,53 @@ const { Types } = mongoose;
 
 async function sendNotification(request, gigs, status) {
     let user;
-    let messageList = [
-        { status: 'Applying', type: '2', description: `Applicant has sent a gig request` },
-        { status: 'Accepted', type: '1', description: `Congratulations, your gig has been accepted.` },
-        { status: 'Confirm-Gig', type: '0', description: `Jobster has confirmed pushing thru the gig.` },
-        { status: 'Arrived', type: '0', description: `The jobster has arrived.` },
-        { status: 'Confirm-Arrived', type: '0', description: `The client have confirmed your arrival.` },
-        { status: 'End-Shift', type: '0', description: `The jobster have Ended the shift` },
-        {
-            status: 'Confirm-End-Shift',
-            type: '0',
-            description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
-        },
-        {
-            status: 'Cancelled',
-            type: '0',
-            description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
-        }
-    ];
-
-    if (client.includes(status)) {
-        user = await User.find({ _id: Types.ObjectId(gigs.uid) })
-            .lean()
-            .exec();
-    } else if (freelancer.includes(status)) {
-        let jobster_id = { _id: Types.ObjectId(request.uid) }; // client
-
-        // individual gig postings
-        if (status === 'Confirm-Arrived') {
-            jobster_id = { _id: Types.ObjectId(gigs.auid) }; // jobster
-        }
-
-        user = await User.find(jobster_id).lean().exec();
-    }
-
-    user = user.pop();
-    let message = messageList.filter((obj) => {
-        if (obj.status === status) return obj;
-    });
-
-    // return still to process top level request.
-    if (!message) return true;
-    if (!user || !user.deviceId) return true;
-
-    message = message.pop();
     try {
+        let messageList = [
+            { status: 'Applying', type: '2', description: `Applicant has sent a gig request` },
+            { status: 'Accepted', type: '1', description: `Congratulations, your gig has been accepted.` },
+            { status: 'Confirm-Gig', type: '0', description: `Jobster has confirmed pushing thru the gig.` },
+            { status: 'Arrived', type: '0', description: `The jobster has arrived.` },
+            { status: 'Confirm-Arrived', type: '0', description: `The client have confirmed your arrival.` },
+            { status: 'End-Shift', type: '0', description: `The jobster have Ended the shift` },
+            {
+                status: 'Confirm-End-Shift',
+                type: '0',
+                description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
+            },
+            {
+                status: 'Cancelled',
+                type: '0',
+                description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
+            }
+        ];
+
+        if (client.includes(status)) {
+            user = await User.find({ _id: Types.ObjectId(gigs.uid) })
+                .lean()
+                .exec();
+        } else if (freelancer.includes(status)) {
+            let jobster_id = { _id: Types.ObjectId(request.uid) }; // client
+
+            // individual gig postings
+            if (status === 'Confirm-Arrived') {
+                jobster_id = { _id: Types.ObjectId(gigs.auid) }; // jobster
+            }
+
+            user = await User.find(jobster_id).lean().exec();
+        }
+
+        user = user.pop();
+        let message = messageList.filter((obj) => {
+            if (obj.status === status) return obj;
+        });
+
+        // return still to process top level request.
+        if (!message) return true;
+        if (!user || !user.deviceId) return true;
+
+        message = message.pop();
+        console.log(message);
+
         await fetch('https://fcm.googleapis.com/fcm/send', {
             method: 'post',
             headers: {
@@ -81,6 +83,7 @@ async function sendNotification(request, gigs, status) {
 
         return true;
     } catch (error) {
+        console.log(error);
         await logger.logError(error, 'Apply.send_notification', user.deviceId, null, 'FETCH');
     }
 }

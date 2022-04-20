@@ -1,3 +1,4 @@
+// istanbul ignore file
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
@@ -8,8 +9,7 @@
 // resources are updated in the background.
 
 // To learn more about the benefits of this model and instructions on how to
-// opt-in, read https://cra.link/PWA
-import {toast} from 'react-toastify'
+// opt-in, read https://bit.ly/CRA-PWA
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -42,7 +42,7 @@ export function register(config) {
         navigator.serviceWorker.ready.then(() => {
           console.log(
             'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://cra.link/PWA',
+              'worker. To learn more, visit https://bit.ly/CRA-PWA',
           )
         })
       } else {
@@ -57,35 +57,23 @@ function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
-      registration.update()
-
-      setInterval(() => {
-        registration.update()
-        console.debug('Checked for update...')
-      }, 1000 * 60 * 1)
-
       registration.onupdatefound = () => {
         const installingWorker = registration.installing
+
         if (installingWorker == null) {
           return
         }
+
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-
               console.log(
                 'New content is available and will be used when all ' +
-                  'tabs for this page are closed. See https://cra.link/PWA.',
+                  'tabs for this page are closed. See https://bit.ly/CRA-PWA.',
               )
-
-              toast.info(`Update available! To update, close all windows and reopen.`, {
-                toastId: 'appUpdateAvailable', // Prevent duplicate toasts
-                onClick: () => window.close(), // Closes windows on click
-                autoClose: false, // Prevents toast from auto closing
-              })
 
               // Execute callback
               if (config && config.onUpdate) {
@@ -95,6 +83,7 @@ function registerValidSW(swUrl, config) {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
+              console.log('Content is cached for offline use.')
 
               // Execute callback
               if (config && config.onSuccess) {
@@ -110,6 +99,7 @@ function registerValidSW(swUrl, config) {
     })
 }
 
+// only used when running on localhost
 function checkValidServiceWorker(swUrl, config) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, {
@@ -131,18 +121,14 @@ function checkValidServiceWorker(swUrl, config) {
       }
     })
     .catch(() => {
-      'No internet connection found. App is running in offline mode.'
+      console.log('No internet connection found. App is running in offline mode.')
     })
 }
 
 export function unregister() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready
-      .then((registration) => {
-        registration.unregister()
-      })
-      .catch((error) => {
-        console.error(error.message)
-      })
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.unregister()
+    })
   }
 }

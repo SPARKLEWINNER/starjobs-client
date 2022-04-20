@@ -5,7 +5,7 @@ import moment from 'moment'
 import {useSnackbar} from 'notistack5'
 
 // components
-import {CurrentCard, BillingCard} from '../../../cards'
+import {CurrentCard} from '../../../cards'
 import CurrentModalPopup from '../modal'
 
 // api
@@ -109,7 +109,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
 
       {FILTERED_DATA &&
         FILTERED_DATA.map((v, k) => {
-          if (v.status === 'Confirm-End-Shift') return <BillingCard key={k} gig={v} />
+          if (v.status === 'Confirm-End-Shift') return ''
           return (
             <CurrentCard
               key={k}

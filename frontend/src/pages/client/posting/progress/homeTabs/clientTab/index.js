@@ -3,21 +3,51 @@ import {useSnackbar} from 'notistack5'
 import moment from 'moment'
 
 // material
-import {Stack} from '@material-ui/core'
+import {Stack, Tab} from '@material-ui/core'
+import {makeStyles} from '@material-ui/styles'
+import {TabContext, TabList, TabPanel} from '@material-ui/lab'
 
 // context
 import {RatingsContext} from 'utils/context/rating'
 
 // component
-import {PendingTab, IncomingTab, CurrentTab} from './tabs'
+import {PendingTab, IncomingTab, CurrentTab, BillingTab} from './tabs'
 import {IncomingNotification, ConfirmEndShiftNotification} from 'components/notifications'
 
 // api
 import gigs_api from 'api/gigs'
 import storage from 'utils/storage'
+import {useLocation} from 'react-router-dom'
+
+const useStyles = makeStyles({
+  nav_item: {
+    textTransform: 'uppercase',
+    margin: '0 4px',
+    borderRadius: '8px',
+    minHeight: '42px',
+    '@media (max-width: 500px)': {
+      padding: '6px 0',
+      margin: '0 3px',
+      fontSize: 12,
+    },
+    '@media (max-width: 475px)': {
+      fontSize: 11,
+    },
+  },
+})
+
+const SIMPLE_TAB = [
+  {value: 0, label: 'Current ', disabled: false},
+  {value: 1, label: 'Incoming ', disabled: false},
+  {value: 2, label: 'Pending ', disabled: false},
+  {value: 3, label: 'For Billing', disabled: false},
+]
 
 export default function TabsComponent() {
+  const params = useLocation()
+  const classes = useStyles()
   const {toggleDrawer} = useContext(RatingsContext)
+  const [value, setValue] = useState('1')
   const {enqueueSnackbar} = useSnackbar()
   const [gigs, setGigs] = useState([])
   const [gigPop, setGigPop] = useState([])
@@ -26,8 +56,16 @@ export default function TabsComponent() {
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+
   useEffect(() => {
     const load = async () => {
+      if (params?.search) {
+        setValue(params?.search?.split('?tab=')[1])
+      }
+
       const local_user = await storage.getUser()
       if (!local_user) return
 
@@ -133,13 +171,35 @@ export default function TabsComponent() {
     setOpen(false)
   }
 
+  const renderTab = (type) => {
+    if (type === 1) return <IncomingTab gigs={gigs} user={current_user} key="incoming" />
+    if (type === 2) return <PendingTab gigs={gigs} key="pending" />
+    if (type === 3) return <BillingTab gigs={gigs} key="billing" />
+
+    return <CurrentTab gigs={gigs} user={current_user} key="current" onEndShift={handleEndShift} />
+  }
+
   return (
     <>
-      <Stack spacing={3} sx={{width: '100%', mb: 20}} direction="column">
-        <CurrentTab gigs={gigs} user={current_user} key="current" onEndShift={handleEndShift} />
-        <IncomingTab gigs={gigs} user={current_user} key="incoming" />
-        <PendingTab gigs={gigs} key="pending" />
-      </Stack>
+      <TabContext value={value}>
+        <TabList
+          onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable auto tabs example"
+        >
+          {SIMPLE_TAB.map((tab, index) => (
+            <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
+          ))}
+        </TabList>
+        {SIMPLE_TAB.map((panel, index) => (
+          <TabPanel key={panel.value} value={String(index + 1)} sx={{p: '0 !important'}}>
+            {renderTab(panel.value)}
+          </TabPanel>
+        ))}
+      </TabContext>
+
+      <Stack spacing={3} sx={{width: '100%', mb: 20}} direction="column"></Stack>
 
       <ConfirmEndShiftNotification
         open={confirmOpen}

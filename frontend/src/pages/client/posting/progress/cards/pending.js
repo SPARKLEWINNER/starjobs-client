@@ -5,21 +5,17 @@ import {Icon} from '@iconify/react'
 import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 import Label from 'components/Label'
 import {calculations} from 'utils/gigComputation'
+
+function numberOfApplicants(gig) {
+  if (gig && gig.numberofApplicants > 0)
+    return `${gig.numberofApplicants} ${
+      gig && gig.numberofApplicants && gig.numberofApplicants.length > 0 ? 'applicants' : 'applicant'
+    }`
+
+  return '0 Applicant'
+}
+
 export default function PendingCard({gig}) {
-  let applicants = ''
-
-  if (gig.isExtended) {
-    applicants =
-      gig?.numberofApplicants === null
-        ? `0 Applicant`
-        : `${gig?.numberofApplicants.length} ${gig?.numberofApplicants.length > 0 ? `applicants` : `applicant`}`
-  } else {
-    applicants =
-      gig?.numberofApplicants === null
-        ? `0 Applicant`
-        : `${gig?.numberofApplicants} ${gig?.numberofApplicants.length > 0 ? `applicants` : `applicant`}`
-  }
-
   const {position, _id, hours, fee, from, date, status, time, locationRate} = gig
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
   let {serviceCost} = calculations(hours, fee, locationRate)
@@ -64,7 +60,7 @@ export default function PendingCard({gig}) {
           <Stack direction="row" sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
             <Box sx={{mr: 2}}>
               <Typography variant="overline" sx={{fontSize: 10}} color="default">
-                {applicants}
+                {numberOfApplicants(gig)}
               </Typography>
             </Box>
             {(status === 'Waiting' || status === 'Applying') && (

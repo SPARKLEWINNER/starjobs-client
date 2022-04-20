@@ -11,13 +11,8 @@ export default function CurrentCard({gig, onView}) {
   return (
     <Card
       sx={{
-        overflow: 'hidden',
-        display: 'block',
-        height: 120,
-        marginRight: '16px',
-        width: '320px',
-        boxShadow: 'none',
-        borderRadius: 2,
+        mb: 2,
+        borderRadius: 1,
         cursor: 'pointer',
       }}
       onClick={() => onView()}

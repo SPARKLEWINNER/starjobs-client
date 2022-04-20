@@ -10,7 +10,7 @@ import {useSnackbar} from 'notistack5'
 import DatePicker from 'react-datepicker'
 import {calculations} from 'utils/gigComputation'
 
-export default function GigForm({user, formData, onNext, onStoreData}) {
+export default function GigForm({formData, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [date, setDate] = useState(new Date())
@@ -33,16 +33,16 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
 
   const formik = useFormik({
     initialValues: {
-      date: formData.date || '',
-      fee: formData.fee || '',
-      position: formData.position || '',
-      shift: formData.shift || '',
-      hours: formData.hours || '',
-      from: formData.from || '',
-      to: formData.time || '', // time
-      breakHr: formData.breakHr || 0,
-      notes: formData.notes || '',
-      locationRate: formData.locationRate || '',
+      date: formData?.date ?? '',
+      fee: formData?.fee ?? '',
+      position: formData?.position ?? '',
+      shift: '',
+      hours: formData?.hours ?? '',
+      from: formData?.from ?? '',
+      to: formData?.time ?? '', // time
+      breakHr: formData?.breakHr ?? 0,
+      notes: formData?.notes ?? '',
+      locationRate: formData?.locationRate ?? '',
     },
     enableReinitialize: true,
     validationSchema: GigSchema,
@@ -56,7 +56,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
       values.from = moment(values.from)
       values.to = moment(values.to)
 
-      if (!values.position || !values.shift || !values.hours || !values.fee || !values.notes) return setLoading(false)
+      if (!values.position || !values.shift || !values.hours || !values.fee) return setLoading(false)
 
       const {
         computedFeeByHr,
@@ -79,7 +79,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
         time: values.to,
         from: values.from,
         breakHr: values.break,
-        notes: values.notes,
+        notes: values.notes ?? '',
         locationRate: values.locationRate,
         fees: {
           computedFeeByHr: computedFeeByHr,
@@ -170,11 +170,13 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
             <TextField
               fullWidth
               label="Type of work"
+              type="text"
               {...getFieldProps('position')}
               error={Boolean(touched.position && errors.position)}
               helperText={touched.position && errors.position}
             />
           </Stack>
+
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <MobileDatePicker
@@ -186,7 +188,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
                   setDate(newValue)
                   setFieldValue('date', moment(newValue).format('YYYY-MM-DD'))
                 }}
-                renderInput={(params) => <TextField fullWidth {...params} margin="normal" />}
+                renderInput={(params) => <TextField type="text" fullWidth {...params} margin="normal" />}
               />
             </LocalizationProvider>
           </Stack>
@@ -199,7 +201,16 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
               showTimeSelect
               timeCaption="time"
               dateFormat="MMMM d, yyyy h:mm aa"
-              customInput={<TextField fullWidth margin="normal" sx={{marginTop: '0 !important'}} label="Start date" />}
+              customInput={
+                <TextField
+                  type="text"
+                  fullWidth
+                  margin="normal"
+                  sx={{marginTop: '0 !important'}}
+                  label="Start date"
+                  value={values.from ?? ''}
+                />
+              }
             />
             <DatePicker
               onChange={(date) => handleCalculate(date)}
@@ -208,13 +219,23 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
               showTimeSelect
               timeCaption="time"
               dateFormat="MMMM d, yyyy h:mm aa"
-              customInput={<TextField fullWidth margin="normal" sx={{marginTop: '0 !important'}} label="End date" />}
+              customInput={
+                <TextField
+                  type="text"
+                  fullWidth
+                  margin="normal"
+                  sx={{marginTop: '0 !important'}}
+                  label="End date"
+                  value={values.time ?? ''}
+                />
+              }
             />
           </Stack>
 
           <TextField
             fullWidth
             label="Shift"
+            type="text"
             {...getFieldProps('shift')}
             error={Boolean(touched.shift && errors.shift)}
             helperText={touched.shift && errors.shift}
@@ -257,6 +278,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
               labelPlacement="end"
             />
           </FormControl>
+
           {values.isBreak && (
             <TextField
               fullWidth
@@ -294,6 +316,7 @@ export default function GigForm({user, formData, onNext, onStoreData}) {
             label="Special Instruction"
             key="notes"
             rows={6}
+            type="text"
             fullWidth
             multiline
             sx={{mt: 3}}

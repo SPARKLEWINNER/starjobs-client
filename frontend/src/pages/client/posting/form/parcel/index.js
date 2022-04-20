@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 // material
 import {Box, Button, Typography} from '@material-ui/core'
 import {LoadingButton} from '@material-ui/lab'
@@ -9,18 +9,16 @@ import {ParcelForm, BillingForm} from './form'
 import {CreateParcelDialog} from './dialog'
 
 // hooks
-import storage from 'utils/storage'
 import gigs_api from 'api/gigs'
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
 
-export default function GigCreate() {
+export default function CreateParcelForm({user}) {
   const discordHook = new webhook.Webhook(`${REACT_APP_DISCORD_URL}/${REACT_APP_DISCORD_KEY_STARJOBS}`)
   const {enqueueSnackbar} = useSnackbar()
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set())
-  const [user, setUser] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState([])
@@ -36,26 +34,6 @@ export default function GigCreate() {
     var strTime = hours + ':' + minutes + ' ' + ampm
     return strTime
   }
-
-  useEffect(() => {
-    const load = async () => {
-      const local_user = await storage.getUser()
-      if (!local_user) {
-        return
-      }
-
-      const user = JSON.parse(local_user)
-      if (!user) {
-        return setLoading(false)
-      }
-
-      setUser(user)
-      setLoading(false)
-    }
-
-    load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
 
@@ -91,28 +69,30 @@ export default function GigCreate() {
   const handleSubmit = async () => {
     setLoading(true)
     setOpen(false)
-    const form_data = {
-      ...form,
+
+    try {
+      const form_data = {
+        ...form,
+      }
+      const result = await gigs_api.post_gig(user._id, form_data)
+      if (!result.ok) return enqueueSnackbar('Unable to process your parcel posting', {variant: 'error'})
+
+      await discordHook.info(
+        `Gig Posted Starjobs `,
+        `\n\n**From:**\n ${user.name} - ${user.email}\n\n**Gig Details:**\n ${form.category} - ${form.position} \n${
+          form.date
+        } ${tConvert(form.from)} - ${tConvert(form.time)} \n ${form.shift} shift ${form.hours} hours \n Fee: P ${
+          form.fee
+        }`,
+      )
+
+      enqueueSnackbar('Parcel post success', {variant: 'success'})
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setActiveStep(0)
+      setLoading(false)
     }
-
-    const result = await gigs_api.post_gig(user._id, form_data)
-    if (!result.ok) {
-      enqueueSnackbar('Unable to process your parcel posting', {variant: 'error'})
-      return setLoading(false)
-    }
-
-    await discordHook.info(
-      `Gig Posted Starjobs `,
-      `\n\n**From:**\n ${user.name} - ${user.email}\n\n**Gig Details:**\n ${form.category} - ${form.position} \n${
-        form.date
-      } ${tConvert(form.from)} - ${tConvert(form.time)} \n ${form.shift} shift ${form.hours} hours \n Fee: P ${
-        form.fee
-      }`,
-    )
-
-    enqueueSnackbar('Parcel post success', {variant: 'success'})
-    setLoading(false)
-    setActiveStep(0)
   }
 
   return (
@@ -123,7 +103,7 @@ export default function GigCreate() {
       {activeStep === 0 ? <ParcelForm onNext={handleNext} onStoreData={handleFormData} /> : ''}
       {activeStep === 1 ? <BillingForm onNext={handleNext} storeData={form} /> : ''}
       <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
-        {activeStep === 1 ? (
+        {activeStep === 1 && (
           <LoadingButton
             variant="contained"
             size="large"
@@ -133,10 +113,8 @@ export default function GigCreate() {
           >
             Post A Parcel
           </LoadingButton>
-        ) : (
-          ''
         )}
-        {activeStep !== 0 ? (
+        {activeStep !== 0 && (
           <Button
             size="large"
             variant="outlined"
@@ -145,8 +123,6 @@ export default function GigCreate() {
           >
             Go Back
           </Button>
-        ) : (
-          ''
         )}
       </Box>
       <CreateParcelDialog open={open} onConfirm={handleSubmit} handleClose={handleCancelConfirm} />

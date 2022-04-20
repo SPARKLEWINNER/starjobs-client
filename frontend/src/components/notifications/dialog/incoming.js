@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,7 @@ import {
 import moment from 'moment'
 
 export default function IncomingNotification({open, gig, onCommit, onReject}) {
+  const [loading, setLoading] = useState(false)
   const getFormattedDate = (date) => {
     if (!date) return
     let year = date.getFullYear()
@@ -22,19 +24,23 @@ export default function IncomingNotification({open, gig, onCommit, onReject}) {
   }
 
   const handleCommit = (value) => {
+    setLoading(true)
     let data = {
       new_status: 'Confirm-Gig',
       ...value,
     }
     onCommit(data)
+    setLoading(false)
   }
 
   const handleReject = (value) => {
+    setLoading(true)
     let data = {
       new_status: 'Cancelled',
       ...value,
     }
     onReject(data)
+    setLoading(false)
   }
 
   return (
@@ -64,10 +70,16 @@ export default function IncomingNotification({open, gig, onCommit, onReject}) {
             Are you pushing through the gig today?
           </Typography>
           <Stack row>
-            <Button color="primary" variant="contained" onClick={() => handleCommit(gig)}>
+            <Button color="primary" variant="contained" onClick={() => handleCommit(gig)} disabled={loading}>
               Pushing through
             </Button>
-            <Button onClick={() => handleReject(gig)} variant="outlined" color="inherit" sx={{mt: 2}}>
+            <Button
+              onClick={() => handleReject(gig)}
+              variant="outlined"
+              color="inherit"
+              sx={{mt: 2}}
+              disabled={loading}
+            >
               Not Pushing through
             </Button>
           </Stack>

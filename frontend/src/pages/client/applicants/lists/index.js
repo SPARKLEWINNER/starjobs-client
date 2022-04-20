@@ -1,8 +1,7 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
 import {useSnackbar} from 'notistack5'
-import {Stack, Card, Typography, Link} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Card, Typography, Link} from '@material-ui/core'
 
 // component
 import ApplicantCard from './card'
@@ -12,26 +11,12 @@ import {ConfirmDialog} from './dialog'
 import gigs_api from 'api/gigs'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
-// variables
-const DRAWER_WIDTH = 280
-
-const MainStyle = styled(Stack)(({theme}) => ({
-  marginHorizontal: 'auto',
-  marginTop: 20,
-  [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
-}))
-
-export default function ListApplicants({details, applicants}) {
+const ListApplicants = ({details: gig, applicants}) => {
   const {enqueueSnackbar} = useSnackbar()
   const navigation = useNavigate()
   const params = useParams()
-  const [applicant, setApplicants] = useState(applicants)
   const [open, setOpen] = useState(false)
   const [applicantId, setApplicantId] = useState('')
-  const [gig, setGig] = useState([])
-
   const {sendGigNotification} = useSendNotif()
 
   // const load = async () => {
@@ -40,18 +25,6 @@ export default function ListApplicants({details, applicants}) {
   //   setGig(result.data)
   //   setApplicants(result.data.applicants)
   // }
-
-  useEffect(() => {
-    // load()
-    setGig(details)
-    setApplicants(applicants)
-
-    if (!details.isExtended) {
-      console.log(details)
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applicants])
 
   const handleClose = () => {
     setOpen(false)
@@ -81,52 +54,48 @@ export default function ListApplicants({details, applicants}) {
     })
 
     enqueueSnackbar('Applicant accepted and notified', {variant: 'success'})
-    navigation('/client')
+    navigation('/client/gig/create?tab=1')
   }
 
   return (
     <>
-      <>
-        <MainStyle>
-          <Stack>
-            {applicant &&
-              Object.values(applicant).map((v, k) => {
-                if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying')) {
-                  return <ApplicantCard data={v} key={k} onClick={handleConfirm} gigDetails={gig} />
-                }
+      {applicants &&
+        Object.values(applicants).map((v, k) => {
+          if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying')) {
+            return <ApplicantCard data={v} key={k} onClick={handleConfirm} gigDetails={gig} />
+          }
 
-                return ''
-              })}
+          return ''
+        })}
 
-            {gig.status !== 'Applying' ||
-              (Object.values(applicant).length <= 0 && (
-                <Card
-                  sx={{
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    px: 3,
-                    py: 10,
-                  }}
-                >
-                  <Typography variant="h6">
-                    No applicants{' '}
-                    <Link
-                      component={RouterLink}
-                      to="/client/app"
-                      underline="none"
-                      sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
-                    >
-                      Go back
-                    </Link>
-                  </Typography>
-                </Card>
-              ))}
-          </Stack>
-        </MainStyle>
-      </>
+      {gig.status !== 'Applying' ||
+        (Object.values(applicants).length <= 0 && (
+          <Card
+            sx={{
+              textAlign: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              px: 3,
+              py: 10,
+            }}
+          >
+            <Typography variant="h6">
+              No applicants{' '}
+              <Link
+                component={RouterLink}
+                to="/client/app"
+                underline="none"
+                sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
+              >
+                Go back
+              </Link>
+            </Typography>
+          </Card>
+        ))}
       <ConfirmDialog open={open} handleClose={handleClose} onConfirm={handleSubmit} />
     </>
   )
 }
+
+export default ListApplicants

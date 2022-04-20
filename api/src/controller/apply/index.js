@@ -19,20 +19,20 @@ const { Types } = mongoose;
 async function sendNotification(request, gigs, status) {
     let user;
     let messageList = [
-        { status: 'Applying', type: '#pending', description: `Applicant has sent a gig request` },
-        { status: 'Accepted', type: '#incoming', description: `Congratulations, your gig has been accepted.` },
-        { status: 'Confirm-Gig', type: '#current', description: `Jobster has confirmed pushing thru the gig.` },
-        { status: 'Arrived', type: '#current', description: `The jobster has arrived.` },
-        { status: 'Confirm-Arrived', type: '#current', description: `The client have confirmed your arrival.` },
-        { status: 'End-Shift', type: '#current', description: `The jobster have Ended the shift` },
+        { status: 'Applying', type: '2', description: `Applicant has sent a gig request` },
+        { status: 'Accepted', type: '1', description: `Congratulations, your gig has been accepted.` },
+        { status: 'Confirm-Gig', type: '0', description: `Jobster has confirmed pushing thru the gig.` },
+        { status: 'Arrived', type: '0', description: `The jobster has arrived.` },
+        { status: 'Confirm-Arrived', type: '0', description: `The client have confirmed your arrival.` },
+        { status: 'End-Shift', type: '0', description: `The jobster have Ended the shift` },
         {
             status: 'Confirm-End-Shift',
-            type: '#pending',
+            type: '0',
             description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
         },
         {
             status: 'Cancelled',
-            type: '#pending',
+            type: '0',
             description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
         }
     ];
@@ -73,7 +73,7 @@ async function sendNotification(request, gigs, status) {
                 notification: {
                     title: message.description,
                     icon: 'https://app.starjobs.com.ph/images/72x72.png',
-                    click_action: `https://app.starjobs.com.ph/index-my-gigs.html${message.type}`
+                    click_action: message.type
                 },
                 to: user.deviceId
             }

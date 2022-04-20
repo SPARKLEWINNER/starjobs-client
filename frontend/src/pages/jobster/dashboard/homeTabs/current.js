@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react'
 import {useSnackbar} from 'notistack5'
 import moment from 'moment'
-import AliceCarousel from 'react-alice-carousel'
 
 // components
 import {Box, Stack, Typography, Card} from '@material-ui/core'
@@ -15,12 +14,6 @@ import gigs_api from 'api/gigs'
 
 // theme
 import color from 'theme/palette'
-
-const responsive = {
-  0: {items: 1},
-  568: {items: 1},
-  1024: {items: 2},
-}
 
 export default function CurrentTab({gigs, user, onEndShift}) {
   const {enqueueSnackbar} = useSnackbar()
@@ -104,25 +97,17 @@ export default function CurrentTab({gigs, user, onEndShift}) {
         </Card>
       )}
 
-      <AliceCarousel
-        mouseTracking
-        responsive={responsive}
-        controlsStrategy="alternate"
-        disableDotsControls={true}
-        disableButtonsControls={true}
-      >
-        {FILTERED_GIGS.length > 0 &&
-          FILTERED_GIGS.map((v, k) => (
-            <CurrentCard
-              key={k}
-              gig={v}
-              onClick={handleAction}
-              isLoading={isLoading}
-              onView={() => handleView(v)}
-              onEndShift={handleEndShift}
-            />
-          ))}
-      </AliceCarousel>
+      {FILTERED_GIGS.length > 0 &&
+        FILTERED_GIGS.map((v, k) => (
+          <CurrentCard
+            key={k}
+            gig={v}
+            onClick={handleAction}
+            isLoading={isLoading}
+            onView={() => handleView(v)}
+            onEndShift={handleEndShift}
+          />
+        ))}
       {SELECTED_GIG.length !== 0 && (
         <CurrentModalPopup
           gig={SELECTED_GIG || []}

@@ -45,8 +45,7 @@ export default function ApplicantCard({data, onClick, gigDetails}) {
             to={`/client/gigs/applicant/profile/${data.uuid}/${data.gid}`}
             sx={{cursor: 'pointer'}}
           >
-            <Typography variant="body1">{`${data.firstName} ${data.middleInitial} ${data.lastName}`}</Typography>
-            {applicant_id}
+            <Typography variant="body1">{`${data.firstName} ${data.lastName}`}</Typography>
           </Link>
           <Typography
             variant="body1"

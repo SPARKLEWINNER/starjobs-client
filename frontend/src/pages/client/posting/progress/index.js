@@ -33,10 +33,6 @@ const MainStyle = styled(Stack)(({theme}) => ({
   [theme.breakpoints.up('lg')]: {
     width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
   },
-  [theme.breakpoints.up('xs')]: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
 }))
 
 const TabStyle = styled(Stack)(({theme}) => ({
@@ -140,7 +136,7 @@ const Dashboard = () => {
   return (
     <>
       {/* <Page title="Client Dashboard |  Starjobs"> */}
-      <MainStyle sx={{my: 4, justifyContent: 'flex-start'}}>
+      <MainStyle sx={{my: 2, justifyContent: 'flex-start'}}>
         <TabStyle>
           <ClientTab gigs={gigs} user={current_user} key="ClientTab" />
 

@@ -1,7 +1,7 @@
-import {Paper, Divider, Box, Stack, Typography} from '@material-ui/core'
+import {Paper, Divider, Box, Stack, Typography} from '@mui/material'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 export default function About({form}) {
   if (form.length === 0) return

@@ -6,13 +6,13 @@ import {Icon} from '@iconify/react'
 import map from '@iconify/icons-eva/map-outline'
 
 // material
-import {Box, Stack, Card, Avatar, Typography, Link, Button} from '@material-ui/core'
+import {Box, Stack, Card, Avatar, Typography, Link, Button} from '@mui/material'
 // component
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 
 // hooks
-import {getUser} from 'utils/hooks/auth'
-import useSendNotif from 'utils/hooks/useSendNotif'
+import {getUser} from 'src/utils/hooks/auth'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // variables
 const image_url = process.env.REACT_APP_IMAGE_URL
@@ -47,7 +47,7 @@ const FreelancerCard = ({data, onClick, onClickApplicantId}) => {
                 fontWeight: 'bold',
                 fontSize: '0.85rem !important',
                 wordBreak: 'break-all',
-                width: '200px',
+                width: '200px'
               }}
             >{`${data.firstName} ${data.lastName}`}</Typography>
           </Link>
@@ -59,7 +59,7 @@ const FreelancerCard = ({data, onClick, onClickApplicantId}) => {
               display: 'flex',
               alignItems: 'center',
               color: 'text.secondary',
-              fontSize: '0.85rem !important',
+              fontSize: '0.85rem !important'
             }}
           >
             <Box component={Icon} icon={map} sx={{width: 16, height: 16, mr: 0.5}} />
@@ -83,14 +83,14 @@ const FreelancerCard = ({data, onClick, onClickApplicantId}) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-end',
-                color: 'text.secondary',
+                color: 'text.secondary'
               }}
             >
               <Button
                 variant="text"
                 sx={{
                   zIndex: '999',
-                  fontSize: '0.75rem',
+                  fontSize: '0.75rem'
                 }}
                 onClick={() => [sendInterest()]}
               >

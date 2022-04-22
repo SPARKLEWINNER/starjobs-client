@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import {useNavigate} from 'react-router'
 
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ export default function Dashboard() {
     },
 
     // eslint-disable-next-line
-    [],
+    []
   )
 
   return <></>

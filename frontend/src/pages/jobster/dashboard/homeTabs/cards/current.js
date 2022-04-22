@@ -1,6 +1,6 @@
-import {Box, Card, CardContent, Typography, Stack} from '@material-ui/core'
+import {Box, Card, CardContent, Typography, Stack} from '@mui/material'
 import moment from 'moment'
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 
 function change_label_by_status(status) {
   switch (status) {
@@ -29,7 +29,7 @@ export default function CurrentCard({gig, onView}) {
       sx={{
         mb: 2,
         borderRadius: 1,
-        cursor: 'pointer',
+        cursor: 'pointer'
       }}
       onClick={() => onView()}
     >

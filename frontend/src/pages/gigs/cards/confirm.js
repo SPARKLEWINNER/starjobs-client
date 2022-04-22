@@ -7,8 +7,8 @@ import {
   DialogActions,
   Button,
   Typography,
-  Stack,
-} from '@material-ui/core'
+  Stack
+} from '@mui/material'
 
 const ConfirmGig = ({open, onConfirm, handleClose}) => {
   const [isLoading, setLoading] = useState(false)

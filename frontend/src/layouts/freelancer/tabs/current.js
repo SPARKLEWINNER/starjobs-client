@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {Box, Stack, Typography, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
 import {useSnackbar} from 'notistack5'
 import AliceCarousel from 'react-alice-carousel'
@@ -7,15 +7,15 @@ import {CurrentCard} from './../cards'
 import CurrentModalPopup from './../modal'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const responsive = {
   0: {items: 1},
   568: {items: 1},
-  1024: {items: 2},
+  1024: {items: 2}
 }
 
 export default function CurrentTab({gigs, user, onEndShift}) {
@@ -29,7 +29,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     if (!user) return
     let form_data = {
       status: value.new_status,
-      uid: user._id,
+      uid: user._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
-import {Box, Stack, Typography, Grid, Link, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Grid, Link, Card} from '@mui/material'
 import moment from 'moment'
 import {useSnackbar} from 'notistack5'
 
@@ -9,10 +9,10 @@ import {CurrentCard} from '../../../cards'
 import CurrentModalPopup from '../modal'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 // status
 const current_status = [
@@ -22,7 +22,7 @@ const current_status = [
   'Confirm-Arrived',
   'On-going',
   'End-Shift',
-  'Confirm-End-Shift',
+  'Confirm-End-Shift'
 ]
 
 export default function CurrentTab({gigs, user, onEndShift}) {
@@ -35,7 +35,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     if (!user) return
     let form_data = {
       status: value.new_status,
-      uid: user._id,
+      uid: user._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)

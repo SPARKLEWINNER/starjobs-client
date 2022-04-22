@@ -2,16 +2,16 @@ import {Link as RouterLink} from 'react-router-dom'
 import moment from 'moment'
 
 // material
-import {Box, Card, CardContent, Button, Link, Typography, Stack} from '@material-ui/core'
+import {Box, Card, CardContent, Button, Link, Typography, Stack} from '@mui/material'
 
 // icons
 import {Icon} from '@iconify/react'
 import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 
 // components
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 
-import {calculations} from 'utils/gigComputation'
+import {calculations} from 'src/utils/gigComputation'
 
 const ApplyCard = ({path, gig, currentUser, onClick}) => {
   let {position, hours, fee, user, time, from, category, uid, _id, locationRate} = gig

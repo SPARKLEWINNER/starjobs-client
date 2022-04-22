@@ -2,13 +2,13 @@ import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 
 // material
-import {Stack, Box, Paper, Button, Avatar, Typography} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
-import {LoadingButton} from '@material-ui/lab'
+import {Stack, Box, Paper, Button, Avatar, Typography} from '@mui/material'
+import {styled} from '@mui/material/styles'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import PersonalForm from './form/personalForm'
 import ContactForm from './form/contactForm'
 import IndustryForm from './form/industryForm'
@@ -16,10 +16,10 @@ import RateForm from './form/rateForm'
 import ProfileForm from './form/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
-import user_api from 'api/users'
-import {useAuth} from 'utils/context/AuthContext'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
+import user_api from 'src/lib/users'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -31,8 +31,8 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const EditProfile = () => {
@@ -49,7 +49,7 @@ const EditProfile = () => {
     industry: [],
     rate: [],
     photo: '',
-    documents: '',
+    documents: ''
   })
 
   useEffect(() => {
@@ -84,14 +84,14 @@ const EditProfile = () => {
             companyName: details[0].companyName,
             companyPosition: details[0].companyPosition,
             location: details[0].location,
-            website: details[0].website,
+            website: details[0].website
           },
           rate: {
             accountType: details[0].payment.accountPaymentType,
             accountName: details[0].payment.acccountPaymentName,
-            accountNumber: details[0].payment.acccountPaymentNumber,
+            accountNumber: details[0].payment.acccountPaymentNumber
           },
-          photo: `${details[0].photo}`,
+          photo: `${details[0].photo}`
         }
 
         sessionStorage.setItem(
@@ -105,8 +105,8 @@ const EditProfile = () => {
             companyName: details[0].companyName,
             companyPosition: details[0].companyPosition,
             location: details[0].location,
-            website: details[0].website,
-          }),
+            website: details[0].website
+          })
         )
 
         sessionStorage.setItem('contact', JSON.stringify(details[0].contact))
@@ -120,8 +120,8 @@ const EditProfile = () => {
               rateType: details[0].rate.rateType,
               accountType: details[0].payment.acccountPaymentName,
               accountName: details[0].payment.acccountPaymentNumber,
-              accountNumber: details[0].payment.accountPaymentType,
-            }),
+              accountNumber: details[0].payment.accountPaymentType
+            })
           )
         }
 
@@ -180,9 +180,9 @@ const EditProfile = () => {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
-      photo: form.photo,
+      photo: form.photo
     }
 
     const result = await onboard_api.patch_client_profile(form_data, user._id)

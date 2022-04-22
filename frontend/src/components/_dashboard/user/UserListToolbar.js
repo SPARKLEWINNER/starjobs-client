@@ -6,33 +6,33 @@ import trash2Fill from '@iconify/icons-eva/trash-2-fill'
 import archiveOutline from '@iconify/icons-eva/archive-outline'
 import roundFilterList from '@iconify/icons-ic/round-filter-list'
 // material
-import {styled} from '@material-ui/core/styles'
-import {Box, Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, Link} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Box, Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, Link} from '@mui/material'
 
 const RootStyle = styled(Toolbar)(({theme}) => ({
   height: 96,
   display: 'flex',
   justifyContent: 'space-between',
-  padding: theme.spacing(0, 1, 0, 3),
+  padding: theme.spacing(0, 1, 0, 3)
 }))
 
 const SearchStyle = styled(OutlinedInput)(({theme}) => ({
   width: 240,
   transition: theme.transitions.create(['box-shadow', 'width'], {
     easing: theme.transitions.easing.easeInOut,
-    duration: theme.transitions.duration.shorter,
+    duration: theme.transitions.duration.shorter
   }),
   '&.Mui-focused': {width: 320, boxShadow: theme.customShadows.z8},
   '& fieldset': {
     borderWidth: `1px !important`,
-    borderColor: `${theme.palette.grey[500_32]} !important`,
-  },
+    borderColor: `${theme.palette.grey[500_32]} !important`
+  }
 }))
 
 UserListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
+  onFilterName: PropTypes.func
 }
 
 export default function UserListToolbar({numSelected, filterName, onFilterName}) {
@@ -41,8 +41,8 @@ export default function UserListToolbar({numSelected, filterName, onFilterName})
       sx={{
         ...(numSelected > 0 && {
           color: 'starjobs.main',
-          bgcolor: 'primary.lighter',
-        }),
+          bgcolor: 'primary.lighter'
+        })
       }}
     >
       {numSelected > 0 ? (

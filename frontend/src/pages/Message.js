@@ -1,19 +1,19 @@
 import React, {useState, useEffect} from 'react'
-import {styled} from '@material-ui/core/styles'
-import {Stack, Container, Typography, Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Stack, Container, Typography, Box} from '@mui/material'
 import {slice} from 'lodash'
 
-import Page from 'components/Page'
-import LoadingScreen from 'components/LoadingScreen'
+import Page from 'src/components/Page'
+import LoadingScreen from 'src/components/LoadingScreen'
 
-import storage from 'utils/storage'
-import user_api from 'api/users'
-import NotificationCardV2 from 'components/notifications/card_v2'
+import storage from 'src/utils/storage'
+import user_api from 'src/lib/users'
+import NotificationCardV2 from 'src/components/notifications/card_v2'
 
 const RootStyle = styled(Page)(({theme}) => ({
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -22,7 +22,7 @@ const ContentStyle = styled('div')(({theme}) => ({
   minHeight: '50vh',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  padding: theme.spacing(3, 0),
+  padding: theme.spacing(3, 0)
 }))
 
 const LIMIT = 3

@@ -1,9 +1,9 @@
-import {Box, Stack, Typography, Link, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Link, Card} from '@mui/material'
 import moment from 'moment'
 import {PendingCard} from './cards'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 export default function PendingTab({gigs}) {
   return (
@@ -15,7 +15,7 @@ export default function PendingTab({gigs}) {
           </Typography>
           {gigs.filter(
             (obj) =>
-              !moment(obj.date).isBefore(moment(), 'day') && (obj.status === 'Waiting' || obj.status === 'Applying'),
+              !moment(obj.date).isBefore(moment(), 'day') && (obj.status === 'Waiting' || obj.status === 'Applying')
           ).length > 5 && (
             <Link href="/pending" sx={{textDecoration: 'none', fontWeight: 400, mb: 0, mr: 2}}>
               More

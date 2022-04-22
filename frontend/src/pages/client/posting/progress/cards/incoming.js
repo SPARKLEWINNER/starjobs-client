@@ -1,10 +1,10 @@
 import {Link as RouterLink} from 'react-router-dom'
-import {Box, Card, CardContent, Typography, Stack, Link} from '@material-ui/core'
-import {calculations} from 'utils/gigComputation'
+import {Box, Card, CardContent, Typography, Stack, Link} from '@mui/material'
+import {calculations} from 'src/utils/gigComputation'
 import {Icon} from '@iconify/react'
 import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 import moment from 'moment'
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 export default function IncomingCard({gig}) {
   let applicants
   if (gig && gig.numberofApplicants > 0) {

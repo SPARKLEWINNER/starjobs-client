@@ -1,1 +1,1 @@
-export { default as CreateGigDialog } from './CreateGigDialog'
+export {default as CreateGigDialog} from './CreateGigDialog'

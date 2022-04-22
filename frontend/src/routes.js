@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {Navigate, useRoutes, useLocation} from 'react-router-dom'
 import {TransitionGroup, CSSTransition} from 'react-transition-group'
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 // material
-import {Stack} from '@material-ui/core'
+import {Stack} from '@mui/material'
 
 // layouts
 import DashboardLayout from './layouts/dashboard'
@@ -57,7 +57,7 @@ import GigApplySuccess from './pages/gigs/success'
 import GigEdit from './pages/gigs/edit'
 
 // components
-import LoadingScreen from './components/LoadingScreen'
+import LoadingScreen from 'src/components/LoadingScreen'
 
 const UseRoutes = () => {
   const {currentUser} = useAuth()
@@ -81,13 +81,13 @@ const UseRoutes = () => {
         {path: '/profile', element: <JobsterProfile />},
         {path: '/edit', element: <JobsterEditProfile />},
         {path: '/message', element: <Message />},
-        {path: '/search', element: <BrowseCategory />},
-      ],
+        {path: '/search', element: <BrowseCategory />}
+      ]
     },
     {
       path: 'history',
       element: <DashboardLayout />,
-      children: [{path: '/details/:id/:hid', element: <JobsterHistoryDetails />}],
+      children: [{path: '/details/:id/:hid', element: <JobsterHistoryDetails />}]
     },
     // client routes
     {
@@ -106,8 +106,8 @@ const UseRoutes = () => {
         {path: '/gigs/applicants/:id', element: <ClientApplicants />},
         {path: '/gigs/applicant/profile/:id/:gig_id', element: <ClientApplicantProfile />},
         {path: '/jobster/:id', element: <ClientPublicProfile />},
-        {path: '/search', element: <BrowseCategory />},
-      ],
+        {path: '/search', element: <BrowseCategory />}
+      ]
     },
     {
       path: 'gigs',
@@ -118,8 +118,8 @@ const UseRoutes = () => {
         {path: '/det/:id', element: <GigsFullDetails />},
         {path: '/details/:id/:category', element: <GigDetails />},
         {path: '/edit/:id', element: <GigEdit />},
-        {path: '/apply/success', element: <GigApplySuccess />},
-      ],
+        {path: '/apply/success', element: <GigApplySuccess />}
+      ]
     },
     // global routes
     {
@@ -127,23 +127,23 @@ const UseRoutes = () => {
       element: <SignedLayout />,
       children: [
         {path: '/', element: <Navigate to="/welcome" replace />},
-        {path: '/welcome', element: <Welcome />},
-      ],
+        {path: '/welcome', element: <Welcome />}
+      ]
     },
     {
       path: 'account',
       element: <DashboardLayout />,
-      children: [{path: '/change-password', element: <ChangePassword />}],
+      children: [{path: '/change-password', element: <ChangePassword />}]
     },
     {
       path: 'notification',
       element: <DashboardLayout />,
-      children: [{path: '/details/:id/:hid', element: <NotificationDetails />}],
+      children: [{path: '/details/:id/:hid', element: <NotificationDetails />}]
     },
     {
       path: 'dashboard',
       element: <DashboardLayout />,
-      children: [{path: '/', element: <Dashboard />}],
+      children: [{path: '/', element: <Dashboard />}]
     },
     // non-signed accounts
     {
@@ -156,15 +156,15 @@ const UseRoutes = () => {
         {path: '/sign-up', element: <Registration />},
         {path: '/forgot-password', element: <ForgotPassword />},
         {path: '/reset-password', element: <ResetPassword />},
-        {path: '404', element: <NotFound />},
-      ],
+        {path: '404', element: <NotFound />}
+      ]
     },
     {
       path: 'undefined',
       element: <LogoOnlyLayout />,
-      children: [{path: '/login', element: <Navigate to="/undefined" replace />}],
+      children: [{path: '/login', element: <Navigate to="/undefined" replace />}]
     },
-    {path: '*', element: <Navigate to="/404" replace />},
+    {path: '*', element: <Navigate to="/404" replace />}
   ])
 }
 

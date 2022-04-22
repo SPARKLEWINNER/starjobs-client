@@ -4,14 +4,14 @@ import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 
 // material
-import {Stack, TextField, Select, Typography, Box} from '@material-ui/core'
-import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
+import {Stack, TextField, Select, Typography, Box} from '@mui/material'
+import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
 import DatePicker from 'react-datepicker'
 
 // api
-import category_api from 'api/category'
+import category_api from 'src/lib/category'
 
 const EditGigForm = ({data, onNext, onStoreData}) => {
   const {enqueueSnackbar} = useSnackbar()
@@ -48,7 +48,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
     hours: Yup.number(),
     shift: Yup.string(),
     fee: Yup.string(),
-    notes: Yup.string(),
+    notes: Yup.string()
   })
 
   const formik = useFormik({
@@ -61,7 +61,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
       hours: data.hours || '    ',
       from: new Date(data.from) || '',
       to: new Date(data.time) || '', // time
-      notes: data.notes || '',
+      notes: data.notes || ''
     },
     enableReinitialize: true,
     validationSchema: GigSchema,
@@ -90,12 +90,12 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
         fee: values.fee,
         time: values.to,
         from: values.from,
-        notes: values.notes,
+        notes: values.notes
       }
       setLoading(false)
       onStoreData(data)
       onNext()
-    },
+    }
   })
 
   const {values, errors, touched, handleSubmit, setFieldValue, getFieldProps} = formik
@@ -237,7 +237,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
               type="number"
               {...getFieldProps('hours')}
               InputLabelProps={{
-                shrink: true,
+                shrink: true
               }}
               error={Boolean(touched.hours && errors.hours)}
               helperText={touched.hours && errors.hours}
@@ -249,7 +249,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
                 type="number"
                 {...getFieldProps('fee')}
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={(value) => handleFeeFormat(value.target.value)}
                 error={Boolean(touched.fee && errors.fee)}
@@ -269,7 +269,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
               multiline
               sx={{mt: 3}}
               InputLabelProps={{
-                shrink: true,
+                shrink: true
               }}
               {...getFieldProps('notes')}
             />

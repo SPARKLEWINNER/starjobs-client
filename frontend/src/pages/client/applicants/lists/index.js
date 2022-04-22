@@ -1,15 +1,15 @@
 import {useState} from 'react'
 import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
 import {useSnackbar} from 'notistack5'
-import {Card, Typography, Link} from '@material-ui/core'
+import {Card, Typography, Link} from '@mui/material'
 
 // component
 import ApplicantCard from './card'
 import {ConfirmDialog} from './dialog'
 
 // api
-import gigs_api from 'api/gigs'
-import useSendNotif from 'utils/hooks/useSendNotif'
+import gigs_api from 'src/lib/gigs'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 const ListApplicants = ({details: gig, applicants}) => {
   const {enqueueSnackbar} = useSnackbar()
@@ -40,7 +40,7 @@ const ListApplicants = ({details: gig, applicants}) => {
     setOpen(false)
     let data = {
       status: 'Accepted',
-      uid: applicantId,
+      uid: applicantId
     }
 
     const result = await gigs_api.patch_gigs_apply(params.id, data)
@@ -50,7 +50,7 @@ const ListApplicants = ({details: gig, applicants}) => {
       title: 'You have been accepted',
       body: 'Please report to the location at the correct time',
       targetUsers: [applicantId],
-      additionalData: result,
+      additionalData: result
     })
 
     enqueueSnackbar('Applicant accepted and notified', {variant: 'success'})
@@ -82,7 +82,7 @@ const ListApplicants = ({details: gig, applicants}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 px: 3,
-                py: 10,
+                py: 10
               }}
             >
               <Typography variant="h6">

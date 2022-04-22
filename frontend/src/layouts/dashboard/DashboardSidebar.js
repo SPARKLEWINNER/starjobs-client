@@ -1,25 +1,25 @@
 import PropTypes from 'prop-types'
 import {useEffect, useState} from 'react'
 import {Link as RouterLink, useLocation} from 'react-router-dom'
-import {alpha, styled} from '@material-ui/core/styles'
-import {Box, Link, Button, Drawer, Typography, Avatar, Stack, Tooltip, CardActionArea} from '@material-ui/core'
+import {alpha, styled} from '@mui/material/styles'
+import {Box, Link, Button, Drawer, Typography, Avatar, Stack, Tooltip, CardActionArea} from '@mui/material'
 import Logo from '../../components/Logo'
 import Scrollbar from '../../components/Scrollbar'
 import NavSection from '../../components/NavSection'
 import {MHidden} from '../../components/@material-extend'
 import SidebarConfigStore from './SidebarConfigStore'
 import SidebarConfigEmployee from './SidebarConfigEmployee'
-import useCollapseDrawer from 'utils/hooks/drawer'
+import useCollapseDrawer from 'src/utils/hooks/drawer'
 import {DocIllustration} from '../../assets'
-import discord_api from 'api/discord'
+import discord_api from 'src/lib/discord'
 const DRAWER_WIDTH = 280
 const COLLAPSE_WIDTH = 102
 
 const RootStyle = styled('div')(({theme}) => ({
   [theme.breakpoints.up('lg')]: {
     flexShrink: 0,
-    width: DRAWER_WIDTH,
-  },
+    width: DRAWER_WIDTH
+  }
 }))
 
 const AccountStyle = styled('div')(({theme}) => ({
@@ -27,17 +27,17 @@ const AccountStyle = styled('div')(({theme}) => ({
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: theme.shape.borderRadiusSm,
-  backgroundColor: theme.palette.grey[200],
+  backgroundColor: theme.palette.grey[200]
 }))
 
 DashboardSidebar.propTypes = {
   isOpenSidebar: PropTypes.bool,
-  onCloseSidebar: PropTypes.func,
+  onCloseSidebar: PropTypes.func
 }
 
 IconCollapse.propTypes = {
   onToggleCollapse: PropTypes.func,
-  collapseClick: PropTypes.bool,
+  collapseClick: PropTypes.bool
 }
 
 function IconCollapse({onToggleCollapse, collapseClick}) {
@@ -56,8 +56,8 @@ function IconCollapse({onToggleCollapse, collapseClick}) {
           justifyContent: 'center',
           border: 'solid 1px currentColor',
           ...(collapseClick && {
-            borderWidth: 2,
-          }),
+            borderWidth: 2
+          })
         }}
       >
         <Box
@@ -69,8 +69,8 @@ function IconCollapse({onToggleCollapse, collapseClick}) {
             transition: (theme) => theme.transitions.create('all'),
             ...(collapseClick && {
               width: 0,
-              height: 0,
-            }),
+              height: 0
+            })
           }}
         />
       </CardActionArea>
@@ -92,7 +92,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
     var message = ''
     message = prompt(
       'How can we help you? - <name/phone#/email - branch - [issue/feedback]>',
-      'Input name/phone#/email - branch - [issue/problem/inquiry/feedback]',
+      'Input name/phone#/email - branch - [issue/problem/inquiry/feedback]'
     )
 
     if (message === null) return
@@ -100,7 +100,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
     let params = JSON.stringify({
       username: 'Captain Sparkle',
       avatar_url: 'https://www.sparkles.com.ph/static/2629bb8535ba6ae5406fc9385dadc2e0/497c6/Spark--noodles.png',
-      content: `Starjobs Help - Version 1 \n**Issue:**\n ${message}`,
+      content: `Starjobs Help - Version 1 \n**Issue:**\n ${message}`
     })
 
     const result = await discord_api.send_message(params)
@@ -116,8 +116,8 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
         '& .simplebar-content': {
           height: 1,
           display: 'flex',
-          flexDirection: 'column',
-        },
+          flexDirection: 'column'
+        }
       }}
     >
       <Stack
@@ -127,8 +127,8 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
           pt: 3,
           pb: 2,
           ...(isCollapse && {
-            alignItems: 'center',
-          }),
+            alignItems: 'center'
+          })
         }}
       >
         <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -197,11 +197,11 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
     <RootStyle
       sx={{
         width: {
-          lg: isCollapse ? COLLAPSE_WIDTH : DRAWER_WIDTH,
+          lg: isCollapse ? COLLAPSE_WIDTH : DRAWER_WIDTH
         },
         ...(collapseClick && {
-          position: 'absolute',
-        }),
+          position: 'absolute'
+        })
       }}
     >
       <MHidden width="lgUp">
@@ -209,7 +209,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
           open={isOpenSidebar}
           onClose={onCloseSidebar}
           PaperProps={{
-            sx: {width: DRAWER_WIDTH},
+            sx: {width: DRAWER_WIDTH}
           }}
         >
           {renderContent}
@@ -227,16 +227,16 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
               width: DRAWER_WIDTH,
               bgcolor: 'background.default',
               ...(isCollapse && {
-                width: COLLAPSE_WIDTH,
+                width: COLLAPSE_WIDTH
               }),
               ...(collapseHover && {
                 borderRight: 0,
                 backdropFilter: 'blur(6px)',
                 WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
                 boxShadow: (theme) => theme.customShadows.z20,
-                bgcolor: (theme) => alpha(theme.palette.background.default, 0.88),
-              }),
-            },
+                bgcolor: (theme) => alpha(theme.palette.background.default, 0.88)
+              })
+            }
           }}
         >
           {renderContent}

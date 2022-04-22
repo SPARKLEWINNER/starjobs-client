@@ -4,21 +4,21 @@ import moment from 'moment'
 import {useSnackbar} from 'notistack5'
 
 // material
-import {Stack} from '@material-ui/core'
-// import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
+import {Stack} from '@mui/material'
+// import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
 
 // components
-// import Page from 'components/Page'
+// import Page from 'src/components/Page'
 import {
   // JobsterTab,
-  ClientTab,
+  ClientTab
 } from './homeTabs'
-import {IncomingNotification, ConfirmArrivedNotification} from 'components/notifications'
+import {IncomingNotification, ConfirmArrivedNotification} from 'src/components/notifications'
 
 // api
-import gigs_api from 'api/gigs'
-import {useAuth} from 'utils/context/AuthContext'
+import gigs_api from 'src/lib/gigs'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -31,15 +31,15 @@ const MainStyle = styled(Stack)(({theme}) => ({
   marginRight: 'auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const TabStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const Dashboard = () => {
@@ -60,7 +60,7 @@ const Dashboard = () => {
       }
 
       const data = result.data.gigs.sort((a, b) =>
-        moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1,
+        moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1
       )
       if (componentMounted) {
         checkNotice(data)
@@ -101,7 +101,7 @@ const Dashboard = () => {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: currentUser._id,
+      uid: currentUser._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -118,7 +118,7 @@ const Dashboard = () => {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: currentUser._id,
+      uid: currentUser._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)

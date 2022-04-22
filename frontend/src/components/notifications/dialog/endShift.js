@@ -1,6 +1,6 @@
 import {useState} from 'react'
-import {Dialog, DialogTitle, DialogActions, Typography, Stack} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Dialog, DialogTitle, DialogActions, Typography, Stack} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 export default function EndShiftNotification({open, gig, onCommit, onReject, handleClose}) {
   const [loading, setLoading] = useState(false)
   const handleCommit = (value) => {
@@ -8,7 +8,7 @@ export default function EndShiftNotification({open, gig, onCommit, onReject, han
     try {
       let data = {
         new_status: 'End-Shift',
-        ...value,
+        ...value
       }
       onCommit(data)
     } catch (error) {

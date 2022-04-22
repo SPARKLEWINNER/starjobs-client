@@ -3,8 +3,8 @@ import {Icon} from '@iconify/react'
 import roundFullscreen from '@iconify/icons-ic/round-fullscreen'
 import roundFullscreenExit from '@iconify/icons-ic/round-fullscreen-exit'
 // material
-import {alpha} from '@material-ui/core/styles'
-import {Button} from '@material-ui/core'
+import {alpha} from '@mui/material/styles'
+import {Button} from '@mui/material'
 
 export default function SettingFullscreen() {
   const [fullscreen, setFullscreen] = useState(false)
@@ -30,8 +30,8 @@ export default function SettingFullscreen() {
       sx={{
         fontSize: 14,
         ...(fullscreen && {
-          bgcolor: (theme) => alpha(theme.palette.starjobs.main, theme.palette.action.selectedOpacity),
-        }),
+          bgcolor: (theme) => alpha(theme.palette.starjobs.main, theme.palette.action.selectedOpacity)
+        })
       }}
     >
       {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}

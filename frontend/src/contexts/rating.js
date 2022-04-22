@@ -1,27 +1,27 @@
 import React, {useEffect, useState, createContext} from 'react'
-
+import PropTypes from 'prop-types'
 // components
-import {Box, Typography, SwipeableDrawer, Stack, Button} from '@material-ui/core'
+import {Box, Typography, SwipeableDrawer, Stack, Button} from '@mui/material'
 import {Global} from '@emotion/react'
-import {styled} from '@material-ui/styles'
-import {grey} from '@material-ui/core/colors'
+import {styled} from '@mui/styles'
+import {grey} from '@mui/material/colors'
 
 // icons
 import {Icon} from '@iconify/react'
 import closeIcon from '@iconify/icons-eva/close-circle-outline'
 
 // components
-import {FreelancerRating} from 'components/gigRatings'
+import {FreelancerRating} from 'src/components/gigRatings'
 
 // hooks
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const drawerBleeding = 56
 
 // styles
 const StyledBox = styled(Box)(({theme}) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
+  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800]
 }))
 
 const Puller = styled(Box)(({theme}) => ({
@@ -31,8 +31,12 @@ const Puller = styled(Box)(({theme}) => ({
   borderRadius: 3,
   position: 'absolute',
   top: 8,
-  left: 'calc(50% - 15px)',
+  left: 'calc(50% - 15px)'
 }))
+
+RatingsProvider.propTypes = {
+  children: PropTypes.node
+}
 
 const RatingsContext = createContext()
 
@@ -63,8 +67,8 @@ const RatingsProvider = ({children}) => {
         styles={{
           '.rating-drawer > .MuiPaper-root': {
             height: `calc(80%)`,
-            overflow: 'visible',
-          },
+            overflow: 'visible'
+          }
         }}
       />
       <Box
@@ -73,7 +77,7 @@ const RatingsProvider = ({children}) => {
           backgroundColor: '#FFF',
           overflow: 'hidden',
           borderRadius: '6px',
-          border: '2px solid white',
+          border: '2px solid white'
         }}
       >
         <SwipeableDrawer
@@ -84,7 +88,7 @@ const RatingsProvider = ({children}) => {
           swipeAreaWidth={drawerBleeding}
           disableSwipeToOpen={true}
           ModalProps={{
-            keepMounted: true,
+            keepMounted: true
           }}
           className="rating-drawer"
         >
@@ -96,7 +100,7 @@ const RatingsProvider = ({children}) => {
               borderTopRightRadius: 8,
               visibility: 'visible',
               right: 0,
-              left: 0,
+              left: 0
             }}
           >
             <Puller />
@@ -110,7 +114,7 @@ const RatingsProvider = ({children}) => {
               px: 2,
               pb: 2,
               height: '100%',
-              overflow: 'auto',
+              overflow: 'auto'
             }}
           >
             <Box sx={{py: 1}}>

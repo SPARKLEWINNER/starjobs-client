@@ -3,13 +3,13 @@ import {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 // material
-import {Stack, TextField, MenuItem, Select} from '@material-ui/core'
-import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
+import {Stack, TextField, MenuItem, Select} from '@mui/material'
+import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack5'
 import DatePicker from 'react-datepicker'
 // api
-import category_api from 'api/category'
+import category_api from 'src/lib/category'
 
 export default function ParcelForm({onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
@@ -47,7 +47,7 @@ export default function ParcelForm({onNext, onStoreData}) {
     fee: Yup.number().min(1, 'Min value 1.').required('Gig fee is required'),
     from: Yup.string().required('Gig Start time is required'),
     to: Yup.string().required('Gig End time is required'),
-    notes: Yup.string(),
+    notes: Yup.string()
   })
 
   const formik = useFormik({
@@ -60,7 +60,7 @@ export default function ParcelForm({onNext, onStoreData}) {
       hours: '',
       from: '',
       to: '', // time
-      notes: '',
+      notes: ''
     },
     enableReinitialize: true,
     validationSchema: Schema,
@@ -88,12 +88,12 @@ export default function ParcelForm({onNext, onStoreData}) {
         hours: values.hours,
         fee: values.fee,
         time: values.to,
-        from: values.from,
+        from: values.from
       }
       setLoading(false)
       onStoreData(data)
       onNext()
-    },
+    }
   })
 
   const {values, errors, touched, handleSubmit, setFieldValue, getFieldProps} = formik

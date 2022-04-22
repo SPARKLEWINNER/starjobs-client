@@ -1,14 +1,14 @@
 import {useState, useEffect} from 'react'
 // material
-import {Stack, Select, Typography} from '@material-ui/core'
+import {Stack, Select, Typography} from '@mui/material'
 
 // components
 import CreatGigForm from './gigs'
 import CreateParcelForm from './parcel'
 
 // api
-import category_api from 'api/category'
-import {useAuth} from 'utils/context/AuthContext'
+import category_api from 'src/lib/category'
+import {useAuth} from 'src/contexts/AuthContext'
 const GigsForm = () => {
   const {currentUser} = useAuth()
   const [category, setCategory] = useState([])

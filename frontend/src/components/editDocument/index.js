@@ -1,18 +1,26 @@
 import {useState, useCallback, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 // material
-import {Box, Stack, Typography, Link} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Stack, Typography, Link} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 // components
-import {UploadMultiFile} from 'components/upload'
+import {UploadMultiFile} from 'src/components/upload'
 
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
-import users_api from 'api/users'
-import onboard_api from 'api/onboard'
+import users_api from 'src/lib/users'
+import onboard_api from 'src/lib/onboard'
+
 const image_bucket = process.env.REACT_APP_IMAGE_URL
+
+EditDocument.propTypes = {
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
+
 export default function EditDocument({onNext, onStoreData}) {
   const navigate = useNavigate()
   const {enqueueSnackbar} = useSnackbar()
@@ -46,12 +54,12 @@ export default function EditDocument({onNext, onStoreData}) {
         acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
-            file: file,
-          }),
-        ),
+            file: file
+          })
+        )
       )
     },
-    [setFiles],
+    [setFiles]
   )
 
   const handleRemoveAll = () => {
@@ -77,7 +85,7 @@ export default function EditDocument({onNext, onStoreData}) {
         const upload = await onboard_api.request_upload_url(value.file)
         if (!upload) console.log(upload)
         documents.push(upload)
-      }),
+      })
     )
 
     if (documents.length !== files.length) {
@@ -93,7 +101,7 @@ export default function EditDocument({onNext, onStoreData}) {
     setLoading(true)
 
     const form_data = {
-      documents: format_document,
+      documents: format_document
     }
 
     const result = await onboard_api.patch_client_documents(form_data, currentUser._id)
@@ -119,8 +127,9 @@ export default function EditDocument({onNext, onStoreData}) {
         </Typography>
         <Box sx={{width: '25%', display: 'block', mt: '0 !important'}}>
           {EXISTING_DOCUMENTS &&
-            EXISTING_DOCUMENTS.map((value) => (
+            EXISTING_DOCUMENTS.map((value, index) => (
               <Link
+                key={index}
                 href={`${image_bucket}/${value}`}
                 rel="noreferrer"
                 target="_blank"

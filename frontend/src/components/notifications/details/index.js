@@ -11,18 +11,18 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
-  Button,
-} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
-import CheckIcon from '@material-ui/icons/CheckCircle'
-import ChevronIconRight from '@material-ui/icons/ChevronRight'
+  Button
+} from '@mui/material'
+import {styled} from '@mui/material/styles'
+import CheckIcon from '@mui/icons-material/CheckCircle'
+import ChevronIconRight from '@mui/icons-material/ChevronRight'
 import Label from '../../Label'
 
 // utils
-import {calculations} from 'utils/gigComputation'
+import {calculations} from 'src/utils/gigComputation'
 
 const ListWrapperStyle = styled(Paper)(() => ({
-  width: '100%',
+  width: '100%'
 }))
 
 const NotificationDetailsCard = ({details}) => {
@@ -40,7 +40,7 @@ const NotificationDetailsCard = ({details}) => {
           textTransform: 'uppercase',
           width: '50%',
           my: 2,
-          py: 2,
+          py: 2
         }}
       >
         {status}
@@ -93,7 +93,7 @@ const NotificationDetailsCard = ({details}) => {
                     <ListItemText
                       primary={v.status}
                       secondary={`${new Date(v.updatedAt).toDateString()} ${new Date(
-                        v.updatedAt,
+                        v.updatedAt
                       ).toLocaleTimeString()}`}
                       sx={{fontSize: {xs: '0.85rem !important'}}}
                     />
@@ -122,7 +122,7 @@ const NotificationDetailsCard = ({details}) => {
             boxShadow: 'none',
             color: 'common.white',
             py: 2,
-            mt: {xs: 5, sm: 5},
+            mt: {xs: 5, sm: 5}
           }}
         >
           View Gig details
@@ -137,7 +137,7 @@ const NotificationDetailsCard = ({details}) => {
           color: 'text.primary',
           py: 2,
           mt: {xs: 5, sm: 10},
-          opacity: 0.35,
+          opacity: 0.35
         }}
       >
         Report an Issue

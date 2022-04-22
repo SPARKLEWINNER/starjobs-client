@@ -1,4 +1,4 @@
-import {Dialog, DialogContent, DialogTitle, DialogActions, Button, Typography, Stack} from '@material-ui/core'
+import {Dialog, DialogContent, DialogTitle, DialogActions, Button, Typography, Stack} from '@mui/material'
 import {useState} from 'react'
 const ConfirmDialog = ({open, onConfirm, handleClose}) => {
   const [loading, setLoading] = useState(false)

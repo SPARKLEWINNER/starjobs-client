@@ -2,9 +2,9 @@ import {Icon} from '@iconify/react'
 import moonFill from '@iconify/icons-eva/moon-fill'
 import sunFill from '@iconify/icons-eva/sun-fill'
 // material
-import {Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel} from '@material-ui/core'
+import {Box, Grid, Radio, Paper, RadioGroup, CardActionArea, FormControlLabel} from '@mui/material'
 // hooks
-import useSettings from 'utils/hooks/settings'
+import useSettings from 'src/utils/hooks/settings'
 
 export default function SettingMode() {
   const {themeMode, onChangeMode} = useSettings()
@@ -22,8 +22,8 @@ export default function SettingMode() {
                 position: 'relative',
                 bgcolor: mode === 'dark' ? 'grey.900' : 'common.white',
                 ...(themeMode === mode && {
-                  boxShadow: (theme) => theme.customShadows.z12,
-                }),
+                  boxShadow: (theme) => theme.customShadows.z12
+                })
               }}
             >
               <CardActionArea sx={{color: 'starjobs.main'}}>
@@ -34,8 +34,8 @@ export default function SettingMode() {
                     color: 'text.disabled',
                     justifyContent: 'center',
                     ...(themeMode === mode && {
-                      color: 'starjobs.main',
-                    }),
+                      color: 'starjobs.main'
+                    })
                   }}
                 >
                   <Icon icon={index === 0 ? sunFill : moonFill} width={24} height={24} />
@@ -50,7 +50,7 @@ export default function SettingMode() {
                     margin: 0,
                     width: '100%',
                     height: '100%',
-                    position: 'absolute',
+                    position: 'absolute'
                   }}
                 />
               </CardActionArea>

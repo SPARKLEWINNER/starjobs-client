@@ -1,8 +1,8 @@
-import {Box, Card, CardContent, Stack, Typography} from '@material-ui/core'
-import CircleIcon from '@material-ui/icons/Circle'
+import {Box, Card, CardContent, Stack, Typography} from '@mui/material'
+import CircleIcon from '@mui/icons-material/Circle'
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-import user_api from 'api/users'
+import user_api from 'src/lib/users'
 
 const NotificationCardV2 = ({
   id = '',
@@ -13,7 +13,7 @@ const NotificationCardV2 = ({
   type = 'Notification',
   notifData = '{"name":"John", "age":30, "car":null}',
   isRead = false,
-  onCardClick = () => {},
+  onCardClick = () => {}
 }) => {
   const navigate = useNavigate()
 

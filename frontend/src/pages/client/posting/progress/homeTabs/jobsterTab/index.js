@@ -13,12 +13,12 @@ import {
   MenuItem,
   Typography,
   RadioGroup,
-  Radio,
-} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+  Radio
+} from '@mui/material'
+import {styled} from '@mui/material/styles'
 
 // api
-import user_api from 'api/users'
+import user_api from 'src/lib/users'
 
 // component
 import FreelancerCard from '../../cards/interest'
@@ -29,8 +29,8 @@ const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 export default function FreelancerTabComponent() {
@@ -43,7 +43,7 @@ export default function FreelancerTabComponent() {
     {label: 'All', value: 'All'},
     {label: 'Hourly', value: 'Hourly'},
     {label: 'Daily', value: 'Daily'},
-    {label: 'Monthly', value: 'Monthly'},
+    {label: 'Monthly', value: 'Monthly'}
   ]
 
   const handleFilterDialogClose = () => {
@@ -129,7 +129,7 @@ export default function FreelancerTabComponent() {
       load()
     },
     // eslint-disable-next-line
-    [],
+    []
   )
 
   useEffect(() => {

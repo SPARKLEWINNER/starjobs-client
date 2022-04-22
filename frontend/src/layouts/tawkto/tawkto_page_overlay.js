@@ -1,17 +1,23 @@
 import {useLocation} from 'react-router-dom'
-import {Dialog, Fab, Slide, Box} from '@material-ui/core'
+import PropTypes from 'prop-types'
+
+import {Dialog, Fab, Slide, Box} from '@mui/material'
 import React, {useState} from 'react'
 
 import Draggable from 'react-draggable'
-import useWindowDimensions from 'utils/hooks/useWindowDimensions'
+import useWindowDimensions from 'src/utils/hooks/useWindowDimensions'
 
-import ChatLogo from 'assets/chat_logo.svg'
+import ChatLogo from 'src/assets/chat_logo.svg'
 
 let listPublic = ['sign-up', 'login', 'verification', '404', 'undefined', 'setup/welcome']
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
+
+TawktoPageOverlay.propTypes = {
+  children: PropTypes.node
+}
 
 const TawktoPageOverlay = ({children}) => {
   const {height} = useWindowDimensions()
@@ -51,7 +57,7 @@ const TawktoPageOverlay = ({children}) => {
                 bottom: '5em',
                 right: 16,
                 padding: '10px',
-                zIndex: '999',
+                zIndex: '999'
               }}
             >
               <Box

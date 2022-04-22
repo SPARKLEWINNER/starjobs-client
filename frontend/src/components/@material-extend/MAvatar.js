@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import {forwardRef} from 'react'
 // material
-import {Avatar, useTheme} from '@material-ui/core'
+import {Avatar, useTheme} from '@mui/material'
 
 const MAvatar = forwardRef(({color = 'default', sx, children, ...other}, ref) => {
   const theme = useTheme()
@@ -21,7 +21,7 @@ const MAvatar = forwardRef(({color = 'default', sx, children, ...other}, ref) =>
         fontWeight: theme.typography.fontWeightMedium,
         color: theme.palette[color].contrastText,
         backgroundColor: 'white',
-        ...sx,
+        ...sx
       }}
       {...other}
     >
@@ -33,7 +33,7 @@ const MAvatar = forwardRef(({color = 'default', sx, children, ...other}, ref) =>
 MAvatar.propTypes = {
   children: PropTypes.node,
   sx: PropTypes.object,
-  color: PropTypes.oneOf(['default', 'primary', 'secondary', 'info', 'success', 'warning', 'error']),
+  color: PropTypes.oneOf(['default', 'primary', 'secondary', 'info', 'success', 'warning', 'error'])
 }
 
 export default MAvatar

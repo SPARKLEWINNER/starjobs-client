@@ -4,17 +4,17 @@ import moment from 'moment'
 import {useSnackbar} from 'notistack5'
 
 // material
-import {Stack, Typography, Link, Grid, Card, Button} from '@material-ui/core'
+import {Stack, Typography, Link, Grid, Card, Button} from '@mui/material'
 
 // utils
-import {fCamelCase} from 'utils/formatCase'
+import {fCamelCase} from 'src/utils/formatCase'
 
 // component
 import ConfirmDeleteGig from './confirmDelete'
 
 // api
-import storage from 'utils/storage'
-import gigs_api from 'api/gigs'
+import storage from 'src/utils/storage'
+import gigs_api from 'src/lib/gigs'
 
 export default function GigsDetailsLayout({details, shift}) {
   const params = useParams()

@@ -1,24 +1,24 @@
 import {useSnackbar} from 'notistack5'
 import {useFormik, Form, FormikProvider} from 'formik'
-import {Card, Stack, Switch, Typography, FormControlLabel} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Card, Stack, Switch, Typography, FormControlLabel} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 
 const ACTIVITY_OPTIONS = [
   {
     value: 'activityComments',
-    label: 'Email me when someone comments onmy article',
+    label: 'Email me when someone comments onmy article'
   },
   {
     value: 'activityAnswers',
-    label: 'Email me when someone answers on my form',
+    label: 'Email me when someone answers on my form'
   },
-  {value: 'activityFollows', label: 'Email me hen someone follows me'},
+  {value: 'activityFollows', label: 'Email me hen someone follows me'}
 ]
 
 const APPLICATION_OPTIONS = [
   {value: 'applicationNews', label: 'News and announcements'},
   {value: 'applicationProduct', label: 'Weekly product updates'},
-  {value: 'applicationBlog', label: 'Weekly blog digest'},
+  {value: 'applicationBlog', label: 'Weekly blog digest'}
 ]
 
 export default function AccountNotifications() {
@@ -33,14 +33,14 @@ export default function AccountNotifications() {
       activityFollows: notifications.activityFollows,
       applicationNews: notifications.applicationNews,
       applicationProduct: notifications.applicationProduct,
-      applicationBlog: notifications.applicationBlog,
+      applicationBlog: notifications.applicationBlog
     },
     onSubmit: async (values, {setSubmitting}) => {
       // await fakeRequest(500);
       setSubmitting(false)
       alert(JSON.stringify(values, null, 2))
       enqueueSnackbar('Save success', {variant: 'success'})
-    },
+    }
   })
 
   const {values, isSubmitting, handleSubmit, getFieldProps} = formik

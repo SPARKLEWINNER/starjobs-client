@@ -9,7 +9,7 @@ export const INDUSTRY_TYPE = [
   {label: 'IT and Computer systems', value: 'IT_COMPUTER_SYSTEMS'},
   {label: 'Design and Graphics', value: 'DESIGN_GRAPHICS'},
   {label: 'Tutorial and consultation', value: 'TUTORIAL_CONSULTATION'},
-  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'},
+  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'}
 ]
 
 export const SKILL_OFFER = [
@@ -23,5 +23,5 @@ export const SKILL_OFFER = [
   {label: 'IT and Computer systems', value: 'IT_COMPUTER_SYSTEMS'},
   {label: 'Design and Graphics', value: 'DESIGN_GRAPHICS'},
   {label: 'Tutorial and consultation', value: 'TUTORIAL_CONSULTATION'},
-  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'},
+  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'}
 ]

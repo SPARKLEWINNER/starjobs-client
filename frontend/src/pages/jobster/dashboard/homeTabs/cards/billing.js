@@ -1,5 +1,5 @@
-import {Box, Card, CardContent, Typography} from '@material-ui/core'
-import {calculations} from 'utils/gigComputation'
+import {Box, Card, CardContent, Typography} from '@mui/material'
+import {calculations} from 'src/utils/gigComputation'
 export default function BillingCard({gig}) {
   let {position, hours, fee, locationRate} = gig
 

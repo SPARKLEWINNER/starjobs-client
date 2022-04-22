@@ -12,16 +12,16 @@ import {
   RadioGroup,
   DialogActions,
   Radio,
-  FormControlLabel,
-} from '@material-ui/core'
-import Sort from '@material-ui/icons/Sort'
+  FormControlLabel
+} from '@mui/material'
+import Sort from '@mui/icons-material/Sort'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 // component
 import {WaitingCard} from '../cards'
-import ProgressCircle from 'components/progressCircle'
+import ProgressCircle from 'src/components/progressCircle'
 
 export default function ClientTab({category}) {
   const [data, setData] = useState([])
@@ -52,7 +52,7 @@ export default function ClientTab({category}) {
     switch (sortType) {
       case 'N-O':
         finalSortedData = data.sort((a, b) =>
-          a.dateCreated > b.dateCreated ? -1 : a.dateCreated < b.dateCreated ? 1 : 0,
+          a.dateCreated > b.dateCreated ? -1 : a.dateCreated < b.dateCreated ? 1 : 0
         )
         setData(finalSortedData)
         //Needs to put this here cause for some reason useEffect doesn't execute even if the [data] is changed
@@ -60,7 +60,7 @@ export default function ClientTab({category}) {
         break
       case 'O-N':
         finalSortedData = data.sort((a, b) =>
-          a.dateCreated < b.dateCreated ? -1 : a.dateCreated > b.dateCreated ? 1 : 0,
+          a.dateCreated < b.dateCreated ? -1 : a.dateCreated > b.dateCreated ? 1 : 0
         )
         setData(finalSortedData)
         setRenderData(data.slice(0, 3))
@@ -119,7 +119,7 @@ export default function ClientTab({category}) {
       }
     },
     // eslint-disable-next-line
-    [],
+    []
   )
 
   useEffect(() => {

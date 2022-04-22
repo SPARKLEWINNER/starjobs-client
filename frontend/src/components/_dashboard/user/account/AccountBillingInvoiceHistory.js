@@ -3,13 +3,13 @@ import {Icon} from '@iconify/react'
 import {Link as RouterLink} from 'react-router-dom'
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill'
 // material
-import {Link, Stack, Button, Typography} from '@material-ui/core'
+import {Link, Stack, Button, Typography} from '@mui/material'
 // utils
 import {fDate} from '../../../../utils/formatTime'
 import {fCurrency} from '../../../../utils/formatNumber'
 
 AccountBillingInvoiceHistory.propTypes = {
-  invoices: PropTypes.array,
+  invoices: PropTypes.array
 }
 
 export default function AccountBillingInvoiceHistory({invoices}) {

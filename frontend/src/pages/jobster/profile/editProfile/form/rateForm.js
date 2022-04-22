@@ -1,20 +1,27 @@
 import * as Yup from 'yup'
-import { useState } from 'react'
-import { useFormik, Form, FormikProvider } from 'formik'
+import PropTypes from 'react'
+import {useState} from 'react'
+import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import { Stack, TextField, Box, Typography, Select } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
-import { useSnackbar } from 'notistack5'
-const E_WALLETS = [{ label: 'GCash', image: '', value: 'gcash' }]
+import {Stack, TextField, Box, Typography, Select} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack5'
+const E_WALLETS = [{label: 'GCash', image: '', value: 'gcash'}]
 
 const RATE_TYPE = [
-  { label: 'Hourly', value: 'Hourly' },
-  { label: 'Daily', value: 'Daily' },
-  { label: 'Monthly', value: 'Monthly' },
+  {label: 'Hourly', value: 'Hourly'},
+  {label: 'Daily', value: 'Daily'},
+  {label: 'Monthly', value: 'Monthly'}
 ]
 
-export default function PersonalForm({ user, stored, onNext, onStoreData }) {
-  const { enqueueSnackbar } = useSnackbar()
+PersonalForm.propTypes = {
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
+
+export default function PersonalForm({stored, onNext, onStoreData}) {
+  const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const store = stored.rate ? stored.rate : undefined
 
@@ -23,7 +30,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
     rateType: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Rate billing is required'),
     accountType: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Account type is required'),
     accountName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Account Name is required'),
-    accountNumber: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Account number'),
+    accountNumber: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Account number')
   })
 
   const formik = useFormik({
@@ -32,7 +39,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
       rateType: store.rateType || '',
       accountType: store.accountType || '',
       accountName: store.accountName || '',
-      accountNumber: store.accountNumber || '',
+      accountNumber: store.accountNumber || ''
     },
     enableReinitialize: true,
     validationSchema: Schema,
@@ -45,7 +52,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
         !values.accountName ||
         !values.accountNumber
       ) {
-        enqueueSnackbar('Kindly put N/A for empty fields', { variant: 'warning' })
+        enqueueSnackbar('Kindly put N/A for empty fields', {variant: 'warning'})
         return setLoading(false)
       }
 
@@ -54,27 +61,27 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
         rateType: values.rateType,
         accountType: values.accountType,
         accountName: values.accountName,
-        accountNumber: values.accountNumber,
+        accountNumber: values.accountNumber
       }
       onStoreData(data, 'rate')
       onNext()
-    },
+    }
   })
 
-  const { errors, values, touched, handleSubmit, getFieldProps } = formik
+  const {errors, values, touched, handleSubmit, getFieldProps} = formik
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Typography variant="body1" sx={{ mt: 3, fontWeight: 'bold' }}>
+        <Typography variant="body1" sx={{mt: 3, fontWeight: 'bold'}}>
           Rate & Payment
         </Typography>
-        <Typography variant="body2" sx={{ mb: 3 }}>
+        <Typography variant="body2" sx={{mb: 3}}>
           plus SSS, PhilHealth, Pag-Ibig Mutual Fund
         </Typography>
         <Stack spacing={3}>
           <Box>
-            <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
+            <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
                 autoFocus
                 type="number"
@@ -100,18 +107,18 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
             </Stack>
           </Box>
 
-          <Typography variant="body1" sx={{ mt: 3, mb: 0, fontWeight: 'bold' }}>
+          <Typography variant="body1" sx={{mt: 3, mb: 0, fontWeight: 'bold'}}>
             How would you like to get paid?
           </Typography>
-          <Typography variant="body2" sx={{ mb: 3, marginTop: '0 !important' }}>
+          <Typography variant="body2" sx={{mb: 3, marginTop: '0 !important'}}>
             The usual processing of Gig service fees takes not more than 12 hours after every successful Gig engagement
           </Typography>
           <Box>
-            <Stack sx={{ mt: 2 }} direction={{ xs: 'column', sm: 'column' }} spacing={2}>
-              <Typography variant="body1" sx={{ mb: 0, fontWeight: 'bold' }}>
+            <Stack sx={{mt: 2}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
+              <Typography variant="body1" sx={{mb: 0, fontWeight: 'bold'}}>
                 E-Wallets
               </Typography>
-              <Typography variant="body2" sx={{ mb: 3, marginTop: '0 !important' }}>
+              <Typography variant="body2" sx={{mb: 3, marginTop: '0 !important'}}>
                 plus SSS, PhilHealth, Pag-Ibig Mutual Fund
               </Typography>
               <Select native {...getFieldProps('accountType')} value={values.accountType}>
@@ -127,7 +134,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
                 })}
               </Select>
               {values.accountType ? (
-                <Stack sx={{ mt: 3 }} direction={{ xs: 'column', sm: 'column' }} spacing={2}>
+                <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
                   <TextField
                     fullWidth
                     label="Account Name"

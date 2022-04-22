@@ -3,7 +3,7 @@ import {useState} from 'react'
 import {onMessageListener} from './firebase'
 
 // routes
-import AppRoute from './routes'
+import AppRoute from 'src/routes'
 // theme
 import ThemeConfig from './theme'
 // components
@@ -12,12 +12,12 @@ import FirebaseToken from './components/fcm'
 import ScrollToTop from './components/ScrollToTop'
 import NotistackProvider from './components/NotistackProvider'
 import ThemePrimaryColor from './components/ThemePrimaryColor'
-import {RatingsProvider} from './utils/context/rating'
 
-import TawktoPageOverlay from 'layouts/tawkto/tawkto_page_overlay'
+import TawktoPageOverlay from 'src/layouts/tawkto/tawkto_page_overlay'
 
-import {AuthProvider} from 'utils/context/AuthContext'
-import {SessionProvider} from 'utils/context/SessionContext'
+import {RatingsProvider} from 'src/contexts/rating'
+import {AuthProvider} from 'src/contexts/AuthContext'
+import {SessionProvider} from 'src/contexts/SessionContext'
 
 export default function App() {
   const [open, setOpen] = useState(false)

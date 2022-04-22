@@ -1,4 +1,3 @@
-import Bugsnag from '@bugsnag/js'
 import * as Yup from 'yup'
 import {useState} from 'react'
 import {Icon} from '@iconify/react'
@@ -19,26 +18,26 @@ import {
   FormLabel,
   Typography,
   Checkbox,
-  Button,
-} from '@material-ui/core'
+  Button
+} from '@mui/material'
 import {DialogAnimate} from '../../animate'
-import {LoadingButton} from '@material-ui/lab'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 
-import auth_api from 'api/auth'
+import auth_api from 'src/lib/auth'
 
-import {LoadingButtonStyle, InputOutlineStyle, CheckboxWhiteStyle} from 'theme/style'
+import {LoadingButtonStyle, InputOutlineStyle, CheckboxWhiteStyle} from 'src/theme/style'
 
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const freelancer_docs = [
   'https://bit.ly/3DIlnNl', // data privacy
-  'https://bit.ly/3Jfr0Gk', // service agreements
+  'https://bit.ly/3Jfr0Gk' // service agreements
 ]
 
 const client_docs = [
   'https://bit.ly/3IBUi1R', // data privacy
-  'https://bit.ly/35ZqTA4', // service agreements
+  'https://bit.ly/35ZqTA4' // service agreements
 ]
 
 export default function StoreOnboardForm() {
@@ -66,7 +65,7 @@ export default function StoreOnboardForm() {
       .max(11, 'Not a valid phone number! (ex. 091523468790)')
       .required('Phone number is required'),
     accountType: Yup.number(),
-    marketing: Yup.boolean(),
+    marketing: Yup.boolean()
   })
 
   const formik = useFormik({
@@ -75,7 +74,7 @@ export default function StoreOnboardForm() {
       lastName: '',
       email: '',
       password: '',
-      phone: '',
+      phone: ''
     },
     enableReinitialize: true,
     validationSchema: RegistrationSchema,
@@ -84,7 +83,7 @@ export default function StoreOnboardForm() {
 
       if (!terms) {
         enqueueSnackbar('Please agree with our terms and conditions, privacy policy agreement. Thank you.', {
-          variant: 'warning',
+          variant: 'warning'
         })
         return setLoading(false)
       }
@@ -116,7 +115,7 @@ export default function StoreOnboardForm() {
         email: values.email,
         password: values.password,
         accountType: JSON.parse(values.accountType),
-        phone: format_phone,
+        phone: format_phone
       }
 
       const result = await auth_api.post_sign_up(data)
@@ -127,11 +126,11 @@ export default function StoreOnboardForm() {
       }
 
       enqueueSnackbar('Registration success. We have sent a Verification code under your registered Email address', {
-        variant: 'success',
+        variant: 'success'
       })
       setLoading(false)
       navigate('/login', {replace: true})
-    },
+    }
   })
 
   const {values, errors, touched, handleSubmit, setFieldValue, getFieldProps} = formik
@@ -236,7 +235,7 @@ export default function StoreOnboardForm() {
                       <Icon icon={showPassword ? eyeFill : eyeOffFill} />
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
               error={Boolean(touched.password && errors.password)}
               helperText={touched.password && errors.password}
@@ -261,7 +260,7 @@ export default function StoreOnboardForm() {
                   mt: 3,
                   color: `${color.starjobs.fieldLabel} !important`,
                   fontWeight: 400,
-                  fontSize: '0.75rem !important',
+                  fontSize: '0.75rem !important'
                 }}
               >
                 Allow us to know you
@@ -284,7 +283,7 @@ export default function StoreOnboardForm() {
                     justifyContent: 'center',
                     padding: '0.5rem 0.75rem',
                     transition: 'all 0.4s ease',
-                    color: `${color.starjobs.fieldLabel} !important`,
+                    color: `${color.starjobs.fieldLabel} !important`
                   }}
                   className={`radio-control-group ${values.accountType === '0' ? 'active-button' : ''}`}
                 />
@@ -300,7 +299,7 @@ export default function StoreOnboardForm() {
                     justifyContent: 'center',
                     padding: '0.5rem 0.75rem',
                     transition: 'all 0.4s ease',
-                    color: `${color.starjobs.fieldLabel} !important`,
+                    color: `${color.starjobs.fieldLabel} !important`
                   }}
                   className={`radio-control-group ${values.accountType === '1' ? 'active-button' : ''}`}
                 />
@@ -389,7 +388,7 @@ export default function StoreOnboardForm() {
           src={dataPrivacyLink}
           width="100%"
           style={{height: '90vh', overflowX: 'scroll'}}
-          frameborder="0"
+          frameBorder="0"
           title="data-privacy-policy"
         ></iframe>
         <Button onClick={handleClose} variant="contained" size="large" sx={{backgroundColor: 'starjobs.main'}}>
@@ -402,7 +401,7 @@ export default function StoreOnboardForm() {
           src="https://bit.ly/3tXxUcW"
           width="100%"
           style={{height: '90vh'}}
-          frameborder="0"
+          frameBorder="0"
           title="terms-conditions"
         ></iframe>
         <Button onClick={handleClose} variant="contained" size="large" sx={{backgroundColor: 'starjobs.main'}}>
@@ -415,7 +414,7 @@ export default function StoreOnboardForm() {
           src={termsLink}
           width="100%"
           style={{height: '90vh'}}
-          frameborder="0"
+          frameBorder="0"
           title="service-agreement"
         ></iframe>
         <Button onClick={handleClose} variant="contained" size="large" sx={{backgroundColor: 'starjobs.main'}}>

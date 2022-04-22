@@ -1,5 +1,5 @@
 // components
-import PublicProfile from 'pages/jobster/profile'
+import PublicProfile from 'src/pages/jobster/profile'
 
 const FreelancerProfile = () => {
   return <PublicProfile />

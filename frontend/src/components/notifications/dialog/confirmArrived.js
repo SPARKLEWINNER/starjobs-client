@@ -7,8 +7,8 @@ import {
   Button,
   Typography,
   Stack,
-  Box,
-} from '@material-ui/core'
+  Box
+} from '@mui/material'
 
 export default function ConfirmArrivedNotification({open, gig, onCommit, onReject}) {
   const getFormattedDate = (date) => {
@@ -37,7 +37,7 @@ export default function ConfirmArrivedNotification({open, gig, onCommit, onRejec
   const handleCommit = (value) => {
     let data = {
       new_status: 'Confirm-Arrived',
-      ...value,
+      ...value
     }
     onCommit(data)
   }
@@ -45,7 +45,7 @@ export default function ConfirmArrivedNotification({open, gig, onCommit, onRejec
   const handleReject = (value) => {
     let data = {
       new_status: 'Cancelled',
-      ...value,
+      ...value
     }
     onReject(data)
   }

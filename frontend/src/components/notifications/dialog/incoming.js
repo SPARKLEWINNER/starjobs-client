@@ -8,8 +8,8 @@ import {
   Button,
   Typography,
   Stack,
-  Box,
-} from '@material-ui/core'
+  Box
+} from '@mui/material'
 import moment from 'moment'
 
 export default function IncomingNotification({open, gig, onCommit, onReject}) {
@@ -28,7 +28,7 @@ export default function IncomingNotification({open, gig, onCommit, onReject}) {
     try {
       let data = {
         new_status: 'Confirm-Gig',
-        ...value,
+        ...value
       }
       onCommit(data)
     } catch (error) {
@@ -44,7 +44,7 @@ export default function IncomingNotification({open, gig, onCommit, onReject}) {
     setLoading(true)
     let data = {
       new_status: 'Cancelled',
-      ...value,
+      ...value
     }
     onReject(data)
     setLoading(false)

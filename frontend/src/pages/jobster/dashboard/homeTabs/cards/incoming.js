@@ -1,6 +1,6 @@
-import {Box, Card, CardContent, CardMedia, Typography, Stack} from '@material-ui/core'
+import {Box, Card, CardContent, CardMedia, Typography, Stack} from '@mui/material'
 import moment from 'moment'
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 export default function IncomingCard({gig}) {
   let {user, position, hours, fee, from, category, time} = gig
   const {location, thumbnail} = user[0]

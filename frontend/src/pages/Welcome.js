@@ -4,18 +4,18 @@ import {styled} from '@material-ui/core/styles'
 // material
 import {Box, Container, Paper, Button, Link, MobileStepper} from '@material-ui/core'
 
-import Page from 'components/Page'
-import {Verified, Start, Notification, Complete} from 'components/welcome'
-import {useAuth} from 'utils/context/AuthContext'
+import Page from 'src/components/Page'
+import {Verified, Start, Notification, Complete} from 'src/components/welcome'
+import {useAuth} from 'src/contexts/AuthContext'
 
-import {LoadingButtonStyle} from 'theme/style'
+import {LoadingButtonStyle} from 'src/theme/style'
 const steps = ['Verified', 'Notification', 'Profile', 'Start']
 
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.starjobs.main,
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -26,7 +26,7 @@ const ContentStyle = styled('div')(({theme}) => ({
 
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(1, 0),
+  padding: theme.spacing(1, 0)
 }))
 
 export default function Welcome() {
@@ -91,11 +91,11 @@ export default function Welcome() {
               alignItems: 'center',
               backgroundColor: 'starjobs.main',
               '& .MuiMobileStepper-dot': {
-                backgroundColor: 'common.white',
+                backgroundColor: 'common.white'
               },
               '& .MuiMobileStepper-dot.MuiMobileStepper-dotActive': {
-                backgroundColor: 'common.black',
-              },
+                backgroundColor: 'common.black'
+              }
             }}
             nextButton={
               <Box sx={{display: 'flex'}}>

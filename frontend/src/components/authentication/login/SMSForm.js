@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import {useState} from 'react'
+import PropTypes from 'prop-types'
 import {useSnackbar} from 'notistack5'
 import {
   Dialog,
@@ -9,12 +10,18 @@ import {
   DialogActions,
   Typography,
   Stack,
-  TextField,
-} from '@material-ui/core'
+  TextField
+} from '@mui/material'
 import {useFormik, Form, FormikProvider} from 'formik'
-import {LoadingButton} from '@material-ui/lab'
+import {LoadingButton} from '@mui/lab'
 
-import auth_api from 'api/auth'
+import auth_api from 'src/lib/auth'
+
+SMSDialog.propTypes = {
+  account: PropTypes.object,
+  open: PropTypes.Boolean,
+  onClose: PropTypes.func
+}
 
 const SMSDialog = ({account, open, onClose}) => {
   const [isLoading, setLoading] = useState(false)
@@ -24,12 +31,12 @@ const SMSDialog = ({account, open, onClose}) => {
     phone: Yup.string()
       .min(11, 'Not a valid phone number! (ex. 091523468790)')
       .max(11, 'Not a valid phone number! (ex. 091523468790)')
-      .required('Phone number is required'),
+      .required('Phone number is required')
   })
 
   const formik = useFormik({
     initialValues: {
-      phone: '',
+      phone: ''
     },
     validationSchema: SMSSchema,
     onSubmit: async (values) => {
@@ -45,7 +52,7 @@ const SMSDialog = ({account, open, onClose}) => {
       setTimeout(() => {
         window.location.reload()
       }, 3000)
-    },
+    }
   })
 
   const {errors, touched, handleSubmit, getFieldProps} = formik

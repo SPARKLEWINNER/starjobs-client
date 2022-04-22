@@ -1,18 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
-import {styled} from '@material-ui/core/styles'
-import {Link, Stack, Container, Typography, TextField, Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Link, Stack, Container, Typography, TextField, Box} from '@mui/material'
 
-import SearchIcon from '@material-ui/icons/Search'
+import SearchIcon from '@mui/icons-material/Search'
 
-import Page from '../components/Page'
-import LoadingScreen from 'components/LoadingScreen'
+import Page from 'src/components/Page'
+import LoadingScreen from 'src/components/LoadingScreen'
 
-import category_api from 'api/category'
+import category_api from 'src/lib/category'
 const RootStyle = styled(Page)(({theme}) => ({
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }))
 
 const default_image = '/static/favicon/starjobs.png'
@@ -23,15 +23,15 @@ const ContentStyle = styled('div')(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(3, 0),
+  padding: theme.spacing(3, 0)
 }))
 
 export default function BrowseCategory() {
   const [category, setCategory] = useState([
     {
       initial: [],
-      dynamic: [],
-    },
+      dynamic: []
+    }
   ])
   const [isLoading, setLoading] = useState(false)
   useEffect(() => {
@@ -96,7 +96,7 @@ export default function BrowseCategory() {
                           width: '43%',
                           m: 1,
                           textAlign: 'center',
-                          verticalAlign: {xs: 'top'},
+                          verticalAlign: {xs: 'top'}
                         }}
                         color="#000"
                       >
@@ -116,7 +116,7 @@ export default function BrowseCategory() {
                           width: '43%',
                           m: 1,
                           textAlign: 'center',
-                          verticalAlign: {xs: 'top'},
+                          verticalAlign: {xs: 'top'}
                         }}
                         color="#000"
                       >

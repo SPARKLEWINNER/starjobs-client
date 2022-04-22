@@ -4,8 +4,8 @@ import {motion} from 'framer-motion'
 import {useState, useRef} from 'react'
 
 // material
-import {alpha, useTheme, styled} from '@material-ui/core/styles'
-import {Box, Card, Paper, Button, Typography, CardContent} from '@material-ui/core'
+import {alpha, useTheme, styled} from '@mui/material/styles'
+import {Box, Card, Paper, Button, Typography, CardContent} from '@mui/material'
 
 //
 import {varFadeInRight, MotionContainer} from '../animate'
@@ -16,7 +16,7 @@ const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature(),
+  image: faker.image.nature()
 }))
 
 const CarouselImgStyle = styled('img')({
@@ -24,12 +24,12 @@ const CarouselImgStyle = styled('img')({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  position: 'absolute',
+  position: 'absolute'
 })
 
 CarouselItem.propTypes = {
   item: PropTypes.object,
-  isActive: PropTypes.bool,
+  isActive: PropTypes.bool
 }
 
 function CarouselItem({item, isActive}) {
@@ -40,7 +40,7 @@ function CarouselItem({item, isActive}) {
     <Paper
       sx={{
         position: 'relative',
-        paddingTop: {xs: '100%', md: '50%'},
+        paddingTop: {xs: '100%', md: '50%'}
       }}
     >
       <CarouselImgStyle alt={title} src={image} />
@@ -52,8 +52,8 @@ function CarouselItem({item, isActive}) {
           position: 'absolute',
           backgroundImage: `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(
             theme.palette.grey[900],
-            0,
-          )} 100%)`,
+            0
+          )} 100%)`
         }}
       />
       <CardContent
@@ -63,7 +63,7 @@ function CarouselItem({item, isActive}) {
           maxWidth: 480,
           textAlign: 'left',
           position: 'absolute',
-          color: 'common.white',
+          color: 'common.white'
         }}
       >
         <MotionContainer open={isActive}>
@@ -101,7 +101,7 @@ export default function CarouselAnimation() {
     slidesToShow: 1,
     slidesToScroll: 1,
     rtl: Boolean(theme.direction === 'rtl'),
-    beforeChange: (current, next) => setCurrentIndex(next),
+    beforeChange: (current, next) => setCurrentIndex(next)
   }
 
   const handlePrevious = () => {

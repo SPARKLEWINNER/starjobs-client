@@ -1,20 +1,22 @@
 import {useEffect} from 'react'
+import PropTypes from 'prop-types'
+
 import {useSnackbar} from 'notistack5'
 import {useNavigate} from 'react-router-dom'
 import {useState} from 'react'
-import {Stack, Button} from '@material-ui/core'
+import {Stack, Button} from '@mui/material'
 import {Form, FormikProvider, useFormik} from 'formik'
 // material
-import {LoadingButton} from '@material-ui/lab'
+import {LoadingButton} from '@mui/lab'
 import ReactCodeInput from 'react-verification-code-input'
-import {makeStyles} from '@material-ui/styles'
+import {makeStyles} from '@mui/styles'
 
-import auth_api from 'api/auth'
-import storage from 'utils/storage'
+import auth_api from 'src/lib/auth'
+import storage from 'src/utils/storage'
 
 import SMSForm from './SMSForm'
 
-import {LoadingButtonStyle} from 'theme/style'
+import {LoadingButtonStyle} from 'src/theme/style'
 
 const useStyles = makeStyles((theme) => ({
   inpt: {
@@ -34,11 +36,15 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: '0.25rem !important',
       height: '3rem !important',
       '&:nth-child(even)': {
-        margin: '0 0.5rem',
-      },
-    },
-  },
+        margin: '0 0.5rem'
+      }
+    }
+  }
 }))
+
+VerifyCodeForm.propTypes = {
+  account: PropTypes.object
+}
 
 export default function VerifyCodeForm({account}) {
   const navigate = useNavigate()
@@ -57,7 +63,7 @@ export default function VerifyCodeForm({account}) {
 
   const formik = useFormik({
     initialValues: {
-      code: '',
+      code: ''
     },
     onSubmit: async () => {
       setLoading(true)
@@ -65,7 +71,7 @@ export default function VerifyCodeForm({account}) {
 
       let form_data = {
         email: account.email,
-        code: code,
+        code: code
       }
 
       const result = await auth_api.post_verify(form_data)
@@ -82,7 +88,7 @@ export default function VerifyCodeForm({account}) {
       setLoading(false)
       enqueueSnackbar('Verify success', {variant: 'success'})
       return navigate(`/setup/welcome`, {replace: true})
-    },
+    }
   })
 
   const {handleSubmit} = formik
@@ -116,7 +122,7 @@ export default function VerifyCodeForm({account}) {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const handleResendVerification = async (type) => {

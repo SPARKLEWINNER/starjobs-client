@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 // material
-import {Grid} from '@material-ui/core'
+import {Grid} from '@mui/material'
 import ShopProductCard from './ProductCard'
 
 ProductList.propTypes = {
-  products: PropTypes.array.isRequired,
+  products: PropTypes.array.isRequired
 }
 
 export default function ProductList({products, ...other}) {

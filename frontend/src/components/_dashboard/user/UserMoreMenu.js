@@ -19,15 +19,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide,
-} from '@material-ui/core'
+  Slide
+} from '@mui/material'
 
 import {useSnackbar} from 'notistack5'
 
 //api
 
-import useUser from 'api/users'
-import storage from 'utils/storage'
+import useUser from 'src/lib/users'
+import storage from 'src/utils/storage'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -116,7 +116,7 @@ export default function UserMoreMenu({id}) {
         anchorEl={ref.current}
         onClose={() => setIsOpen(false)}
         PaperProps={{
-          sx: {width: 200, maxWidth: '100%'},
+          sx: {width: 200, maxWidth: '100%'}
         }}
         anchorOrigin={{vertical: 'top', horizontal: 'right'}}
         transformOrigin={{vertical: 'top', horizontal: 'right'}}

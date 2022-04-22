@@ -3,13 +3,13 @@ import {useState} from 'react'
 import chevronUpFill from '@iconify/icons-eva/chevron-up-fill'
 import chevronDownFill from '@iconify/icons-eva/chevron-down-fill'
 // material
-import {Menu, Button, MenuItem, Typography} from '@material-ui/core'
+import {Menu, Button, MenuItem, Typography} from '@mui/material'
 
 const SORT_BY_OPTIONS = [
   {value: 'featured', label: 'Featured'},
   {value: 'newest', label: 'Newest'},
   {value: 'priceDesc', label: 'Price: High-Low'},
-  {value: 'priceAsc', label: 'Price: Low-High'},
+  {value: 'priceAsc', label: 'Price: Low-High'}
 ]
 
 export default function ShopProductSort() {

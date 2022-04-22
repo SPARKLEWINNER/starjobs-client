@@ -1,8 +1,8 @@
-import {Box, Card, CardContent, Typography, Accordion, AccordionSummary, CardMedia, Stack} from '@material-ui/core'
+import {Box, Card, CardContent, Typography, Accordion, AccordionSummary, CardMedia, Stack} from '@mui/material'
 import {Icon} from '@iconify/react'
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
 import moment from 'moment'
-import {calculations} from 'utils/gigComputation'
+import {calculations} from 'src/utils/gigComputation'
 
 const default_url = process.env.REACT_APP_IMAGE_URL
 
@@ -41,7 +41,7 @@ export default function BillingCard({gig, _type}) {
                     borderRadius: '8px',
                     width: '130px',
                     height: '130px',
-                    margin: '0 auto',
+                    margin: '0 auto'
                   }}
                   image={`${default_url}${photo}`}
                   alt={position}

@@ -112,7 +112,7 @@ const _expObject = {
   getStore,
   removeStore,
   storeRefreshToken,
-  getRefreshToken,
+  getRefreshToken
 }
 
 export default _expObject

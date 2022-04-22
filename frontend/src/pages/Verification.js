@@ -1,21 +1,21 @@
 import React, {useEffect} from 'react'
 import {useNavigate, Link as RouterLink} from 'react-router-dom'
-import {styled} from '@material-ui/core/styles'
-import {Stack, Container, Typography, Button, Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Stack, Container, Typography, Button, Box} from '@mui/material'
 
-import Page from '../components/Page'
+import Page from 'src/components/Page'
 import {VerifyCodeForm} from '../components/authentication/login'
 
-import storage from 'utils/storage'
-import {useAuth} from 'utils/context/AuthContext'
+import storage from 'src/utils/storage'
+import {useAuth} from 'src/contexts/AuthContext'
 
-import {LoadingButtonOutline} from 'theme/style'
+import {LoadingButtonOutline} from 'src/theme/style'
 
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.common.white,
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -25,7 +25,7 @@ const ContentStyle = styled('div')(({theme}) => ({
   minHeight: '100vh',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(0, 0),
+  padding: theme.spacing(0, 0)
 }))
 
 export default function VerificationPage() {

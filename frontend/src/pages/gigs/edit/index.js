@@ -2,27 +2,27 @@ import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 
 // material
-import {Box, Button, Stack} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Button, Stack} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
-import {styled} from '@material-ui/core/styles'
+import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import {EditGigForm, EditBillingForm} from './form'
 import EditDialog from './dialog'
 
 // hooks
-import storage from 'utils/storage'
-import gigs_api from 'api/gigs'
+import storage from 'src/utils/storage'
+import gigs_api from 'src/lib/gigs'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const Edit = () => {
@@ -101,7 +101,7 @@ const Edit = () => {
     setLoading(true)
     setOpen(false)
     const form_data = {
-      ...form,
+      ...form
     }
 
     const result = await gigs_api.patch_gig_details(params.id, CURRENT_USER._id, form_data)

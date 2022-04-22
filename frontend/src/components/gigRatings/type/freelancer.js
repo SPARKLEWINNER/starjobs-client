@@ -2,14 +2,14 @@ import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import {Stack, TextField, Typography, Rating} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Stack, TextField, Typography, Rating} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
-import {fCamelCase} from 'utils/formatCase'
+import {fCamelCase} from 'src/utils/formatCase'
 
 export default function FreelancerRating({user, gigId, onClose}) {
   const {enqueueSnackbar} = useSnackbar()
@@ -18,11 +18,11 @@ export default function FreelancerRating({user, gigId, onClose}) {
     efficiency: 0,
     onTime: 0,
     completeness: 0,
-    showRate: 0,
+    showRate: 0
   })
 
   const GigSchema = Yup.object().shape({
-    comments: Yup.string(),
+    comments: Yup.string()
   })
 
   const formik = useFormik({
@@ -50,7 +50,7 @@ export default function FreelancerRating({user, gigId, onClose}) {
       let data = {
         ...RATING,
         comments: values.comments || '',
-        _id: gigId,
+        _id: gigId
       }
 
       const request = await gigs_api.post_rating_gig(data._id, data)
@@ -65,7 +65,7 @@ export default function FreelancerRating({user, gigId, onClose}) {
       setTimeout(() => {
         window.location.reload()
       }, 1000)
-    },
+    }
   })
 
   const {handleSubmit, getFieldProps} = formik

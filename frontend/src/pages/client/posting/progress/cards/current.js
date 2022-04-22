@@ -1,10 +1,10 @@
 import moment from 'moment'
 
 // material
-import {Box, Card, CardContent, Typography, Stack} from '@material-ui/core'
+import {Box, Card, CardContent, Typography, Stack} from '@mui/material'
 
 // component
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 
 function change_label_by_status(status) {
   switch (status) {

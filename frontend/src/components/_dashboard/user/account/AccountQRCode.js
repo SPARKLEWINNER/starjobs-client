@@ -1,6 +1,6 @@
-import {Link} from '@material-ui/core'
+import {Link} from '@mui/material'
 import QRCode from 'react-qr-code'
-import {Grid, Card, Stack} from '@material-ui/core'
+import {Grid, Card, Stack} from '@mui/material'
 
 const {REACT_APP_CLIENT_URL} = process.env
 const AccountQRCode = ({_data}) => {

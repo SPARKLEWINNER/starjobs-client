@@ -2,13 +2,13 @@ import {useState} from 'react'
 import * as Yup from 'yup'
 import {useSnackbar} from 'notistack5'
 import {useFormik, Form, FormikProvider} from 'formik'
-import {Stack, Card, TextField, Grid, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Stack, Card, TextField, Grid, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 
-import user_api from 'api/users'
-import {useAuth} from 'utils/context/AuthContext'
+import user_api from 'src/lib/users'
+import {useAuth} from 'src/contexts/AuthContext'
 
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 export default function AccountChangePassword() {
   const {enqueueSnackbar} = useSnackbar()
@@ -18,14 +18,14 @@ export default function AccountChangePassword() {
   const ChangePassWordSchema = Yup.object().shape({
     oldPassword: Yup.string().required('Old Password is required'),
     newPassword: Yup.string().min(6, 'Password must be at least 6 characters').required('New Password is required'),
-    confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
+    confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
   })
 
   const formik = useFormik({
     initialValues: {
       oldPassword: '',
       newPassword: '',
-      confirmNewPassword: '',
+      confirmNewPassword: ''
     },
     validationSchema: ChangePassWordSchema,
     onSubmit: async (values) => {
@@ -38,7 +38,7 @@ export default function AccountChangePassword() {
       resetForm()
       setLoading(false)
       return enqueueSnackbar('Change password success', {variant: 'success'})
-    },
+    }
   })
 
   const {errors, touched, resetForm, handleSubmit, getFieldProps} = formik

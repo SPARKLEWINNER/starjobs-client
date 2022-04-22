@@ -2,8 +2,8 @@ import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import {Stack, TextField, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Stack, TextField, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 
 export default function ContactForm({user, stored, onNext, onStoreData}) {
@@ -18,7 +18,7 @@ export default function ContactForm({user, stored, onNext, onStoreData}) {
     blkNo: Yup.string().required('Blk no. is required'),
     zipCode: Yup.string().required('Zip code is required'),
     streetName: Yup.string().required('Street Name is required'),
-    city: Yup.string().required('City is required'),
+    city: Yup.string().required('City is required')
   })
 
   const formik = useFormik({
@@ -28,7 +28,7 @@ export default function ContactForm({user, stored, onNext, onStoreData}) {
       blkNo: store.blkNo || '',
       zipCode: store.zipCode || '',
       streetName: store.streetName || '',
-      city: store.city || '',
+      city: store.city || ''
     },
     enableReinitialize: true,
     validationSchema: Schema,
@@ -53,12 +53,12 @@ export default function ContactForm({user, stored, onNext, onStoreData}) {
         blkNo: values.blkNo,
         zipCode: values.zipCode,
         streetName: values.streetName,
-        city: values.city,
+        city: values.city
       }
 
       onStoreData(data, 'contact')
       onNext()
-    },
+    }
   })
 
   const {errors, touched, handleSubmit, getFieldProps} = formik

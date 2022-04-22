@@ -3,17 +3,17 @@ import {Link as RouterLink} from 'react-router-dom'
 
 // animation
 import {motion} from 'framer-motion'
-import {MotionContainer, varBounceIn} from 'components/animate'
+import {MotionContainer, varBounceIn} from 'src/components/animate'
 
 // material
-import {styled} from '@material-ui/core/styles'
-import {Container, Typography, Link, Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Container, Typography, Link, Box} from '@mui/material'
 
 // component
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 
 // hooks
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // styles
 const RootStyle = styled(Page)(({theme}) => ({
@@ -21,7 +21,7 @@ const RootStyle = styled(Page)(({theme}) => ({
   minHeight: '100%',
   alignItems: 'center',
   paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(10),
+  paddingBottom: theme.spacing(10)
 }))
 
 export default function GigApplySuccess() {

@@ -6,9 +6,9 @@ import {
   Stack,
   DialogContent,
   DialogContentText,
-  Box,
-} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+  Box
+} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useState} from 'react'
 
 export default function ConfirmEndShiftNotification({open, gig, onCommit, onReject, handleClose}) {
@@ -18,7 +18,7 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, onReje
     try {
       let data = {
         new_status: 'Confirm-End-Shift',
-        ...value,
+        ...value
       }
       onCommit(data)
     } catch (error) {

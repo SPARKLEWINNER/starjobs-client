@@ -1,9 +1,9 @@
 import moment from 'moment'
 // material
-import {Stack, Card, Typography, Grid} from '@material-ui/core'
+import {Stack, Card, Typography, Grid} from '@mui/material'
 
 // utils
-import {calculations} from 'utils/gigComputation'
+import {calculations} from 'src/utils/gigComputation'
 
 const ActivityDetailsCard = ({details}) => {
   if (!details || details === undefined) return ''

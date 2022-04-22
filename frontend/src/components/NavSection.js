@@ -5,8 +5,8 @@ import {NavLink as RouterLink, matchPath, useLocation} from 'react-router-dom'
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill'
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
 // material
-import {alpha, useTheme, styled} from '@material-ui/core/styles'
-import {Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton} from '@material-ui/core'
+import {alpha, useTheme, styled} from '@mui/material/styles'
+import {Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton} from '@mui/material'
 
 const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(({theme}) => ({
   ...theme.typography.body2,
@@ -26,8 +26,8 @@ const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props
     position: 'absolute',
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
-    backgroundColor: theme.palette.starjobs.main,
-  },
+    backgroundColor: theme.palette.starjobs.main
+  }
 }))
 
 const ListItemIconStyle = styled(ListItemIcon)({
@@ -35,12 +35,12 @@ const ListItemIconStyle = styled(ListItemIcon)({
   height: 22,
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'center'
 })
 
 NavItem.propTypes = {
   item: PropTypes.object,
-  active: PropTypes.func,
+  active: PropTypes.func
 }
 
 function NavItem({item, active, account}) {
@@ -57,12 +57,12 @@ function NavItem({item, active, account}) {
     color: 'starjobs.main',
     fontWeight: 'fontWeightMedium',
     bgcolor: alpha(theme.palette.starjobs.main, theme.palette.action.selectedOpacity),
-    '&:before': {display: 'block'},
+    '&:before': {display: 'block'}
   }
 
   const activeSubStyle = {
     color: 'text.primary',
-    fontWeight: 'fontWeightMedium',
+    fontWeight: 'fontWeightMedium'
   }
 
   if (children) {
@@ -71,7 +71,7 @@ function NavItem({item, active, account}) {
         <ListItemStyle
           onClick={handleOpen}
           sx={{
-            ...(isActiveRoot && activeRootStyle),
+            ...(isActiveRoot && activeRootStyle)
           }}
         >
           <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
@@ -96,7 +96,7 @@ function NavItem({item, active, account}) {
                   component={RouterLink}
                   to={path}
                   sx={{
-                    ...(isActiveSub && activeSubStyle),
+                    ...(isActiveSub && activeSubStyle)
                   }}
                 >
                   <ListItemIconStyle>
@@ -113,8 +113,8 @@ function NavItem({item, active, account}) {
                         transition: (theme) => theme.transitions.create('transform'),
                         ...(isActiveSub && {
                           transform: 'scale(2)',
-                          bgcolor: 'starjobs.main',
-                        }),
+                          bgcolor: 'starjobs.main'
+                        })
                       }}
                     />
                   </ListItemIconStyle>
@@ -133,7 +133,7 @@ function NavItem({item, active, account}) {
       component={RouterLink}
       to={path}
       sx={{
-        ...(isActiveRoot && activeRootStyle),
+        ...(isActiveRoot && activeRootStyle)
       }}
     >
       <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
@@ -144,7 +144,7 @@ function NavItem({item, active, account}) {
 }
 
 NavSection.propTypes = {
-  navConfig: PropTypes.array,
+  navConfig: PropTypes.array
 }
 
 export default function NavSection({account, navConfig, ...other}) {

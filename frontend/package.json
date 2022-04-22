@@ -11,7 +11,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+    "prettier": "npx prettier src test --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix"
   },
   "eslintConfig": {
     "extends": [
@@ -20,6 +22,17 @@
       "eslint:recommended",
       "plugin:react/recommended",
       "plugin:react/recommended"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
     ]
   },
   "babel": {
@@ -47,11 +60,12 @@
     "@iconify/icons-eva": "^1.1.0",
     "@iconify/icons-ic": "^1.1.8",
     "@iconify/react": "^1.1.4",
-    "@material-ui/core": "^5.0.0-beta.2",
-    "@material-ui/icons": "^5.0.0-beta.1",
-    "@material-ui/lab": "^5.0.0-alpha.41",
-    "@material-ui/styles": "^5.0.0-beta.2",
-    "@material-ui/utils": "^5.0.0-beta.1",
+    "@mui/core": "^5.0.0-alpha.54",
+    "@mui/icons-material": "^5.6.0",
+    "@mui/lab": "^5.0.0-alpha.76",
+    "@mui/material": "^5.5.3",
+    "@mui/styles": "^5.5.3",
+    "@mui/utils": "^5.6.1",
     "@testing-library/jest-dom": "^5.14.1",
     "apisauce": "^2.1.1",
     "change-case": "^4.1.2",
@@ -77,6 +91,8 @@
     "react-alice-carousel": "^2.5.1",
     "react-datepicker": "^4.5.0",
     "react-dom": "^17.0.2",
+    "react-draggable": "^4.4.4",
+    "react-dropzone": "^12.0.5",
     "react-helmet-async": "^1.0.9",
     "react-image-lightbox": "^5.1.4",
     "react-intersection-observer": "^8.32.0",
@@ -102,14 +118,12 @@
   "devDependencies": {
     "@babel/core": "^7.14.8",
     "@babel/eslint-parser": "7.14.7",
-    "eslint": "^8.13.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "2.23.4",
-    "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "4.2.0",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.0",
     "node-sass": "^7.0.1",
-    "prettier": "^2.3.2"
+    "prettier": "^2.6.2"
   }
 }

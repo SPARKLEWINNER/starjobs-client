@@ -1,5 +1,5 @@
 import React from 'react'
-import {Snackbar, Button} from '@material-ui/core'
+import {Snackbar, Button} from '@mui/material'
 import {register} from '../serviceWorkerRegistration'
 
 const ServiceWorkerWrapper = () => {

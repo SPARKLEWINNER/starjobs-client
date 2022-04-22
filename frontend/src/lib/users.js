@@ -1,5 +1,5 @@
-import request from 'utils/header'
-import storage from 'utils/storage'
+import request from 'src/utils/header'
+import storage from 'src/utils/storage'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 const timezone = require('dayjs/plugin/timezone')
@@ -106,7 +106,7 @@ const _expObject = {
   put_user_notification_read,
   patch_user_password,
   get_user_activity,
-  get_user_activity_client,
+  get_user_activity_client
 }
 
 export default _expObject

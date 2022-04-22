@@ -3,17 +3,17 @@ import {useSnackbar} from 'notistack5'
 import moment from 'moment'
 
 // components
-import {Box, Stack, Typography, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Card} from '@mui/material'
 
 // component
 import {BillingCard} from './cards'
 import CurrentModalPopup from './modal'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 export default function CurrentTab({gigs, user, onEndShift}) {
   const {enqueueSnackbar} = useSnackbar()
@@ -26,7 +26,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     if (!user) return
     let form_data = {
       status: value.new_status,
-      uid: user._id,
+      uid: user._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)

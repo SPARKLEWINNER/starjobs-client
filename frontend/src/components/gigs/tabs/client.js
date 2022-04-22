@@ -9,16 +9,16 @@ import {
   RadioGroup,
   DialogActions,
   Radio,
-  FormControlLabel,
-} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
-import Sort from '@material-ui/icons/Sort'
+  FormControlLabel
+} from '@mui/material'
+import {styled} from '@mui/material/styles'
+import Sort from '@mui/icons-material/Sort'
 import moment from 'moment'
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 // component
-import {WaitingCard} from 'components/gigCards'
+import {WaitingCard} from 'src/components/gigCards'
 
 // variable
 const DRAWER_WIDTH = 280
@@ -26,8 +26,8 @@ const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 export default function ClientTab({category}) {
@@ -80,7 +80,7 @@ export default function ClientTab({category}) {
     switch (sortType) {
       case 'N-O':
         finalSortedData = data.sort((a, b) =>
-          a.dateCreated > b.dateCreated ? -1 : a.dateCreated < b.dateCreated ? 1 : 0,
+          a.dateCreated > b.dateCreated ? -1 : a.dateCreated < b.dateCreated ? 1 : 0
         )
         setData(finalSortedData)
         //Needs to put this here cause for some reason useEffect doesn't execute even if the [data] is changed
@@ -88,7 +88,7 @@ export default function ClientTab({category}) {
         break
       case 'O-N':
         finalSortedData = data.sort((a, b) =>
-          a.dateCreated < b.dateCreated ? -1 : a.dateCreated > b.dateCreated ? 1 : 0,
+          a.dateCreated < b.dateCreated ? -1 : a.dateCreated > b.dateCreated ? 1 : 0
         )
         setData(finalSortedData)
         setRenderData(data.slice(0, 3))
@@ -108,7 +108,7 @@ export default function ClientTab({category}) {
       load()
     },
     // eslint-disable-next-line
-    [],
+    []
   )
 
   useEffect(() => {

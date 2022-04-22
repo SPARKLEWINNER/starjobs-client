@@ -1,6 +1,6 @@
 // material
-import {useTheme} from '@material-ui/core/styles'
-import {Box} from '@material-ui/core'
+import {useTheme} from '@mui/material/styles'
+import {Box} from '@mui/material'
 
 export default function MotivationIllustration({...other}) {
   const theme = useTheme()
@@ -16,8 +16,7 @@ export default function MotivationIllustration({...other}) {
         xmlnsXlink="http://www.w3.org/1999/xlink"
         width="100%"
         height="100%"
-        viewBox="0 0 480 360"
-      >
+        viewBox="0 0 480 360">
         <defs>
           <linearGradient id="BG" x1="19.496%" x2="77.479%" y1="71.822%" y2="16.69%">
             <stop offset="0%" stopColor={PRIMARY_MAIN} />

@@ -1,12 +1,12 @@
 import {useState, useEffect} from 'react'
 // material
-import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
+import {styled} from '@mui/material/styles'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 
 // component
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import PersonalForm from './form/personalForm'
 import EmploymentForm from './form/employmentForm'
 import ExpertiseForm from './form/expertiseForm'
@@ -15,9 +15,9 @@ import RateForm from './form/rateForm'
 import ProfileForm from './form/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
-import user_api from 'api/users'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
+import user_api from 'src/lib/users'
 import {useNavigate} from 'react-router-dom'
 
 // variables
@@ -29,7 +29,7 @@ const steps = [
   'Expertise',
   'Education Background',
   'Rate & Payment',
-  'Profile Picture',
+  'Profile Picture'
 ]
 
 // styles
@@ -37,8 +37,8 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 export default function LinearAlternativeLabel() {
@@ -54,7 +54,7 @@ export default function LinearAlternativeLabel() {
     expertise: [],
     education: [],
     rate: [],
-    photo: '',
+    photo: ''
   })
 
   useEffect(() => {
@@ -103,16 +103,16 @@ export default function LinearAlternativeLabel() {
             permanentZipCode: details[0].permanentZipCode,
             emergencyName: details[0].emergencyName,
             emergencyContact: details[0].emergencyContact,
-            emergencyRelation: details[0].emergencyRelation,
+            emergencyRelation: details[0].emergencyRelation
           },
           rate: {
             rateAmount: details[0].rate.rateAmount,
             rateType: details[0].rate.rateType,
             accountType: details[0].payment.acccountPaymentName,
             accountName: details[0].payment.acccountPaymentNumber,
-            accountNumber: details[0].payment.accountPaymentType,
+            accountNumber: details[0].payment.accountPaymentType
           },
-          photo: `${details[0].photo}`,
+          photo: `${details[0].photo}`
         }
 
         sessionStorage.setItem(
@@ -136,8 +136,8 @@ export default function LinearAlternativeLabel() {
             permanentZipCode: details[0].permanentZipCode,
             emergencyName: details[0].emergencyName,
             emergencyContact: details[0].emergencyContact,
-            emergencyRelation: details[0].emergencyRelation,
-          }),
+            emergencyRelation: details[0].emergencyRelation
+          })
         )
 
         sessionStorage.setItem('work', JSON.stringify(details[0].work))
@@ -151,8 +151,8 @@ export default function LinearAlternativeLabel() {
             rateType: details[0].rate.rateType,
             accountType: details[0].payment.acccountPaymentName,
             accountName: details[0].payment.acccountPaymentNumber,
-            accountNumber: details[0].payment.accountPaymentType,
-          }),
+            accountNumber: details[0].payment.accountPaymentType
+          })
         )
 
         sessionStorage.setItem('photo', details[0].photo)
@@ -163,7 +163,7 @@ export default function LinearAlternativeLabel() {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -204,9 +204,9 @@ export default function LinearAlternativeLabel() {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
-      photo: form.photo,
+      photo: form.photo
     }
 
     const result = await onboard_api.patch_freelancer_profile(form_data, user._id)
@@ -305,10 +305,10 @@ export default function LinearAlternativeLabel() {
                     </Typography>
                     <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{marginTop: '0 !important'}}>
                       {form.expertise.workType.split('=>').length > 0 ? (
-                        form.expertise.workType.split('=>').map((v, k) => {
+                        form.expertise.workType.split('=>').map((v, key) => {
                           return (
                             <Typography
-                              Typography
+                              key={key}
                               variant="body2"
                               sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
                             >

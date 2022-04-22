@@ -2,28 +2,28 @@ import {useEffect, useState} from 'react'
 import moment from 'moment'
 
 // material
-import {Stack, Button, Box, Card, CardContent, Typography} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Stack, Button, Box, Card, CardContent, Typography} from '@mui/material'
+import {styled} from '@mui/material/styles'
 
 // components
-import Page from '../components/Page'
+import Page from 'src/components/Page'
 
 // api
-import user_api from 'api/users'
-import storage from 'utils/storage'
-import {calculations} from 'utils/gigComputation'
+import user_api from 'src/lib/users'
+import storage from 'src/utils/storage'
+import {calculations} from 'src/utils/gigComputation'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   },
   [theme.breakpoints.up('xs')]: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
+    paddingRight: theme.spacing(2)
+  }
 }))
 
 const ClientMyActivity = () => {
@@ -60,7 +60,7 @@ const ClientMyActivity = () => {
       load()
     },
     // eslint-disable-next-line
-    [],
+    []
   )
 
   useEffect(() => {

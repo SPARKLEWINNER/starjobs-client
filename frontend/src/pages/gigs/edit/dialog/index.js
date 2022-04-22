@@ -6,8 +6,8 @@ import {
   DialogActions,
   Button,
   Typography,
-  Stack,
-} from '@material-ui/core'
+  Stack
+} from '@mui/material'
 
 const EditDialog = ({open, onConfirm, handleClose}) => {
   const handleConfirmGig = () => {

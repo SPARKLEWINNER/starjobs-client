@@ -1,7 +1,7 @@
 import {useState} from 'react'
 // material
-import {Box, Button, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Button, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 
 // component form
@@ -9,7 +9,7 @@ import {ParcelForm, BillingForm} from './form'
 import {CreateParcelDialog} from './dialog'
 
 // hooks
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
@@ -72,7 +72,7 @@ export default function CreateParcelForm({user}) {
 
     try {
       const form_data = {
-        ...form,
+        ...form
       }
       const result = await gigs_api.post_gig(user._id, form_data)
       if (!result.ok) return enqueueSnackbar('Unable to process your parcel posting', {variant: 'error'})
@@ -83,7 +83,7 @@ export default function CreateParcelForm({user}) {
           form.date
         } ${tConvert(form.from)} - ${tConvert(form.time)} \n ${form.shift} shift ${form.hours} hours \n Fee: P ${
           form.fee
-        }`,
+        }`
       )
 
       enqueueSnackbar('Parcel post success', {variant: 'success'})

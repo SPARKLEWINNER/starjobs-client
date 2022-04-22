@@ -1,7 +1,7 @@
 import {Link as RouterLink} from 'react-router-dom'
-import {Stack, Typography, Box, Button, Link} from '@material-ui/core'
+import {Stack, Typography, Box, Button, Link} from '@mui/material'
 
-import {LoadingButtonInvertedStyle} from 'theme/style'
+import {LoadingButtonInvertedStyle} from 'src/theme/style'
 export default function VerifiedWelcome({user}) {
   return (
     <Stack sx={{mb: 5}}>

@@ -1,12 +1,12 @@
 import {useEffect, useState} from 'react'
-import {Box, Stack, Typography, Grid, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Grid, Card} from '@mui/material'
 import moment from 'moment'
 
 // components
 import {BillingCard} from '../../../cards'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 // status
 const current_status = [
@@ -16,7 +16,7 @@ const current_status = [
   'Confirm-Arrived',
   'On-going',
   'End-Shift',
-  'Confirm-End-Shift',
+  'Confirm-End-Shift'
 ]
 
 export default function CurrentTab({gigs}) {

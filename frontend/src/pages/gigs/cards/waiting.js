@@ -1,11 +1,11 @@
 import {Link as RouterLink} from 'react-router-dom'
-import {Box, Card, CardContent, CardMedia, Link, Typography, Stack} from '@material-ui/core'
+import {Box, Card, CardContent, CardMedia, Link, Typography, Stack} from '@mui/material'
 import moment from 'moment'
 import {Icon} from '@iconify/react'
 import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 
-import {calculations} from 'utils/gigComputation'
+import {calculations} from 'src/utils/gigComputation'
 export default function WaitingCard({gig, _type, category}) {
   let {position, uid, hours, fee, user, from, time, locationRate} = gig
   const {thumbnail, location} = user[0]

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 // material
-import {Box} from '@material-ui/core'
+import {Box} from '@mui/material'
 
 LogoOutline.propTypes = {
-  sx: PropTypes.object,
+  sx: PropTypes.object
 }
 
 export default function LogoOutline({sx}) {

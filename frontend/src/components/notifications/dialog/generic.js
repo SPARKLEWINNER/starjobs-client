@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import {
   Dialog,
   DialogContent,
@@ -7,11 +9,17 @@ import {
   Button,
   Typography,
   Stack,
-  Box,
-} from '@material-ui/core'
+  Box
+} from '@mui/material'
 import {useNavigate} from 'react-router-dom'
 import {useState} from 'react'
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
+
+GenericNotification.propTypes = {
+  open: PropTypes.boolean,
+  details: PropTypes.object,
+  handleClose: PropTypes.func
+}
 
 export default function GenericNotification({open, details, handleClose}) {
   const {currentUser} = useAuth()

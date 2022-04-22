@@ -2,13 +2,13 @@ import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 
 // material
-import {Box, Paper, Stack, Button, Avatar, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Paper, Stack, Button, Avatar, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
-import {styled} from '@material-ui/core/styles'
+import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import PersonalForm from './form/personalForm'
 import ContactForm from './form/contactForm'
 import IndustryForm from './form/industryForm'
@@ -16,8 +16,8 @@ import RateForm from './form/rateForm'
 import ProfileForm from './form/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
 
 // variables
 const image_bucket = process.env.REACT_APP_IMAGE_URL
@@ -29,8 +29,8 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const OnboardPage = () => {
@@ -46,7 +46,7 @@ const OnboardPage = () => {
     industry: [],
     rate: [],
     photo: '',
-    documents: '',
+    documents: ''
   })
 
   useEffect(() => {
@@ -113,10 +113,10 @@ const OnboardPage = () => {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
       photo: form.photo,
-      documents: form.documents,
+      documents: form.documents
     }
 
     const result = await onboard_api.post_client_onboard(form_data, user._id)

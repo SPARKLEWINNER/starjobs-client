@@ -8,9 +8,9 @@ import {
   DialogActions,
   Button,
   Typography,
-  Stack,
-} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+  Stack
+} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 
 const CreateGigDialog = ({open, onConfirm, handleClose}) => {
   const [loading, setLoading] = useState(false)

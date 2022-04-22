@@ -1,20 +1,20 @@
 import {useState, useEffect} from 'react'
 // material
-import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack5'
 
 // component form
-import PersonalForm from 'components/freelancerOnboard/form/personalForm'
-import EmploymentForm from 'components/freelancerOnboard/form/employmentForm'
-import ExpertiseForm from 'components/freelancerOnboard/form/expertiseForm'
-import EducationForm from 'components/freelancerOnboard/form/educationForm'
-import RateForm from 'components/freelancerOnboard/form/rateForm'
-import ProfileForm from 'components/freelancerOnboard/form/profileForm'
+import PersonalForm from 'src/components/freelancerOnboard/form/personalForm'
+import EmploymentForm from 'src/components/freelancerOnboard/form/employmentForm'
+import ExpertiseForm from 'src/components/freelancerOnboard/form/expertiseForm'
+import EducationForm from 'src/components/freelancerOnboard/form/educationForm'
+import RateForm from 'src/components/freelancerOnboard/form/rateForm'
+import ProfileForm from 'src/components/freelancerOnboard/form/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
 import {useNavigate} from 'react-router-dom'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL
@@ -24,7 +24,7 @@ const steps = [
   'Expertise',
   'Education Background',
   'Rate & Payment',
-  'Profile Picture',
+  'Profile Picture'
 ]
 
 export default function LinearAlternativeLabel() {
@@ -40,7 +40,7 @@ export default function LinearAlternativeLabel() {
     expertise: [],
     education: [],
     rate: [],
-    photo: '',
+    photo: ''
   })
 
   useEffect(() => {
@@ -109,9 +109,9 @@ export default function LinearAlternativeLabel() {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
-      photo: form.photo,
+      photo: form.photo
     }
 
     const result = await onboard_api.post_freelancer_onboard(form_data, user._id)

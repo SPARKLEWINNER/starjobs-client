@@ -1,6 +1,6 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom'
-import {styled} from '@material-ui/core/styles'
+import {styled} from '@mui/material/styles'
 import {
   // Badge,
   Box,
@@ -8,9 +8,9 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
-} from '@material-ui/core'
-import ChevronLeftOutlinedIcon from '@material-ui/icons/ChevronLeftOutlined'
+  Button
+} from '@mui/material'
+import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined'
 
 import AccountPopover from './AccountPopover'
 const DRAWER_WIDTH = 280
@@ -26,16 +26,16 @@ const RootStyle = styled(AppBar)(({theme}) => ({
   left: 0,
   margin: '0 auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const ToolbarStyle = styled(Toolbar)(({theme}) => ({
   minHeight: APPBAR_MOBILE,
   [theme.breakpoints.up('lg')]: {
     minHeight: APPBAR_DESKTOP,
-    padding: theme.spacing(0, 5),
-  },
+    padding: theme.spacing(0, 5)
+  }
 }))
 
 const DashboardNavbar = ({location, user}) => {
@@ -47,7 +47,7 @@ const DashboardNavbar = ({location, user}) => {
       return {
         child: true,
         status: false,
-        name: '',
+        name: ''
       }
     }
     let check_applicant_profile = url.split('/').includes('applicant')
@@ -55,7 +55,7 @@ const DashboardNavbar = ({location, user}) => {
       return {
         child: true,
         status: false,
-        name: 'Jobster Profile',
+        name: 'Jobster Profile'
       }
     }
 
@@ -64,7 +64,7 @@ const DashboardNavbar = ({location, user}) => {
       return {
         child: true,
         status: false,
-        name: 'Notification Details',
+        name: 'Notification Details'
       }
     }
 
@@ -73,7 +73,7 @@ const DashboardNavbar = ({location, user}) => {
       return {
         child: true,
         status: false,
-        name: 'Browse Gigs',
+        name: 'Browse Gigs'
       }
     }
 
@@ -81,63 +81,63 @@ const DashboardNavbar = ({location, user}) => {
       case '/client/my-activity':
         return {
           status: true,
-          name: 'My Activity',
+          name: 'My Activity'
         }
       case '/client/gig/create':
         return {
           status: true,
-          name: 'Gigs',
+          name: 'Gigs'
         }
       case '/account/change-password':
         return {
           status: true,
-          name: 'Account',
+          name: 'Account'
         }
       case '/freelancer/search':
       case '/client/search':
         return {
           status: true,
-          name: 'Browse by Category',
+          name: 'Browse by Category'
         }
       case '/freelancer/message':
       case '/client/message':
         return {
           status: true,
-          name: 'Notifications',
+          name: 'Notifications'
         }
       case '/freelancer/history':
       case '/client/history':
         return {
           status: true,
-          name: 'My Activity',
+          name: 'My Activity'
         }
       case '/freelancer/dashboard':
         return {
           status: false,
-          name: 'Gigs',
+          name: 'Gigs'
         }
       case '/freelancer/app':
       case '/client/app':
         return {
           status: false,
-          name: '',
+          name: ''
         }
       case '/freelancer/edit':
       case '/client/edit':
         return {
           status: false,
-          name: 'Edit Profile',
+          name: 'Edit Profile'
         }
       case '/freelancer/profile':
       case '/client/profile':
         return {
           child: false,
           status: false,
-          name: 'Profile',
+          name: 'Profile'
         }
       default:
         return {
-          status: false,
+          status: false
         }
     }
   }

@@ -1,5 +1,5 @@
-import request from 'utils/header'
-import storage from 'utils/storage'
+import request from 'src/utils/header'
+import storage from 'src/utils/storage'
 const base_url = process.env.REACT_APP_API_URL
 
 const request_upload_url = async (_file, type) => {
@@ -18,8 +18,8 @@ const request_upload_url = async (_file, type) => {
   const get_url = await fetch(`${base_url}/upload`, {
     headers: {
       'Content-Type': _file.type,
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   }).then((r) => {
     return r.json()
   })
@@ -35,12 +35,12 @@ const request_upload_url = async (_file, type) => {
   }
 
   let blobData = new Blob([new Uint8Array(array)], {
-    type: _file.type,
+    type: _file.type
   })
 
   const result = await fetch(uploadURL, {
     method: 'PUT',
-    body: blobData,
+    body: blobData
   }).then((response) => {
     return response
   })
@@ -68,7 +68,7 @@ const _expObject = {
   post_client_onboard,
   patch_client_profile,
   patch_freelancer_profile,
-  patch_client_documents,
+  patch_client_documents
 }
 
 export default _expObject

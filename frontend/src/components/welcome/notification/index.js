@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 
 // material
-import {Stack, Typography, Box} from '@material-ui/core'
+import {Stack, Typography, Box} from '@mui/material'
 
 export default function NotificationTab() {
   const [isEnable, setEnabled] = useState(false)

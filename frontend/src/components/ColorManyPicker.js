@@ -2,10 +2,10 @@ import PropTypes from 'prop-types'
 import {Icon} from '@iconify/react'
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill'
 // material
-import {Box, Checkbox} from '@material-ui/core'
+import {Box, Checkbox} from '@mui/material'
 
 IconColor.propTypes = {
-  sx: PropTypes.object,
+  sx: PropTypes.object
 }
 
 function IconColor({sx, ...other}) {
@@ -22,9 +22,9 @@ function IconColor({sx, ...other}) {
         bgcolor: 'currentColor',
         transition: (theme) =>
           theme.transitions.create('all', {
-            duration: theme.transitions.duration.shortest,
+            duration: theme.transitions.duration.shortest
           }),
-        ...sx,
+        ...sx
       }}
       {...other}
     >
@@ -36,7 +36,7 @@ function IconColor({sx, ...other}) {
 ColorManyPicker.propTypes = {
   colors: PropTypes.array.isRequired,
   onChecked: PropTypes.func,
-  sx: PropTypes.object,
+  sx: PropTypes.object
 }
 
 export default function ColorManyPicker({colors, onChecked, sx, ...other}) {
@@ -56,8 +56,8 @@ export default function ColorManyPicker({colors, onChecked, sx, ...other}) {
               <IconColor
                 sx={{
                   ...(isWhite && {
-                    border: (theme) => `solid 1px ${theme.palette.divider}`,
-                  }),
+                    border: (theme) => `solid 1px ${theme.palette.divider}`
+                  })
                 }}
               />
             }
@@ -72,20 +72,20 @@ export default function ColorManyPicker({colors, onChecked, sx, ...other}) {
                     height: '100%',
                     borderRadius: '50%',
                     position: 'absolute',
-                    boxShadow: '4px 4px 8px 0 currentColor',
+                    boxShadow: '4px 4px 8px 0 currentColor'
                   },
                   '& svg': {width: 12, height: 12, color: 'common.white'},
                   ...(isWhite && {
                     border: (theme) => `solid 1px ${theme.palette.divider}`,
                     boxShadow: (theme) => `4px 4px 8px 0 ${theme.palette.grey[500_24]}`,
-                    '& svg': {width: 12, height: 12, color: 'common.black'},
-                  }),
+                    '& svg': {width: 12, height: 12, color: 'common.black'}
+                  })
                 }}
               />
             }
             sx={{
               color,
-              '&:hover': {opacity: 0.72},
+              '&:hover': {opacity: 0.72}
             }}
             {...other}
           />

@@ -3,18 +3,18 @@ import {useParams} from 'react-router'
 import moment from 'moment'
 
 // material
-import {Box, Stack, Typography, Card, Grid} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
-import {CalendarTodayOutlined, LocationOnOutlined, AccessTime, AccessAlarm, Timelapse, Paid} from '@material-ui/icons'
+import {Box, Stack, Typography, Card, Grid} from '@mui/material'
+import {styled} from '@mui/material/styles'
+import {CalendarTodayOutlined, LocationOnOutlined, AccessTime, AccessAlarm, Timelapse, Paid} from '@mui/icons-material'
 
 // components
-import Page from 'components/Page'
-import LoadingScreen from 'components/LoadingScreen'
+import Page from 'src/components/Page'
+import LoadingScreen from 'src/components/LoadingScreen'
 import {capitalCase} from 'change-case'
 
 // api
-import gigs_api from 'api/gigs'
-import {calculations} from 'utils/gigComputation'
+import gigs_api from 'src/lib/gigs'
+import {calculations} from 'src/utils/gigComputation'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -23,8 +23,8 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const FullDetails = () => {
@@ -59,7 +59,7 @@ const FullDetails = () => {
       }
     },
     // eslint-disable-next-line
-    [],
+    []
   )
 
   return (
@@ -73,7 +73,7 @@ const FullDetails = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              flexDirection: 'column',
+              flexDirection: 'column'
             }}
           >
             <Typography variant="h4" color="primary.main" sx={{fontWeight: 'bold', textAlign: 'center'}}>
@@ -121,7 +121,7 @@ const FullDetails = () => {
                   px: 2,
                   py: 4,
                   borderRadius: 1,
-                  alignItems: 'flex-start',
+                  alignItems: 'flex-start'
                 }}
               >
                 <Grid container spacing={2}>

@@ -1,20 +1,20 @@
 import * as Yup from 'yup'
-import { useState } from 'react'
-import { useFormik, Form, FormikProvider } from 'formik'
+import {useState} from 'react'
+import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import { Stack, TextField, Divider, Box, Typography, Select } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
-import { useSnackbar } from 'notistack5'
+import {Stack, TextField, Divider, Box, Typography, Select} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack5'
 
 const PROGRAM_COURSE = [
-  { label: 'None', value: 'None' },
-  { label: 'Outstanding Leadership Award', value: 'Outstanding Leadership Award' },
-  { label: 'Overachiever Award', value: 'Overachiever Award' },
-  { label: 'Exemplary Character Award', value: 'Exemplary Character Award' },
-  { label: 'The Epitome of Teamwork Award', value: 'The Epitome of Teamwork Award' },
-  { label: 'Mentorship Award', value: 'Mentorship Award' },
-  { label: 'Innovation Award', value: 'Innovation Award' },
-  { label: 'Extraordinary Diligence Award', value: 'Extraordinary Diligence Award' },
+  {label: 'None', value: 'None'},
+  {label: 'Outstanding Leadership Award', value: 'Outstanding Leadership Award'},
+  {label: 'Overachiever Award', value: 'Overachiever Award'},
+  {label: 'Exemplary Character Award', value: 'Exemplary Character Award'},
+  {label: 'The Epitome of Teamwork Award', value: 'The Epitome of Teamwork Award'},
+  {label: 'Mentorship Award', value: 'Mentorship Award'},
+  {label: 'Innovation Award', value: 'Innovation Award'},
+  {label: 'Extraordinary Diligence Award', value: 'Extraordinary Diligence Award'}
 ]
 
 const fields = [
@@ -25,12 +25,12 @@ const fields = [
   'vocationalProgram',
   'vocationalYear',
   'vocationalAwards',
-  'vocationalProgramCourse',
+  'vocationalProgramCourse'
 ]
 
-export default function PersonalForm({ user, stored, onNext, onStoreData }) {
+export default function PersonalForm({user, stored, onNext, onStoreData}) {
   const [isLoading, setLoading] = useState(false)
-  const { enqueueSnackbar } = useSnackbar()
+  const {enqueueSnackbar} = useSnackbar()
   let store = stored.education ? stored.education : undefined
 
   const PersonalSchema = Yup.object().shape({
@@ -43,7 +43,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
     collegeDegree: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!'),
     vocationalProgram: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!'),
     vocationalYear: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!'),
-    vocationalAwards: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!'),
+    vocationalAwards: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!')
   })
 
   const formik = useFormik({
@@ -57,7 +57,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
       collegeDegree: store.collegeDegree || '',
       vocationalProgram: store.vocationalProgram || '',
       vocationalYear: store.vocationalYear || '',
-      vocationalAwards: store.vocationalAwards || '',
+      vocationalAwards: store.vocationalAwards || ''
     },
     enableReinitialize: true,
     validationSchema: PersonalSchema,
@@ -76,8 +76,6 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
         }
       })
 
-
-
       if (
         !values.highSchoolName ||
         !values.highSchoolYear ||
@@ -89,26 +87,26 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
         !values.vocationalYear ||
         !values.vocationalAwards
       ) {
-        enqueueSnackbar('Kindly put N/A for empty fields', { variant: 'warning' })
+        enqueueSnackbar('Kindly put N/A for empty fields', {variant: 'warning'})
         return setLoading(false)
       }
 
       onStoreData(values, 'education')
       onNext()
-    },
+    }
   })
 
-  const { errors, values, touched, handleSubmit, setFieldValue, getFieldProps } = formik
+  const {errors, values, touched, handleSubmit, setFieldValue, getFieldProps} = formik
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Typography variant="body1" sx={{ mb: 3, mt: 3, fontWeight: 'bold' }}>
+        <Typography variant="body1" sx={{mb: 3, mt: 3, fontWeight: 'bold'}}>
           Education Background
         </Typography>
         <Stack spacing={3}>
           <Box>
-            <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
+            <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
                 fullWidth
                 label="High school"
@@ -125,7 +123,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
               />
             </Stack>
 
-            <Stack sx={{ mt: 3 }} direction={{ xs: 'column', sm: 'column' }} spacing={2}>
+            <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
                 fullWidth
                 label="Awards Received"
@@ -135,9 +133,9 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
               />
             </Stack>
           </Box>
-          <Divider sx={{ my: 3 }} />
+          <Divider sx={{my: 3}} />
           <Box>
-            <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
+            <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
                 fullWidth
                 label="College"
@@ -154,7 +152,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
               />
             </Stack>
 
-            <Stack sx={{ mt: 3 }} direction={{ xs: 'column', sm: 'column' }} spacing={2}>
+            <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
                 fullWidth
                 label="Awards Received"
@@ -164,9 +162,9 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
               />
             </Stack>
           </Box>
-          <Divider sx={{ my: 3 }} />
+          <Divider sx={{my: 3}} />
           <Box>
-            <Stack direction={{ xs: 'row', sm: 'row' }} spacing={2}>
+            <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
                 fullWidth
                 label="Vocational Program"
@@ -183,7 +181,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
               />
             </Stack>
 
-            <Stack sx={{ mt: 3 }} direction={{ xs: 'column', sm: 'column' }} spacing={2}>
+            <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
                 fullWidth
                 label="Awards Received"
@@ -192,7 +190,7 @@ export default function PersonalForm({ user, stored, onNext, onStoreData }) {
                 helperText={touched.vocationalAwards && errors.vocationalAwards}
               />
 
-              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="body2" sx={{fontWeight: 'bold'}}>
                 Program / Course
               </Typography>
               <Select native {...getFieldProps('vocationalProgramCourse')} value={values.civilStatus}>

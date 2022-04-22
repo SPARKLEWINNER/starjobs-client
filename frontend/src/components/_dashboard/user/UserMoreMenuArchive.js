@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {Icon} from '@iconify/react'
 import {useRef, useState} from 'react'
 // import editFill from '@iconify/icons-eva/edit-fill'
@@ -19,15 +20,19 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide,
-} from '@material-ui/core'
+  Slide
+} from '@mui/material'
 
 import {useSnackbar} from 'notistack5'
 
 //api
 
-import useUser from 'api/users'
-import storage from 'utils/storage'
+import useUser from 'src/lib/users'
+import storage from 'src/utils/storage'
+
+UserMoreMenu.propTypes = {
+  id: PropTypes.string
+}
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -115,7 +120,7 @@ export default function UserMoreMenu({id}) {
         anchorEl={ref.current}
         onClose={() => setIsOpen(false)}
         PaperProps={{
-          sx: {width: 200, maxWidth: '100%'},
+          sx: {width: 200, maxWidth: '100%'}
         }}
         anchorOrigin={{vertical: 'top', horizontal: 'right'}}
         transformOrigin={{vertical: 'top', horizontal: 'right'}}

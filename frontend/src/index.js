@@ -8,7 +8,6 @@ import 'simplebar/src/simplebar.css'
 import 'react-image-lightbox/style.css'
 
 import 'react-quill/dist/quill.snow.css'
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -45,7 +44,7 @@ ReactDOM.render(
       </SettingsProvider>
     </HelmetProvider>
   </>,
-  document.getElementById('root'),
+  document.getElementById('root')
 )
 
 // If you want to start measuring performance in your app, pass a function

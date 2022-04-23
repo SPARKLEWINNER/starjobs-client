@@ -29,6 +29,15 @@ import {LoadingButton} from '@mui/lab'
 
 // utils
 import {calculations} from 'src/utils/gigComputation'
+import PropTypes from 'prop-types'
+
+CurrentModalPopup.propTypes = {
+  gig: PropTypes.object,
+  open: PropTypes.bool,
+  onClick: PropTypes.func,
+  onClose: PropTypes.func,
+  onEndShift: PropTypes.func
+}
 
 // variable
 const drawerBleeding = 56

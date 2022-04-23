@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import * as Yup from 'yup'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {useFormik, Form, FormikProvider} from 'formik'
 import {Stack, Card, TextField, Grid, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'

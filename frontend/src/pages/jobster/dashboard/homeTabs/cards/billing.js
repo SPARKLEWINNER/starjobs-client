@@ -1,5 +1,13 @@
+import PropTypes from 'prop-types'
+
 import {Box, Card, CardContent, Typography} from '@mui/material'
+
 import {calculations} from 'src/utils/gigComputation'
+
+BillingCard.propTypes = {
+  gig: PropTypes.object
+}
+
 export default function BillingCard({gig}) {
   let {position, hours, fee, locationRate} = gig
 

@@ -9,6 +9,8 @@ import {
   Stack
 } from '@mui/material'
 
+import PropTypes from 'prop-types'
+
 const CreateParcelDialog = ({open, onConfirm, handleClose}) => {
   const handleConfirmParcel = () => {
     onConfirm()
@@ -41,5 +43,9 @@ const CreateParcelDialog = ({open, onConfirm, handleClose}) => {
     </div>
   )
 }
-
+CreateParcelDialog.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  onConfirm: PropTypes.func,
+  handleClose: PropTypes.func
+}
 export default CreateParcelDialog

@@ -21,6 +21,8 @@ import Label from '../../Label'
 // utils
 import {calculations} from 'src/utils/gigComputation'
 
+import PropTypes from 'prop-types'
+
 const ListWrapperStyle = styled(Paper)(() => ({
   width: '100%'
 }))
@@ -144,6 +146,10 @@ const NotificationDetailsCard = ({details}) => {
       </Button>
     </Stack>
   )
+}
+
+NotificationDetailsCard.propTypes = {
+  details: PropTypes.object
 }
 
 export default NotificationDetailsCard

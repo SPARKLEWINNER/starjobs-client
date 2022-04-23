@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // material
 import {Link, Grid, Typography, Box, Avatar, Stack} from '@mui/material'
@@ -116,7 +116,7 @@ const Dashboard = () => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const checkNotice = (data) => {
@@ -288,7 +288,7 @@ const Dashboard = () => {
             onReject={handleCancelled}
           />
           <IncomingNotification
-            open={open}
+            open={open ?? false}
             handleClose={handleNoticeClose}
             gig={gigPop}
             onCommit={handleAccepted}

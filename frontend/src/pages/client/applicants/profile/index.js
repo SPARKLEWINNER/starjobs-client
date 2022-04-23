@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {useNavigate, useParams, useLocation, Link as RouterLink} from 'react-router-dom'
 import {capitalCase} from 'change-case'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // components
 import {Box, Tab, Stack, Grid, Typography, Button, Link, Divider, Card} from '@mui/material'
@@ -123,7 +123,7 @@ export default function TabsComponent() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const renderTab = (type, current_user) => {

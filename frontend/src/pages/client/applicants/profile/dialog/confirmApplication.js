@@ -9,6 +9,8 @@ import {
   Stack
 } from '@mui/material'
 
+import PropTypes from 'prop-types'
+
 const ConfirmApplicationDialog = ({open, onCommit, handleClose}) => {
   const handleConfirmGig = () => {
     onCommit()
@@ -40,6 +42,12 @@ const ConfirmApplicationDialog = ({open, onCommit, handleClose}) => {
       </Dialog>
     </div>
   )
+}
+
+ConfirmApplicationDialog.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  onCommit: PropTypes.func,
+  handleClose: PropTypes.func
 }
 
 export default ConfirmApplicationDialog

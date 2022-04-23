@@ -2,7 +2,7 @@ import request from 'src/utils/header'
 import storage from 'src/utils/storage'
 const base_url = process.env.REACT_APP_API_URL
 
-const request_upload_url = async (_file, type) => {
+const request_upload_url = async (_file) => {
   if (!_file) return false
 
   const to_base64 = (file) =>

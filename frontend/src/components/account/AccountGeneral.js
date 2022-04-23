@@ -1,14 +1,14 @@
 import * as Yup from 'yup'
-// import { useSnackbar } from 'notistack5';
+// import { useSnackbar } from 'notistack';
 import {useCallback, useState} from 'react'
 import {Form, FormikProvider, useFormik} from 'formik'
 import {Box, Grid, Card, Stack, Switch, TextField, FormControlLabel, Typography, FormHelperText} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 import {UploadAvatar} from 'src/components/upload'
 import {fData} from 'src/utils/formatNumber'
+import PropTypes from 'prop-types'
 
 const AccountGeneral = ({_data}) => {
-  console.log(_data)
   // const { enqueueSnackbar } = useSnackbar();
   const [isEdit, setIsEdit] = useState(false)
   const UpdateUserSchema = Yup.object().shape({
@@ -168,6 +168,10 @@ const AccountGeneral = ({_data}) => {
       </Form>
     </FormikProvider>
   )
+}
+
+AccountGeneral.propTypes = {
+  _data: PropTypes.object
 }
 
 export default AccountGeneral

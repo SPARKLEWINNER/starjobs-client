@@ -23,7 +23,7 @@ import {
   Slide
 } from '@mui/material'
 
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 //api
 

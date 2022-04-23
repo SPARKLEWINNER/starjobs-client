@@ -5,6 +5,15 @@ import {useFormik, Form, FormikProvider} from 'formik'
 import {Stack, TextField, Box, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 
+import PropTypes from 'prop-types'
+
+PersonalForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
+
 export default function PersonalForm({user, stored, onNext, onStoreData}) {
   const [isLoading, setLoading] = useState(false)
 

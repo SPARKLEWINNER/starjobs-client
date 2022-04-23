@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 // material
 import {Box, Stack, Typography, Link} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 // components
 import {UploadMultiFile} from 'src/components/upload'
 

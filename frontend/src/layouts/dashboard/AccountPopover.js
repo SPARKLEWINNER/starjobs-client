@@ -27,6 +27,8 @@ import storage from 'src/utils/storage'
 
 // style
 import {LoadingButtonStyle} from 'src/theme/style'
+import PropTypes from 'prop-types'
+
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 export default function AccountPopover({user}) {
   const anchorRef = useRef(null)
@@ -272,4 +274,8 @@ export default function AccountPopover({user}) {
       */}
     </>
   )
+}
+
+AccountPopover.propTypes = {
+  user: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 }

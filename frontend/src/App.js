@@ -47,7 +47,7 @@ export default function App() {
                   <ScrollToTop />
                   <AppRoute />
                   <FirebaseToken />
-                  <GenericNotification open={open} details={payload} handleClose={handleClose} />
+                  <GenericNotification open={open ?? false} details={payload} handleClose={handleClose} />
                 </TawktoPageOverlay>
               </RatingsProvider>
             </NotistackProvider>

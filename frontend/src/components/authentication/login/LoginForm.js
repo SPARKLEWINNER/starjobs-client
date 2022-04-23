@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 import {useState} from 'react'
 import {useNavigate, Link as RouterLink} from 'react-router-dom'
 import {useFormik, Form, FormikProvider} from 'formik'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 import {Icon} from '@iconify/react'
 import eyeFill from '@iconify/icons-eva/eye-fill'

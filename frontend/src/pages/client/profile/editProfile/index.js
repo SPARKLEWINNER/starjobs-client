@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom'
 import {Stack, Box, Paper, Button, Avatar, Typography} from '@mui/material'
 import {styled} from '@mui/material/styles'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // components
 import Page from 'src/components/Page'
@@ -139,7 +139,7 @@ const EditProfile = () => {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [currentUser])
 
   const isStepSkipped = (step) => skipped.has(step)

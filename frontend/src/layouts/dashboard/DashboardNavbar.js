@@ -13,6 +13,8 @@ import {
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined'
 
 import AccountPopover from './AccountPopover'
+import PropTypes from 'prop-types'
+
 const DRAWER_WIDTH = 280
 const APPBAR_MOBILE = 48
 const APPBAR_DESKTOP = 92
@@ -183,3 +185,8 @@ const DashboardNavbar = ({location, user}) => {
 }
 
 export default DashboardNavbar
+
+DashboardNavbar.propTypes = {
+  location: PropTypes.string,
+  user: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+}

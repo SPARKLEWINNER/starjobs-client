@@ -1,10 +1,12 @@
+import PropTypes from 'prop-types'
+
 import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, Divider, Box, Typography, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 const PROGRAM_COURSE = [
   {label: 'None', value: 'None'},
@@ -28,7 +30,14 @@ const fields = [
   'vocationalProgramCourse'
 ]
 
-export default function PersonalForm({user, stored, onNext, onStoreData}) {
+EducationForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
+
+export default function EducationForm({stored, onNext, onStoreData}) {
   const [isLoading, setLoading] = useState(false)
   const {enqueueSnackbar} = useSnackbar()
   let store = stored.education ? stored.education : undefined

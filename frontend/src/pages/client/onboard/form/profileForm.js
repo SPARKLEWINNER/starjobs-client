@@ -2,11 +2,17 @@ import {useState, useCallback} from 'react'
 // material
 import {Box, Stack, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 // utils
 import {fData} from 'src/utils/formatNumber'
 // components
 import {UploadAvatar, UploadMultiFile} from 'src/components/upload'
+import PropTypes from 'prop-types'
+
+Upload.propTypes = {
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
 
 import onboard_api from 'src/lib/onboard'
 export default function Upload({onNext, onStoreData}) {
@@ -70,7 +76,7 @@ export default function Upload({onNext, onStoreData}) {
     }
 
     await Promise.all(
-      files.map(async (value, k) => {
+      files.map(async (value) => {
         const upload = await onboard_api.request_upload_url(value.file)
         if (!upload) console.log(upload)
         documents.push(upload)

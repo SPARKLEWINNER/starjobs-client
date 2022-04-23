@@ -6,7 +6,7 @@ import {Box} from '@mui/material'
 import {varWrapEnter} from './variants'
 
 MotionContainer.propTypes = {
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
   children: PropTypes.node
 }
 

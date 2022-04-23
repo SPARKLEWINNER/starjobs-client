@@ -1,6 +1,12 @@
 import {Box, Card, CardContent, CardMedia, Typography, Stack} from '@mui/material'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import Label from 'src/components/Label'
+
+PendingCard.propTypes = {
+  gig: PropTypes.object
+}
+
 export default function PendingCard({gig}) {
   let {user, position, hours, fee, from, category, time} = gig
   const {location, thumbnail} = user[0]

@@ -11,8 +11,9 @@ import {
   Box
 } from '@mui/material'
 import moment from 'moment'
+import PropTypes from 'prop-types'
 
-export default function IncomingNotification({open, gig, onCommit, onReject}) {
+const IncomingNotification = ({open = false, gig, onCommit, onReject}) => {
   const [loading, setLoading] = useState(false)
   const getFormattedDate = (date) => {
     if (!date) return
@@ -51,47 +52,46 @@ export default function IncomingNotification({open, gig, onCommit, onReject}) {
   }
 
   return (
-    <div>
-      <Dialog open={open}>
-        <DialogTitle sx={{textAlign: 'center', pt: 5}}>
-          <Typography variant="h6" sx={{fontWeight: 'normal'}}>
-            Incoming Gig Notification!
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <Box sx={{textAlign: 'center'}}>
-              <Typography variant="h6" sx={{fontWeight: 'bold'}} color="#000">
-                {gig ? gig.position : ''}
-              </Typography>
-              <Typography variant="h6" sx={{fontWeight: 'bold'}} color="#000">
-                {gig
-                  ? `${getFormattedDate(new Date(gig.date))} ${moment(gig.time).format('DD MMM  YYYY hh:mm A')}`
-                  : ''}{' '}
-              </Typography>
-            </Box>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{display: 'block', pb: 5, px: 5}}>
-          <Typography variant="body1" sx={{mb: 3}}>
-            Are you pushing through the gig today?
-          </Typography>
-          <Stack row>
-            <Button color="primary" variant="contained" onClick={() => handleCommit(gig)} disabled={loading}>
-              Pushing through
-            </Button>
-            <Button
-              onClick={() => handleReject(gig)}
-              variant="outlined"
-              color="inherit"
-              sx={{mt: 2}}
-              disabled={loading}
-            >
-              Not Pushing through
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog open={open ?? false}>
+      <DialogTitle sx={{textAlign: 'center', pt: 5}}>
+        <Typography variant="h6" sx={{fontWeight: 'normal'}}>
+          Incoming Gig Notification!
+        </Typography>
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          <Box sx={{textAlign: 'center'}}>
+            <Typography variant="h6" sx={{fontWeight: 'bold'}} color="#000">
+              {gig ? gig.position : ''}
+            </Typography>
+            <Typography variant="h6" sx={{fontWeight: 'bold'}} color="#000">
+              {gig ? `${getFormattedDate(new Date(gig.date))} ${moment(gig.time).format('DD MMM  YYYY hh:mm A')}` : ''}{' '}
+            </Typography>
+          </Box>
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions sx={{display: 'block', pb: 5, px: 5}}>
+        <Typography variant="body1" sx={{mb: 3}}>
+          Are you pushing through the gig today?
+        </Typography>
+        <Stack row>
+          <Button color="primary" variant="contained" onClick={() => handleCommit(gig)} disabled={loading}>
+            Pushing through
+          </Button>
+          <Button onClick={() => handleReject(gig)} variant="outlined" color="inherit" sx={{mt: 2}} disabled={loading}>
+            Not Pushing through
+          </Button>
+        </Stack>
+      </DialogActions>
+    </Dialog>
   )
 }
+
+IncomingNotification.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  gig: PropTypes.array,
+  onCommit: PropTypes.func,
+  onReject: PropTypes.func
+}
+
+export default IncomingNotification

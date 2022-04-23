@@ -1,5 +1,8 @@
 import {Stack, Grid, Typography, Divider} from '@mui/material'
 import {parcel_calculations} from 'src/utils/gigComputation'
+
+import PropTypes from 'prop-types'
+
 export default function BillingForm({storeData}) {
   if (!storeData) return
 
@@ -102,4 +105,8 @@ export default function BillingForm({storeData}) {
       </Typography>
     </Stack>
   )
+}
+
+BillingForm.propTypes = {
+  storeData: PropTypes.object
 }

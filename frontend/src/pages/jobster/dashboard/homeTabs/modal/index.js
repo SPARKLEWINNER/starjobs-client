@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import React, {useState} from 'react'
 import {Global} from '@emotion/react'
 import {styled} from '@mui/styles'
@@ -25,7 +27,7 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)'
 }))
 
-export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift}) {
+const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift}) => {
   const [loading, setLoading] = useState(false)
   let {user, shift, position, hours, fee, time, from, status, category} = gig
 
@@ -279,3 +281,13 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
     </>
   )
 }
+
+CurrentModalPopup.propTypes = {
+  gig: PropTypes.array,
+  open: PropTypes.bool,
+  onClick: PropTypes.func,
+  onClose: PropTypes.func,
+  onEndShift: PropTypes.func
+}
+
+export default CurrentModalPopup

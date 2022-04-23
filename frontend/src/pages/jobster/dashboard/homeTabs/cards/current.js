@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import {Box, Card, CardContent, Typography, Stack} from '@mui/material'
 import moment from 'moment'
 import Label from 'src/components/Label'
@@ -17,7 +19,7 @@ function change_label_by_status(status) {
   }
 }
 
-export default function CurrentCard({gig, onView}) {
+const CurrentCard = ({gig, onView}) => {
   let {position, hours, fee, time, from, status, category} = gig
   fee = parseFloat(fee)
   let computedGigFee = parseFloat(fee * hours)
@@ -69,3 +71,10 @@ export default function CurrentCard({gig, onView}) {
     </Card>
   )
 }
+
+CurrentCard.propTypes = {
+  gig: PropTypes.object,
+  onView: PropTypes.func
+}
+
+export default CurrentCard

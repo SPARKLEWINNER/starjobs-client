@@ -1,8 +1,9 @@
 import {Box, Card, CardContent, Stack, Typography} from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
-import React from 'react'
 import {useNavigate} from 'react-router-dom'
 import user_api from 'src/lib/users'
+
+import PropTypes from 'prop-types'
 
 const NotificationCardV2 = ({
   id = '',
@@ -84,6 +85,18 @@ const NotificationCardV2 = ({
       </Box>
     </Card>
   )
+}
+
+NotificationCardV2.propTypes = {
+  id: PropTypes.string,
+  uid: PropTypes.string,
+  userType: PropTypes.number,
+  title: PropTypes.string,
+  body: PropTypes.string,
+  type: PropTypes.string,
+  notifData: PropTypes.string,
+  isRead: PropTypes.bool,
+  onCardClick: PropTypes.func
 }
 
 export default NotificationCardV2

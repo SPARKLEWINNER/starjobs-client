@@ -15,10 +15,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-TawktoPageOverlay.propTypes = {
-  children: PropTypes.node
-}
-
 const TawktoPageOverlay = ({children}) => {
   const {height} = useWindowDimensions()
   const {pathname} = useLocation()
@@ -80,6 +76,10 @@ const TawktoPageOverlay = ({children}) => {
       {children}
     </div>
   )
+}
+
+TawktoPageOverlay.propTypes = {
+  children: PropTypes.node
 }
 
 export default TawktoPageOverlay

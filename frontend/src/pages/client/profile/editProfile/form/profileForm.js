@@ -2,13 +2,23 @@ import {useState, useCallback} from 'react'
 // material
 import {Box, Stack, Typography, Avatar, Button} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 // utils
 import {fData} from 'src/utils/formatNumber'
 // components
 import {UploadAvatar} from 'src/components/upload'
 
 import onboard_api from 'src/lib/onboard'
+
+import PropTypes from 'prop-types'
+
+Upload.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
+
 export default function Upload({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [avatarUrl, setAvatarUrl] = useState('')

@@ -1,7 +1,8 @@
 import {useState, useEffect} from 'react'
+import PropTypes from 'prop-types'
 import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import AliceCarousel from 'react-alice-carousel'
 import {CurrentCard} from './../cards'
 import CurrentModalPopup from './../modal'
@@ -18,7 +19,7 @@ const responsive = {
   1024: {items: 2}
 }
 
-export default function CurrentTab({gigs, user, onEndShift}) {
+const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
   const [FILTERED_GIGS, setFilter] = useState([])
   const [isLoading, setLoading] = useState(false)
@@ -62,6 +63,11 @@ export default function CurrentTab({gigs, user, onEndShift}) {
         gigs.map((value) => {
           const now = moment(new Date())
           const {status, from, date} = value
+          const diff = moment(from).diff(now)
+
+          //express as a duration
+          const diffDuration = moment.duration(diff)
+
           if (!moment(date).isSame(moment(), 'day')) return false
           switch (status) {
             case 'Accepted':
@@ -73,10 +79,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
             case 'End-Shift':
             case 'Confirm-End-Shift':
               if (status === 'Confirm-End-Shift') return false
-              const diff = moment(from).diff(now)
 
-              //express as a duration
-              const diffDuration = moment.duration(diff)
               if (diffDuration.hours() > 3) return false
               return setFilter((prevState) => [...prevState, ...[value]])
             default:
@@ -131,3 +134,11 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     </Box>
   )
 }
+
+CurrentTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.array,
+  onEndShift: PropTypes.func
+}
+
+export default CurrentTab

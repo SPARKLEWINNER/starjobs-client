@@ -34,10 +34,6 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)'
 }))
 
-RatingsProvider.propTypes = {
-  children: PropTypes.node
-}
-
 const RatingsContext = createContext()
 
 const RatingsProvider = ({children}) => {
@@ -148,6 +144,10 @@ const RatingsProvider = ({children}) => {
       </Box>
     </RatingsContext.Provider>
   )
+}
+
+RatingsProvider.propTypes = {
+  children: PropTypes.node
 }
 
 export {RatingsContext, RatingsProvider}

@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 // material
 import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // component form
 import PersonalForm from 'src/components/editFreelancer/form/personalForm'
@@ -150,7 +150,7 @@ export default function LinearAlternativeLabel() {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -292,11 +292,7 @@ export default function LinearAlternativeLabel() {
                   {form.expertise.workType.split('=>').length > 0 ? (
                     form.expertise.workType.split('=>').map((v, k) => {
                       return (
-                        <Typography
-                          Typography
-                          variant="body2"
-                          sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
-                        >
+                        <Typography key={k} variant="body2" sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}>
                           - {v}
                         </Typography>
                       )

@@ -1,7 +1,9 @@
 import {useState} from 'react'
 import {Dialog, DialogTitle, DialogActions, Typography, Stack} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-export default function EndShiftNotification({open, gig, onCommit, onReject, handleClose}) {
+import PropTypes from 'prop-types'
+
+const EndShiftNotification = ({open, gig, onCommit, handleClose}) => {
   const [loading, setLoading] = useState(false)
   const handleCommit = (value) => {
     setLoading(true)
@@ -48,3 +50,13 @@ export default function EndShiftNotification({open, gig, onCommit, onReject, han
     </div>
   )
 }
+
+EndShiftNotification.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  gig: PropTypes.array,
+  onCommit: PropTypes.func,
+  handleClose: PropTypes.func,
+  onReject: PropTypes.func
+}
+
+export default EndShiftNotification

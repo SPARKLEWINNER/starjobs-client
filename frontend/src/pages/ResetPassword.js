@@ -13,7 +13,7 @@ import {useLocation, useNavigate} from 'react-router-dom'
 // material
 import {Stack, TextField, Typography, Container, Box, InputAdornment, IconButton} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 import auth_api from 'src/lib/auth'
 import Page from 'src/components/Page'

@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import PropTypes from 'prop-types'
 
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 import {Stack, Button} from '@mui/material'

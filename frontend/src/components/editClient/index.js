@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom'
 // material
 import {Box, Paper, Button, Avatar, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // component form
 import PersonalForm from 'src/components/editClient/form/personalForm'
@@ -121,7 +121,7 @@ export default function EditClientForm() {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)

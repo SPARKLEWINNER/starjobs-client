@@ -34,7 +34,7 @@ export default function Reviews() {
         {reviews &&
           reviews.map((v, k) => {
             return (
-              <Grid item xs={12} md={12} sx={{my: 2}}>
+              <Grid item xs={12} md={12} sx={{my: 2}} key={k}>
                 <Stack direction="row">
                   <Box sx={{mr: 1, display: 'flex', alignItems: 'center', px: 1}}>
                     <Avatar alt={v.name} src={v.image} />

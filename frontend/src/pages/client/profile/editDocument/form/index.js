@@ -4,15 +4,16 @@ import {useNavigate} from 'react-router-dom'
 // material
 import {Box, Stack, Typography, Link} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 // components
 import {UploadMultiFile} from 'src/components/upload'
 
 import users_api from 'src/lib/users'
 import onboard_api from 'src/lib/onboard'
 import {useAuth} from 'src/contexts/AuthContext'
+
 const image_bucket = process.env.REACT_APP_IMAGE_URL
-export default function EditDocument({onNext, onStoreData}) {
+export default function EditDocument() {
   const navigate = useNavigate()
   const {enqueueSnackbar} = useSnackbar()
   const [files, setFiles] = useState([])
@@ -74,7 +75,7 @@ export default function EditDocument({onNext, onStoreData}) {
     }
 
     await Promise.all(
-      files.map(async (value, k) => {
+      files.map(async (value) => {
         const upload = await onboard_api.request_upload_url(value.file)
         if (!upload) console.log(upload)
         documents.push(upload)
@@ -120,8 +121,9 @@ export default function EditDocument({onNext, onStoreData}) {
         </Typography>
         <Box sx={{width: '25%', display: 'block', mt: '0 !important'}}>
           {EXISTING_DOCUMENTS &&
-            EXISTING_DOCUMENTS.map((value) => (
+            EXISTING_DOCUMENTS.map((value, key) => (
               <Link
+                key={key}
                 href={`${image_bucket}/${value}`}
                 rel="noreferrer"
                 target="_blank"

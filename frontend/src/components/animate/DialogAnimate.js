@@ -5,13 +5,6 @@ import {Dialog} from '@mui/material'
 //
 import {varFadeInUp} from './variants'
 
-DialogAnimate.propTypes = {
-  open: PropTypes.bool.isRequired,
-  animate: PropTypes.object,
-  onClose: PropTypes.func,
-  children: PropTypes.node.isRequired
-}
-
 export default function DialogAnimate({open = false, animate, onClose, children, ...other}) {
   return (
     <AnimatePresence>
@@ -36,4 +29,11 @@ export default function DialogAnimate({open = false, animate, onClose, children,
       )}
     </AnimatePresence>
   )
+}
+
+DialogAnimate.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  animate: PropTypes.object,
+  onClose: PropTypes.func,
+  children: PropTypes.node.isRequired
 }

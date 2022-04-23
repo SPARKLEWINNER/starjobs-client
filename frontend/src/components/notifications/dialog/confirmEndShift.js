@@ -11,7 +11,9 @@ import {
 import {LoadingButton} from '@mui/lab'
 import {useState} from 'react'
 
-export default function ConfirmEndShiftNotification({open, gig, onCommit, onReject, handleClose}) {
+import PropTypes from 'prop-types'
+
+export default function ConfirmEndShiftNotification({open, gig, onCommit, handleClose}) {
   const [loading, setLoading] = useState(false)
   const handleCommit = (value) => {
     setLoading(true)
@@ -68,4 +70,12 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, onReje
       </Dialog>
     </div>
   )
+}
+
+ConfirmEndShiftNotification.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  gig: PropTypes.object,
+  onCommit: PropTypes.func,
+  handleClose: PropTypes.func,
+  onReject: PropTypes.func
 }

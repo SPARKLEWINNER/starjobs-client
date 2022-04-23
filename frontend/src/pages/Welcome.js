@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
-import {styled} from '@material-ui/core/styles'
+import {styled} from '@mui/material/styles'
 // material
-import {Box, Container, Paper, Button, Link, MobileStepper} from '@material-ui/core'
+import {Box, Container, Paper, Button, Link, MobileStepper} from '@mui/material'
 
 import Page from 'src/components/Page'
 import {Verified, Start, Notification, Complete} from 'src/components/welcome'

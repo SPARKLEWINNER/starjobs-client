@@ -22,7 +22,7 @@ import {
 } from '@mui/material'
 import {DialogAnimate} from '../../animate'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 import auth_api from 'src/lib/auth'
 
@@ -120,7 +120,6 @@ export default function StoreOnboardForm() {
 
       const result = await auth_api.post_sign_up(data)
       if (!result.ok) {
-        Bugsnag.notify(result)
         enqueueSnackbar(`${result.data.msg}`, {variant: 'error'})
         return setLoading(false)
       }

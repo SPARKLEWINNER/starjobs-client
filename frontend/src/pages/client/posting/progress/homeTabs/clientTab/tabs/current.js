@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 import {Box, Stack, Typography, Grid, Link, Card} from '@mui/material'
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // components
 import {CurrentCard} from '../../../cards'
@@ -10,6 +10,7 @@ import CurrentModalPopup from '../modal'
 
 // api
 import gigs_api from 'src/lib/gigs'
+import PropTypes from 'prop-types'
 
 // theme
 import color from 'src/theme/palette'
@@ -25,7 +26,7 @@ const current_status = [
   'Confirm-End-Shift'
 ]
 
-export default function CurrentTab({gigs, user, onEndShift}) {
+const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
   const [FILTERED_DATA, setData] = useState([])
   const [SELECTED_GIG, setSelectedGig] = useState([])
@@ -141,3 +142,11 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     </Box>
   )
 }
+
+CurrentTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.object,
+  onEndShift: PropTypes.func
+}
+
+export default CurrentTab

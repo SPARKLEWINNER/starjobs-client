@@ -2,6 +2,8 @@ import {Link as RouterLink} from 'react-router-dom'
 import {Stack, Typography, Box, Button, Link} from '@mui/material'
 
 import {LoadingButtonInvertedStyle} from 'src/theme/style'
+import PropTypes from 'prop-types'
+
 export default function VerifiedWelcome({user}) {
   return (
     <Stack sx={{mb: 5}}>
@@ -27,4 +29,8 @@ export default function VerifiedWelcome({user}) {
       </Box>
     </Stack>
   )
+}
+
+VerifiedWelcome.propTypes = {
+  user: PropTypes.object
 }

@@ -5,11 +5,13 @@ import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, FormControlLabel, Typography, Checkbox, Box} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import Select from 'react-select'
 import {FreelancerCategory} from 'src/utils/data'
 
-export default function IndustryForm({user, stored, onNext, onStoreData}) {
+import PropTypes from 'prop-types'
+
+export default function IndustryForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [SKILL_QUALIFICATION, setSkillQualification] = useState(FreelancerCategory.SKILL_QUALIFICATION)
@@ -358,4 +360,11 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
       </Form>
     </FormikProvider>
   )
+}
+
+IndustryForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
 }

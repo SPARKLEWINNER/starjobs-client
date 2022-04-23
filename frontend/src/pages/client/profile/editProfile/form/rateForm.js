@@ -4,15 +4,24 @@ import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, Box, Typography, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {fCamelCase} from 'src/utils/formatCase'
+
+import PropTypes from 'prop-types'
+
+RateForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
 
 const E_WALLETS = [
   {label: 'None', image: '', value: 'none'},
   {label: 'GCash', image: '', value: 'gcash'}
 ]
 
-export default function PersonalForm({user, stored, onNext, onStoreData}) {
+export default function RateForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   let store = stored.rate ? stored.rate : undefined

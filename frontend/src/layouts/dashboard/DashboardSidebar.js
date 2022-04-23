@@ -30,16 +30,6 @@ const AccountStyle = styled('div')(({theme}) => ({
   backgroundColor: theme.palette.grey[200]
 }))
 
-DashboardSidebar.propTypes = {
-  isOpenSidebar: PropTypes.bool,
-  onCloseSidebar: PropTypes.func
-}
-
-IconCollapse.propTypes = {
-  onToggleCollapse: PropTypes.func,
-  collapseClick: PropTypes.bool
-}
-
 function IconCollapse({onToggleCollapse, collapseClick}) {
   return (
     <Tooltip title="Mini Menu">
@@ -85,7 +75,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
     if (isOpenSidebar) {
       onCloseSidebar()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [pathname, account])
 
   const handleHelpCenterClick = async (e) => {
@@ -244,4 +234,14 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
       </MHidden>
     </RootStyle>
   )
+}
+
+DashboardSidebar.propTypes = {
+  isOpenSidebar: PropTypes.bool,
+  onCloseSidebar: PropTypes.func
+}
+
+IconCollapse.propTypes = {
+  onToggleCollapse: PropTypes.func,
+  collapseClick: PropTypes.bool
 }

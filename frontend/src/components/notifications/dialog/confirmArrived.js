@@ -10,6 +10,8 @@ import {
   Box
 } from '@mui/material'
 
+import PropTypes from 'prop-types'
+
 export default function ConfirmArrivedNotification({open, gig, onCommit, onReject}) {
   const getFormattedDate = (date) => {
     if (!date) return
@@ -86,4 +88,12 @@ export default function ConfirmArrivedNotification({open, gig, onCommit, onRejec
       </Dialog>
     </div>
   )
+}
+
+ConfirmArrivedNotification.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  gig: PropTypes.array,
+  onCommit: PropTypes.func,
+  handleClose: PropTypes.func,
+  onReject: PropTypes.func
 }

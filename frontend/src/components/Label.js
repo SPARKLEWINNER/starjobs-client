@@ -2,8 +2,8 @@ import PropTypes from 'prop-types'
 // material
 import {alpha, styled} from '@mui/material/styles'
 
-const RootStyle = styled('span')(({theme, styleProps}) => {
-  const {color, variant} = styleProps
+const RootStyle = styled('span')(({theme, styleprops}) => {
+  const {color, variant} = styleprops
 
   const styleFilled = (color) => ({
     color: theme.palette[color].contrastText,
@@ -60,7 +60,7 @@ const RootStyle = styled('span')(({theme, styleProps}) => {
 
 export default function Label({color = 'default', variant = 'ghost', children, ...other}) {
   return (
-    <RootStyle styleProps={{color, variant}} {...other}>
+    <RootStyle styleprops={{color, variant}} {...other}>
       {children}
     </RootStyle>
   )

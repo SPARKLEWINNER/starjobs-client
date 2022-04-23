@@ -5,6 +5,13 @@ import {Icon} from '@iconify/react'
 import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 import moment from 'moment'
 import Label from 'src/components/Label'
+
+import PropTypes from 'prop-types'
+
+IncomingCard.propTypes = {
+  gig: PropTypes.object
+}
+
 export default function IncomingCard({gig}) {
   let applicants
   if (gig && gig.numberofApplicants > 0) {

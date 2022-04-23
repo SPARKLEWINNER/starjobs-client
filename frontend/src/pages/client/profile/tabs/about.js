@@ -23,7 +23,7 @@ export default function About() {
         {ratings &&
           ratings.map((v, k) => {
             return (
-              <Grid item xs={6} md={6} sx={{my: 1}}>
+              <Grid item xs={6} md={6} sx={{my: 1}} key={k}>
                 <Stack direction="row">
                   <Box sx={{mr: 1}}>
                     <Icon icon={starIcon} color="#ffc107" width={25} height={25} />

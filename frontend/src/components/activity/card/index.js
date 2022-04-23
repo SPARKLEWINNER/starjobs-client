@@ -4,6 +4,7 @@ import {Box, Card, CardContent, Link, Typography, Stack} from '@mui/material'
 import MonetizationOnOutlined from '@mui/icons-material/MonetizationOnOutlined'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import Label from 'src/components/Label'
+import PropTypes from 'prop-types'
 
 const ActivityCard = ({gig, details}) => {
   if (!gig || !details) return ''
@@ -50,5 +51,8 @@ const ActivityCard = ({gig, details}) => {
     </Card>
   )
 }
-
+ActivityCard.propTypes = {
+  gig: PropTypes.object,
+  details: PropTypes.object
+}
 export default ActivityCard

@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types'
+
 import {useState, useEffect} from 'react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
 // components
@@ -15,7 +17,7 @@ import gigs_api from 'src/lib/gigs'
 // theme
 import color from 'src/theme/palette'
 
-export default function CurrentTab({gigs, user, onEndShift}) {
+const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
   const [FILTERED_GIGS, setFilter] = useState([])
   const [isLoading, setLoading] = useState(false)
@@ -59,6 +61,11 @@ export default function CurrentTab({gigs, user, onEndShift}) {
         gigs.map((value) => {
           const now = moment(new Date())
           const {status, from, date} = value
+          const diff = moment(from).diff(now)
+
+          //express as a duration
+          const diffDuration = moment.duration(diff)
+
           if (!moment(date).isSame(moment(), 'day')) return false
           switch (status) {
             case 'Accepted':
@@ -69,10 +76,6 @@ export default function CurrentTab({gigs, user, onEndShift}) {
             case 'On-going':
             case 'End-Shift':
             case 'Confirm-End-Shift':
-              const diff = moment(from).diff(now)
-
-              //express as a duration
-              const diffDuration = moment.duration(diff)
               if (diffDuration.hours() > 3) return false
               return setFilter((prevState) => [...prevState, ...[value]])
             default:
@@ -122,3 +125,11 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     </Box>
   )
 }
+
+CurrentTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.array,
+  onEndShift: PropTypes.func
+}
+
+export default CurrentTab

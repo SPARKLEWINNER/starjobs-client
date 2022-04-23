@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
-import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
-import {useSnackbar} from 'notistack5'
+import {Link as RouterLink, useParams} from 'react-router-dom'
+import {useSnackbar} from 'notistack'
 import {Box, Stack, Typography, Link} from '@mui/material'
 import {styled} from '@mui/material/styles'
 
@@ -27,7 +27,6 @@ const MainStyle = styled(Stack)(({theme}) => ({
 
 export default function ClientApplicants() {
   const {enqueueSnackbar} = useSnackbar()
-  const navigation = useNavigate()
   const params = useParams()
   const [applicant, setApplicants] = useState([])
   const [isLoading, setLoading] = useState(false)
@@ -48,7 +47,7 @@ export default function ClientApplicants() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const handleClose = () => {

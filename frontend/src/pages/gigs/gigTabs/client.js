@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import moment from 'moment'
-
+import PropTypes from 'prop-types'
 // material
 import {
   Stack,
@@ -22,6 +22,10 @@ import gigs_api from 'src/lib/gigs'
 // component
 import {WaitingCard} from '../cards'
 import ProgressCircle from 'src/components/progressCircle'
+
+ClientTab.propTypes = {
+  category: PropTypes.string
+}
 
 export default function ClientTab({category}) {
   const [data, setData] = useState([])
@@ -87,18 +91,21 @@ export default function ClientTab({category}) {
           } else {
             result = await gigs_api.get_gigs_no_category()
           }
-
-          let {data} = result
-          if (!data || data.length === 0) {
-            setData([])
-            setRenderData([])
+          if (!result.ok) {
             return
           }
 
-          data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-          const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-
           if (componentMounted) {
+            let {data} = result
+            if (!data || data.length === 0) {
+              setData([])
+              setRenderData([])
+              return
+            }
+
+            data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+            const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
+
             setData(FILTERED)
             setRenderData(FILTERED.slice(0, 3))
             setLoading(false)
@@ -106,11 +113,9 @@ export default function ClientTab({category}) {
         } catch (err) {
           console.log(err)
         } finally {
-          setLoading(false)
-        }
-
-        if (!result.ok) {
-          return
+          if (componentMounted) {
+            setLoading(false)
+          }
         }
       }
       load()
@@ -123,7 +128,13 @@ export default function ClientTab({category}) {
   )
 
   useEffect(() => {
-    data && setRenderData(data.slice(0, 3))
+    let componentMounted = true
+    if (componentMounted) {
+      data && setRenderData(data.slice(0, 3))
+    }
+    return () => {
+      componentMounted = false
+    }
   }, [data])
 
   return (

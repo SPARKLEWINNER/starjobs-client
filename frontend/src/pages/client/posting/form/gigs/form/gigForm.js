@@ -6,9 +6,17 @@ import moment from 'moment'
 import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox, Select} from '@mui/material'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import DatePicker from 'react-datepicker'
 import {calculations} from 'src/utils/gigComputation'
+
+import PropTypes from 'prop-types'
+
+GigForm.propTypes = {
+  formData: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
 
 export default function GigForm({formData, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()

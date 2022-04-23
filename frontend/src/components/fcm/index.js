@@ -47,6 +47,7 @@ export default function Notifications() {
 
   useEffect(() => {
     let token
+    let componentMounted = true
 
     async function tokenFunc() {
       checkIfPushIsEnabled()
@@ -63,11 +64,18 @@ export default function Notifications() {
             await fcm_api.patch_subscriber_token(user._id, token)
           }
         }
-        return token
+
+        if (componentMounted) {
+          return token
+        }
       }
     }
 
     tokenFunc()
+
+    return () => {
+      componentMounted = false
+    }
   }, [isTokenFound])
 
   return <></>

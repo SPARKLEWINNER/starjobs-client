@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 // material
 import {Box, Stack, Typography, Button, Avatar} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 // utils
 import {fData} from 'src/utils/formatNumber'
 // components

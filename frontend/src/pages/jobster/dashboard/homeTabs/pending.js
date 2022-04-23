@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import {Box, Stack, Typography, Link, Card} from '@mui/material'
 import moment from 'moment'
 import {PendingCard} from './cards'
@@ -5,7 +7,7 @@ import {PendingCard} from './cards'
 // theme
 import color from 'src/theme/palette'
 
-export default function PendingTab({gigs}) {
+const PendingTab = ({gigs}) => {
   return (
     <Box>
       <Stack spacing={3}>
@@ -51,3 +53,9 @@ export default function PendingTab({gigs}) {
     </Box>
   )
 }
+
+PendingTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.string])
+}
+
+export default PendingTab

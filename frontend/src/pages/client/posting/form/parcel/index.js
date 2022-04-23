@@ -2,7 +2,7 @@ import {useState} from 'react'
 // material
 import {Box, Button, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // component form
 import {ParcelForm, BillingForm} from './form'
@@ -10,6 +10,11 @@ import {CreateParcelDialog} from './dialog'
 
 // hooks
 import gigs_api from 'src/lib/gigs'
+import PropTypes from 'prop-types'
+
+CreateParcelForm.propTypes = {
+  user: PropTypes.object
+}
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
@@ -52,7 +57,7 @@ export default function CreateParcelForm({user}) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  const handleFormData = (form_data, form_type) => {
+  const handleFormData = (form_data) => {
     if (!form_data) return
 
     setForm((prev_state) => ({...prev_state, ...form_data}))

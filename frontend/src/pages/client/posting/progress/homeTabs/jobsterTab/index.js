@@ -140,9 +140,9 @@ export default function FreelancerTabComponent() {
     <MainStyle>
       <Stack direction={{xs: 'column', md: 'column'}}>
         {renderData &&
-          renderData.map((v, k) => {
+          renderData.map((v, key) => {
             if (v.details.length === 0) return ''
-            return <FreelancerCard data={v.details[0]} />
+            return <FreelancerCard key={key} data={v.details[0]} />
           })}
 
         {data.length > 5 && data.length !== renderLength && (
@@ -188,8 +188,12 @@ export default function FreelancerTabComponent() {
               value={rateType}
               onChange={handleFilterRateTypeChange}
             >
-              {RATE_TYPE.map((rate) => {
-                return <MenuItem value={rate.value}>{rate.label}</MenuItem>
+              {RATE_TYPE.map((rate, key) => {
+                return (
+                  <MenuItem key={key} value={rate.value}>
+                    {rate.label}
+                  </MenuItem>
+                )
               })}
             </Select>
           </Stack>

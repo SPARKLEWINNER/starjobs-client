@@ -15,13 +15,7 @@ import {useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 import {useAuth} from 'src/contexts/AuthContext'
 
-GenericNotification.propTypes = {
-  open: PropTypes.boolean,
-  details: PropTypes.object,
-  handleClose: PropTypes.func
-}
-
-export default function GenericNotification({open, details, handleClose}) {
+const GenericNotification = ({open = false, details = {}, handleClose = () => {}}) => {
   const {currentUser} = useAuth()
   const navigate = useNavigate()
   const [show, setShow] = useState(open ?? false)
@@ -67,3 +61,11 @@ export default function GenericNotification({open, details, handleClose}) {
     </div>
   )
 }
+
+GenericNotification.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  details: PropTypes.array,
+  handleClose: PropTypes.func
+}
+
+export default GenericNotification

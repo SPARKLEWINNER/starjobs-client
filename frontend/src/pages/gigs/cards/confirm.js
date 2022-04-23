@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import PropTypes from 'prop-types'
 import {
   Dialog,
   DialogContent,
@@ -48,6 +49,12 @@ const ConfirmGig = ({open, onConfirm, handleClose}) => {
       </Dialog>
     </div>
   )
+}
+
+ConfirmGig.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  onConfirm: PropTypes.func,
+  handleClose: PropTypes.func
 }
 
 export default ConfirmGig

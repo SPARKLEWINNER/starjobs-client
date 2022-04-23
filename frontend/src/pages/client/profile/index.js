@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {useNavigate, useParams, useLocation} from 'react-router-dom'
 
 import {capitalCase} from 'change-case'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
 // icon

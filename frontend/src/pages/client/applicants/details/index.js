@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // material
 import {Stack, Typography, Link, Grid, Card, Button} from '@mui/material'
@@ -15,6 +15,8 @@ import ConfirmDeleteGig from './confirmDelete'
 // api
 import storage from 'src/utils/storage'
 import gigs_api from 'src/lib/gigs'
+
+import PropTypes from 'prop-types'
 
 export default function GigsDetailsLayout({details, shift}) {
   const params = useParams()
@@ -60,7 +62,7 @@ export default function GigsDetailsLayout({details, shift}) {
   useEffect(() => {
     setGig(details)
     setHrShift(shift)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [details, shift])
 
   return (
@@ -163,4 +165,9 @@ export default function GigsDetailsLayout({details, shift}) {
       <ConfirmDeleteGig open={deleteOpen} onConfirm={onConfirm} handleClose={handleCloseDeleteDialog} />
     </>
   )
+}
+
+GigsDetailsLayout.propTypes = {
+  details: PropTypes.object,
+  shift: PropTypes.string
 }

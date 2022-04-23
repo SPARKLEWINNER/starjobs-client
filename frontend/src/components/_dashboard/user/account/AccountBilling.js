@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {useState} from 'react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {Box, Grid, Card, Button, Typography, Stack} from '@mui/material'
 import AccountBillingAddressBook from './AccountBillingAddressBook'
 import AccountBillingPaymentMethod from './AccountBillingPaymentMethod'

@@ -1,4 +1,6 @@
 import {Link as RouterLink} from 'react-router-dom'
+import PropTypes from 'prop-types'
+
 import {Box, Card, CardContent, CardMedia, Link, Typography, Stack} from '@mui/material'
 import moment from 'moment'
 import {Icon} from '@iconify/react'
@@ -6,7 +8,14 @@ import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 import Label from 'src/components/Label'
 
 import {calculations} from 'src/utils/gigComputation'
-export default function WaitingCard({gig, _type, category}) {
+
+WaitingCard.propTypes = {
+  gig: PropTypes.object,
+  _type: PropTypes.object,
+  category: PropTypes.string
+}
+
+export default function WaitingCard({gig, category}) {
   let {position, uid, hours, fee, user, from, time, locationRate} = gig
   const {thumbnail, location} = user[0]
 

@@ -6,10 +6,17 @@ import moment from 'moment'
 import {Stack, TextField, MenuItem, Select} from '@mui/material'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import DatePicker from 'react-datepicker'
 // api
 import category_api from 'src/lib/category'
+
+import PropTypes from 'prop-types'
+
+ParcelForm.propTypes = {
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
 
 export default function ParcelForm({onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()

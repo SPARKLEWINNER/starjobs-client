@@ -2,6 +2,7 @@ import {useState, forwardRef} from 'react'
 import Carousel from 'nuka-carousel'
 import {HighlightOff as HighlightOffIcon} from '@mui/icons-material'
 import {Box, Dialog, DialogActions, DialogContent, Button, Slide} from '@mui/material'
+import PropTypes from 'prop-types'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -85,3 +86,7 @@ const PromotionsBanner = ({banners}) => {
 }
 
 export default PromotionsBanner
+
+PromotionsBanner.propTypes = {
+  banners: PropTypes.array
+}

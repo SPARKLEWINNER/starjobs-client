@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import * as Yup from 'yup'
 import {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
@@ -7,7 +9,7 @@ import moment from 'moment'
 import {Stack, TextField, Select, Typography, Box} from '@mui/material'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import DatePicker from 'react-datepicker'
 
 // api
@@ -36,7 +38,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const GigSchema = Yup.object().shape({
@@ -289,6 +291,12 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
       </Form>
     </FormikProvider>
   )
+}
+
+EditGigForm.propTypes = {
+  data: PropTypes.object,
+  onNext: PropTypes.object,
+  onStoreData: PropTypes.object
 }
 
 export default EditGigForm

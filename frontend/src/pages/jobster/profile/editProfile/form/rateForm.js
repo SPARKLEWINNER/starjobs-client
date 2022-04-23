@@ -5,7 +5,7 @@ import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, Box, Typography, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 const E_WALLETS = [{label: 'GCash', image: '', value: 'gcash'}]
 
 const RATE_TYPE = [

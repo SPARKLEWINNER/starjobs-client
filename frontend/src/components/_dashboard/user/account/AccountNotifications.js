@@ -1,4 +1,4 @@
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {useFormik, Form, FormikProvider} from 'formik'
 import {Card, Stack, Switch, Typography, FormControlLabel} from '@mui/material'
 import {LoadingButton} from '@mui/lab'

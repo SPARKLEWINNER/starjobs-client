@@ -1,10 +1,13 @@
-import * as Yup from 'yup'
 import {useState} from 'react'
+import PropTypes from 'prop-types'
+
+import * as Yup from 'yup'
 import {useFormik, Form, FormikProvider} from 'formik'
+
 // material
 import {Stack, TextField, Box, Typography, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {fCamelCase} from 'src/utils/formatCase'
 
 const E_WALLETS = [
@@ -18,7 +21,14 @@ const RATE_TYPE = [
   {label: 'Monthly', value: 'Monthly'}
 ]
 
-export default function PersonalForm({user, stored, onNext, onStoreData}) {
+PersonalForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
+
+export default function PersonalForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const store = stored.rate ? stored.rate : undefined

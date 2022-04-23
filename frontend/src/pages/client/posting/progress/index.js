@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // material
 import {Stack} from '@mui/material'
@@ -72,7 +72,7 @@ const Dashboard = () => {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [currentUser])
 
   const checkNotice = (data) => {
@@ -146,7 +146,7 @@ const Dashboard = () => {
             onReject={handleCancelled}
           />
           <IncomingNotification
-            open={open}
+            open={open ?? false}
             handleClose={handleNoticeClose}
             gig={gigPop}
             onCommit={handleAccepted}

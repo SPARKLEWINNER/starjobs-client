@@ -6,6 +6,12 @@ import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
 import Label from 'src/components/Label'
 import {calculations} from 'src/utils/gigComputation'
 
+import PropTypes from 'prop-types'
+
+PendingCard.propTypes = {
+  gig: PropTypes.object
+}
+
 function numberOfApplicants(gig) {
   if (gig.isExtended) {
     if (gig && gig.numberofApplicants > 0)

@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom'
 // material
 import {Box, Button, Stack} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {styled} from '@mui/material/styles'
 
 // components
@@ -63,7 +63,7 @@ const Edit = () => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -83,7 +83,7 @@ const Edit = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  const handleFormData = (form_data, form_type) => {
+  const handleFormData = (form_data) => {
     if (!form_data) return
 
     setForm((prev_state) => ({...prev_state, ...form_data}))

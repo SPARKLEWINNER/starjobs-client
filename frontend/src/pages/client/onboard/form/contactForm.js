@@ -4,9 +4,18 @@ import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
-export default function ContactForm({user, stored, onNext, onStoreData}) {
+import PropTypes from 'prop-types'
+
+ContactForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
+
+export default function ContactForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
 

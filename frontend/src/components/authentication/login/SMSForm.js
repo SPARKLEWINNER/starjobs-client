@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 import {useState} from 'react'
 import PropTypes from 'prop-types'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {
   Dialog,
   DialogContent,
@@ -16,12 +16,6 @@ import {useFormik, Form, FormikProvider} from 'formik'
 import {LoadingButton} from '@mui/lab'
 
 import auth_api from 'src/lib/auth'
-
-SMSDialog.propTypes = {
-  account: PropTypes.object,
-  open: PropTypes.Boolean,
-  onClose: PropTypes.func
-}
 
 const SMSDialog = ({account, open, onClose}) => {
   const [isLoading, setLoading] = useState(false)
@@ -95,6 +89,12 @@ const SMSDialog = ({account, open, onClose}) => {
       </Dialog>
     </div>
   )
+}
+
+SMSDialog.propTypes = {
+  account: PropTypes.object,
+  open: PropTypes.bool,
+  onClose: PropTypes.func
 }
 
 export default SMSDialog

@@ -140,7 +140,13 @@ export default function FreelancerTab() {
   )
 
   useEffect(() => {
-    data && setRenderData(data.slice(0, 5))
+    let componentMounted = true
+    if (componentMounted) {
+      data && setRenderData(data.slice(0, 5))
+    }
+    return () => {
+      componentMounted = false
+    }
   }, [data])
 
   return (

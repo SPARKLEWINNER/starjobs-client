@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
 import {styled} from '@mui/material/styles'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // component
 import Page from 'src/components/Page'

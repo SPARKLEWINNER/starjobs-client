@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // material
 import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
@@ -82,7 +82,7 @@ const Onboard = () => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -219,14 +219,14 @@ const Onboard = () => {
                     </Typography>
                     <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{marginTop: '0 !important'}}>
                       {form.expertise.workType.split('=>').length > 0 ? (
-                        form.expertise.workType.split('=>').map((v, k) => {
+                        form.expertise.workType.split('=>').map((value, key) => {
                           return (
                             <Typography
-                              Typography
+                              key={key}
                               variant="body2"
                               sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
                             >
-                              - {v}
+                              - {value}
                             </Typography>
                           )
                         })

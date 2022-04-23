@@ -4,9 +4,16 @@ import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
 import moment from 'moment'
 import {calculations} from 'src/utils/gigComputation'
 
+import PropTypes from 'prop-types'
+
+BillingCard.propTypes = {
+  gig: PropTypes.object,
+  _type: PropTypes.string
+}
+
 const default_url = process.env.REACT_APP_IMAGE_URL
 
-export default function BillingCard({gig, _type}) {
+export default function BillingCard({gig}) {
   let {position, hours, fee, time, from, _id, account, locationRate} = gig
   fee = parseFloat(fee)
   const {firstName, middleInitial, lastName, photo} = account[0]

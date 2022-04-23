@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 // material
 import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // component form
 import PersonalForm from 'src/components/freelancerOnboard/form/personalForm'
@@ -68,7 +68,7 @@ export default function LinearAlternativeLabel() {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)

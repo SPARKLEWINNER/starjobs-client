@@ -8,6 +8,7 @@ import {
   Typography,
   Stack
 } from '@mui/material'
+import PropTypes from 'prop-types'
 
 const ConfirmDeleteGig = ({open, onConfirm, handleClose}) => {
   const handleConfirmGig = () => {
@@ -40,6 +41,11 @@ const ConfirmDeleteGig = ({open, onConfirm, handleClose}) => {
       </Dialog>
     </div>
   )
+}
+ConfirmDeleteGig.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  onConfirm: PropTypes.func,
+  handleClose: PropTypes.func
 }
 
 export default ConfirmDeleteGig

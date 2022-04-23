@@ -6,7 +6,7 @@ import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, FormControlLabel, Box, Typography, Checkbox, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 import {fCamelCase} from 'src/utils/formatCase'
 

@@ -1,13 +1,23 @@
+import PropTypes from 'prop-types'
+
 import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, FormControlLabel, Typography, Checkbox} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 import {fCamelCase} from 'src/utils/formatCase'
-export default function EmploymentForm({user, stored, onNext, onStoreData}) {
+
+EmploymentForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
+
+export default function EmploymentForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const store = stored.work ? stored.work : undefined

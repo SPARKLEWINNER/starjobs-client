@@ -1,5 +1,11 @@
 import {Stack, Grid, Typography, Divider} from '@mui/material'
 import {calculations} from 'src/utils/gigComputation'
+import PropTypes from 'prop-types'
+
+BillingForm.propTypes = {
+  storeData: PropTypes.object
+}
+
 export default function BillingForm({storeData}) {
   if (!storeData) return
 

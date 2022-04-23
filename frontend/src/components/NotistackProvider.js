@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import {Icon} from '@iconify/react'
-import {SnackbarProvider} from 'notistack5'
+import {SnackbarProvider} from 'notistack'
 
 // material
 import {Box} from '@mui/material'
@@ -76,7 +76,8 @@ function SnackbarIcon({icon, color}) {
         justifyContent: 'center',
         color: `${color}.main`,
         bgcolor: (theme) => alpha(theme.palette[color].main, 0.16)
-      }}>
+      }}
+    >
       <Icon icon={icon} width={24} height={24} />
     </Box>
   )
@@ -114,7 +115,8 @@ export default function NotistackProvider({children}) {
         variantSuccess: classes.success,
         variantWarning: classes.warning,
         variantError: classes.error
-      }}>
+      }}
+    >
       {children}
     </SnackbarProvider>
   )

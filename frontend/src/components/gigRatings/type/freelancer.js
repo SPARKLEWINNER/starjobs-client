@@ -4,14 +4,22 @@ import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, Typography, Rating} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // api
 import gigs_api from 'src/lib/gigs'
 
 import {fCamelCase} from 'src/utils/formatCase'
 
-export default function FreelancerRating({user, gigId, onClose}) {
+import PropTypes from 'prop-types'
+
+FreelancerRating.propTypes = {
+  user: PropTypes.object,
+  gigId: PropTypes.string,
+  onClose: PropTypes.func
+}
+
+export default function FreelancerRating({gigId, onClose}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [RATING, setRating] = useState({

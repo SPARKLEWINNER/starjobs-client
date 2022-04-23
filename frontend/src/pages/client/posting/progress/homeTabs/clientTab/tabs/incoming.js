@@ -5,6 +5,13 @@ import {IncomingCard} from '../../../cards'
 
 // theme
 import color from 'src/theme/palette'
+import PropTypes from 'prop-types'
+
+IncomingTab.propTypes = {
+  gigs: PropTypes.array,
+  user: PropTypes.array,
+  selected: PropTypes.string
+}
 
 const incoming_status = ['Accepted']
 

@@ -5,6 +5,7 @@ import {Box, Card, CardContent, Typography, Stack} from '@mui/material'
 
 // component
 import Label from 'src/components/Label'
+import PropTypes from 'prop-types'
 
 function change_label_by_status(status) {
   switch (status) {
@@ -18,7 +19,7 @@ function change_label_by_status(status) {
       return status
   }
 }
-export default function CurrentCard({gig, onView}) {
+const CurrentCard = ({gig, onView}) => {
   let {position, hours, fee, time, from, status, category} = gig
 
   return (
@@ -59,3 +60,10 @@ export default function CurrentCard({gig, onView}) {
     </Card>
   )
 }
+
+CurrentCard.propTypes = {
+  gig: PropTypes.object,
+  onView: PropTypes.func
+}
+
+export default CurrentCard

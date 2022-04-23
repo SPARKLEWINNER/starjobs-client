@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 // icons
 import {Icon} from '@iconify/react'
@@ -17,7 +18,7 @@ import useSendNotif from 'src/utils/hooks/useSendNotif'
 // variables
 const image_url = process.env.REACT_APP_IMAGE_URL
 
-const FreelancerCard = ({data, onClick, onClickApplicantId}) => {
+const FreelancerCard = ({data}) => {
   const [isSendingInterest, setIsSendingInterest] = useState(false)
 
   const {sendInterestNotification} = useSendNotif()
@@ -102,6 +103,12 @@ const FreelancerCard = ({data, onClick, onClickApplicantId}) => {
       </Stack>
     </Card>
   )
+}
+
+FreelancerCard.propTypes = {
+  data: PropTypes.object,
+  onClick: PropTypes.func,
+  onClickApplicantId: PropTypes.func
 }
 
 export default FreelancerCard

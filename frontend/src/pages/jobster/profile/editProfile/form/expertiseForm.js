@@ -6,7 +6,7 @@ import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, FormControlLabel, Typography, Checkbox, Box} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import Select from 'react-select'
 import {FreelancerCategory} from 'src/utils/data'
 

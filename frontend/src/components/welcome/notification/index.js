@@ -10,10 +10,7 @@ export default function NotificationTab() {
   const checkIfPushIsEnabled = () => {
     var ua = navigator.userAgent.toLowerCase()
     if (ua.indexOf('safari') !== -1) {
-      if (ua.indexOf('chrome') > -1) {
-      } else {
-        return
-      }
+      if (ua.indexOf('chrome') <= -1) return
     }
 
     navigator.serviceWorker.ready.then((registration) => {
@@ -46,10 +43,9 @@ export default function NotificationTab() {
         .getSubscription()
         .then(function (subscription) {
           console.log('subscription', subscription)
-          if (subscription) {
-            console.log(subscription)
-          } else {
-          }
+          if (!subscription) return
+
+          console.log(subscription)
         })
         .catch(function (error) {
           console.error('Error occurred enabling push ', error)

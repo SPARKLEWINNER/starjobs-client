@@ -13,7 +13,8 @@ import storage from 'src/utils/storage'
 import {Formik, useField} from 'formik'
 import * as yup from 'yup'
 
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
+import PropTypes from 'prop-types'
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY} = process.env
 const webhook = require('webhook-discord')
@@ -81,7 +82,7 @@ const DiscordDialog = ({open, handleClose}) => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   return (
@@ -114,7 +115,7 @@ const DiscordDialog = ({open, handleClose}) => {
               return enqueueSnackbar('Thank you for your patience, we will contact you ASAP.', {variant: 'success'})
             }}
           >
-            {({values, handleChange, handleSubmit, isSubmitting}) => (
+            {({handleChange, handleSubmit, isSubmitting}) => (
               <form onSubmit={handleSubmit}>
                 <CustomTextField
                   autoFocus
@@ -171,3 +172,22 @@ const DiscordDialog = ({open, handleClose}) => {
 }
 
 export default DiscordDialog
+
+CustomTextField.propTypes = {
+  type: PropTypes.string,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  InputProps: PropTypes.object
+}
+
+CustomMultiLineTextField.propTypes = {
+  type: PropTypes.string,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  InputProps: PropTypes.object
+}
+
+DiscordDialog.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  handleClose: PropTypes.func
+}

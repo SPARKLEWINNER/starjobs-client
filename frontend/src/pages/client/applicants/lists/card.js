@@ -4,6 +4,7 @@ import map from '@iconify/icons-eva/map-outline'
 // material
 import {alpha, styled} from '@mui/material/styles'
 import {Box, Stack, Card, Avatar, Button, Typography, Link} from '@mui/material'
+import PropTypes from 'prop-types'
 
 const IconWrapperStyle = styled('div')(({theme}) => ({
   width: 200,
@@ -79,4 +80,10 @@ export default function ApplicantCard({data, onClick, gigDetails}) {
       )}
     </>
   )
+}
+
+ApplicantCard.propTypes = {
+  data: PropTypes.bool,
+  gigDetails: PropTypes.bool,
+  onClick: PropTypes.func
 }

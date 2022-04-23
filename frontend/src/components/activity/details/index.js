@@ -4,6 +4,7 @@ import {Stack, Card, Typography, Grid} from '@mui/material'
 
 // utils
 import {calculations} from 'src/utils/gigComputation'
+import PropTypes from 'prop-types'
 
 const ActivityDetailsCard = ({details}) => {
   if (!details || details === undefined) return ''
@@ -81,4 +82,7 @@ const ActivityDetailsCard = ({details}) => {
   )
 }
 
+ActivityDetailsCard.propTypes = {
+  details: PropTypes.object
+}
 export default ActivityDetailsCard

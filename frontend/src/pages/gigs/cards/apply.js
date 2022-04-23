@@ -13,6 +13,8 @@ import Label from 'src/components/Label'
 
 import {calculations} from 'src/utils/gigComputation'
 
+import PropTypes from 'prop-types'
+
 const ApplyCard = ({path, gig, currentUser, onClick}) => {
   let {position, hours, fee, user, time, from, category, uid, _id, locationRate} = gig
   const isApplied =
@@ -110,6 +112,13 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
       </Box>
     </Card>
   )
+}
+
+ApplyCard.propTypes = {
+  path: PropTypes.string,
+  gig: PropTypes.object,
+  currentUser: PropTypes.object,
+  onClick: PropTypes.func
 }
 
 export default ApplyCard

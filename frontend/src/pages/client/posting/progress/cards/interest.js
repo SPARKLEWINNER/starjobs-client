@@ -1,9 +1,8 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import {Link as RouterLink} from 'react-router-dom'
+import {capitalCase} from 'change-case'
 
 import {Icon} from '@iconify/react'
-import {capitalCase} from 'change-case'
-import {Link as RouterLink} from 'react-router-dom'
 import map from '@iconify/icons-eva/map-outline'
 // material
 import {Box, Stack, Card, Avatar, Typography, Link} from '@mui/material'
@@ -11,12 +10,6 @@ import {Box, Stack, Card, Avatar, Typography, Link} from '@mui/material'
 import Label from 'src/components/Label'
 // import {getUser} from 'src/utils/hooks/auth'
 // import useSendNotif from 'src/utils/hooks/useSendNotif'
-
-FreelancerCard.propTypes = {
-  data: PropTypes.object,
-  onClick: PropTypes.func,
-  onClickApplicantId: PropTypes.string
-}
 
 const image_url = process.env.REACT_APP_IMAGE_URL
 export default function FreelancerCard({data}) {
@@ -68,4 +61,10 @@ export default function FreelancerCard({data}) {
       </Stack>
     </Card>
   )
+}
+
+FreelancerCard.propTypes = {
+  data: PropTypes.object,
+  onClick: PropTypes.func,
+  onClickApplicantId: PropTypes.string
 }

@@ -1,5 +1,5 @@
 import {Icon} from '@iconify/react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {useFormik, Form, FormikProvider} from 'formik'
 import twitterFill from '@iconify/icons-eva/twitter-fill'
 import linkedinFill from '@iconify/icons-eva/linkedin-fill'

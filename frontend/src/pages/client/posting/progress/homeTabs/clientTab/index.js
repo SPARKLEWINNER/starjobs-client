@@ -1,5 +1,5 @@
 import {useState, useEffect, useContext} from 'react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
 // material
@@ -86,7 +86,7 @@ export default function TabsComponent() {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const checkNotice = (data) => {
@@ -154,7 +154,7 @@ export default function TabsComponent() {
     setConfirmOpen(false)
   }
 
-  const handleConfirmEndShift = async (value) => {
+  const handleConfirmEndShift = async () => {
     let form_data = {
       status: 'Confirm-End-Shift',
       uid: gigConfirm.auid
@@ -209,7 +209,7 @@ export default function TabsComponent() {
       />
 
       <IncomingNotification
-        open={open}
+        open={open ?? false}
         handleClose={handleNoticeClose}
         gig={gigPop}
         onCommit={handleAccepted}

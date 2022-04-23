@@ -42,7 +42,8 @@ function SettingsProvider({children}) {
           name: color.name,
           value: color.main
         }))
-      }}>
+      }}
+    >
       {children}
     </SettingsContext.Provider>
   )

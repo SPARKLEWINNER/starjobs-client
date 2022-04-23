@@ -7,6 +7,7 @@ import {BillingCard} from '../../../cards'
 
 // theme
 import color from 'src/theme/palette'
+import PropTypes from 'prop-types'
 
 // status
 const current_status = [
@@ -19,7 +20,7 @@ const current_status = [
   'Confirm-End-Shift'
 ]
 
-export default function CurrentTab({gigs}) {
+const CurrentTab = ({gigs}) => {
   const [FILTERED_DATA, setData] = useState([])
 
   useEffect(() => {
@@ -67,3 +68,9 @@ export default function CurrentTab({gigs}) {
     </Box>
   )
 }
+
+CurrentTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.string])
+}
+
+export default CurrentTab

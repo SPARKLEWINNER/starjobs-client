@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import moment from 'moment'
 import {useLocation, useNavigate} from 'react-router-dom'
 
@@ -11,7 +11,10 @@ import {TabContext, TabList, TabPanel} from '@mui/lab'
 
 // component
 import Page from 'src/components/Page'
-import {PendingTab, IncomingTab, CurrentTab, ReceiveTab} from './homeTabs'
+import CurrentTab from './homeTabs/current'
+import IncomingTab from './homeTabs/incoming'
+import PendingTab from './homeTabs/pending'
+import ReceiveTab from './homeTabs/receive'
 import {IncomingNotification, EndShiftNotification} from 'src/components/notifications'
 
 // api
@@ -96,7 +99,7 @@ const Dashboard = () => {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const checkNotice = (data) => {
@@ -163,7 +166,7 @@ const Dashboard = () => {
     setConfirmOpen(false)
   }
 
-  const handleConfirmEndShift = async (value) => {
+  const handleConfirmEndShift = async () => {
     let form_data = {
       status: 'End-Shift',
       uid: gigConfirm.auid
@@ -220,7 +223,7 @@ const Dashboard = () => {
         />
 
         <IncomingNotification
-          open={open}
+          open={open ?? false}
           handleClose={handleNoticeClose}
           gig={gigPop}
           onCommit={handleAccepted}

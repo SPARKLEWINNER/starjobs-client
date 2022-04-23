@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import {Card, Typography, Link} from '@mui/material'
 
 // component
@@ -10,6 +10,7 @@ import {ConfirmDialog} from './dialog'
 // api
 import gigs_api from 'src/lib/gigs'
 import useSendNotif from 'src/utils/hooks/useSendNotif'
+import PropTypes from 'prop-types'
 
 const ListApplicants = ({details: gig, applicants}) => {
   const {enqueueSnackbar} = useSnackbar()
@@ -102,6 +103,10 @@ const ListApplicants = ({details: gig, applicants}) => {
       <ConfirmDialog open={open} handleClose={handleClose} onConfirm={handleSubmit} />
     </>
   )
+}
+ListApplicants.propTypes = {
+  details: PropTypes.object,
+  applicants: PropTypes.object
 }
 
 export default ListApplicants

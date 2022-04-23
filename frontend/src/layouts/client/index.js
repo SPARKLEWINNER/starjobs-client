@@ -10,7 +10,7 @@ import map from '@iconify/icons-eva/map-outline'
 import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // component
 import {CredentialsTab} from './tabs'

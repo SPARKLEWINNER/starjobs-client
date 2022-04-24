@@ -38,8 +38,7 @@ export const InputOutlineStyle = {
   },
 
   '& .MuiInputLabel-root ': {
-    color: `${color.starjobs.fieldLabel} !important`,
-    fontSize: '0.75rem'
+    color: `${color.starjobs.fieldLabel} !important`
   },
   '& fieldset': {
     borderColor: `${color.starjobs.fieldColor} !important`
@@ -49,8 +48,7 @@ export const InputOutlineStyle = {
   },
   '& input': {
     backgroundColor: color.starjobs.fieldColor,
-    color: `${color.starjobs.main} !important`,
-    fontSize: '0.75rem'
+    color: `${color.starjobs.main} !important`
   },
   '& .MuiFormHelperText-root': {
     color: `${color.starjobs.fieldLabel} !important`

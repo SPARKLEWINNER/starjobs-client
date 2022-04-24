@@ -27,25 +27,25 @@ import {HelmetProvider} from 'react-helmet-async'
 import {SettingsProvider} from 'src/contexts/settings'
 import {CollapseDrawerProvider} from 'src/contexts/drawer'
 
+import registerServiceWorker from './serviceWorkerRegistration'
+
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import ServiceWorkerWrapper from './pwa/ServiceWrapper'
 
 ReactDOM.render(
-  <>
-    <HelmetProvider>
-      <ServiceWorkerWrapper />
-      <SettingsProvider>
-        <CollapseDrawerProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </CollapseDrawerProvider>
-      </SettingsProvider>
-    </HelmetProvider>
-  </>,
+  <HelmetProvider>
+    <SettingsProvider>
+      <CollapseDrawerProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </CollapseDrawerProvider>
+    </SettingsProvider>
+  </HelmetProvider>,
   document.getElementById('root')
 )
+
+registerServiceWorker()
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

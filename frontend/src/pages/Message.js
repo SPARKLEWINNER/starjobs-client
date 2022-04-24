@@ -67,6 +67,7 @@ const Message = () => {
 
     return (
       <NotificationCardV2
+        key={index}
         id={v._id}
         uid={user._id}
         userType={user.accountType}

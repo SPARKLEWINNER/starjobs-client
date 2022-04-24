@@ -260,7 +260,7 @@ const Profile = () => {
             <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
               <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
                 <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '200px'}}>
-                  {capitalCase(`${user && user.firstName} ${user && user.middleInitial} ${user && user.lastName}`)}
+                  {capitalCase(`${user && user.name}`)}
 
                   <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
                     <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />

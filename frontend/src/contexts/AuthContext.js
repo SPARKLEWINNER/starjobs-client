@@ -24,9 +24,9 @@ function useProvideAuth() {
   const [currentUser, setCurrentUser] = useState({})
 
   const signOut = () => {
-    window.localStorage.removeItem('token')
-    window.localStorage.removeItem('refreshToken')
-    window.localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('user')
     setAuthToken(null)
   }
 

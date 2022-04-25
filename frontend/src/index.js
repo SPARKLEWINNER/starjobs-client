@@ -20,32 +20,47 @@ import './_style.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import ReactDOM from 'react-dom'
-import React from 'react'
 
 import {BrowserRouter} from 'react-router-dom'
 import {HelmetProvider} from 'react-helmet-async'
 import {SettingsProvider} from 'src/contexts/settings'
 import {CollapseDrawerProvider} from 'src/contexts/drawer'
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
+import {ServiceWorkerProvider} from './pwa/pwa-context'
+import * as serviceWorker from './serviceWorkerRegistration'
+
 ReactDOM.render(
   <HelmetProvider>
-    <SettingsProvider>
-      <CollapseDrawerProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </CollapseDrawerProvider>
-    </SettingsProvider>
+    <ServiceWorkerProvider>
+      <SettingsProvider>
+        <CollapseDrawerProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </CollapseDrawerProvider>
+      </SettingsProvider>
+    </ServiceWorkerProvider>
   </HelmetProvider>,
   document.getElementById('root')
 )
 
-// If you want to enable client cache, register instead.
-serviceWorkerRegistration.register()
+serviceWorker.register({
+  onUpdate: (registration) => {
+    const waitingServiceWorker = registration.waiting
+
+    if (waitingServiceWorker) {
+      waitingServiceWorker.addEventListener('statechange', (event) => {
+        if (event.target.state === 'activated') {
+          window.location.reload()
+        }
+      })
+      waitingServiceWorker.postMessage({type: 'SKIP_WAITING'})
+    }
+  }
+})
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

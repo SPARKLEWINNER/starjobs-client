@@ -1,4 +1,5 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
+
 // firebase
 import {onMessageListener} from './firebase'
 
@@ -19,23 +20,33 @@ import {RatingsProvider} from 'src/contexts/rating'
 import {AuthProvider} from 'src/contexts/AuthContext'
 import {SessionProvider} from 'src/contexts/SessionContext'
 
+import {useServiceWorker} from './pwa/pwa-context'
+
 export default function App() {
+  const {isUpdateAvailable, updateAssets} = useServiceWorker()
   const [open, setOpen] = useState(false)
   const [payload, setPayload] = useState([])
+
+  console.log('isUpdateAvailable', isUpdateAvailable)
 
   const handleClose = () => {
     setOpen(false)
   }
 
-  if (onMessageListener !== undefined) {
-    onMessageListener()
-      .then((payload) => {
-        setPayload(payload)
-        setOpen(true)
-      })
-      .catch((err) => console.log('failed: ', err))
-  }
+  useEffect(() => {
+    const load = () => {
+      if (onMessageListener !== undefined) {
+        onMessageListener()
+          .then((payload) => {
+            setPayload(payload)
+            setOpen(true)
+          })
+          .catch((err) => console.log('failed: ', err))
+      }
+    }
 
+    load()
+  }, [])
   return (
     <ThemeConfig>
       <ThemePrimaryColor>
@@ -53,6 +64,14 @@ export default function App() {
             </NotistackProvider>
           </SessionProvider>
         </AuthProvider>
+        {isUpdateAvailable && (
+          <div>
+            A new version of this app is available!
+            <button type="button" onClick={updateAssets}>
+              Update now
+            </button>
+          </div>
+        )}
       </ThemePrimaryColor>
     </ThemeConfig>
   )

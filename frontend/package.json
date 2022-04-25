@@ -97,6 +97,7 @@
     "react-image-lightbox": "^5.1.4",
     "react-intersection-observer": "^8.32.0",
     "react-quill": "^2.0.0-beta.2",
+    "react-redux": "^8.0.1",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.0",
@@ -106,6 +107,7 @@
     "react-slick": "^0.28.0",
     "react-transition-group": "^4.4.2",
     "react-verification-code-input": "^1.2.9",
+    "redux": "^4.2.0",
     "secure-ls": "^1.2.6",
     "simplebar": "^5.3.5",
     "simplebar-react": "^2.3.5",
@@ -126,6 +128,11 @@
     "lint-staged": "^12.4.0",
     "node-sass": "^7.0.1",
     "prettier": "^2.6.2",
-    "react-error-overlay": "^6.0.11"
+    "react-error-overlay": "^6.0.11",
+    "workbox-core": "^6.5.3",
+    "workbox-expiration": "^6.5.3",
+    "workbox-precaching": "^6.5.3",
+    "workbox-routing": "^6.5.3",
+    "workbox-strategies": "^6.5.3"
   }
 }

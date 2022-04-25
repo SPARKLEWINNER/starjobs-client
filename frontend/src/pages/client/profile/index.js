@@ -144,7 +144,7 @@ const Profile = () => {
 
       if (componentMounted) {
         setCurrentUser(user)
-        setUser(user)
+        setUser(details)
         setGigs(gigs)
       }
     }
@@ -260,7 +260,7 @@ const Profile = () => {
             <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
               <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
                 <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '200px'}}>
-                  {capitalCase(`${user && user.name}`)}
+                  {capitalCase(`${user && user?.firstName} ${user && user?.middleName} ${user && user?.lastName}`)}
 
                   <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
                     <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
@@ -285,7 +285,7 @@ const Profile = () => {
                   variant="body2"
                   sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                 >
-                  {user && user.location}
+                  {user && capitalCase(user.location)}
                 </Typography>
               </Box>
               <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>

@@ -3,10 +3,10 @@ import {useParams, useLocation} from 'react-router-dom'
 import {capitalCase} from 'capital-case'
 
 // material
-import {Box, Tab, Stack, Grid, Divider, Typography, Card} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
+import {Box, Tab, Stack, Grid, Divider, Typography, Card} from '@mui/material'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 
 // icons
 import {Icon} from '@iconify/react'
@@ -15,16 +15,16 @@ import map from '@iconify/icons-eva/map-outline'
 import envelope from '@iconify/icons-eva/email-outline'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import {AboutTab, ReviewTab, CredentialsTab, MyActivitiesTab} from './tabs'
-import MAvatar from 'components/@material-extend/MAvatar'
+import MAvatar from 'src/components/@material-extend/MAvatar'
 
 // api
-import user_api from 'api/users'
-import storage from 'utils/storage'
-import {nameInitials} from 'utils/formatCase'
+import user_api from 'src/lib/users'
+import storage from 'src/utils/storage'
+import {nameInitials} from 'src/utils/formatCase'
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 // variables
 const image_bucket = process.env.REACT_APP_IMAGE_URL
@@ -37,19 +37,19 @@ const MainStyle = styled(Stack)(({theme}) => ({
   marginRight: 'auto',
   marginTop: APPBAR_DESKTOP,
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   },
   [theme.breakpoints.up('sm')]: {
-    marginTop: 120,
+    marginTop: 120
   },
   [theme.breakpoints.up('xs')]: {
-    marginTop: 0,
-  },
+    marginTop: 0
+  }
 }))
 
 const useStyles = makeStyles({
   root: {
-    width: 'auto',
+    width: 'auto'
   },
   nav_item: {
     // textTransform: 'uppercase',
@@ -62,28 +62,28 @@ const useStyles = makeStyles({
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
+      fontSize: 11
     },
     '&.Mui-selected': {
       borderBottom: `1px solid ${color.starjobs.main}`,
       border: 'none',
-      borderRadius: 0,
-    },
+      borderRadius: 0
+    }
   },
   icon: {
     width: 27,
-    height: 27,
-  },
+    height: 27
+  }
 })
 
 const STATIC_TAB = [
   {value: 1, label: 'About', disabled: false},
   {value: 2, label: 'Reviews', disabled: false},
   {value: 3, label: 'Credentials', disabled: false},
-  {value: 4, label: 'My Activities', disabled: false},
+  {value: 4, label: 'My Activities', disabled: false}
 ]
 
 const Profile = () => {
@@ -135,7 +135,7 @@ const Profile = () => {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const renderTab = (type, current_user) => {
@@ -171,7 +171,7 @@ const Profile = () => {
                     mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
                     width: '100%',
                     alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-                    px: '0 !important',
+                    px: '0 !important'
                   }}
                 >
                   <Box
@@ -180,7 +180,7 @@ const Profile = () => {
                       display: 'flex',
                       alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
                       px: {sm: 0, xs: 0},
-                      mb: 1,
+                      mb: 1
                     }}
                   >
                     <MAvatar
@@ -253,8 +253,8 @@ const Profile = () => {
                       aria-label="scrollable auto tabs example"
                       TabIndicatorProps={{
                         style: {
-                          display: 'none',
-                        },
+                          display: 'none'
+                        }
                       }}
                     >
                       {SIMPLE_TAB.map((tab, index) => (
@@ -265,7 +265,7 @@ const Profile = () => {
                       sx={{
                         mt: 2,
                         width: '100%',
-                        borderRadius: 1,
+                        borderRadius: 1
                       }}
                     >
                       <Card
@@ -274,7 +274,7 @@ const Profile = () => {
                           mt: 1,
                           mb: 20,
                           width: '100%',
-                          borderRadius: 1,
+                          borderRadius: 1
                         }}
                       >
                         {SIMPLE_TAB.map((panel, index) => (

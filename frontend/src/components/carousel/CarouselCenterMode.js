@@ -5,8 +5,8 @@ import {Icon} from '@iconify/react'
 import {Link as RouterLink} from 'react-router-dom'
 import arrowForwardFill from '@iconify/icons-eva/arrow-forward-fill'
 // material
-import {alpha, useTheme, styled} from '@material-ui/core/styles'
-import {Box, Paper, Link, Typography, CardContent} from '@material-ui/core'
+import {alpha, useTheme, styled} from '@mui/material/styles'
+import {Box, Paper, Link, Typography, CardContent} from '@mui/material'
 // utils
 //
 import {CarouselControlsArrowsBasic2} from './controls'
@@ -16,7 +16,7 @@ const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature(),
+  image: faker.image.nature()
 }))
 
 const RootStyle = styled('div')(({theme}) => ({
@@ -33,14 +33,14 @@ const RootStyle = styled('div')(({theme}) => ({
     position: 'absolute',
     backgroundImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
     [theme.breakpoints.up(480)]: {
-      display: 'block',
-    },
+      display: 'block'
+    }
   },
   '&:after': {
     right: 0,
     left: 'auto',
-    transform: 'scaleX(-1)',
-  },
+    transform: 'scaleX(-1)'
+  }
 }))
 
 const CarouselImgStyle = styled('img')(({theme}) => ({
@@ -49,11 +49,11 @@ const CarouselImgStyle = styled('img')(({theme}) => ({
   height: '100%',
   objectFit: 'cover',
   position: 'absolute',
-  transition: theme.transitions.create('all'),
+  transition: theme.transitions.create('all')
 }))
 
 CarouselItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object
 }
 
 function CarouselItem({item}) {
@@ -69,8 +69,8 @@ function CarouselItem({item}) {
         position: 'relative',
         '&:hover img': {
           width: '120%',
-          height: '120%',
-        },
+          height: '120%'
+        }
       }}
     >
       <CarouselImgStyle alt={title} src={image} />
@@ -83,7 +83,7 @@ function CarouselItem({item}) {
           position: 'absolute',
           color: 'common.white',
           backgroundImage: (theme) =>
-            `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(theme.palette.grey[900], 0)} 100%)`,
+            `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(theme.palette.grey[900], 0)} 100%)`
         }}
       >
         <Typography variant="h4" paragraph>
@@ -99,7 +99,7 @@ function CarouselItem({item}) {
             alignItems: 'center',
             display: 'inline-flex',
             transition: (theme) => theme.transitions.create('opacity'),
-            '&:hover': {opacity: 1},
+            '&:hover': {opacity: 1}
           }}
         >
           learn More
@@ -122,17 +122,17 @@ export default function CarouselCenterMode() {
     responsive: [
       {
         breakpoint: 1024,
-        settings: {slidesToShow: 2},
+        settings: {slidesToShow: 2}
       },
       {
         breakpoint: 600,
-        settings: {slidesToShow: 2},
+        settings: {slidesToShow: 2}
       },
       {
         breakpoint: 480,
-        settings: {slidesToShow: 1, centerPadding: '0'},
-      },
-    ],
+        settings: {slidesToShow: 1, centerPadding: '0'}
+      }
+    ]
   }
 
   const handlePrevious = () => {

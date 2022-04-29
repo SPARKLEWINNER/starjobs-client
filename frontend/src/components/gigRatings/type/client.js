@@ -2,27 +2,34 @@ import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import {Stack, TextField, Typography, Rating} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Stack, TextField, Typography, Rating} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
-import {fCamelCase} from 'utils/formatCase'
+import {fCamelCase} from 'src/utils/formatCase'
 
-export default function ClientRating({user, gigId, onClose}) {
+import PropTypes from 'prop-types'
+
+ClientRating.propTypes = {
+  user: PropTypes.object,
+  gigId: PropTypes.object,
+  onClose: PropTypes.func
+}
+export default function ClientRating({gigId, onClose}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [RATING, setRating] = useState({
     efficiency: 0,
     onTime: 0,
     completeness: 0,
-    noShowRate: 0,
+    noShowRate: 0
   })
 
   const GigSchema = Yup.object().shape({
-    comments: Yup.string(),
+    comments: Yup.string()
   })
 
   const formik = useFormik({
@@ -50,7 +57,7 @@ export default function ClientRating({user, gigId, onClose}) {
       let data = {
         ...RATING,
         comments: values.comments || '',
-        gigId: gigId,
+        gigId: gigId
       }
 
       const request = await gigs_api.post_rating_gig(data._id, values)
@@ -65,7 +72,7 @@ export default function ClientRating({user, gigId, onClose}) {
       setTimeout(() => {
         window.location.reload()
       }, 1000)
-    },
+    }
   })
 
   const {handleSubmit, getFieldProps} = formik

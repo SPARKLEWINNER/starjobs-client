@@ -2,31 +2,33 @@ import {useNavigate} from 'react-router-dom'
 import {useRef, useState} from 'react'
 import {Icon} from '@iconify/react'
 import menu2Fill from '@iconify/icons-eva/menu-2-fill'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemButton from '@material-ui/core/ListItemButton'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
 // material
-import {alpha} from '@material-ui/core/styles'
-import {Button, Box, SwipeableDrawer, Typography, Avatar, IconButton} from '@material-ui/core'
-import PersonIcon from '@material-ui/icons/PersonOutline'
-import DocumentScannerOutlined from '@material-ui/icons/DocumentScannerOutlined'
-import HelpIcon from '@material-ui/icons/HelpOutlineOutlined'
-import ArrowRightIcon from '@material-ui/icons/ChevronRightOutlined'
-import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
-import PasswordOutlinedIcon from '@material-ui/icons/PasswordOutlined'
-// import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import {alpha} from '@mui/material/styles'
+import {Button, Box, SwipeableDrawer, Typography, Avatar, IconButton} from '@mui/material'
+import PersonIcon from '@mui/icons-material/PersonOutline'
+import DocumentScannerOutlined from '@mui/icons-material/DocumentScannerOutlined'
+import HelpIcon from '@mui/icons-material/HelpOutlineOutlined'
+import ArrowRightIcon from '@mui/icons-material/ChevronRightOutlined'
+import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined'
+import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined'
+// import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
 
 // component
 // import MenuPopover from '../../components/MenuPopover'
-import DiscordDialog from 'components/discord/DiscordDialog'
+import DiscordDialog from 'src/components/discord/DiscordDialog'
 
 // hooks
-import storage from 'utils/storage'
+import storage from 'src/utils/storage'
 
 // style
-import {LoadingButtonStyle} from 'theme/style'
+import {LoadingButtonStyle} from 'src/theme/style'
+import PropTypes from 'prop-types'
+
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 export default function AccountPopover({user}) {
   const anchorRef = useRef(null)
@@ -79,9 +81,9 @@ export default function AccountPopover({user}) {
               borderRadius: '50%',
               position: 'absolute',
               bottom: '0 !important',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
-            },
-          }),
+              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72)
+            }
+          })
         }}
       >
         <Icon
@@ -89,7 +91,7 @@ export default function AccountPopover({user}) {
           style={{
             width: 30,
             height: 30,
-            color: '#FFFFFF',
+            color: '#FFFFFF'
           }}
         />
       </IconButton>
@@ -109,7 +111,7 @@ export default function AccountPopover({user}) {
               my: 0,
               py: 3,
               borderBottomLeftRadius: 80,
-              borderBottomRightRadius: 80,
+              borderBottomRightRadius: 80
             }}
           >
             <Box
@@ -118,7 +120,7 @@ export default function AccountPopover({user}) {
                 display: 'flex',
                 alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
                 px: {sm: 0, xs: 0},
-                mb: 1,
+                mb: 1
               }}
             >
               <Avatar
@@ -222,7 +224,7 @@ export default function AccountPopover({user}) {
               left: 0,
               right: 0,
               mx: 'auto',
-              opacity: 1,
+              opacity: 1
             }}
           >
             Click to Hide
@@ -272,4 +274,8 @@ export default function AccountPopover({user}) {
       */}
     </>
   )
+}
+
+AccountPopover.propTypes = {
+  user: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 }

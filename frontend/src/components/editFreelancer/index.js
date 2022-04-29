@@ -1,21 +1,21 @@
 import {useState, useEffect} from 'react'
 // material
-import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
 // component form
-import PersonalForm from 'components/editFreelancer/form/personalForm'
-import EmploymentForm from 'components/editFreelancer/form/employmentForm'
-import ExpertiseForm from 'components/editFreelancer/form/expertiseForm'
-import EducationForm from 'components/editFreelancer/form/educationForm'
-import RateForm from 'components/editFreelancer/form/rateForm'
-import ProfileForm from 'components/editFreelancer/form/profileForm'
+import PersonalForm from 'src/components/editFreelancer/form/personalForm'
+import EmploymentForm from 'src/components/editFreelancer/form/employmentForm'
+import ExpertiseForm from 'src/components/editFreelancer/form/expertiseForm'
+import EducationForm from 'src/components/editFreelancer/form/educationForm'
+import RateForm from 'src/components/editFreelancer/form/rateForm'
+import ProfileForm from 'src/components/editFreelancer/form/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
-import user_api from 'api/users'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
+import user_api from 'src/lib/users'
 import {useNavigate} from 'react-router-dom'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL
@@ -25,7 +25,7 @@ const steps = [
   'Expertise',
   'Education Background',
   'Rate & Payment',
-  'Profile Picture',
+  'Profile Picture'
 ]
 
 export default function LinearAlternativeLabel() {
@@ -41,7 +41,7 @@ export default function LinearAlternativeLabel() {
     expertise: [],
     education: [],
     rate: [],
-    photo: '',
+    photo: ''
   })
 
   useEffect(() => {
@@ -90,16 +90,16 @@ export default function LinearAlternativeLabel() {
             permanentZipCode: details[0].permanentZipCode,
             emergencyName: details[0].emergencyName,
             emergencyContact: details[0].emergencyContact,
-            emergencyRelation: details[0].emergencyRelation,
+            emergencyRelation: details[0].emergencyRelation
           },
           rate: {
             rateAmount: details[0].rate.rateAmount,
             rateType: details[0].rate.rateType,
             accountType: details[0].payment.acccountPaymentName,
             accountName: details[0].payment.acccountPaymentNumber,
-            accountNumber: details[0].payment.accountPaymentType,
+            accountNumber: details[0].payment.accountPaymentType
           },
-          photo: `${details[0].photo}`,
+          photo: `${details[0].photo}`
         }
 
         sessionStorage.setItem(
@@ -123,8 +123,8 @@ export default function LinearAlternativeLabel() {
             permanentZipCode: details[0].permanentZipCode,
             emergencyName: details[0].emergencyName,
             emergencyContact: details[0].emergencyContact,
-            emergencyRelation: details[0].emergencyRelation,
-          }),
+            emergencyRelation: details[0].emergencyRelation
+          })
         )
 
         sessionStorage.setItem('work', JSON.stringify(details[0].work))
@@ -138,8 +138,8 @@ export default function LinearAlternativeLabel() {
             rateType: details[0].rate.rateType,
             accountType: details[0].payment.acccountPaymentName,
             accountName: details[0].payment.acccountPaymentNumber,
-            accountNumber: details[0].payment.accountPaymentType,
-          }),
+            accountNumber: details[0].payment.accountPaymentType
+          })
         )
 
         sessionStorage.setItem('photo', details[0].photo)
@@ -150,7 +150,7 @@ export default function LinearAlternativeLabel() {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -191,9 +191,9 @@ export default function LinearAlternativeLabel() {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
-      photo: form.photo,
+      photo: form.photo
     }
 
     const result = await onboard_api.patch_freelancer_profile(form_data, user._id)
@@ -292,11 +292,7 @@ export default function LinearAlternativeLabel() {
                   {form.expertise.workType.split('=>').length > 0 ? (
                     form.expertise.workType.split('=>').map((v, k) => {
                       return (
-                        <Typography
-                          Typography
-                          variant="body2"
-                          sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
-                        >
+                        <Typography key={k} variant="body2" sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}>
                           - {v}
                         </Typography>
                       )

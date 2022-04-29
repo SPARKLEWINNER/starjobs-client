@@ -5,12 +5,12 @@ import {Link as RouterLink} from 'react-router-dom'
 import {motion} from 'framer-motion'
 
 // material
-import {styled} from '@material-ui/core/styles'
-import {Box, Button, Typography, Container} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Box, Button, Typography, Container} from '@mui/material'
 
 // components
 import {MotionContainer, varBounceIn} from '../components/animate'
-import Page from '../components/Page'
+import Page from 'src/components/Page'
 
 // context
 
@@ -19,7 +19,7 @@ const RootStyle = styled(Page)(({theme}) => ({
   minHeight: '100%',
   alignItems: 'center',
   paddingTop: theme.spacing(5),
-  paddingBottom: theme.spacing(5),
+  paddingBottom: theme.spacing(5)
 }))
 
 export default function Page404() {

@@ -1,22 +1,22 @@
 import {useState, useEffect, useContext} from 'react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
 // material
-import {Stack, Tab} from '@material-ui/core'
-import {makeStyles} from '@material-ui/styles'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
+import {Stack, Tab} from '@mui/material'
+import {makeStyles} from '@mui/styles'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
 
 // context
-import {RatingsContext} from 'utils/context/rating'
+import {RatingsContext} from 'src/contexts/rating'
 
 // component
 import {PendingTab, IncomingTab, CurrentTab, BillingTab} from './tabs'
-import {IncomingNotification, ConfirmEndShiftNotification} from 'components/notifications'
+import {IncomingNotification, ConfirmEndShiftNotification} from 'src/components/notifications'
 
 // api
-import gigs_api from 'api/gigs'
-import {useAuth} from 'utils/context/AuthContext'
+import gigs_api from 'src/lib/gigs'
+import {useAuth} from 'src/contexts/AuthContext'
 
 import {useLocation} from 'react-router-dom'
 
@@ -29,19 +29,19 @@ const useStyles = makeStyles({
     '@media (max-width: 500px)': {
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
-    },
-  },
+      fontSize: 11
+    }
+  }
 })
 
 const SIMPLE_TAB = [
   {value: 0, label: 'Current ', disabled: false},
   {value: 1, label: 'Incoming ', disabled: false},
   {value: 2, label: 'Pending ', disabled: false},
-  {value: 3, label: 'For Billing', disabled: false},
+  {value: 3, label: 'For Billing', disabled: false}
 ]
 
 export default function TabsComponent() {
@@ -74,7 +74,7 @@ export default function TabsComponent() {
       }
 
       const data = result.data.gigs.sort((a, b) =>
-        moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1,
+        moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1
       )
       if (componentMounted) {
         checkNotice(data)
@@ -86,7 +86,7 @@ export default function TabsComponent() {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const checkNotice = (data) => {
@@ -114,7 +114,7 @@ export default function TabsComponent() {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: currentUser._id,
+      uid: currentUser._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -131,7 +131,7 @@ export default function TabsComponent() {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: currentUser._id,
+      uid: currentUser._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -154,10 +154,10 @@ export default function TabsComponent() {
     setConfirmOpen(false)
   }
 
-  const handleConfirmEndShift = async (value) => {
+  const handleConfirmEndShift = async () => {
     let form_data = {
       status: 'Confirm-End-Shift',
-      uid: gigConfirm.auid,
+      uid: gigConfirm.auid
     }
 
     const result = await gigs_api.patch_gigs_apply(gigConfirm._id, form_data)
@@ -209,7 +209,7 @@ export default function TabsComponent() {
       />
 
       <IncomingNotification
-        open={open}
+        open={open ?? false}
         handleClose={handleNoticeClose}
         gig={gigPop}
         onCommit={handleAccepted}

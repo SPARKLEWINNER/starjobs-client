@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {useNavigate, useParams, useLocation} from 'react-router-dom'
 
 import {capitalCase} from 'change-case'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
 // icon
@@ -13,26 +13,26 @@ import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 
 // material
-import {Box, Tab, Stack, Grid, Typography, Divider, Card} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
+import {Box, Tab, Stack, Grid, Typography, Divider, Card} from '@mui/material'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 
 // components
-import Page from 'components/Page'
-import {CredentialsTab, ActivityTab} from 'pages/client/profile/tabs'
-import {ApplyCard, ConfirmGig} from 'pages/gigs/cards'
-import MAvatar from 'components/@material-extend/MAvatar'
+import Page from 'src/components/Page'
+import {CredentialsTab, ActivityTab} from 'src/pages/client/profile/tabs'
+import {ApplyCard, ConfirmGig} from 'src/pages/gigs/cards'
+import MAvatar from 'src/components/@material-extend/MAvatar'
 
 // api
-import user_api from 'api/users'
-import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
-import useSendNotif from 'utils/hooks/useSendNotif'
+import user_api from 'src/lib/users'
+import gigs_api from 'src/lib/gigs'
+import storage from 'src/utils/storage'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // theme
-import color from 'theme/palette'
-import {useAuth} from 'utils/context/AuthContext'
+import color from 'src/theme/palette'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const image_bucket = process.env.REACT_APP_IMAGE_URL
@@ -42,27 +42,27 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const ProfileStyle = styled(Stack)(({theme}) => ({
   marginLeft: 'auto',
   marginRight: 'auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   },
   [theme.breakpoints.up('sm')]: {
-    marginTop: 120,
+    marginTop: 120
   },
   [theme.breakpoints.up('xs')]: {
-    marginTop: 0,
-  },
+    marginTop: 0
+  }
 }))
 
 const useStyles = makeStyles({
   root: {
-    width: 'auto',
+    width: 'auto'
   },
   nav_item: {
     // textTransform: 'uppercase',
@@ -74,26 +74,26 @@ const useStyles = makeStyles({
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
+      fontSize: 11
     },
     '&.Mui-selected': {
       borderBottom: `1px solid ${color.starjobs.main}`,
       border: 'none',
-      borderRadius: 0,
-    },
+      borderRadius: 0
+    }
   },
   icon: {
     width: 27,
-    height: 27,
-  },
+    height: 27
+  }
 })
 
 const STATIC_TAB = [
   {value: 2, label: 'Credentials', disabled: false},
-  {value: 3, label: 'Activity History', disabled: false},
+  {value: 3, label: 'Activity History', disabled: false}
 ]
 
 const Profile = () => {
@@ -144,7 +144,7 @@ const Profile = () => {
 
       if (componentMounted) {
         setCurrentUser(user)
-        setUser(user)
+        setUser(details)
         setGigs(gigs)
       }
     }
@@ -153,7 +153,7 @@ const Profile = () => {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [currentUser])
 
   const handleClose = () => {
@@ -168,7 +168,7 @@ const Profile = () => {
   const handleApply = async () => {
     let data = {
       status: 'Applying',
-      uid: current_user._id,
+      uid: current_user._id
     }
     const result = await gigs_api.patch_gigs_apply(applyDetails._id, data)
 
@@ -184,7 +184,7 @@ const Profile = () => {
       body: `${current_user.name} is applying`,
       targetUsers: [`${applyDetails.uid}`],
       additionalData: result,
-      userId: current_user._id,
+      userId: current_user._id
     })
 
     //todo
@@ -235,7 +235,7 @@ const Profile = () => {
               mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
               width: '100%',
               alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-              px: 0,
+              px: 0
             }}
           >
             {/* image */}
@@ -245,7 +245,7 @@ const Profile = () => {
                 display: 'flex',
                 alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
                 px: {sm: 0, xs: 0},
-                mb: 1,
+                mb: 1
               }}
             >
               <MAvatar
@@ -260,7 +260,7 @@ const Profile = () => {
             <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
               <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
                 <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '200px'}}>
-                  {capitalCase(`${user && user.firstName} ${user && user.middleInitial} ${user && user.lastName}`)}
+                  {capitalCase(`${user && user?.firstName} ${user && user?.middleName} ${user && user?.lastName}`)}
 
                   <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
                     <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
@@ -285,7 +285,7 @@ const Profile = () => {
                   variant="body2"
                   sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                 >
-                  {user && user.location}
+                  {user && capitalCase(user.location)}
                 </Typography>
               </Box>
               <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
@@ -315,8 +315,8 @@ const Profile = () => {
                 onChange={handleChange}
                 TabIndicatorProps={{
                   style: {
-                    display: 'none',
-                  },
+                    display: 'none'
+                  }
                 }}
               >
                 {SIMPLE_TAB.map((tab, index) => (
@@ -330,7 +330,7 @@ const Profile = () => {
                   mt: 1,
                   width: '100%',
                   borderRadius: 1,
-                  ...(location.pathname !== '/client/profile' ? {} : {mb: 20}),
+                  ...(location.pathname !== '/client/profile' ? {} : {mb: 20})
                 }}
               >
                 {SIMPLE_TAB.map((panel, index) => (

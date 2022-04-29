@@ -1,12 +1,18 @@
 import {last} from 'lodash'
+import PropTypes from 'prop-types'
 import {useEffect, createContext, useContext} from 'react'
 
 import {useNavigate, useLocation} from 'react-router-dom'
 
 import {useAuth} from './AuthContext'
-import storage from '../../utils/storage'
+import storage from 'src/utils/storage'
 
 import jwt_decode from 'jwt-decode'
+
+SessionProvider.propTypes = {
+  children: PropTypes.node
+}
+
 const SessionContext = createContext({})
 
 const unauthenticatedPages = [' ', 'login', 'sign-up', 'forgot-password', 'reset-password']

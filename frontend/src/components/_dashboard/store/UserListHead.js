@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
-import { visuallyHidden } from '@material-ui/utils';
-import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@material-ui/core';
-
+import PropTypes from 'prop-types'
+import {visuallyHidden} from '@material-ui/utils'
+import {Box, TableRow, TableCell, TableHead, TableSortLabel} from '@mui/material'
 
 UserListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
@@ -11,7 +10,7 @@ UserListHead.propTypes = {
   numSelected: PropTypes.number,
   onRequestSort: PropTypes.func,
   onSelectAllClick: PropTypes.func
-};
+}
 
 export default function UserListHead({
   order,
@@ -23,15 +22,13 @@ export default function UserListHead({
   onSelectAllClick
 }) {
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
+    onRequestSort(event, property)
+  }
 
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-
-        </TableCell>
+        <TableCell padding="checkbox"></TableCell>
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -46,14 +43,12 @@ export default function UserListHead({
             >
               {headCell.label}
               {orderBy === headCell.id ? (
-                <Box sx={{ ...visuallyHidden }}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
+                <Box sx={{...visuallyHidden}}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
               ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
     </TableHead>
-  );
+  )
 }

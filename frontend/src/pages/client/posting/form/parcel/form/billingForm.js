@@ -1,5 +1,8 @@
-import {Stack, Grid, Typography, Divider} from '@material-ui/core'
-import {parcel_calculations} from 'utils/gigComputation'
+import {Stack, Grid, Typography, Divider} from '@mui/material'
+import {parcel_calculations} from 'src/utils/gigComputation'
+
+import PropTypes from 'prop-types'
+
 export default function BillingForm({storeData}) {
   if (!storeData) return
 
@@ -7,7 +10,7 @@ export default function BillingForm({storeData}) {
 
   let {computedFeeByHr, transactionFee, grossGigFee, grossVAT, grossWithHolding, serviceCost} = parcel_calculations(
     hours,
-    fee,
+    fee
   )
 
   return (
@@ -102,4 +105,8 @@ export default function BillingForm({storeData}) {
       </Typography>
     </Stack>
   )
+}
+
+BillingForm.propTypes = {
+  storeData: PropTypes.object
 }

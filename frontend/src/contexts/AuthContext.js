@@ -1,6 +1,11 @@
 import {useState, useContext, createContext} from 'react'
-import storage from '../storage'
-import auth_api from '../../api/auth'
+import PropTypes from 'prop-types'
+import storage from 'src/utils/storage'
+import auth_api from 'src/lib/auth'
+
+AuthProvider.propTypes = {
+  children: PropTypes.node
+}
 
 const authContext = createContext({})
 
@@ -19,9 +24,9 @@ function useProvideAuth() {
   const [currentUser, setCurrentUser] = useState({})
 
   const signOut = () => {
-    window.localStorage.removeItem('token')
-    window.localStorage.removeItem('refreshToken')
-    window.localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('user')
     setAuthToken(null)
   }
 
@@ -29,14 +34,14 @@ function useProvideAuth() {
     if (!email || !password)
       return {
         msg: 'Missing fields',
-        status: false,
+        status: false
       }
 
     const result = await auth_api.sign_in_email({email: email, password: password})
     if (!result.ok) {
       return {
         msg: 'Invalid credentials',
-        status: false,
+        status: false
       }
     }
 
@@ -55,7 +60,7 @@ function useProvideAuth() {
         phone: data?.phone,
         verificationCode: data?.verificationCode,
         name: data?.name,
-        _id: data?._id,
+        _id: data?._id
       }
 
       setCurrentUser(user)
@@ -67,12 +72,12 @@ function useProvideAuth() {
 
       return {
         msg: 'Success Login',
-        status: true,
+        status: true
       }
     }
     return {
       msg: 'Invalid credentials',
-      status: false,
+      status: false
     }
   }
 
@@ -98,6 +103,6 @@ function useProvideAuth() {
     isSignedIn,
     currentUser,
     sessionToken,
-    sessionUser,
+    sessionUser
   }
 }

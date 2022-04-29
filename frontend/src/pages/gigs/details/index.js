@@ -1,6 +1,6 @@
 // components
-import Page from 'components/Page'
-import ClientProfile from 'pages/client/profile'
+import Page from 'src/components/Page'
+import ClientProfile from 'src/pages/client/profile'
 
 const Details = () => {
   return (

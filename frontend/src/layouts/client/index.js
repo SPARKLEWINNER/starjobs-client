@@ -1,32 +1,32 @@
 import {useState, useEffect} from 'react'
 import {useNavigate, useParams, useLocation, Link as RouterLink} from 'react-router-dom'
-import {Box, Tab, Stack, Grid, Typography, Divider, Button, Link, Card} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
+import {Box, Tab, Stack, Grid, Typography, Divider, Button, Link, Card} from '@mui/material'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'
 import map from '@iconify/icons-eva/map-outline'
 import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // component
 import {CredentialsTab} from './tabs'
-import LoadingScreen from 'components/LoadingScreen'
-import {ApplyCard, ConfirmGig} from 'components/gigCards'
-import MAvatar from 'components/@material-extend/MAvatar'
+import LoadingScreen from 'src/components/LoadingScreen'
+import {ApplyCard, ConfirmGig} from 'src/components/gigCards'
+import MAvatar from 'src/components/@material-extend/MAvatar'
 
 // api
-import user_api from 'api/users'
-import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
-import useSendNotif from 'utils/hooks/useSendNotif'
+import user_api from 'src/lib/users'
+import gigs_api from 'src/lib/gigs'
+import storage from 'src/utils/storage'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // theme
-import color from 'theme/palette'
-import {useAuth} from 'utils/context/AuthContext'
+import color from 'src/theme/palette'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -38,19 +38,19 @@ const MainStyle = styled(Stack)(({theme}) => ({
   marginRight: 'auto',
   marginTop: APPBAR_DESKTOP,
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   },
   [theme.breakpoints.up('sm')]: {
-    marginTop: 120,
+    marginTop: 120
   },
   [theme.breakpoints.up('xs')]: {
-    marginTop: 0,
-  },
+    marginTop: 0
+  }
 }))
 
 const useStyles = makeStyles({
   root: {
-    width: 'auto',
+    width: 'auto'
   },
   nav_item: {
     fontSize: '1rem !important',
@@ -62,22 +62,22 @@ const useStyles = makeStyles({
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
+      fontSize: 11
     },
     '&.Mui-selected': {
       border: 'none',
       borderRadius: 0,
       borderBottom: `1px solid ${color.common.black}`,
-      color: `${color.common.black}`,
-    },
+      color: `${color.common.black}`
+    }
   },
   icon: {
     width: 27,
-    height: 27,
-  },
+    height: 27
+  }
 })
 
 export default function TabsComponent() {
@@ -132,7 +132,7 @@ export default function TabsComponent() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const SIMPLE_TAB = [{value: 2, label: 'Credentials', disabled: false}]
@@ -153,7 +153,7 @@ export default function TabsComponent() {
 
     let data = {
       status: 'Applying',
-      uid: current_user._id,
+      uid: current_user._id
     }
 
     console.log('data', data)
@@ -171,7 +171,7 @@ export default function TabsComponent() {
       body: `${current_user.name} is applying`,
       targetUsers: [`${applyDetails.uid}`],
       additionalData: result,
-      userId: current_user._id,
+      userId: current_user._id
     })
 
     //todo
@@ -214,7 +214,7 @@ export default function TabsComponent() {
                   width: {sm: '50%', xs: '100%'},
                   margin: '0 auto',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'center'
                 }}
               >
                 <Box sx={{padding: {xs: 3}}}>
@@ -251,7 +251,7 @@ export default function TabsComponent() {
                 mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
                 width: '100%',
                 alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-                px: '0 !important',
+                px: '0 !important'
               }}
             >
               <Box
@@ -260,7 +260,7 @@ export default function TabsComponent() {
                   display: 'flex',
                   alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
                   px: {sm: 0, xs: 0},
-                  mb: 1,
+                  mb: 1
                 }}
               >
                 <MAvatar
@@ -326,8 +326,8 @@ export default function TabsComponent() {
                   onChange={handleChange}
                   TabIndicatorProps={{
                     style: {
-                      display: 'none',
-                    },
+                      display: 'none'
+                    }
                   }}
                 >
                   {SIMPLE_TAB.map((tab, index) => (
@@ -341,7 +341,7 @@ export default function TabsComponent() {
                     mt: 1,
                     width: '100%',
                     borderRadius: 1,
-                    ...(location.pathname !== '/client/profile' ? {} : {mb: 20}),
+                    ...(location.pathname !== '/client/profile' ? {} : {mb: 20})
                   }}
                 >
                   {SIMPLE_TAB.map((panel, index) => (

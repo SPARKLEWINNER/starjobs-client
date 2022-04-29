@@ -2,8 +2,9 @@ import {Icon} from '@iconify/react'
 import {Link as RouterLink} from 'react-router-dom'
 import map from '@iconify/icons-eva/map-outline'
 // material
-import {alpha, styled} from '@material-ui/core/styles'
-import {Box, Stack, Card, Avatar, Button, Typography, Link} from '@material-ui/core'
+import {alpha, styled} from '@mui/material/styles'
+import {Box, Stack, Card, Avatar, Button, Typography, Link} from '@mui/material'
+import PropTypes from 'prop-types'
 
 const IconWrapperStyle = styled('div')(({theme}) => ({
   width: 200,
@@ -16,7 +17,7 @@ const IconWrapperStyle = styled('div')(({theme}) => ({
   position: 'absolute',
   bottom: '1rem',
   right: '1rem',
-  backgroundColor: alpha(theme.palette.starjobs.main, 0.08),
+  backgroundColor: alpha(theme.palette.starjobs.main, 0.08)
 }))
 
 export default function ApplicantCard({data, onClick, gigDetails}) {
@@ -57,7 +58,7 @@ export default function ApplicantCard({data, onClick, gigDetails}) {
                   mt: 0.25,
                   display: 'flex',
                   alignItems: 'center',
-                  color: 'text.secondary',
+                  color: 'text.secondary'
                 }}
               >
                 <Box component={Icon} icon={map} sx={{width: 16, height: 16, mr: 0.5}} />
@@ -79,4 +80,10 @@ export default function ApplicantCard({data, onClick, gigDetails}) {
       )}
     </>
   )
+}
+
+ApplicantCard.propTypes = {
+  data: PropTypes.bool,
+  gigDetails: PropTypes.bool,
+  onClick: PropTypes.func
 }

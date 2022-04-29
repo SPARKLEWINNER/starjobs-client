@@ -6,8 +6,9 @@ import {
   DialogActions,
   Button,
   Typography,
-  Stack,
-} from '@material-ui/core'
+  Stack
+} from '@mui/material'
+import PropTypes from 'prop-types'
 
 const EditDialog = ({open, onConfirm, handleClose}) => {
   const handleConfirmGig = () => {
@@ -40,6 +41,12 @@ const EditDialog = ({open, onConfirm, handleClose}) => {
       </Dialog>
     </div>
   )
+}
+
+EditDialog.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  onConfirm: PropTypes.func,
+  handleClose: PropTypes.func
 }
 
 export default EditDialog

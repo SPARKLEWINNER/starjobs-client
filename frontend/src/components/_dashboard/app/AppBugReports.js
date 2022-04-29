@@ -1,8 +1,8 @@
 import {Icon} from '@iconify/react'
 import bugFilled from '@iconify/icons-ant-design/bug-filled'
 // material
-import {alpha, styled} from '@material-ui/core/styles'
-import {Card, Typography} from '@material-ui/core'
+import {alpha, styled} from '@mui/material/styles'
+import {Card, Typography} from '@mui/material'
 // utils
 import {fShortenNumber} from '../../../utils/formatNumber'
 
@@ -11,7 +11,7 @@ const RootStyle = styled(Card)(({theme}) => ({
   textAlign: 'center',
   padding: theme.spacing(5, 0),
   color: theme.palette.error.darker,
-  backgroundColor: theme.palette.error.lighter,
+  backgroundColor: theme.palette.error.lighter
 }))
 
 const IconWrapperStyle = styled('div')(({theme}) => ({
@@ -26,8 +26,8 @@ const IconWrapperStyle = styled('div')(({theme}) => ({
   color: theme.palette.error.dark,
   backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.error.dark, 0)} 0%, ${alpha(
     theme.palette.error.dark,
-    0.24,
-  )} 100%)`,
+    0.24
+  )} 100%)`
 }))
 
 const TOTAL = 234

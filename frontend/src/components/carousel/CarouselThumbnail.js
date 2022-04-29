@@ -2,8 +2,8 @@ import Slider from 'react-slick'
 import PropTypes from 'prop-types'
 import {useState, useRef, useEffect} from 'react'
 // material
-import {styled} from '@material-ui/core/styles'
-import {Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Box} from '@mui/material'
 //
 import {CarouselControlsArrowsIndex} from './controls'
 
@@ -12,7 +12,7 @@ const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature(),
+  image: faker.image.nature()
 }))
 
 const THUMB_SIZE = 64
@@ -23,9 +23,9 @@ const RootStyle = styled('div')(({theme}) => {
   return {
     root: {
       '& .slick-slide': {
-        float: isRTL ? 'right' : 'left',
-      },
-    },
+        float: isRTL ? 'right' : 'left'
+      }
+    }
   }
 })
 
@@ -34,7 +34,7 @@ const LargeImgStyle = styled('img')({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  position: 'absolute',
+  position: 'absolute'
 })
 
 const ThumbImgStyle = styled('img')(({theme}) => ({
@@ -46,12 +46,12 @@ const ThumbImgStyle = styled('img')(({theme}) => ({
   borderRadius: theme.shape.borderRadiusSm,
   '&:hover': {
     opacity: 0.72,
-    transition: theme.transitions.create('opacity'),
-  },
+    transition: theme.transitions.create('opacity')
+  }
 }))
 
 LargeItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object
 }
 
 function LargeItem({item}) {
@@ -63,8 +63,8 @@ function LargeItem({item}) {
         position: 'relative',
         paddingTop: {
           xs: '100%',
-          md: '50%',
-        },
+          md: '50%'
+        }
       }}
     >
       <LargeImgStyle alt={title} src={image} />
@@ -73,7 +73,7 @@ function LargeItem({item}) {
 }
 
 ThumbnailItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object
 }
 
 function ThumbnailItem({item}) {
@@ -96,7 +96,7 @@ export default function CarouselThumbnail() {
     draggable: false,
     slidesToScroll: 1,
     adaptiveHeight: true,
-    beforeChange: (current, next) => setCurrentIndex(next),
+    beforeChange: (current, next) => setCurrentIndex(next)
   }
 
   const settings2 = {
@@ -107,7 +107,7 @@ export default function CarouselThumbnail() {
     focusOnSelect: true,
     variableWidth: true,
     centerPadding: '0px',
-    slidesToShow: MOCK_CAROUSELS.length > 3 ? 3 : MOCK_CAROUSELS.length,
+    slidesToShow: MOCK_CAROUSELS.length > 3 ? 3 : MOCK_CAROUSELS.length
   }
 
   useEffect(() => {
@@ -130,7 +130,7 @@ export default function CarouselThumbnail() {
           zIndex: 0,
           borderRadius: 2,
           overflow: 'hidden',
-          position: 'relative',
+          position: 'relative'
         }}
       >
         <Slider {...settings1} asNavFor={nav2} ref={slider1}>
@@ -157,8 +157,8 @@ export default function CarouselThumbnail() {
           ...(MOCK_CAROUSELS.length === 5 && {maxWidth: THUMB_SIZE * 6}),
           '& .slick-current img': {
             opacity: 1,
-            border: (theme) => `solid 3px ${theme.palette.starjobs.main}`,
-          },
+            border: (theme) => `solid 3px ${theme.palette.starjobs.main}`
+          }
         }}
       >
         <Slider {...settings2} asNavFor={nav1} ref={slider2}>

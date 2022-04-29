@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import {Stack, Typography, Box} from '@material-ui/core'
+import {Stack, Typography, Box} from '@mui/material'
 import {slice} from 'lodash'
 
-import ActivityCard from 'components/activity/card'
+import ActivityCard from 'src/components/activity/card'
 
-import user_api from 'api/users'
-import {useAuth} from 'utils/context/AuthContext'
+import user_api from 'src/lib/users'
+import {useAuth} from 'src/contexts/AuthContext'
 
 const LIMIT = 3
 const MyActivities = () => {

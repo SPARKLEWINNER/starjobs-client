@@ -1,5 +1,5 @@
-import request from 'utils/header'
-import storage from 'utils/storage'
+import request from 'src/utils/header'
+import storage from 'src/utils/storage'
 
 const get_gigs_categorized = (category) => request.get(`/gigs/list/${category}`)
 
@@ -53,7 +53,7 @@ const exp_object = {
   patch_gig_details,
   post_gig,
   post_rating_gig,
-  remove_gig,
+  remove_gig
 }
 
 export default exp_object

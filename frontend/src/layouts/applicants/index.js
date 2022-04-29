@@ -1,17 +1,17 @@
 import {useState, useEffect} from 'react'
-import {Link as RouterLink, useParams, useNavigate} from 'react-router-dom'
-import {useSnackbar} from 'notistack5'
-import {Box, Stack, Typography, Link} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Link as RouterLink, useParams} from 'react-router-dom'
+import {useSnackbar} from 'notistack'
+import {Box, Stack, Typography, Link} from '@mui/material'
+import {styled} from '@mui/material/styles'
 
 // component
-import LoadingScreen from 'components/LoadingScreen'
+import LoadingScreen from 'src/components/LoadingScreen'
 import ApplicantCard from './card'
 import {ConfirmDialog} from './dialog'
 
 // api
-import gigs_api from 'api/gigs'
-import useSendNotif from 'utils/hooks/useSendNotif'
+import gigs_api from 'src/lib/gigs'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -21,13 +21,12 @@ const MainStyle = styled(Stack)(({theme}) => ({
   marginHorizontal: 'auto',
   marginTop: 20,
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 export default function ClientApplicants() {
   const {enqueueSnackbar} = useSnackbar()
-  const navigation = useNavigate()
   const params = useParams()
   const [applicant, setApplicants] = useState([])
   const [isLoading, setLoading] = useState(false)
@@ -48,7 +47,7 @@ export default function ClientApplicants() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const handleClose = () => {
@@ -67,7 +66,7 @@ export default function ClientApplicants() {
 
     let data = {
       status: 'Accepted',
-      uid: applicantId,
+      uid: applicantId
     }
 
     const result = await gigs_api.patch_gigs_apply(params.id, data)
@@ -80,7 +79,7 @@ export default function ClientApplicants() {
       title: 'You have been accepted',
       body: 'Please report to the location at the correct time',
       targetUsers: [applicantId],
-      additionalData: result,
+      additionalData: result
     })
 
     enqueueSnackbar('Applicant accepted and notified', {variant: 'success'})
@@ -114,7 +113,7 @@ export default function ClientApplicants() {
                       textAlign: 'center',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justifyContent: 'center'
                     }}
                   >
                     <Typography variant="h4">
@@ -139,7 +138,7 @@ export default function ClientApplicants() {
                       minHeight: '50vh',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justifyContent: 'center'
                     }}
                   >
                     <Typography variant="h4">

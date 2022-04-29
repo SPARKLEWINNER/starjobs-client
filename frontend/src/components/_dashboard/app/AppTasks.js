@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types'
 import {Form, FormikProvider, useFormik} from 'formik'
 // material
-import {Box, Card, Checkbox, CardHeader, Typography, FormControlLabel, Stack} from '@material-ui/core'
+import {Box, Card, Checkbox, CardHeader, Typography, FormControlLabel, Stack} from '@mui/material'
 
 const TASKS = [
   'Create FireStone Logo',
   'Add SCSS and JS files if required',
   'Stakeholder Meeting',
   'Scoping & Estimations',
-  'Sprint Showcase',
+  'Sprint Showcase'
 ]
 
 TaskItem.propTypes = {
   task: PropTypes.string,
   checked: PropTypes.bool,
-  formik: PropTypes.object,
+  formik: PropTypes.object
 }
 
 function TaskItem({task, checked, formik, ...other}) {
@@ -30,8 +30,8 @@ function TaskItem({task, checked, formik, ...other}) {
             sx={{
               ...(checked && {
                 color: 'text.disabled',
-                textDecoration: 'line-through',
-              }),
+                textDecoration: 'line-through'
+              })
             }}
           >
             {task}
@@ -45,11 +45,11 @@ function TaskItem({task, checked, formik, ...other}) {
 export default function AppTasks() {
   const formik = useFormik({
     initialValues: {
-      checked: [TASKS[2]],
+      checked: [TASKS[2]]
     },
     onSubmit: (values) => {
       console.log(values)
-    },
+    }
   })
 
   const {values, handleSubmit} = formik

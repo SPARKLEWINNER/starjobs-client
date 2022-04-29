@@ -1,4 +1,4 @@
-import notif from '../../api/notif'
+import notif from 'src/lib/notif'
 
 export default function useSendNotif() {
   const sendInterestNotification = async ({clientId, clientName, targetUsers = []}) => {
@@ -8,7 +8,7 @@ export default function useSendNotif() {
       targetUsers: targetUsers,
       type: 'ClientInterest',
       target: 'Selected',
-      additionalData: JSON.stringify({_id: clientId}),
+      additionalData: JSON.stringify({_id: clientId})
     }
 
     let response = await notif.create_notification(clientId, notifParams)
@@ -21,7 +21,7 @@ export default function useSendNotif() {
     body = 'Click to open gig',
     targetUsers = [],
     additionalData,
-    userId,
+    userId
   }) => {
     let notifParams = {
       title: `${title}`,
@@ -29,7 +29,7 @@ export default function useSendNotif() {
       targetUsers: targetUsers,
       type: 'GigNotif',
       target: 'Selected',
-      additionalData: JSON.stringify(additionalData),
+      additionalData: JSON.stringify(additionalData)
     }
 
     let response = await notif.create_notification(userId, notifParams)

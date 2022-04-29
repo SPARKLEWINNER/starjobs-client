@@ -8,7 +8,7 @@ const firebaseConfig = {
   storageBucket: 'starjobs-313714.appspot.com',
   messagingSenderId: '426778381453',
   appId: '1:426778381453:web:e06c184c8d7469d40a66c4',
-  measurementId: 'G-G9FHBHVZR4',
+  measurementId: 'G-G9FHBHVZR4'
 }
 
 let getToken

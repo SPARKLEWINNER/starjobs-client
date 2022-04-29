@@ -1,34 +1,34 @@
-import {Box, Grid, Stack, Typography, Avatar} from '@material-ui/core'
+import {Box, Grid, Stack, Typography, Avatar} from '@mui/material'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-outline'
 import starIcon from '@iconify/icons-eva/star-fill'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const ratings = [
   {label: 'Efficiency', value: '100%'},
   {label: 'On-Time', value: '100%'},
   {label: 'Completeness', value: '100%'},
-  {label: 'Show Rate', value: '100%'},
+  {label: 'Show Rate', value: '100%'}
 ]
 
 const reviews = [
   {
     name: 'Anonymous_5592',
     comment: 'Shows initiative with developing new ways of thinking to improve projects or company performance.',
-    image: '/static/mock-images/avatars/avatar_1.jpg',
+    image: '/static/mock-images/avatars/avatar_1.jpg'
   },
   {
     name: 'Yellow Fin ',
     comment: 'Willingly adjust their schedule to be available when needed.',
-    image: '/static/mock-images/avatars/avatar_24.jpg',
+    image: '/static/mock-images/avatars/avatar_24.jpg'
   },
   {
     name: 'Diego Sy ',
     comment: "Has good attendance and doesn't violate the standard attendance policy.",
-    image: '/static/mock-images/avatars/avatar_19.jpg',
-  },
+    image: '/static/mock-images/avatars/avatar_19.jpg'
+  }
 ]
 
 export default function Reviews() {

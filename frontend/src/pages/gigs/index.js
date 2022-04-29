@@ -1,37 +1,37 @@
 import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 // material
-import {Box, Tab, Stack} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
+import {Box, Tab, Stack} from '@mui/material'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import {FreelancerTab, ClientTab} from './gigTabs'
 
 // theme
-import color from 'theme/palette'
-import {useAuth} from 'utils/context/AuthContext'
+import color from 'src/theme/palette'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
 const SIMPLE_TAB = [
   {value: 1, label: 'Jobsters', disabled: false, keys: 'jobster'},
-  {value: 2, label: 'Clients', disabled: false, keys: 'clients'},
+  {value: 2, label: 'Clients', disabled: false, keys: 'clients'}
 ]
 
 // styles
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const useStyles = makeStyles({
   root: {
-    width: 'auto',
+    width: 'auto'
   },
   nav_item: {
     width: '48.33%',
@@ -46,21 +46,21 @@ const useStyles = makeStyles({
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
+      fontSize: 11
     },
     '&.Mui-selected': {
       backgroundColor: `${color.starjobs.main}`,
       border: 'none',
-      color: `${color.common.white}`,
-    },
+      color: `${color.common.white}`
+    }
   },
   icon: {
     width: 27,
-    height: 27,
-  },
+    height: 27
+  }
 })
 
 const Gigs = () => {
@@ -99,8 +99,8 @@ const Gigs = () => {
               onChange={handleChange}
               TabIndicatorProps={{
                 style: {
-                  display: 'none',
-                },
+                  display: 'none'
+                }
               }}
             >
               {SIMPLE_TAB.map((tab, index) => (
@@ -112,7 +112,7 @@ const Gigs = () => {
                 p: 1,
                 mt: 2,
                 mb: 10,
-                width: '100%',
+                width: '100%'
               }}
             >
               {SIMPLE_TAB.map((panel, index) => (

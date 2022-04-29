@@ -1,1 +1,1 @@
-export { default as ConfirmApplicationDialog } from './confirmApplication'
+export {default as ConfirmApplicationDialog} from './confirmApplication'

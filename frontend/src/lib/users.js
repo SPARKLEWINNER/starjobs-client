@@ -1,35 +1,15 @@
-import request from 'utils/header'
-import storage from 'utils/storage'
+import request from 'src/utils/header'
+import storage from 'src/utils/storage'
+
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 const timezone = require('dayjs/plugin/timezone')
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Manila')
 
-// const get_users = (_type) =>
-//   request
-//     .get('/users')
-//     .then((users) => {
-//       let newUser = []
-//       if (!users.data) return newUser
-
-//       users.data.map((v, k) => {
-//         if (v.role !== _type) return ''
-//         if (v.firstName === null || v.lastName === null) return ''
-//         return newUser.push({...v})
-//       })
-
-//       return {
-//         ok: true,
-//         data: newUser,
-//       }
-//     })
-//     .catch((err) => {
-//       return {ok: false, data: err}
-//     })
-
-const get_user = (_id) => request.get(`/user`)
+const get_user = () => request.get(`/user`)
 
 const get_users = (_id) => request.get(`/store/users/${_id}`)
 
@@ -106,7 +86,7 @@ const _expObject = {
   put_user_notification_read,
   patch_user_password,
   get_user_activity,
-  get_user_activity_client,
+  get_user_activity_client
 }
 
 export default _expObject

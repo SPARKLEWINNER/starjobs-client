@@ -1,11 +1,11 @@
 import {create} from 'apisauce'
-import authStorage from './storage'
+import authStorage from 'src/utils/storage'
 // import cache from './cache'
 
 // const base_url = 'https://sparkle-time-in.herokuapp.com/api'
 const base_url = process.env.REACT_APP_API_URL
 const apiClient = create({
-  baseURL: base_url,
+  baseURL: base_url
 })
 
 apiClient.addAsyncRequestTransform(async (request) => {

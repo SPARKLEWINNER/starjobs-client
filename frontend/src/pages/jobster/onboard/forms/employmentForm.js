@@ -1,13 +1,23 @@
+import PropTypes from 'prop-types'
+
 import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import {Stack, TextField, FormControlLabel, Typography, Checkbox} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Stack, TextField, FormControlLabel, Typography, Checkbox} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
-import {fCamelCase} from 'utils/formatCase'
-export default function EmploymentForm({user, stored, onNext, onStoreData}) {
+import {fCamelCase} from 'src/utils/formatCase'
+
+EmploymentForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
+
+export default function EmploymentForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const store = stored.work ? stored.work : undefined
@@ -23,7 +33,7 @@ export default function EmploymentForm({user, stored, onNext, onStoreData}) {
     pastEndDate: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!'),
     pastPlaceOfWork: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!'),
     isCurrentWork: Yup.boolean(),
-    isFreshGraduate: Yup.boolean(),
+    isFreshGraduate: Yup.boolean()
   })
 
   const formik = useFormik({
@@ -39,7 +49,7 @@ export default function EmploymentForm({user, stored, onNext, onStoreData}) {
       pastEndDate: store.pastEndDate || '',
       pastPlaceOfWork: store.pastPlaceOfWork || '',
       isCurrentWork: store.isCurrentWork || false,
-      isFreshGraduate: store.isFreshGraduate || false,
+      isFreshGraduate: store.isFreshGraduate || false
     },
     enableReinitialize: true,
     validationSchema: Schema,
@@ -82,7 +92,7 @@ export default function EmploymentForm({user, stored, onNext, onStoreData}) {
         pastEndDate: values.pastEndDate,
         pastPlaceOfWork: values.pastPlaceOfWork,
         isCurrentWork: values.isCurrentWork || false,
-        isFreshGraduate: values.isFreshGraduate,
+        isFreshGraduate: values.isFreshGraduate
       }
 
       if (values.isCurrentWork) {
@@ -99,7 +109,7 @@ export default function EmploymentForm({user, stored, onNext, onStoreData}) {
 
       onStoreData(data, 'work')
       onNext()
-    },
+    }
   })
 
   const {values, errors, touched, handleSubmit, getFieldProps} = formik

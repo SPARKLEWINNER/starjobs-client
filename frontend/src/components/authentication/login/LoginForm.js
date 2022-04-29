@@ -2,18 +2,18 @@ import * as Yup from 'yup'
 import {useState} from 'react'
 import {useNavigate, Link as RouterLink} from 'react-router-dom'
 import {useFormik, Form, FormikProvider} from 'formik'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 import {Icon} from '@iconify/react'
 import eyeFill from '@iconify/icons-eva/eye-fill'
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill'
 // material
-import {Stack, TextField, IconButton, InputAdornment, Link} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Stack, TextField, IconButton, InputAdornment, Link} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
-import {LoadingButtonStyle, InputOutlineStyle} from 'theme/style'
+import {LoadingButtonStyle, InputOutlineStyle} from 'src/theme/style'
 
 export default function LoginForm() {
   const navigate = useNavigate()
@@ -23,13 +23,13 @@ export default function LoginForm() {
   const {signIn} = useAuth()
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string().required('Password is required')
   })
 
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
+      password: ''
     },
     validationSchema: LoginSchema,
     onSubmit: async () => {
@@ -43,7 +43,7 @@ export default function LoginForm() {
       resetForm()
       navigate('/dashboard')
       setLoading(false)
-    },
+    }
   })
 
   const {errors, touched, values, resetForm, handleSubmit, getFieldProps} = formik
@@ -79,7 +79,7 @@ export default function LoginForm() {
                     <Icon icon={showPassword ? eyeFill : eyeOffFill} sx={{color: 'starjobs.main'}} />
                   </IconButton>
                 </InputAdornment>
-              ),
+              )
             }}
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}

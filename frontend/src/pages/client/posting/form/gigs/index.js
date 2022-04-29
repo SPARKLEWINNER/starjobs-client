@@ -2,16 +2,17 @@ import {useState} from 'react'
 import moment from 'moment'
 import {capitalCase} from 'change-case'
 // material
-import {Box, Button, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Box, Button, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
 // component form
 import {GigForm, BillingForm} from './form'
 import {CreateGigDialog} from './dialog'
 
 // hooks
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
+import PropTypes from 'prop-types'
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
@@ -42,7 +43,7 @@ export default function CreatGigForm({user, category}) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  const handleFormData = (form_data, form_type) => {
+  const handleFormData = (form_data) => {
     if (!form_data) return
 
     setForm((prev_state) => ({...prev_state, ...form_data}))
@@ -68,7 +69,7 @@ export default function CreatGigForm({user, category}) {
     setOpen(false)
     const form_data = {
       category: category,
-      ...form,
+      ...form
     }
 
     const result = await gigs_api.post_gig(user._id, form_data)
@@ -83,7 +84,7 @@ export default function CreatGigForm({user, category}) {
         form.date
       } ${moment(form.from).format('MMM-DD hh:mm A')} - ${moment(form.time).format('MMM-DD hh:mm A')} \n ${
         form.shift
-      } shift ${form.hours} hours \n Fee: P ${form.fee}`,
+      } shift ${form.hours} hours \n Fee: P ${form.fee}`
     )
 
     enqueueSnackbar('Gig post success', {variant: 'success'})
@@ -127,4 +128,9 @@ export default function CreatGigForm({user, category}) {
       <CreateGigDialog open={open} onConfirm={handleSubmit} handleClose={handleCancelConfirm} />
     </>
   )
+}
+
+CreatGigForm.propTypes = {
+  user: PropTypes.object,
+  category: PropTypes.object
 }

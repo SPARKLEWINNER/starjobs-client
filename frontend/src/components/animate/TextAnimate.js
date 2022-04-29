@@ -1,14 +1,14 @@
 import {motion} from 'framer-motion'
 import PropTypes from 'prop-types'
 // material
-import {Typography} from '@material-ui/core'
+import {Typography} from '@mui/material'
 //
 import {varFadeInUp} from './variants'
 
 TextAnimate.propTypes = {
   text: PropTypes.string,
   variants: PropTypes.object,
-  sx: PropTypes.object,
+  sx: PropTypes.object
 }
 
 export default function TextAnimate({text, variants, sx, ...other}) {
@@ -19,7 +19,7 @@ export default function TextAnimate({text, variants, sx, ...other}) {
         typography: 'h1',
         overflow: 'hidden',
         display: 'inline-flex',
-        ...sx,
+        ...sx
       }}
       {...other}
     >

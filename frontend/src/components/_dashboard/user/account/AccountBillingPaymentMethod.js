@@ -4,15 +4,15 @@ import {Form, FormikProvider} from 'formik'
 import plusFill from '@iconify/icons-eva/plus-fill'
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill'
 // material
-import {Box, Paper, Stack, Card, Button, Collapse, TextField, IconButton, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Paper, Stack, Card, Button, Collapse, TextField, IconButton, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 
 AccountBillingPaymentMethod.propTypes = {
   formik: PropTypes.object,
   cards: PropTypes.array,
   isOpen: PropTypes.bool,
   onOpen: PropTypes.func,
-  onCancel: PropTypes.func,
+  onCancel: PropTypes.func
 }
 
 export default function AccountBillingPaymentMethod({formik, cards, isOpen, onOpen, onCancel}) {
@@ -33,7 +33,7 @@ export default function AccountBillingPaymentMethod({formik, cards, isOpen, onOp
                 p: 3,
                 width: 1,
                 position: 'relative',
-                border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`,
+                border: (theme) => `solid 1px ${theme.palette.grey[500_32]}`
               }}
             >
               <Box
@@ -47,7 +47,7 @@ export default function AccountBillingPaymentMethod({formik, cards, isOpen, onOp
                 sx={{
                   top: 8,
                   right: 8,
-                  position: 'absolute',
+                  position: 'absolute'
                 }}
               >
                 <Icon icon={moreVerticalFill} width={20} height={20} />
@@ -68,7 +68,7 @@ export default function AccountBillingPaymentMethod({formik, cards, isOpen, onOp
             padding: 3,
             marginTop: 3,
             borderRadius: 1,
-            bgcolor: 'background.neutral',
+            bgcolor: 'background.neutral'
           }}
         >
           <FormikProvider value={formik}>

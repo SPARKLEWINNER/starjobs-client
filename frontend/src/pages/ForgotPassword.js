@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import {styled} from '@material-ui/core/styles'
+import {styled} from '@mui/material/styles'
 
 import {Link as RouterLink} from 'react-router-dom'
 import {useState} from 'react'
@@ -7,19 +7,19 @@ import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 
 // material
-import {Stack, TextField, Typography, Container, Box, Link} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Stack, TextField, Typography, Container, Box, Link} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
-import auth_api from 'api/auth'
-import Page from 'components/Page'
-import {LoadingButtonStyle, InputOutlineStyle} from 'theme/style'
+import auth_api from 'src/lib/auth'
+import Page from 'src/components/Page'
+import {LoadingButtonStyle, InputOutlineStyle} from 'src/theme/style'
 
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.common.white,
   height: '100vh',
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'center'
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -28,19 +28,19 @@ const ContentStyle = styled('div')(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(3, 0),
+  padding: theme.spacing(3, 0)
 }))
 
 export default function ForgotPassword() {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    email: Yup.string().email('Email must be a valid email address').required('Email is required')
   })
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: ''
     },
     validationSchema: LoginSchema,
     onSubmit: async () => {
@@ -49,7 +49,7 @@ export default function ForgotPassword() {
       enqueueSnackbar('We have sent a change password link to your email address', {variant: 'success'})
       resetForm()
       return setLoading(false)
-    },
+    }
   })
 
   const {errors, touched, values, resetForm, handleSubmit, getFieldProps} = formik
@@ -112,7 +112,7 @@ export default function ForgotPassword() {
                     fontSize: '0.8rem',
                     width: '100%',
                     textDecoration: 'none',
-                    fontWeight: 600,
+                    fontWeight: 600
                   }}
                 >
                   Go back

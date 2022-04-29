@@ -2,27 +2,27 @@ import {useState, useEffect} from 'react'
 import {Link as RouterLink} from 'react-router-dom'
 
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // material
-import {Link, Grid, Typography, Box, Avatar, Stack} from '@material-ui/core'
-// import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
+import {Link, Grid, Typography, Box, Avatar, Stack} from '@mui/material'
+// import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 
-import PromotionsBanner from 'components/promotions'
-import {IncomingNotification, ConfirmArrivedNotification} from 'components/notifications'
+import PromotionsBanner from 'src/components/promotions'
+import {IncomingNotification, ConfirmArrivedNotification} from 'src/components/notifications'
 
 // api
-import gigs_api from 'api/gigs'
-import category_api from 'api/category'
+import gigs_api from 'src/lib/gigs'
+import category_api from 'src/lib/category'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -35,19 +35,19 @@ const MainStyle = styled(Stack)(({theme}) => ({
   marginRight: 'auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   },
   [theme.breakpoints.up('xs')]: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
+    paddingRight: theme.spacing(2)
+  }
 }))
 
 const TabStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const BannerStyle = styled(Stack)(({theme}) => ({
@@ -58,26 +58,26 @@ const BannerStyle = styled(Stack)(({theme}) => ({
   height: 170,
   alignItems: 'center',
   marginBottom: 24,
-  [theme.breakpoints.up('lg')]: {},
+  [theme.breakpoints.up('lg')]: {}
 }))
 
 const mockBanner = [
   {
     title: 'banner-one',
-    image: '/static/home/banner/client/banner-one.png',
+    image: '/static/home/banner/client/banner-one.png'
   },
   {
     title: 'banner-two',
-    image: '/static/home/banner/client/banner-two.png',
+    image: '/static/home/banner/client/banner-two.png'
   },
   {
     title: 'banner-three',
-    image: '/static/home/banner/client/banner-three.png',
+    image: '/static/home/banner/client/banner-three.png'
   },
   {
     title: 'banner-four',
-    image: '/static/home/banner/client/banner-four.png',
-  },
+    image: '/static/home/banner/client/banner-four.png'
+  }
 ]
 
 const Dashboard = () => {
@@ -89,8 +89,8 @@ const Dashboard = () => {
   const [category, setCategory] = useState([
     {
       initial: [],
-      dynamic: [],
-    },
+      dynamic: []
+    }
   ])
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const Dashboard = () => {
       }
 
       const data = result.data.gigs.sort((a, b) =>
-        moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1,
+        moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1
       )
 
       const CATEGORY_RESULT = await category_api.get_categories()
@@ -116,7 +116,7 @@ const Dashboard = () => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const checkNotice = (data) => {
@@ -145,7 +145,7 @@ const Dashboard = () => {
   const handleAccepted = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: currentUser._id,
+      uid: currentUser._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -162,7 +162,7 @@ const Dashboard = () => {
   const handleCancelled = async (value) => {
     let form_data = {
       status: value.new_status,
-      uid: currentUser._id,
+      uid: currentUser._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -199,7 +199,7 @@ const Dashboard = () => {
               height: 100,
               borderRadius: '0 !important ',
               objectFit: 'contain',
-              objectPosition: 'center',
+              objectPosition: 'center'
             }}
           />
         </Box>
@@ -251,7 +251,7 @@ const Dashboard = () => {
                                 borderRadius: 30,
                                 backgroundColor: 'starjobs.main',
                                 objectFit: 'cover',
-                                objectPosition: 'center',
+                                objectPosition: 'center'
                               }}
                             />
                             <Typography variant="body2" sx={{fontWeight: 'bold', color: 'common.black', flexGrow: 1}}>
@@ -288,7 +288,7 @@ const Dashboard = () => {
             onReject={handleCancelled}
           />
           <IncomingNotification
-            open={open}
+            open={open ?? false}
             handleClose={handleNoticeClose}
             gig={gigPop}
             onCommit={handleAccepted}

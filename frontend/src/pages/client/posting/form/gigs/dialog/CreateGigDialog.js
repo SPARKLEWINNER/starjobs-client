@@ -8,9 +8,10 @@ import {
   DialogActions,
   Button,
   Typography,
-  Stack,
-} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+  Stack
+} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import PropTypes from 'prop-types'
 
 const CreateGigDialog = ({open, onConfirm, handleClose}) => {
   const [loading, setLoading] = useState(false)
@@ -49,6 +50,12 @@ const CreateGigDialog = ({open, onConfirm, handleClose}) => {
       </Dialog>
     </div>
   )
+}
+
+CreateGigDialog.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  onConfirm: PropTypes.func,
+  handleClose: PropTypes.func
 }
 
 export default CreateGigDialog

@@ -1,13 +1,13 @@
 import {useState, useEffect} from 'react'
 import {useNavigate, useParams, useLocation, Link as RouterLink} from 'react-router-dom'
 import {capitalCase} from 'change-case'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // components
-import {Box, Tab, Stack, Grid, Typography, Button, Link, Divider, Card} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
+import {Box, Tab, Stack, Grid, Typography, Button, Link, Divider, Card} from '@mui/material'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 
 // icons
 import {Icon} from '@iconify/react'
@@ -17,17 +17,17 @@ import envelope from '@iconify/icons-eva/email-outline'
 
 // component
 import {AboutTab, ReviewTab, CredentialsTab} from './tabs'
-import LoadingScreen from 'components/LoadingScreen'
+import LoadingScreen from 'src/components/LoadingScreen'
 import {ConfirmApplicationDialog} from './dialog'
-import MAvatar from 'components/@material-extend/MAvatar'
+import MAvatar from 'src/components/@material-extend/MAvatar'
 
 // api
-import user_api from 'api/users'
-import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
+import user_api from 'src/lib/users'
+import gigs_api from 'src/lib/gigs'
+import storage from 'src/utils/storage'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 // variables
 const DRAWER_WIDTH = 280
@@ -39,19 +39,19 @@ const MainStyle = styled(Stack)(({theme}) => ({
   marginRight: 'auto',
   marginTop: APPBAR_DESKTOP,
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   },
   [theme.breakpoints.up('sm')]: {
-    marginTop: 120,
+    marginTop: 120
   },
   [theme.breakpoints.up('xs')]: {
-    marginTop: 0,
-  },
+    marginTop: 0
+  }
 }))
 
 const useStyles = makeStyles({
   root: {
-    width: 'auto',
+    width: 'auto'
   },
   nav_item: {
     width: '32%',
@@ -66,21 +66,21 @@ const useStyles = makeStyles({
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
+      fontSize: 11
     },
     '&.Mui-selected': {
       backgroundColor: `${color.starjobs.main}`,
       border: 'none',
-      color: `${color.common.white}`,
-    },
+      color: `${color.common.white}`
+    }
   },
   icon: {
     width: 27,
-    height: 27,
-  },
+    height: 27
+  }
 })
 
 export default function TabsComponent() {
@@ -123,7 +123,7 @@ export default function TabsComponent() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const renderTab = (type, current_user) => {
@@ -141,7 +141,7 @@ export default function TabsComponent() {
   const SIMPLE_TAB = [
     {value: '1', label: 'About', disabled: false},
     {value: '2', label: 'Reviews', disabled: false},
-    {value: '3', label: 'Credentials', disabled: false},
+    {value: '3', label: 'Credentials', disabled: false}
   ]
 
   const handleConfirmApplication = () => {
@@ -153,7 +153,7 @@ export default function TabsComponent() {
 
     let data = {
       status: 'Rejected',
-      uid: params.id,
+      uid: params.id
     }
 
     const result = await gigs_api.patch_gigs_apply(params.gig_id, data)
@@ -179,7 +179,7 @@ export default function TabsComponent() {
 
     let data = {
       status: 'Accepted',
-      uid: params.id,
+      uid: params.id
     }
 
     const result = await gigs_api.patch_gigs_apply(params.gig_id, data)
@@ -209,7 +209,7 @@ export default function TabsComponent() {
                   width: {sm: '100%', xs: '100%'},
                   margin: '0 auto',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'center'
                 }}
               >
                 <Box sx={{padding: {xs: 3}}}>
@@ -244,7 +244,7 @@ export default function TabsComponent() {
                 mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
                 width: '100%',
                 alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-                px: '0 !important',
+                px: '0 !important'
               }}
             >
               <Box
@@ -253,7 +253,7 @@ export default function TabsComponent() {
                   display: 'flex',
                   alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
                   px: {sm: 0, xs: 0},
-                  mb: 1,
+                  mb: 1
                 }}
               >
                 <MAvatar
@@ -326,8 +326,8 @@ export default function TabsComponent() {
                   onChange={handleChange}
                   TabIndicatorProps={{
                     style: {
-                      display: 'none',
-                    },
+                      display: 'none'
+                    }
                   }}
                 >
                   {SIMPLE_TAB.map((tab, index) => (
@@ -338,7 +338,7 @@ export default function TabsComponent() {
                   sx={{
                     mt: 2,
                     width: '100%',
-                    borderRadius: 1,
+                    borderRadius: 1
                   }}
                 >
                   <Card
@@ -346,7 +346,7 @@ export default function TabsComponent() {
                       p: 2,
                       mt: 1,
                       width: '100%',
-                      borderRadius: 1,
+                      borderRadius: 1
                     }}
                   >
                     {SIMPLE_TAB.map((panel, index) => (

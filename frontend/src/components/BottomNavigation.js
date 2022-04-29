@@ -1,34 +1,34 @@
 import React, {useState, useEffect} from 'react'
 
-import {makeStyles} from '@material-ui/styles'
-import {Badge, Box} from '@material-ui/core'
-import {alpha, styled} from '@material-ui/core/styles'
-import {BottomNavigation, BottomNavigationAction} from '@material-ui/core'
+import {makeStyles} from '@mui/styles'
+import {Badge, Box} from '@mui/material'
+import {alpha, styled} from '@mui/material/styles'
+import {BottomNavigation, BottomNavigationAction} from '@mui/material'
 import {Link} from 'react-router-dom'
 
-import DescriptionIcon from '@material-ui/icons/Home'
-import SearchIcon from '@material-ui/icons/SearchOutlined'
-import AddBoxIcon from '@material-ui/icons/Add'
-import PersonIcon from '@material-ui/icons/Person'
-import FormatListNumberedRtlIcon from '@material-ui/icons/FormatListNumberedRtlOutlined'
-import NotificationsIcon from '@material-ui/icons/Notifications'
+import DescriptionIcon from '@mui/icons-material/Home'
+import SearchIcon from '@mui/icons-material/SearchOutlined'
+import AddBoxIcon from '@mui/icons-material/Add'
+import PersonIcon from '@mui/icons-material/Person'
+import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtlOutlined'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
-import user_api from 'api/users'
+import user_api from 'src/lib/users'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 'auto',
+    width: 'auto'
   },
   nav_item: {
     '& svg': {
-      padding: '2px 0',
+      padding: '2px 0'
     },
     '@media (max-width: 500px)': {
       minWidth: 'auto',
-      padding: '6px 0',
-    },
+      padding: '6px 0'
+    }
   },
   main_button: {
     borderRadius: 88,
@@ -47,17 +47,17 @@ const useStyles = makeStyles((theme) => ({
       width: 48,
       height: 48,
       borderRadius: 48,
-      padding: 12,
+      padding: 12
     },
     '@media (max-width: 500px)': {
       minWidth: 'auto',
-      padding: '6px 0',
-    },
+      padding: '6px 0'
+    }
   },
   icon: {
     width: 30,
-    height: 30,
-  },
+    height: 30
+  }
 }))
 
 const DRAWER_WIDTH = 280
@@ -77,8 +77,8 @@ const BottomNavigationContainer = styled('div')(({theme}) => ({
   zIndex: 99,
   height: '60px',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 export default function SimpleBottomNavigation() {
@@ -172,7 +172,6 @@ export default function SimpleBottomNavigation() {
             to={`/client/profile`}
             key="client-profile"
           />
-          */}
         </BottomNavigation>
       </>
     )

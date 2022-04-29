@@ -1,7 +1,11 @@
-import {Paper, Divider, Box, Stack, Typography} from '@material-ui/core'
+import {Paper, Divider, Box, Stack, Typography} from '@mui/material'
+import PropTypes from 'prop-types'
 
+About.propTypes = {
+  form: PropTypes.object
+}
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 export default function About({form}) {
   if (form.length === 0) return
@@ -73,12 +77,12 @@ export default function About({form}) {
             </Typography>
             <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{marginTop: '0 !important'}}>
               {form.expertise.workType.split('=>').length > 0 ? (
-                form.expertise.workType.split('//').map((v, k) => {
+                form.expertise.workType.split('//').map((v) => {
                   return v
                     .replace(',', '')
                     .split('||')
                     .slice(1)
-                    .map((itm, idx) => {
+                    .map((itm) => {
                       return itm.split('=>').map((im, ix) => {
                         return (
                           <Typography

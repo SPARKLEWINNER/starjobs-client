@@ -6,14 +6,14 @@ import arrowRightFill from '@iconify/icons-eva/arrow-right-fill'
 import roundKeyboardArrowLeft from '@iconify/icons-ic/round-keyboard-arrow-left'
 import roundKeyboardArrowRight from '@iconify/icons-ic/round-keyboard-arrow-right'
 // material
-import {useTheme, styled} from '@material-ui/core/styles'
-import {Box} from '@material-ui/core'
+import {useTheme, styled} from '@mui/material/styles'
+import {Box} from '@mui/material'
 //
 import {MIconButton} from '../../@material-extend'
 
 const ICON_SIZE = {
   width: 20,
-  height: 20,
+  height: 20
 }
 
 const RootStyle = styled(Box)(({theme}) => ({
@@ -21,20 +21,20 @@ const RootStyle = styled(Box)(({theme}) => ({
   display: 'flex',
   position: 'absolute',
   top: theme.spacing(2),
-  right: theme.spacing(2),
+  right: theme.spacing(2)
 }))
 
 const ArrowStyle = styled(MIconButton)(({theme}) => ({
   padding: 6,
   opacity: 0.48,
   color: theme.palette.common.white,
-  '&:hover': {opacity: 1},
+  '&:hover': {opacity: 1}
 }))
 
 CarouselControlsArrowsBasic1.propTypes = {
   arrowLine: PropTypes.bool,
   onNext: PropTypes.func,
-  onPrevious: PropTypes.func,
+  onPrevious: PropTypes.func
 }
 
 export default function CarouselControlsArrowsBasic1({arrowLine, onNext, onPrevious, ...other}) {

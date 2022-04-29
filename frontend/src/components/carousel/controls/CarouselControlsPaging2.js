@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 // material
-import {styled} from '@material-ui/core/styles'
-import {Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Box} from '@mui/material'
 
 const RootStyle = styled('ul')({
   display: 'flex',
@@ -16,10 +16,10 @@ const RootStyle = styled('ul')({
       opacity: 1,
       '& .dotActive': {
         width: 18,
-        borderRadius: 8,
-      },
-    },
-  },
+        borderRadius: 8
+      }
+    }
+  }
 })
 
 const DotStyle = styled('span')(({theme}) => ({
@@ -28,12 +28,12 @@ const DotStyle = styled('span')(({theme}) => ({
   borderRadius: '50%',
   transition: theme.transitions.create('all', {
     easing: theme.transitions.easing.easeInOut,
-    duration: 360,
-  }),
+    duration: 360
+  })
 }))
 
 CarouselControlsPaging2.propTypes = {
-  color: PropTypes.string,
+  color: PropTypes.string
 }
 
 export default function CarouselControlsPaging2({color, ...other}) {
@@ -50,16 +50,16 @@ export default function CarouselControlsPaging2({color, ...other}) {
           height: '100%',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
       >
         <DotStyle
           className="dotActive"
           sx={{
-            bgcolor: color || 'starjobs.main',
+            bgcolor: color || 'starjobs.main'
           }}
         />
       </Box>
-    ),
+    )
   }
 }

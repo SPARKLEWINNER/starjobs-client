@@ -1,16 +1,16 @@
 import {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 // material
-import {Divider, Typography, Box} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Divider, Typography, Box} from '@mui/material'
+import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import ListApplicants from './lists'
 import ClientProfile from './details'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Box)(({theme}) => ({
@@ -20,8 +20,8 @@ const MainStyle = styled(Box)(({theme}) => ({
   marginBottom: '280px',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const Applicants = () => {
@@ -29,7 +29,7 @@ const Applicants = () => {
   const [data, setData] = useState({
     applicants: [],
     details: [],
-    shift: undefined,
+    shift: undefined
   })
 
   useEffect(() => {

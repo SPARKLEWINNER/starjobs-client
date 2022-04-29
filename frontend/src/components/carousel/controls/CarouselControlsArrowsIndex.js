@@ -5,14 +5,14 @@ import arrowRightFill from '@iconify/icons-eva/arrow-right-fill'
 import roundKeyboardArrowLeft from '@iconify/icons-ic/round-keyboard-arrow-left'
 import roundKeyboardArrowRight from '@iconify/icons-ic/round-keyboard-arrow-right'
 // material
-import {alpha, useTheme, styled} from '@material-ui/core/styles'
-import {Typography, Box} from '@material-ui/core'
+import {alpha, useTheme, styled} from '@mui/material/styles'
+import {Typography, Box} from '@mui/material'
 //
 import {MIconButton} from '../../@material-extend'
 
 const ICON_SIZE = {
   width: 20,
-  height: 20,
+  height: 20
 }
 
 const RootStyle = styled(Box)(({theme}) => ({
@@ -24,14 +24,14 @@ const RootStyle = styled(Box)(({theme}) => ({
   right: theme.spacing(2),
   color: theme.palette.common.white,
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.grey[900], 0.48),
+  backgroundColor: alpha(theme.palette.grey[900], 0.48)
 }))
 
 const ArrowStyle = styled(MIconButton)(({theme}) => ({
   padding: 6,
   opacity: 0.48,
   color: theme.palette.common.white,
-  '&:hover': {opacity: 1},
+  '&:hover': {opacity: 1}
 }))
 
 CarouselControlsArrowsIndex.propTypes = {
@@ -39,7 +39,7 @@ CarouselControlsArrowsIndex.propTypes = {
   total: PropTypes.number,
   arrowLine: PropTypes.bool,
   onNext: PropTypes.func,
-  onPrevious: PropTypes.func,
+  onPrevious: PropTypes.func
 }
 
 export default function CarouselControlsArrowsIndex({arrowLine, index, total, onNext, onPrevious, ...other}) {

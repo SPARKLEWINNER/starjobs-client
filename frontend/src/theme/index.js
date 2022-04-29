@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import {useMemo} from 'react'
 // material
-import {CssBaseline} from '@material-ui/core'
-import {ThemeProvider, createTheme, StyledEngineProvider} from '@material-ui/core/styles'
+import {CssBaseline} from '@mui/material'
+import {ThemeProvider, createTheme, StyledEngineProvider} from '@mui/material/styles'
 //
 import shape from './shape'
 import palette from './palette'
@@ -12,19 +12,20 @@ import componentsOverride from './overrides'
 import shadows, {customShadows} from './shadows'
 
 ThemeConfig.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 }
 
 export default function ThemeConfig({children}) {
   const themeOptions = useMemo(
     () => ({
-      palette,
       shape,
+      palette,
       typography,
       shadows,
-      customShadows,
+      customShadows
     }),
-    [],
+
+    []
   )
 
   const theme = createTheme(themeOptions)

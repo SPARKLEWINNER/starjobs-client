@@ -1,13 +1,13 @@
 let pronvicialRate = {
   sss: 4.3365385,
   pagibig: 0.7211538,
-  philhealth: 0.4807692,
+  philhealth: 0.4807692
 }
 
 let ncrRate = {
   sss: 5.7692308,
   pagibig: 1.0096154,
-  philhealth: 0.4807692,
+  philhealth: 0.4807692
 }
 
 export function calculations(hours, fee, locationRate) {
@@ -39,7 +39,7 @@ export function calculations(hours, fee, locationRate) {
     grossVAT,
     grossWithHolding,
     serviceCost,
-    jobsterTotal,
+    jobsterTotal
   }
 }
 
@@ -57,6 +57,6 @@ export function parcel_calculations(hours, fee) {
     grossGigFee,
     grossVAT,
     grossWithHolding,
-    serviceCost,
+    serviceCost
   }
 }

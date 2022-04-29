@@ -1,12 +1,13 @@
 import {useEffect, useState} from 'react'
-import {Box, Stack, Typography, Grid, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Grid, Card} from '@mui/material'
 import moment from 'moment'
 
 // components
 import {BillingCard} from '../../../cards'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
+import PropTypes from 'prop-types'
 
 // status
 const current_status = [
@@ -16,10 +17,10 @@ const current_status = [
   'Confirm-Arrived',
   'On-going',
   'End-Shift',
-  'Confirm-End-Shift',
+  'Confirm-End-Shift'
 ]
 
-export default function CurrentTab({gigs}) {
+const CurrentTab = ({gigs}) => {
   const [FILTERED_DATA, setData] = useState([])
 
   useEffect(() => {
@@ -67,3 +68,9 @@ export default function CurrentTab({gigs}) {
     </Box>
   )
 }
+
+CurrentTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.string])
+}
+
+export default CurrentTab

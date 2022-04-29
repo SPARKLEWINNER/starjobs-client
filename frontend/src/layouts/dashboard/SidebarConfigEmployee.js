@@ -6,8 +6,8 @@ let _config = [
   {
     title: 'dashboard',
     path: '/dashboard/app',
-    icon: getIcon(pieChart2Fill),
-  },
+    icon: getIcon(pieChart2Fill)
+  }
 ]
 
 export default _config

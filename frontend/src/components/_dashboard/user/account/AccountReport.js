@@ -1,4 +1,4 @@
-import {Grid, Card, Stack} from '@material-ui/core'
+import {Grid, Card, Stack} from '@mui/material'
 
 export default function AccountReport({_data}) {
   return (

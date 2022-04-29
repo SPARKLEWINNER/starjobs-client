@@ -1,18 +1,18 @@
 import React, {useState, useEffect} from 'react'
-import {styled} from '@material-ui/core/styles'
-import {Stack, Container, Typography, Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Stack, Container, Typography, Box} from '@mui/material'
 import {slice} from 'lodash'
 
-import Page from 'components/Page'
-import ActivityCard from 'components/activity/card'
+import Page from 'src/components/Page'
+import ActivityCard from 'src/components/activity/card'
 
-import storage from 'utils/storage'
-import user_api from 'api/users'
+import storage from 'src/utils/storage'
+import user_api from 'src/lib/users'
 
 const RootStyle = styled(Page)(({theme}) => ({
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -21,7 +21,7 @@ const ContentStyle = styled('div')(({theme}) => ({
   minHeight: '50vh',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  padding: theme.spacing(0, 0),
+  padding: theme.spacing(0, 0)
 }))
 
 const LIMIT = 3

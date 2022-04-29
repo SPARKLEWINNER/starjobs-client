@@ -1,14 +1,14 @@
-import {Box, Stack, Typography, Card} from '@material-ui/core'
+import PropTypes from 'prop-types'
+
+import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
-// import {useSnackbar} from 'notistack5'
+// import {useSnackbar} from 'notistack'
 import {IncomingCard} from './cards'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
-export default function IncomingTab({gigs, user}) {
-  // const {enqueueSnackbar} = useSnackbar()
-
+const IncomingTab = ({gigs, user}) => {
   return (
     <Box>
       <Stack spacing={3}>
@@ -60,3 +60,10 @@ export default function IncomingTab({gigs, user}) {
     </Box>
   )
 }
+
+IncomingTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.array
+}
+
+export default IncomingTab

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 
 import {makeStyles} from '@material-ui/styles'
 import {Badge, Box} from '@material-ui/core'
@@ -6,16 +6,24 @@ import {alpha, styled} from '@material-ui/core/styles'
 import {BottomNavigation, BottomNavigationAction} from '@material-ui/core'
 import {Link} from 'react-router-dom'
 
-import DescriptionIcon from '@material-ui/icons/Home'
+import HomeIcon from '@material-ui/icons/HomeOutlined'
+import HomeIconActive from '@material-ui/icons/Home'
+
 import SearchIcon from '@material-ui/icons/SearchOutlined'
-import AddBoxIcon from '@material-ui/icons/Add'
-import PersonIcon from '@material-ui/icons/Person'
+import SearchIconActive from '@material-ui/icons/Search'
+
+import PersonIcon from '@material-ui/icons/PersonOutline'
+import PersonIconActive from '@material-ui/icons/Person'
+
 import FormatListNumberedRtlIcon from '@material-ui/icons/FormatListNumberedRtlOutlined'
-import NotificationsIcon from '@material-ui/icons/Notifications'
+
+import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
+import NotificationsIconActive from '@material-ui/icons/Notifications'
 
 import {useAuth} from 'utils/context/AuthContext'
 
-import user_api from 'api/users'
+import {useNotifications} from 'utils/context/NotificationContext'
+import {useSession} from 'utils/context/SessionContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,27 +39,29 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   main_button: {
-    borderRadius: 88,
-    paddingTop: 60,
-    paddingBottom: 16,
-    width: 88,
+    borderRadius: 78,
+    width: 82,
     height: 120,
-    marginTop: -60,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    boxShadow: '0px -2px 10px 5px rgba(128,125,125,0.25) inset',
+    marginTop: -80,
+    marginBottom: -120,
+    backgroundColor: theme.palette.common.white,
+    boxShadow: '0px -16px 20px 0px rgba(128,125,125,0.25)',
     backdropFilter: 'blur(6px)',
     '& svg': {
-      marginTop: 50,
       color: theme.palette.common.white,
       backgroundColor: theme.palette.starjobs.main,
-      width: 48,
-      height: 48,
-      borderRadius: 48,
-      padding: 12,
+      width: 52,
+      height: 52,
+      borderRadius: 52,
+      padding: 10,
+      marginTop: -43,
+    },
+    '& .MuiBottomNavigationAction-label': {
+      position: 'absolute',
+      top: '53%',
     },
     '@media (max-width: 500px)': {
       minWidth: 'auto',
-      padding: '6px 0',
     },
   },
   icon: {
@@ -84,95 +94,92 @@ const BottomNavigationContainer = styled('div')(({theme}) => ({
 export default function SimpleBottomNavigation() {
   const classes = useStyles()
   const {currentUser} = useAuth()
-  const [value, setValue] = useState(0)
-  const [notification, setNotifications] = useState(0)
-
-  useEffect(() => {
-    let componentMounted = true
-
-    const load = async () => {
-      let result
-      if (currentUser.accountType === 1) {
-        result = await user_api.get_user_notifications_client(currentUser._id)
-      } else {
-        result = await user_api.get_user_notifications(currentUser._id)
-      }
-
-      if (!result.ok) return
-
-      const {data} = result.data
-      if (data.length === 0) return
-
-      let unread = data.filter((obj) => obj.isRead === false)
-      const tab = sessionStorage.getItem('tab')
-      if (componentMounted) {
-        setNotifications(unread.length)
-        setValue(JSON.parse(tab))
-      }
-    }
-
-    load()
-    return () => {
-      componentMounted = false
-    }
-
-    // eslint-disable-next-line
-  }, [currentUser])
+  const {notification} = useNotifications()
+  const {sessionScreen, handleSessionScreen} = useSession()
 
   const renderClientNavigation = () => {
     return (
       <>
         <BottomNavigation
-          value={value}
+          value={sessionScreen ? sessionScreen : 0}
           onChange={(event, newValue) => {
-            setValue(newValue)
-            sessionStorage.setItem('tab', newValue)
+            handleSessionScreen(newValue)
           }}
           className={classes.root}
           id="bottom-nav"
         >
           <BottomNavigationAction
             className={classes.nav_item}
-            icon={<DescriptionIcon className={classes.icon} />}
+            icon={
+              sessionScreen === 0 ? <HomeIconActive className={classes.icon} /> : <HomeIcon className={classes.icon} />
+            }
             component={Link}
             to={`/client/app`}
             key="client-app"
+            showLabel={true}
+            label="Home"
           />
           <BottomNavigationAction
             className={classes.nav_item}
-            icon={<SearchIcon className={classes.icon} />}
+            icon={
+              sessionScreen === 1 ? (
+                <SearchIconActive className={classes.icon} />
+              ) : (
+                <SearchIcon className={classes.icon} />
+              )
+            }
             component={Link}
             to={`/gigs`}
             key="client-gigs"
+            showLabel={true}
+            label="Search"
           />
-          <Box sx={{overflow: 'hidden'}}>
+          <Box>
             <BottomNavigationAction
+              onChange={() => {
+                handleSessionScreen(2)
+              }}
               className={classes.main_button}
-              icon={<AddBoxIcon className={classes.icon} />}
+              icon={<FormatListNumberedRtlIcon className={classes.icon} />}
               component={Link}
               to="/client/gig/create"
               key="client-gig-create"
+              showLabel={true}
+              label="Gigs"
             />
           </Box>
           <BottomNavigationAction
             className={classes.nav_item}
             icon={
               <Badge badgeContent={notification} color="error">
-                <NotificationsIcon className={classes.icon} />
+                {sessionScreen === 3 ? (
+                  <NotificationsIconActive className={classes.icon} />
+                ) : (
+                  <NotificationsIcon className={classes.icon} />
+                )}
               </Badge>
             }
             component={Link}
             to={`/client/message`}
             key="client-message"
+            showLabel={true}
+            label="Notifications"
           />
           <BottomNavigationAction
             className={classes.nav_item}
-            icon={<PersonIcon className={classes.icon} />}
+            icon={
+              sessionScreen === 4 ? (
+                <PersonIconActive className={classes.icon} />
+              ) : (
+                <PersonIcon className={classes.icon} />
+              )
+            }
             component={Link}
             to={`/client/profile`}
             key="client-profile"
+            showLabel={true}
+            label="Profile"
           />
-          */}
         </BottomNavigation>
       </>
     )
@@ -182,41 +189,52 @@ export default function SimpleBottomNavigation() {
     return (
       <>
         <BottomNavigation
-          value={value === 2 ? '' : value}
+          value={sessionScreen === 2 ? '' : sessionScreen}
           onChange={(event, newValue) => {
-            setValue(newValue)
-            sessionStorage.setItem('tab', newValue)
+            handleSessionScreen(newValue)
           }}
           className={classes.root}
           id="bottom-nav"
         >
           <BottomNavigationAction
             className={classes.nav_item}
-            icon={<DescriptionIcon className={classes.icon} />}
+            icon={
+              sessionScreen === 0 ? <HomeIconActive className={classes.icon} /> : <HomeIcon className={classes.icon} />
+            }
             component={Link}
             to={`/freelancer/app`}
             key="freelancer-app"
+            showLabel={true}
+            label="Home"
           />
           <BottomNavigationAction
             className={classes.nav_item}
-            icon={<SearchIcon className={classes.icon} />}
+            icon={
+              sessionScreen === 1 ? (
+                <SearchIconActive className={classes.icon} />
+              ) : (
+                <SearchIcon className={classes.icon} />
+              )
+            }
             component={Link}
             to={`/gigs`}
             key="freelancer-gigs"
+            showLabel={true}
+            label="Search"
           />
-          {/* <BottomNavigationAction
-                className={classes.nav_item}
-                icon={<AddBoxIcon className={classes.icon} />}
-                component={Link}
-                to="#"
-              /> */}
-          <Box sx={{overflow: 'hidden'}}>
+
+          <Box>
             <BottomNavigationAction
               className={classes.main_button}
               icon={<FormatListNumberedRtlIcon className={classes.icon} />}
               component={Link}
+              onChange={() => {
+                handleSessionScreen(2)
+              }}
               to={`/freelancer/dashboard`}
               key="freelancer-dashboard"
+              showLabel={true}
+              label="Gigs"
             />
           </Box>
           <BottomNavigationAction
@@ -224,21 +242,35 @@ export default function SimpleBottomNavigation() {
             icon={
               <>
                 <Badge badgeContent={notification} color="error">
-                  <NotificationsIcon className={classes.icon} />
+                  {sessionScreen === 3 ? (
+                    <NotificationsIconActive className={classes.icon} />
+                  ) : (
+                    <NotificationsIcon className={classes.icon} />
+                  )}
                 </Badge>
               </>
             }
             component={Link}
             to={`/freelancer/message`}
             key="freelancer-message"
+            showLabel={true}
+            label="Notifications"
           />
 
           <BottomNavigationAction
             className={classes.nav_item}
-            icon={<PersonIcon className={classes.icon} />}
+            icon={
+              sessionScreen === 4 ? (
+                <PersonIconActive className={classes.icon} />
+              ) : (
+                <PersonIcon className={classes.icon} />
+              )
+            }
             component={Link}
             to={`/freelancer/profile`}
             key="freelancer-profile"
+            showLabel={true}
+            label="Profile"
           />
         </BottomNavigation>
       </>

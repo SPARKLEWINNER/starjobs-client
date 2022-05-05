@@ -18,6 +18,7 @@ import TawktoPageOverlay from 'layouts/tawkto/tawkto_page_overlay'
 
 import {AuthProvider} from 'utils/context/AuthContext'
 import {SessionProvider} from 'utils/context/SessionContext'
+import {NotificationsProvider} from 'utils/context/NotificationContext'
 
 export default function App() {
   const [open, setOpen] = useState(false)
@@ -41,6 +42,7 @@ export default function App() {
       <ThemePrimaryColor>
         <AuthProvider>
           <SessionProvider>
+            <NotificationsProvider>
             <NotistackProvider>
               <RatingsProvider>
                 <TawktoPageOverlay>
@@ -51,6 +53,7 @@ export default function App() {
                 </TawktoPageOverlay>
               </RatingsProvider>
             </NotistackProvider>
+            </NotificationsProvider>
           </SessionProvider>
         </AuthProvider>
       </ThemePrimaryColor>

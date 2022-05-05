@@ -1,9 +1,8 @@
 import {useState, useEffect} from 'react'
-import {useNavigate, useParams, useLocation} from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 
 import {capitalCase} from 'change-case'
 import {useSnackbar} from 'notistack5'
-import moment from 'moment'
 
 // icon
 import {Icon} from '@iconify/react'
@@ -13,7 +12,7 @@ import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 
 // material
-import {Box, Tab, Stack, Grid, Typography, Divider, Card} from '@material-ui/core'
+import {Box, Tab, Stack, Grid, Typography, Card} from '@material-ui/core'
 import {TabContext, TabList, TabPanel} from '@material-ui/lab'
 import {styled} from '@material-ui/core/styles'
 import {makeStyles} from '@material-ui/styles'
@@ -21,14 +20,10 @@ import {makeStyles} from '@material-ui/styles'
 // components
 import Page from 'components/Page'
 import {CredentialsTab, ActivityTab} from 'pages/client/profile/tabs'
-import {ApplyCard, ConfirmGig} from 'pages/gigs/cards'
 import MAvatar from 'components/@material-extend/MAvatar'
 
 // api
 import user_api from 'api/users'
-import gigs_api from 'api/gigs'
-import storage from 'utils/storage'
-import useSendNotif from 'utils/hooks/useSendNotif'
 
 // theme
 import color from 'theme/palette'
@@ -97,21 +92,13 @@ const STATIC_TAB = [
 ]
 
 const Profile = () => {
-  const params = useParams()
   const {currentUser} = useAuth()
   const location = useLocation()
-  const navigate = useNavigate()
   const classes = useStyles()
   const {enqueueSnackbar} = useSnackbar()
-  const [open, setOpen] = useState(false)
   const [value, setValue] = useState('1')
   const [user, setUser] = useState([])
-  const [gigs, setGigs] = useState([])
-  const [current_user, setCurrentUser] = useState([])
-  const [applyDetails, setApplyDetails] = useState(null)
-  const [SIMPLE_TAB, setTabs] = useState(STATIC_TAB)
 
-  const {sendGigNotification} = useSendNotif()
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
@@ -124,28 +111,17 @@ const Profile = () => {
         setUser(currentUser)
       }
 
-      const user = JSON.parse(storage.getUser())
-
-      // set tabs to active if
-      if (location.pathname !== '/client/profile') {
-        currentUser._id = params.id
-        setTabs(STATIC_TAB.filter((obj) => obj.value !== 3))
-      }
-
       const result = await user_api.get_user_profile_client(currentUser._id)
-
       if (!result.ok) return
 
-      let {details, gigs} = result.data
+      let {details} = result.data
       if (details && details.length <= 0) {
         enqueueSnackbar('Kindly complete your account details to in order to proceed', {variant: 'warning'})
         return
       }
 
       if (componentMounted) {
-        setCurrentUser(user)
-        setUser(user)
-        setGigs(gigs)
+        setUser(details)
       }
     }
     load()
@@ -155,44 +131,6 @@ const Profile = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  const handleClick = (values) => {
-    setOpen(true)
-    setApplyDetails(values)
-  }
-
-  const handleApply = async () => {
-    let data = {
-      status: 'Applying',
-      uid: current_user._id,
-    }
-    const result = await gigs_api.patch_gigs_apply(applyDetails._id, data)
-
-    if (!result.ok) {
-      enqueueSnackbar('Something went wrong in applying for this gig', {variant: 'error'})
-      setOpen(false)
-      return
-    }
-
-    //Create a notification to the client
-    await sendGigNotification({
-      title: `Gig application`,
-      body: `${current_user.name} is applying`,
-      targetUsers: [`${applyDetails.uid}`],
-      additionalData: result,
-      userId: current_user._id,
-    })
-
-    //todo
-    //Fixed implementation for gig updates
-    enqueueSnackbar('Your application has been submitted!', {variant: 'success'})
-    setOpen(false)
-    navigate(`/gigs/apply/success`, {replace: true})
-  }
 
   const renderTab = (type, current_user) => {
     if (type === 1)
@@ -319,7 +257,7 @@ const Profile = () => {
                   },
                 }}
               >
-                {SIMPLE_TAB.map((tab, index) => (
+                {STATIC_TAB.map((tab, index) => (
                   <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
                 ))}
               </TabList>
@@ -333,7 +271,7 @@ const Profile = () => {
                   ...(location.pathname !== '/client/profile' ? {} : {mb: 20}),
                 }}
               >
-                {SIMPLE_TAB.map((panel, index) => (
+                {STATIC_TAB.map((panel, index) => (
                   <TabPanel key={panel.value} value={String(index + 1)} sx={{p: 0}}>
                     {renderTab(panel.value)}
                   </TabPanel>
@@ -341,55 +279,6 @@ const Profile = () => {
               </Card>
             </TabContext>
           </Stack>
-
-          {location.pathname !== '/client/profile' && (
-            <>
-              <Divider sx={{mb: 3}} />
-              {/* gigs list */}
-              <Box sx={{mb: 10, padding: {xs: 0}}}>
-                {gigs &&
-                  gigs.map((v, k) => {
-                    if (params.category === 'all') {
-                      if (v.status === 'Waiting' || v.status === 'Applying') {
-                        if (moment(v.time).isBefore(moment(), 'day')) return ''
-                        if (!moment(v.from).isValid()) return ''
-                        return (
-                          <ApplyCard
-                            path={location.pathname}
-                            key={k}
-                            gig={v}
-                            accountType={current_user.accountType}
-                            isActive={current_user.isActive}
-                            onClick={handleClick}
-                            currentUser={currentUser}
-                          />
-                        )
-                      } else {
-                        return ''
-                      }
-                    } else {
-                      if ((v.status === 'Waiting' || v.status === 'Applying') && v.category === params.category) {
-                        if (moment(v.time).isBefore(moment(), 'day')) return ''
-                        if (!moment(v.from).isValid()) return ''
-                        return (
-                          <ApplyCard
-                            path={location.pathname}
-                            key={k}
-                            gig={v}
-                            onClick={handleClick}
-                            currentUser={currentUser}
-                          />
-                        )
-                      } else {
-                        return ''
-                      }
-                    }
-                  })}
-              </Box>
-            </>
-          )}
-
-          <ConfirmGig open={open} onConfirm={handleApply} handleClose={handleClose} />
         </ProfileStyle>
       </MainStyle>
     </Page>

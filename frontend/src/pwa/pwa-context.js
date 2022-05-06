@@ -3,10 +3,6 @@ import * as serviceWorker from './../serviceWorkerRegistration'
 import PropTypes from 'prop-types'
 const ServiceWorkerContext = createContext()
 
-ServiceWorkerProvider.propTypes = {
-  children: PropTypes.node
-}
-
 export const ServiceWorkerProvider = ({children}) => {
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null)
   const [isUpdateAvailable, setUpdateAvailable] = useState(false)
@@ -57,4 +53,8 @@ export const ServiceWorkerProvider = ({children}) => {
 // With this React Hook we'll be able to access `isUpdateAvailable` and `updateAssets`
 export const useServiceWorker = () => {
   return useContext(ServiceWorkerContext)
+}
+
+ServiceWorkerProvider.propTypes = {
+  children: PropTypes.node
 }

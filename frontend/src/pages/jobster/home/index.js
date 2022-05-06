@@ -92,7 +92,6 @@ const Dashboard = () => {
   ])
 
   useEffect(() => {
-    let componentMounted = true
     const load = async () => {
       const result = await gigs_api.get_gigs_client()
       if (!result.ok) {
@@ -109,18 +108,12 @@ const Dashboard = () => {
       let category_data = CATEGORY_RESULT.data
         .sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
         .filter((obj) => obj.status !== 1)
-
-      if (componentMounted) {
-        setCategory({initial: category_data, dynamic: category_data})
-        checkNotice(data)
-      }
+      setCategory({initial: category_data, dynamic: category_data})
+      checkNotice(data)
     }
 
     load()
 
-    return () => {
-      componentMounted = false
-    }
     // eslint-disable-next-line
   }, [currentUser])
 

@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
-import {useParams} from 'react-router-dom'
+import {Link as RouterLink, useParams} from 'react-router-dom'
 // material
-import {Divider, Typography, Box} from '@mui/material'
+import {Divider, Typography, Box, Card, Link} from '@mui/material'
 import {styled} from '@mui/material/styles'
 
 // components
@@ -56,7 +56,33 @@ const Applicants = () => {
         <Divider sx={{mt: 3}}>
           <Typography variant="overline">Applicants</Typography>
         </Divider>
-        <ListApplicants details={data.details} applicants={data.applicants} />
+        {data.applicants && data.details && <ListApplicants details={data.details} applicants={data.applicants} />}
+        {!data.applicants ||
+          (!data.details && (
+            <Card
+              sx={{
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: 3,
+                py: 10,
+                mt: 5
+              }}
+            >
+              <Typography variant="h6">
+                No applicants{' '}
+                <Link
+                  component={RouterLink}
+                  to="/client/gig/create?tab=3"
+                  underline="none"
+                  sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
+                >
+                  Go back
+                </Link>
+              </Typography>
+            </Card>
+          ))}
       </MainStyle>
     </Page>
   )

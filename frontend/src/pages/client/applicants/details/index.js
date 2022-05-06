@@ -168,6 +168,6 @@ export default function GigsDetailsLayout({details, shift}) {
 }
 
 GigsDetailsLayout.propTypes = {
-  details: PropTypes.object,
+  details: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   shift: PropTypes.string
 }

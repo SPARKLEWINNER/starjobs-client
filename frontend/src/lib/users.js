@@ -45,9 +45,9 @@ const get_user_profile_client = async (client_id) => request.get(`/clients/${cli
 
 const get_user_profile_freelancer = async (freelancer_id) => request.get(`/applicant/details/${freelancer_id}`)
 
-const get_user_notifications = async (_id) => request.get(`/notifications/${_id}`)
+const get_user_notifications = async () => request.get(`/notifications`)
 
-const get_user_notifications_client = async (_id) => request.get(`/notifications/${_id}`)
+const get_user_notifications_client = async () => request.get(`/notifications`)
 
 const get_user_notifications_details = async (_id) => request.get(`/notifications/details/${_id}`)
 

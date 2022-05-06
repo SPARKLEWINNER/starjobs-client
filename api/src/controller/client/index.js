@@ -203,7 +203,7 @@ var controllers = {
         let gigs;
         let client;
 
-        if (!id) res.status(502).json({ success: false, msg: 'User id missing' });
+        if (!id || id === 'undefined') return res.status(502).json({ success: false, msg: 'User id missing' });
 
         try {
             await getSpecificData({ _id: mongoose.Types.ObjectId(id) }, User, 'User', id);
@@ -283,13 +283,8 @@ var controllers = {
                         // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
                     })
                     .exec();
-
-                gigs = gigs.filter((obj) => {
-                    return !moment(obj.time).isBefore(moment(), 'day');
-                });
-
                 gigs = await Promise.all(
-                    gigs.map(async (obj) => {
+                    gigs && gigs.filter((obj) =>!moment(obj.time).isBefore(moment(), 'day')).map(async (obj) => {
                         if (!obj.isExtended) {
                             const account = await Account.find({ uuid: mongoose.Types.ObjectId(obj.auid) })
                                 .lean()

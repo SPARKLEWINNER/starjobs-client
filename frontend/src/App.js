@@ -10,15 +10,15 @@ import ThemeConfig from './theme'
 // components
 import {GenericNotification} from './components/notifications'
 import FirebaseToken from './components/fcm'
-import ScrollToTop from './components/ScrollToTop'
 import NotistackProvider from './components/NotistackProvider'
 import ThemePrimaryColor from './components/ThemePrimaryColor'
 
-import TawktoPageOverlay from 'src/layouts/tawkto/tawkto_page_overlay'
+// import TawktoPageOverlay from 'src/layouts/tawkto/tawkto_page_overlay'
 
-import {RatingsProvider} from 'src/contexts/rating'
 import {AuthProvider} from 'src/contexts/AuthContext'
 import {SessionProvider} from 'src/contexts/SessionContext'
+import {NotificationsProvider} from 'src/contexts/NotificationContext'
+import {RatingsProvider} from 'src/contexts/rating'
 
 import {useServiceWorker} from './pwa/pwa-context'
 
@@ -26,8 +26,6 @@ export default function App() {
   const {isUpdateAvailable, updateAssets} = useServiceWorker()
   const [open, setOpen] = useState(false)
   const [payload, setPayload] = useState([])
-
-  console.log('isUpdateAvailable', isUpdateAvailable)
 
   const handleClose = () => {
     setOpen(false)
@@ -52,16 +50,17 @@ export default function App() {
       <ThemePrimaryColor>
         <AuthProvider>
           <SessionProvider>
-            <NotistackProvider>
-              <RatingsProvider>
-                <TawktoPageOverlay>
-                  <ScrollToTop />
+            <NotificationsProvider>
+              <NotistackProvider>
+                <RatingsProvider>
+                  {/* <TawktoPageOverlay> */}
                   <AppRoute />
                   <FirebaseToken />
                   <GenericNotification open={open ?? false} details={payload} handleClose={handleClose} />
-                </TawktoPageOverlay>
-              </RatingsProvider>
-            </NotistackProvider>
+                  {/* </TawktoPageOverlay> */}
+                </RatingsProvider>
+              </NotistackProvider>
+            </NotificationsProvider>
           </SessionProvider>
         </AuthProvider>
         {isUpdateAvailable && (

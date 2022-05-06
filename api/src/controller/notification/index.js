@@ -1,3 +1,4 @@
+const jwt_decode = require('jwt-decode');
 const User = require('./../../models/User');
 const Gigs = require('./../../models/Gigs');
 const History = require('./../../models/History');
@@ -136,7 +137,8 @@ var controllers = {
     },
 
     get_notifications_v2: async function (req, res) {
-        const {id} = req.params;
+        const token = req.headers.authorization.split(' ')[1]
+        const {id} = jwt_decode(token);
         let result;
         try {
             result = await Notification.find({

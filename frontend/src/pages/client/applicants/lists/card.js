@@ -83,7 +83,7 @@ export default function ApplicantCard({data, onClick, gigDetails}) {
 }
 
 ApplicantCard.propTypes = {
-  data: PropTypes.bool,
-  gigDetails: PropTypes.bool,
+  data: PropTypes.object,
+  gigDetails: PropTypes.object,
   onClick: PropTypes.func
 }

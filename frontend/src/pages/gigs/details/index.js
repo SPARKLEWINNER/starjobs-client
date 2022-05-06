@@ -205,7 +205,6 @@ const Details = () => {
     }
   }
 
-  console.log('currentUser', currentUser)
   return (
     <Page title="Gigs Details - Starjobs">
       <MainStyle
@@ -275,7 +274,7 @@ const Details = () => {
                   variant="body2"
                   sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                 >
-                  {user && user.location}
+                  {user && user.location && capitalCase(user.location)}
                 </Typography>
               </Box>
               <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>

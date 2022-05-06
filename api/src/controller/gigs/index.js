@@ -191,7 +191,7 @@ var controllers = {
     // create gigs
     post_gig: async function (req, res) {
         const { id } = req.params;
-        const { time, shift, hours, fee, date, category, position, breakHr, from, fees, locationRate } = req.body;
+        const { time, shift, hours, fee, date, category, position, breakHr, from, fees, locationRate, location, contactNumber, notes } = req.body;
         const now = new Date();
 
         const isUserExists = await User.find({ _id: mongoose.Types.ObjectId(id), accountType: 1 })
@@ -230,6 +230,9 @@ var controllers = {
             position,
             breakHr,
             fees,
+            location,
+            contactNumber,
+            notes,
             locationRate: locationRate,
             uid: mongoose.Types.ObjectId(id),
             dateCreated: now.toISOString()

@@ -1,5 +1,6 @@
 import {Link as RouterLink} from 'react-router-dom'
 import moment from 'moment'
+import {capitalCase} from 'change-case'
 
 // material
 import {Box, Card, CardContent, Button, Link, Typography, Stack} from '@mui/material'
@@ -58,7 +59,7 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
           </Stack>
 
           <Typography variant="body2" sx={{fontSize: 13, mb: 0}}>
-            Location: {location}
+            Location: {gig && type !== 'parcels' ? (gig.location ? capitalCase(gig.location) : location) : location}
           </Typography>
 
           <Stack direction="row" sx={{my: 1}}>

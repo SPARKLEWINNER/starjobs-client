@@ -80,11 +80,13 @@ export default function CreatGigForm({user, category}) {
 
     await discordHook.info(
       `Gig Posted Starjobs `,
-      `\n\n**From:**\n ${user.name} - ${user.email}\n\n**Gig Details:**\n ${form.category} - ${form.position} \n${
-        form.date
-      } ${moment(form.from).format('MMM-DD hh:mm A')} - ${moment(form.time).format('MMM-DD hh:mm A')} \n ${
-        form.shift
-      } shift ${form.hours} hours \n Fee: P ${form.fee}`
+      `\n\n**From:**\n ${user.name} - ${user.email} - ${form.contactNumber}\n\n**Gig Details:**\n ${form.category} - ${
+        form.position
+      } \n${form.date} ${moment(form.from).format('MMM-DD hh:mm A')} - ${moment(form.time).format(
+        'MMM-DD hh:mm A'
+      )} \n ${form.shift} shift ${form.hours} hours \n Fee: P ${form.fee}\n\n
+      Location: ${form.location}
+      `
     )
 
     enqueueSnackbar('Gig post success', {variant: 'success'})

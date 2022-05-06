@@ -1,25 +1,15 @@
 import * as Yup from 'yup'
 import {useCallback, useState} from 'react'
 import {Form, FormikProvider, useFormik} from 'formik'
-import {
-  Box,
-  Grid,
-  Card,
-  Stack,
-  Switch,
-  TextField,
-  FormControlLabel,
-  Typography,
-  FormHelperText,
-} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Grid, Card, Stack, Switch, TextField, FormControlLabel, Typography, FormHelperText} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
 import {UploadAvatar} from '../../../upload'
 import {fData} from '../../../../utils/formatNumber'
 
 const AccountGeneral = ({_data}) => {
   const [isEdit, setIsEdit] = useState(false)
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required'),
+    displayName: Yup.string().required('Name is required')
   })
 
   const formik = useFormik({
@@ -35,7 +25,7 @@ const AccountGeneral = ({_data}) => {
       photoURL: _data.image || '',
       phoneNumber: _data.phone || '',
       company: _data.company || '',
-      isVerified: _data.isVerified || '',
+      isVerified: _data.isVerified || ''
     },
     validationSchema: UpdateUserSchema,
     onSubmit: async (values, {setErrors, setSubmitting}) => {
@@ -47,7 +37,7 @@ const AccountGeneral = ({_data}) => {
         setErrors({afterSubmit: error.code})
         setSubmitting(false)
       }
-    },
+    }
   })
 
   const {values, errors, touched, isSubmitting, handleSubmit, getFieldProps, setFieldValue} = formik
@@ -58,11 +48,11 @@ const AccountGeneral = ({_data}) => {
       if (file) {
         setFieldValue('photoURL', {
           ...file,
-          preview: URL.createObjectURL(file),
+          preview: URL.createObjectURL(file)
         })
       }
     },
-    [setFieldValue],
+    [setFieldValue]
   )
 
   return (
@@ -85,7 +75,7 @@ const AccountGeneral = ({_data}) => {
                       mx: 'auto',
                       display: 'block',
                       textAlign: 'center',
-                      color: 'text.secondary',
+                      color: 'text.secondary'
                     }}
                   >
                     Allowed *.jpeg, *.jpg, *.png, *.gif
@@ -116,7 +106,7 @@ const AccountGeneral = ({_data}) => {
                     label="Name"
                     {...getFieldProps('displayName')}
                     InputProps={{
-                      readOnly: isEdit ? false : true,
+                      readOnly: isEdit ? false : true
                     }}
                   />
                   <TextField
@@ -125,7 +115,7 @@ const AccountGeneral = ({_data}) => {
                     label="Email Address"
                     {...getFieldProps('email')}
                     InputProps={{
-                      readOnly: isEdit ? false : true,
+                      readOnly: isEdit ? false : true
                     }}
                   />
                 </Stack>
@@ -136,7 +126,7 @@ const AccountGeneral = ({_data}) => {
                     label="Phone Number"
                     {...getFieldProps('phoneNumber')}
                     InputProps={{
-                      readOnly: isEdit ? false : true,
+                      readOnly: isEdit ? false : true
                     }}
                   />
                   <TextField
@@ -144,7 +134,7 @@ const AccountGeneral = ({_data}) => {
                     label="Company"
                     {...getFieldProps('company')}
                     InputProps={{
-                      readOnly: isEdit ? false : true,
+                      readOnly: isEdit ? false : true
                     }}
                   />
                 </Stack>

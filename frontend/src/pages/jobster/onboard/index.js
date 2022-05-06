@@ -1,13 +1,13 @@
 import {useState, useEffect} from 'react'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 
 // material
-import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
-import {LoadingButton} from '@material-ui/lab'
+import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
+import {styled} from '@mui/material/styles'
+import {LoadingButton} from '@mui/lab'
 
 // components
-import Page from 'components/Page'
+import Page from 'src/components/Page'
 import PersonalForm from './forms/personalForm'
 import EmploymentForm from './forms/employmentForm'
 import ExpertiseForm from './forms/expertiseForm'
@@ -16,8 +16,8 @@ import RateForm from './forms/rateForm'
 import ProfileForm from './forms/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
 import {useNavigate} from 'react-router-dom'
 
 // variables
@@ -28,7 +28,7 @@ const steps = [
   'Expertise',
   'Education Background',
   'Rate & Payment',
-  'Profile Picture',
+  'Profile Picture'
 ]
 
 // styles
@@ -37,8 +37,8 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const Onboard = () => {
@@ -54,7 +54,7 @@ const Onboard = () => {
     expertise: [],
     education: [],
     rate: [],
-    photo: '',
+    photo: ''
   })
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const Onboard = () => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -123,9 +123,9 @@ const Onboard = () => {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
-      photo: form.photo,
+      photo: form.photo
     }
 
     const result = await onboard_api.post_freelancer_onboard(form_data, user._id)
@@ -219,14 +219,14 @@ const Onboard = () => {
                     </Typography>
                     <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{marginTop: '0 !important'}}>
                       {form.expertise.workType.split('=>').length > 0 ? (
-                        form.expertise.workType.split('=>').map((v, k) => {
+                        form.expertise.workType.split('=>').map((value, key) => {
                           return (
                             <Typography
-                              Typography
+                              key={key}
                               variant="body2"
                               sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
                             >
-                              - {v}
+                              - {value}
                             </Typography>
                           )
                         })

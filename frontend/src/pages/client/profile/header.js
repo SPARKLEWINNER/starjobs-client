@@ -1,14 +1,14 @@
-import {Box, Stack, Grid, Typography} from '@material-ui/core'
+import {Box, Stack, Grid, Typography} from '@mui/material'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'
 import map from '@iconify/icons-eva/map-outline'
 import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 
-import MAvatar from 'components/@material-extend/MAvatar'
+import MAvatar from 'src/components/@material-extend/MAvatar'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 const ProfileHeader = ({user}) => {
@@ -21,7 +21,7 @@ const ProfileHeader = ({user}) => {
         mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
         width: '100%',
         alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-        px: '0 !important',
+        px: '0 !important'
       }}
     >
       <Box
@@ -30,7 +30,7 @@ const ProfileHeader = ({user}) => {
           display: 'flex',
           alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
           px: {sm: 0, xs: 0},
-          mb: 1,
+          mb: 1
         }}
       >
         <MAvatar

@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types'
 import {createContext} from 'react'
 // hooks
-import useLocalStorage from 'utils/hooks/storage'
+import useLocalStorage from 'src/utils/hooks/storage'
 // theme
-import palette from 'theme/palette'
+import palette from 'src/theme/palette'
 
 const PRIMARY_COLOR = [
   // DEFAULT
   {
     name: 'default',
-    ...palette.primary,
-  },
+    ...palette.primary
+  }
 ]
 
 function SetColor() {
@@ -19,19 +19,19 @@ function SetColor() {
 
 const initialState = {
   setColor: PRIMARY_COLOR[1],
-  colorOption: [],
+  colorOption: []
 }
 
 const SettingsContext = createContext(initialState)
 
 SettingsProvider.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 }
 
 function SettingsProvider({children}) {
   // eslint-disable-next-line
   const [settings, setSettings] = useLocalStorage('settings', {
-    themeColor: 'default',
+    themeColor: 'default'
   })
   return (
     <SettingsContext.Provider
@@ -40,8 +40,8 @@ function SettingsProvider({children}) {
         setColor: SetColor(settings.themeColor),
         colorOption: PRIMARY_COLOR.map((color) => ({
           name: color.name,
-          value: color.main,
-        })),
+          value: color.main
+        }))
       }}
     >
       {children}

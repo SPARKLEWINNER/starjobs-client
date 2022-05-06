@@ -3,13 +3,13 @@ import {last} from 'lodash'
 import {Outlet, useLocation} from 'react-router-dom'
 // material
 import PullToRefresh from 'react-simple-pull-to-refresh'
-import {styled} from '@material-ui/core/styles'
+import {styled} from '@mui/material/styles'
 //
 import DashboardNavbar from './DashboardNavbar'
-import FixedBottomNavigation from 'components/BottomNavigation'
+import FixedBottomNavigation from 'src/components/BottomNavigation'
 
-import {useAuth} from 'utils/context/AuthContext'
-// import {SocketContext} from 'utils/context/socket'
+import {useAuth} from 'src/contexts/AuthContext'
+// import {SocketContext} from 'src/utils/contexts/socket'
 
 const APP_BAR_MOBILE = 64
 const APP_BAR_DESKTOP = 92
@@ -18,7 +18,7 @@ const RootStyle = styled('div')({
   display: 'flex',
   minHeight: '100%',
   overflow: 'hidden',
-  backgroundColor: '#f8fbfb',
+  backgroundColor: '#f8fbfb'
 })
 
 const MainStyle = styled('div')(({theme}) => ({
@@ -30,12 +30,12 @@ const MainStyle = styled('div')(({theme}) => ({
   [theme.breakpoints.up('lg')]: {
     paddingTop: APP_BAR_DESKTOP + 24,
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingRight: theme.spacing(2)
   },
   [theme.breakpoints.up('xs')]: {
     paddingLeft: theme.spacing(0),
-    paddingRight: theme.spacing(0),
-  },
+    paddingRight: theme.spacing(0)
+  }
 }))
 
 export default function DashboardLayout() {

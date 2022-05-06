@@ -1,8 +1,8 @@
 // material
-import {Box, Grid, Stack, Typography, Avatar} from '@material-ui/core'
+import {Box, Grid, Stack, Typography, Avatar} from '@mui/material'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 // icons
 import {Icon} from '@iconify/react'
@@ -13,25 +13,25 @@ const reviews = [
   {
     name: 'Anonymous_5592',
     comment: 'Shows initiative with developing new ways of thinking to improve projects or company performance.',
-    image: '/static/mock-images/avatars/avatar_1.jpg',
+    image: '/static/mock-images/avatars/avatar_1.jpg'
   },
   {
     name: 'Yellow Fin ',
     comment: 'Willingly adjust their schedule to be available when needed.',
-    image: '/static/mock-images/avatars/avatar_24.jpg',
+    image: '/static/mock-images/avatars/avatar_24.jpg'
   },
   {
     name: 'Diego Sy ',
     comment: "Has good attendance and doesn't violate the standard attendance policy.",
-    image: '/static/mock-images/avatars/avatar_19.jpg',
-  },
+    image: '/static/mock-images/avatars/avatar_19.jpg'
+  }
 ]
 
 const ratings = [
   {label: 'Efficiency', value: '100%'},
   {label: 'On-Time', value: '100%'},
   {label: 'Completeness', value: '100%'},
-  {label: 'Show Rate', value: '100%'},
+  {label: 'Show Rate', value: '100%'}
 ]
 
 export default function Reviews() {

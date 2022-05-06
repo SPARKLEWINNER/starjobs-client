@@ -1,40 +1,40 @@
 import {motion} from 'framer-motion'
 // material
-import {styled} from '@material-ui/core/styles'
-import {Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Box} from '@mui/material'
 
 import Logo from './Logo'
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const RootStyle = styled('div')(({theme}) => ({
   height: '100%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: theme.palette.starjobs?.main,
+  backgroundColor: theme.palette.starjobs?.main
 }))
 
 // variants for framer motion
 const sentence = {
   hidden: {
-    opacity: 1,
+    opacity: 1
   },
   visible: {
     transition: {
       opacity: 1,
       delay: 0.5,
-      staggerChildren: 0.05,
-    },
-  },
+      staggerChildren: 0.05
+    }
+  }
 }
 
 const letter = {
   hidden: {
-    opacity: 0,
+    opacity: 0
   },
   visible: {
-    opacity: 1,
-  },
+    opacity: 1
+  }
 }
 
 const titleLine1 = 'Connect. Engage. Accelerate'
@@ -47,7 +47,7 @@ export default function SplashScreen({...other}) {
           animate={{opacity: 1}}
           transition={{
             duration: 0.5,
-            ease: 'easeInOut',
+            ease: 'easeInOut'
           }}
         >
           <Logo sx={{width: 140, height: 140, mx: 'auto', mb: 1}} />
@@ -63,7 +63,7 @@ export default function SplashScreen({...other}) {
                     variants={letter}
                     style={{
                       display: 'inline-block',
-                      color: color.common.white,
+                      color: color.common.white
                     }}
                   >
                     {char}

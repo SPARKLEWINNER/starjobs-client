@@ -1,20 +1,20 @@
 // material
-import {Stack} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Stack} from '@mui/material'
+import {styled} from '@mui/material/styles'
 
 // components
-import Page from '../components/Page'
-import ClientProfile from 'components/editDocument'
+import Page from 'src/components/Page'
+import ClientProfile from 'src/components/editDocument'
 // context
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const ClientEditDocumentPage = () => {

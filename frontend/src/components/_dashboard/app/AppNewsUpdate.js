@@ -5,7 +5,7 @@ import {formatDistance} from 'date-fns'
 import {Link as RouterLink} from 'react-router-dom'
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill'
 // material
-import {Box, Stack, Link, Card, Button, Divider, Typography, CardHeader} from '@material-ui/core'
+import {Box, Stack, Link, Card, Button, Divider, Typography, CardHeader} from '@mui/material'
 // utils
 import {mockImgCover} from '../../../utils/mockImages'
 //
@@ -17,12 +17,12 @@ const NEWS = [...Array(5)].map((_, index) => {
     title: faker.name.title(),
     description: faker.lorem.paragraphs(),
     image: mockImgCover(setIndex),
-    postedAt: faker.date.soon(),
+    postedAt: faker.date.soon()
   }
 })
 
 NewsItem.propTypes = {
-  news: PropTypes.object.isRequired,
+  news: PropTypes.object.isRequired
 }
 
 function NewsItem({news}) {

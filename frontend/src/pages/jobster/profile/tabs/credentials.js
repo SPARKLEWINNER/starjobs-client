@@ -1,6 +1,6 @@
-import {Box, Stack, Typography} from '@material-ui/core'
+import {Box, Stack, Typography} from '@mui/material'
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 export default function Credentials() {
   return (

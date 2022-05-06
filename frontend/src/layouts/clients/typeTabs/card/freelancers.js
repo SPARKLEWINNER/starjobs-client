@@ -2,9 +2,9 @@ import {Icon} from '@iconify/react'
 import {Link as RouterLink} from 'react-router-dom'
 import map from '@iconify/icons-eva/map-outline'
 // material
-import {Box, Stack, Card, Avatar, Typography, Link} from '@material-ui/core'
+import {Box, Stack, Card, Avatar, Typography, Link} from '@mui/material'
 // component
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 
 const image_url = process.env.REACT_APP_IMAGE_URL
 export default function FreelancerCard({data, onClick, onClickApplicantId}) {
@@ -30,7 +30,7 @@ export default function FreelancerCard({data, onClick, onClickApplicantId}) {
                 display: 'flex',
                 alignItems: 'center',
                 color: 'text.secondary',
-                fontSize: '0.85rem !important',
+                fontSize: '0.85rem !important'
               }}
             >
               <Box component={Icon} icon={map} sx={{width: 16, height: 16, mr: 0.5}} />

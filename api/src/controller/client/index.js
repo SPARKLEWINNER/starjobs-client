@@ -320,7 +320,7 @@ var controllers = {
                 );
 
                 client = {
-                    details: user.pop(),
+                    details: user ? user[0] : {},
                     gigs: gigs,
                     gigCategory: [...new Set(gigs.map((item) => item.category))]
                 };

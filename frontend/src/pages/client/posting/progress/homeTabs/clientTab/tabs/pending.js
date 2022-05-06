@@ -1,12 +1,18 @@
 import {useState, useEffect} from 'react'
-import {Box, Stack, Typography} from '@material-ui/core'
+import {Box, Stack, Typography} from '@mui/material'
 import moment from 'moment'
 import {PendingCard} from '../../../cards'
 
-import ProgressCircle from 'components/progressCircle'
+import ProgressCircle from 'src/components/progressCircle'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
+import PropTypes from 'prop-types'
+
+PendingTab.propTypes = {
+  gigs: PropTypes.array,
+  selected: PropTypes.string
+}
 
 const pending_status = ['Waiting', 'Applying']
 export default function PendingTab({gigs, selected}) {

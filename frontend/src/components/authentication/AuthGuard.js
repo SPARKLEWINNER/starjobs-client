@@ -1,8 +1,8 @@
 import {useLocation} from 'react-router-dom'
 
-import Login from './../../pages/Login'
+import Login from 'src/pages/Login'
 
-import useUser from 'api/users'
+import useUser from 's/lib/users'
 
 const load = async (_url) => {
   if (!_url) return false

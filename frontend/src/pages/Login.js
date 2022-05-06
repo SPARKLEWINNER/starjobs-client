@@ -1,18 +1,18 @@
 import React from 'react'
 import {Link as RouterLink} from 'react-router-dom'
-import {styled} from '@material-ui/core/styles'
-import {Link, Stack, Container, Typography} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Link, Stack, Container, Typography} from '@mui/material'
 
-import Page from '../components/Page'
-import LogoOutline from 'components/LogoOutline'
-import {LoginForm} from '../components/authentication/login'
+import Page from 'src/components/Page'
+import LogoOutline from 'src/components/LogoOutline'
+import {LoginForm} from 'src/components/authentication/login'
 
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.common.white,
   height: '100vh',
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -21,7 +21,7 @@ const ContentStyle = styled('div')(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(3, 0),
+  padding: theme.spacing(3, 0)
 }))
 
 export default function Login() {
@@ -63,7 +63,7 @@ export default function Login() {
                     marginLeft: '.25rem',
                     width: '100%',
                     textDecoration: 'none',
-                    fontWeight: 600,
+                    fontWeight: 600
                   }}
                 >
                   Create Account

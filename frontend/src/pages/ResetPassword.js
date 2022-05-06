@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import {styled} from '@material-ui/core/styles'
+import {styled} from '@mui/material/styles'
 import {useState, useEffect} from 'react'
 import {last} from 'lodash'
 import jwt_decode from 'jwt-decode'
@@ -11,19 +11,19 @@ import eyeOffFill from '@iconify/icons-eva/eye-off-fill'
 import {useFormik, Form, FormikProvider} from 'formik'
 import {useLocation, useNavigate} from 'react-router-dom'
 // material
-import {Stack, TextField, Typography, Container, Box, InputAdornment, IconButton} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Stack, TextField, Typography, Container, Box, InputAdornment, IconButton} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
-import auth_api from 'api/auth'
-import Page from 'components/Page'
-import {LoadingButtonStyle, InputOutlineStyle} from 'theme/style'
+import auth_api from 'src/lib/auth'
+import Page from 'src/components/Page'
+import {LoadingButtonStyle, InputOutlineStyle} from 'src/theme/style'
 
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.common.white,
   height: '100vh',
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'center'
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -32,7 +32,7 @@ const ContentStyle = styled('div')(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(3, 0),
+  padding: theme.spacing(3, 0)
 }))
 
 export default function ForgotPassword() {
@@ -47,13 +47,13 @@ export default function ForgotPassword() {
 
   const Schema = Yup.object().shape({
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('New Password is required'),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match')
   })
 
   const formik = useFormik({
     initialValues: {
       password: '',
-      confirmPassword: '',
+      confirmPassword: ''
     },
     validationSchema: Schema,
     onSubmit: async () => {
@@ -62,7 +62,7 @@ export default function ForgotPassword() {
       if (!resetToken) return enqueueSnackbar('Something went wrong....', {variant: 'error'})
       const form_data = {
         password: values.password,
-        token: resetToken,
+        token: resetToken
       }
 
       await auth_api.post_reset_password(form_data)
@@ -70,7 +70,7 @@ export default function ForgotPassword() {
       resetForm()
       setLoading(false)
       return navigate('/login')
-    },
+    }
   })
 
   const {errors, touched, values, resetForm, handleSubmit, getFieldProps} = formik
@@ -126,7 +126,7 @@ export default function ForgotPassword() {
                     fontWeight: 400,
                     mb: 5,
                     width: '75%',
-                    lineHeight: 'initial',
+                    lineHeight: 'initial'
                   }}
                   variant="body1"
                 >
@@ -154,7 +154,7 @@ export default function ForgotPassword() {
                                 <Icon icon={showPassword ? eyeFill : eyeOffFill} />
                               </IconButton>
                             </InputAdornment>
-                          ),
+                          )
                         }}
                         error={Boolean(touched.password && errors.password)}
                         helperText={touched.password && errors.password}

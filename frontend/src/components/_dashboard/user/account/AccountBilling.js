@@ -1,8 +1,8 @@
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {useState} from 'react'
-import {useSnackbar} from 'notistack5'
-import {Box, Grid, Card, Button, Typography, Stack} from '@material-ui/core'
+import {useSnackbar} from 'notistack'
+import {Box, Grid, Card, Button, Typography, Stack} from '@mui/material'
 import AccountBillingAddressBook from './AccountBillingAddressBook'
 import AccountBillingPaymentMethod from './AccountBillingPaymentMethod'
 import AccountBillingInvoiceHistory from './AccountBillingInvoiceHistory'
@@ -16,7 +16,7 @@ export default function AccountBilling() {
     cardName: Yup.string().required('Name is required'),
     cardNumber: Yup.string().required('Card number is required'),
     cardExpired: Yup.string().required('Card expired is required'),
-    cardCvv: Yup.string().required('Cvv is required'),
+    cardCvv: Yup.string().required('Cvv is required')
   })
 
   const formik = useFormik({
@@ -24,7 +24,7 @@ export default function AccountBilling() {
       cardName: '',
       cardNumber: '',
       cardExpired: '',
-      cardCvv: '',
+      cardCvv: ''
     },
     validationSchema: NewCardSchema,
     onSubmit: async (values, {setSubmitting, resetForm}) => {
@@ -34,7 +34,7 @@ export default function AccountBilling() {
       setSubmitting(false)
       alert(JSON.stringify(values, null, 2))
       enqueueSnackbar('Add card success', {variant: 'success'})
-    },
+    }
   })
 
   const handleOpenAddCard = () => {
@@ -60,7 +60,7 @@ export default function AccountBilling() {
                 mt: {xs: 2, sm: 0},
                 position: {sm: 'absolute'},
                 top: {sm: 24},
-                right: {sm: 24},
+                right: {sm: 24}
               }}
             >
               <Button size="small" color="inherit" variant="outlined" sx={{mr: 1}}>

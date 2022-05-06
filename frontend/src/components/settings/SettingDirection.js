@@ -1,6 +1,6 @@
-import {Box, Grid, Paper, Radio, RadioGroup, CardActionArea, FormControlLabel} from '@material-ui/core'
+import {Box, Grid, Paper, Radio, RadioGroup, CardActionArea, FormControlLabel} from '@mui/material'
 // hooks
-import useSettings from 'utils/hooks/settings'
+import useSettings from 'src/utils/hooks/settings'
 
 export default function SettingDirection() {
   const {themeDirection, onChangeDirection} = useSettings()
@@ -19,8 +19,8 @@ export default function SettingDirection() {
                 overflow: 'hidden',
                 position: 'relative',
                 ...(themeDirection === direction && {
-                  boxShadow: (theme) => theme.customShadows.z12,
-                }),
+                  boxShadow: (theme) => theme.customShadows.z12
+                })
               }}
             >
               <CardActionArea sx={{color: 'starjobs.main'}}>
@@ -29,7 +29,7 @@ export default function SettingDirection() {
                     p: 1.5,
                     display: 'flex',
                     flexDirection: 'column',
-                    ...(index === 1 && {alignItems: 'flex-end'}),
+                    ...(index === 1 && {alignItems: 'flex-end'})
                   }}
                 >
                   {[56, 36, 24].map((size, index) => (
@@ -43,7 +43,7 @@ export default function SettingDirection() {
                         bgcolor: themeDirection === direction ? 'primary.main' : 'grey.500',
                         ...(index === 0 && {opacity: 0.64}),
                         ...(index === 1 && {opacity: 0.32, borderRadius: '4px'}),
-                        ...(index === 2 && {opacity: 0.16, borderRadius: '3px'}),
+                        ...(index === 2 && {opacity: 0.16, borderRadius: '3px'})
                       }}
                     />
                   ))}
@@ -57,7 +57,7 @@ export default function SettingDirection() {
                     margin: 0,
                     width: '100%',
                     height: '100%',
-                    position: 'absolute',
+                    position: 'absolute'
                   }}
                 />
               </CardActionArea>

@@ -1,7 +1,8 @@
 import {useState, forwardRef} from 'react'
 import Carousel from 'nuka-carousel'
-import {HighlightOff as HighlightOffIcon} from '@material-ui/icons'
-import {Box, Dialog, DialogActions, DialogContent, Button, Slide} from '@material-ui/core'
+import {HighlightOff as HighlightOffIcon} from '@mui/icons-material'
+import {Box, Dialog, DialogActions, DialogContent, Button, Slide} from '@mui/material'
+import PropTypes from 'prop-types'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
@@ -40,7 +41,7 @@ const PromotionsBanner = ({banners}) => {
                   sx={{
                     width: '100%',
                     borderRadius: '15px',
-                    objectFit: 'cover',
+                    objectFit: 'cover'
                   }}
                   src={banner.image}
                   alt={banner.title}
@@ -71,7 +72,7 @@ const PromotionsBanner = ({banners}) => {
               zIndex: 20,
               position: 'absolute',
               top: 0,
-              right: -15,
+              right: -15
             }}
           >
             <Button onClick={handleClose} color="primary" sx={{mx: 'auto'}}>
@@ -85,3 +86,7 @@ const PromotionsBanner = ({banners}) => {
 }
 
 export default PromotionsBanner
+
+PromotionsBanner.propTypes = {
+  banners: PropTypes.array
+}

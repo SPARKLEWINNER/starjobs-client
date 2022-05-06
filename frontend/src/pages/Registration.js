@@ -1,17 +1,17 @@
 // material
-import {styled} from '@material-ui/core/styles'
-import {Link, Container, Typography, Box} from '@material-ui/core'
+import {styled} from '@mui/material/styles'
+import {Link, Container, Typography, Box} from '@mui/material'
 import {Link as RouterLink} from 'react-router-dom'
 // layouts
 // components
-import Page from '../components/Page'
+import Page from 'src/components/Page'
 import {RegistrationForm} from '../components/authentication/registration'
 
 const RootStyle = styled(Page)(({theme}) => ({
   backgroundColor: theme.palette.common.white,
   [theme.breakpoints.up('md')]: {
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }))
 
 const ContentStyle = styled('div')(({theme}) => ({
@@ -20,7 +20,7 @@ const ContentStyle = styled('div')(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(3, 0),
+  padding: theme.spacing(3, 0)
 }))
 
 export default function Registration() {
@@ -57,7 +57,7 @@ export default function Registration() {
                     fontSize: '0.8rem',
                     width: '100%',
                     textDecoration: 'none',
-                    fontWeight: 600,
+                    fontWeight: 600
                   }}
                 >
                   Go back

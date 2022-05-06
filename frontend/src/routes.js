@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Navigate, useRoutes, useLocation} from 'react-router-dom'
 import {TransitionGroup, CSSTransition} from 'react-transition-group'
-import {useAuth} from 'utils/context/AuthContext'
 // material
-import {Stack} from '@material-ui/core'
+import {Stack} from '@mui/material'
 
 // layouts
 import DashboardLayout from './layouts/dashboard'
@@ -57,114 +56,107 @@ import GigApplySuccess from './pages/gigs/success'
 import GigEdit from './pages/gigs/edit'
 
 // components
-import LoadingScreen from './components/LoadingScreen'
+import LoadingScreen from 'src/components/LoadingScreen'
 
 const UseRoutes = () => {
-  const {currentUser} = useAuth()
-  const params = useLocation()
-
-  if (currentUser) {
-    localStorage.setItem('last_screen', params.pathname)
-  }
-
   return useRoutes([
     // jobster routes
     {
       path: 'freelancer',
       element: <DashboardLayout />,
       children: [
-        {path: '/', element: <Navigate to="/freelancer/app" replace />},
-        {path: '/app', element: <JobsterHome />},
-        {path: '/dashboard', element: <JobsterDashboard />},
-        {path: '/onboard', element: <JobsterOnboard />},
-        {path: '/onboard/success', element: <JobsterOnboardSuccess />},
-        {path: '/profile', element: <JobsterProfile />},
-        {path: '/edit', element: <JobsterEditProfile />},
-        {path: '/message', element: <Message />},
-        {path: '/search', element: <BrowseCategory />},
-      ],
+        {path: '', element: <Navigate to="/freelancer/app" replace />},
+        {path: 'app', element: <JobsterHome />},
+        {path: 'dashboard', element: <JobsterDashboard />},
+        {path: 'onboard', element: <JobsterOnboard />},
+        {path: 'onboard/success', element: <JobsterOnboardSuccess />},
+        {path: 'profile', element: <JobsterProfile />},
+        {path: 'edit', element: <JobsterEditProfile />},
+        {path: 'message', element: <Message />},
+        {path: 'search', element: <BrowseCategory />}
+      ]
     },
     {
       path: 'history',
       element: <DashboardLayout />,
-      children: [{path: '/details/:id/:hid', element: <JobsterHistoryDetails />}],
+      children: [{path: 'details/:id/:hid', element: <JobsterHistoryDetails />}]
     },
     // client routes
     {
       path: 'client',
       element: <DashboardLayout />,
       children: [
-        {path: '/', element: <Navigate to="/client/app" replace />},
-        {path: '/app', element: <ClientHome />},
-        {path: '/onboard', element: <ClientOnboard />},
-        {path: '/onboard/success', element: <ClientOnboardSuccess />},
-        {path: '/profile', element: <ClientProfile />},
-        {path: '/message', element: <Message />},
-        {path: '/edit', element: <ClientEditProfile />},
-        {path: '/edit/document', element: <ClientEditDocument />},
-        {path: '/gig/create', element: <ClientCreateGig />},
-        {path: '/gigs/applicants/:id', element: <ClientApplicants />},
-        {path: '/gigs/applicant/profile/:id/:gig_id', element: <ClientApplicantProfile />},
-        {path: '/jobster/:id', element: <ClientPublicProfile />},
-        {path: '/search', element: <BrowseCategory />},
-      ],
+        {path: '', element: <Navigate to="/client/app" replace />},
+        {path: 'app', element: <ClientHome />},
+        {path: 'onboard', element: <ClientOnboard />},
+        {path: 'onboard/success', element: <ClientOnboardSuccess />},
+        {path: 'profile', element: <ClientProfile />},
+        {path: 'message', element: <Message />},
+        {path: 'edit', element: <ClientEditProfile />},
+        {path: 'edit/document', element: <ClientEditDocument />},
+        {path: 'gig/create', element: <ClientCreateGig />},
+        {path: 'gigs/applicants/:id', element: <ClientApplicants />},
+        {path: 'gigs/applicant/profile/:id/:gig_id', element: <ClientApplicantProfile />},
+        {path: 'jobster/:id', element: <ClientPublicProfile />},
+        {path: 'search', element: <BrowseCategory />}
+      ]
     },
     {
       path: 'gigs',
       element: <DashboardLayout />,
       children: [
-        {path: '/', element: <Gigs />},
-        {path: '/:category', element: <Gigs />},
-        {path: '/det/:id', element: <GigsFullDetails />},
-        {path: '/details/:id/:category', element: <GigDetails />},
-        {path: '/edit/:id', element: <GigEdit />},
-        {path: '/apply/success', element: <GigApplySuccess />},
-      ],
+        {path: '', element: <Gigs />},
+        {path: ':category', element: <Gigs />},
+        {path: 'det/:id', element: <GigsFullDetails />},
+        {path: 'details/:id/:category', element: <GigDetails />},
+        {path: 'edit/:id', element: <GigEdit />},
+        {path: 'apply/success', element: <GigApplySuccess />}
+      ]
     },
     // global routes
     {
       path: 'setup',
       element: <SignedLayout />,
       children: [
-        {path: '/', element: <Navigate to="/welcome" replace />},
-        {path: '/welcome', element: <Welcome />},
-      ],
+        {path: '', element: <Navigate to="/welcome" replace />},
+        {path: 'welcome', element: <Welcome />}
+      ]
     },
     {
       path: 'account',
       element: <DashboardLayout />,
-      children: [{path: '/change-password', element: <ChangePassword />}],
+      children: [{path: 'change-password', element: <ChangePassword />}]
     },
     {
       path: 'notification',
       element: <DashboardLayout />,
-      children: [{path: '/details/:id/:hid', element: <NotificationDetails />}],
+      children: [{path: 'details/:id/:hid', element: <NotificationDetails />}]
     },
     {
       path: 'dashboard',
       element: <DashboardLayout />,
-      children: [{path: '/', element: <Dashboard />}],
+      children: [{path: '', element: <Dashboard />}]
     },
     // non-signed accounts
     {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        {path: '/', element: <Navigate to="/login" replace />},
-        {path: '/login', element: <Login />},
-        {path: '/verification', element: <Verification />},
-        {path: '/sign-up', element: <Registration />},
-        {path: '/forgot-password', element: <ForgotPassword />},
-        {path: '/reset-password', element: <ResetPassword />},
-        {path: '404', element: <NotFound />},
-      ],
+        {path: '', element: <Navigate to="/login" replace />},
+        {path: 'login', element: <Login />},
+        {path: 'verification', element: <Verification />},
+        {path: 'sign-up', element: <Registration />},
+        {path: 'forgot-password', element: <ForgotPassword />},
+        {path: 'reset-password', element: <ResetPassword />},
+        {path: '404', element: <NotFound />}
+      ]
     },
     {
       path: 'undefined',
       element: <LogoOnlyLayout />,
-      children: [{path: '/login', element: <Navigate to="/undefined" replace />}],
+      children: [{path: 'login', element: <Navigate to="/undefined" replace />}]
     },
-    {path: '*', element: <Navigate to="/404" replace />},
+    {path: '*', element: <Navigate to="/404" replace />}
   ])
 }
 
@@ -176,7 +168,9 @@ const AppRoute = () => {
     let mounted = true
 
     if (mounted) {
-      setLoaded(true)
+      setTimeout(() => {
+        setLoaded(true)
+      }, 2000)
     }
 
     return () => {
@@ -189,7 +183,7 @@ const AppRoute = () => {
       {loaded ? (
         <div className="page">
           <TransitionGroup className="transition-group">
-            <CSSTransition key={location.key} location={location} classNames="fade" exit={false} timeout={300}>
+            <CSSTransition key={location.key} location={location} classNames="fade" exit={false} timeout={3000}>
               <UseRoutes />
             </CSSTransition>
           </TransitionGroup>

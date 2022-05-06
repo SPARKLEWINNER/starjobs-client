@@ -1,14 +1,21 @@
 import {useState, useCallback} from 'react'
-// material
-import {Box, Stack, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
-// utils
-import {fData} from 'utils/formatNumber'
-// components
-import {UploadAvatar} from 'components/upload'
+import PropTypes from 'prop-types'
 
-import onboard_api from 'api/onboard'
+// material
+import {Box, Stack, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
+// utils
+import {fData} from 'src/utils/formatNumber'
+// components
+import {UploadAvatar} from 'src/components/upload'
+import onboard_api from 'src/lib/onboard'
+
+Upload.propTypes = {
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
+
 export default function Upload({onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [avatarUrl, setAvatarUrl] = useState('')
@@ -21,7 +28,7 @@ export default function Upload({onNext, onStoreData}) {
       setAvatarUrl({
         ...file,
         preview: URL.createObjectURL(file),
-        file: file,
+        file: file
       })
     }
   }, [])
@@ -64,7 +71,7 @@ export default function Upload({onNext, onStoreData}) {
                   mx: 'auto',
                   display: 'block',
                   textAlign: 'center',
-                  color: 'text.secondary',
+                  color: 'text.secondary'
                 }}
               >
                 Allowed *.jpeg, *.jpg, *.png, *.gif

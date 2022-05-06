@@ -1,25 +1,25 @@
-import {Box, Grid, Stack, Typography, Avatar} from '@material-ui/core'
+import {Box, Grid, Stack, Typography, Avatar} from '@mui/material'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const reviews = [
   {
     name: 'Anonymous_5592',
     comment: 'Shows initiative with developing new ways of thinking to improve projects or company performance.',
-    image: '/static/mock-images/avatars/avatar_1.jpg',
+    image: '/static/mock-images/avatars/avatar_1.jpg'
   },
   {
     name: 'Yellow Fin ',
     comment: 'Willingly adjust their schedule to be available when needed.',
-    image: '/static/mock-images/avatars/avatar_24.jpg',
+    image: '/static/mock-images/avatars/avatar_24.jpg'
   },
   {
     name: 'Diego Sy ',
     comment: "Has good attendance and doesn't violate the standard attendance policy.",
-    image: '/static/mock-images/avatars/avatar_19.jpg',
-  },
+    image: '/static/mock-images/avatars/avatar_19.jpg'
+  }
 ]
 
 export default function Reviews() {
@@ -34,7 +34,7 @@ export default function Reviews() {
         {reviews &&
           reviews.map((v, k) => {
             return (
-              <Grid item xs={12} md={12} sx={{my: 2}}>
+              <Grid item xs={12} md={12} sx={{my: 2}} key={k}>
                 <Stack direction="row">
                   <Box sx={{mr: 1, display: 'flex', alignItems: 'center', px: 1}}>
                     <Avatar alt={v.name} src={v.image} />

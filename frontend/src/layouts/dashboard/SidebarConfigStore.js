@@ -10,51 +10,51 @@ let _config = [
   {
     title: 'dashboard',
     path: '/stores/app',
-    icon: getIcon(pieChart2Fill),
+    icon: getIcon(pieChart2Fill)
   },
   {
     title: 'QR code',
     path: '/stores/qr',
-    icon: getIcon(imageFill),
+    icon: getIcon(imageFill)
   },
   {
     title: 'user',
     path: '/stores/user',
-    icon: getIcon(peopleFill),
+    icon: getIcon(peopleFill)
   },
   {
     title: 'reports',
     path: '/stores/reports',
-    icon: getIcon(fileFill),
+    icon: getIcon(fileFill)
   },
   {
     title: 'branches',
     path: '/stores/branches',
-    icon: getIcon(compassFill),
-  },
+    icon: getIcon(compassFill)
+  }
 ]
 
 let _configWOBranch = [
   {
     title: 'dashboard',
     path: '/stores/app',
-    icon: getIcon(pieChart2Fill),
+    icon: getIcon(pieChart2Fill)
   },
   {
     title: 'QR code',
     path: '/stores/qr',
-    icon: getIcon(imageFill),
+    icon: getIcon(imageFill)
   },
   {
     title: 'user',
     path: '/stores/user',
-    icon: getIcon(peopleFill),
+    icon: getIcon(peopleFill)
   },
   {
     title: 'reports',
     path: '/stores/reports',
-    icon: getIcon(fileFill),
-  },
+    icon: getIcon(fileFill)
+  }
 ]
 
 let exp_object = {_config, _configWOBranch}

@@ -1,17 +1,17 @@
 import {useState, useEffect} from 'react'
 // material
-import {Stack, Tab} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
+import {Stack, Tab} from '@mui/material'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
 
 // components
-import Page from 'components/Page'
-import LoadingScreen from 'components/LoadingScreen'
+import Page from 'src/components/Page'
+import LoadingScreen from 'src/components/LoadingScreen'
 import GigForm from './form'
 import GigProgress from './progress'
 
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 import {useLocation} from 'react-router'
 
 const DRAWER_WIDTH = 280
@@ -19,8 +19,8 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const useStyles = makeStyles({
@@ -36,17 +36,17 @@ const useStyles = makeStyles({
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
-    },
-  },
+      fontSize: 11
+    }
+  }
 })
 
 const SIMPLE_TAB = [
   {value: 2, label: 'Post a Gig', disabled: false},
-  {value: 1, label: 'Gig in progress', disabled: false},
+  {value: 1, label: 'Gig in progress', disabled: false}
 ]
 
 const GigPosting = () => {

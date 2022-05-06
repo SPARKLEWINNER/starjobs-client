@@ -3,13 +3,15 @@ import * as Yup from 'yup'
 import {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import {Stack, TextField, FormControlLabel, Typography, Checkbox, Box} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Stack, TextField, FormControlLabel, Typography, Checkbox, Box} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 import Select from 'react-select'
-import {FreelancerCategory} from 'utils/data'
+import {FreelancerCategory} from 'src/utils/data'
 
-export default function IndustryForm({user, stored, onNext, onStoreData}) {
+import PropTypes from 'prop-types'
+
+export default function IndustryForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [SKILL_QUALIFICATION, setSkillQualification] = useState(FreelancerCategory.SKILL_QUALIFICATION)
@@ -17,7 +19,7 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
   const [selected, setSelected] = useState({
     SKILL_QUALIFICATION: [],
     SKILL_OFFER: [],
-    SKILL_CATEGORY: [],
+    SKILL_CATEGORY: []
   })
 
   const [CHECKBOX, setChecked] = useState({
@@ -31,7 +33,7 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
     IT_COMPUTER_SYSTEMS: [],
     DESIGN_GRAPHICS: [],
     TUTORIAL_CONSULTATION: [],
-    RETAIL_MERCHANDISING: [],
+    RETAIL_MERCHANDISING: []
   })
 
   const ExpertiseForm = Yup.object().shape({})
@@ -49,7 +51,7 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
       salesMarketing: '',
       skillQualificationOthers: '',
       skillsOfferOthers: '',
-      salesMarketingOthers: '',
+      salesMarketingOthers: ''
     },
     enableReinitialize: true,
     validationSchema: ExpertiseForm,
@@ -130,13 +132,13 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
         othersExpertise: string_marketing_others,
         industryType: string_qualification,
         skillLooking: string_offer,
-        workType: workType.join(),
+        workType: workType.join()
       }
 
       onStoreData(data, 'industry')
       setLoading(false)
       onNext()
-    },
+    }
   })
 
   const {values, handleSubmit, setFieldValue, getFieldProps} = formik
@@ -358,4 +360,11 @@ export default function IndustryForm({user, stored, onNext, onStoreData}) {
       </Form>
     </FormikProvider>
   )
+}
+
+IndustryForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
 }

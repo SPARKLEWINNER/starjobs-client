@@ -1,10 +1,17 @@
 import {useState, useEffect} from 'react'
-import {Box, Stack, Typography, Card} from '@material-ui/core'
+import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
 import {IncomingCard} from '../../../cards'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
+import PropTypes from 'prop-types'
+
+IncomingTab.propTypes = {
+  gigs: PropTypes.array,
+  user: PropTypes.array,
+  selected: PropTypes.string
+}
 
 const incoming_status = ['Accepted']
 

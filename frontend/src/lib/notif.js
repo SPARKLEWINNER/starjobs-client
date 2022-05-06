@@ -1,4 +1,4 @@
-import request from 'utils/header'
+import request from 'src/utils/header'
 
 /**
  * @param {string} userId - The id of the user creating the notif
@@ -7,7 +7,7 @@ import request from 'utils/header'
 const create_notification = (userId, data) => request.post(`/notifications/${userId}`, data)
 
 const exp_object = {
-  create_notification,
+  create_notification
 }
 
 export default exp_object

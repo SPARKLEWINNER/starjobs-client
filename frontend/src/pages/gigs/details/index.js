@@ -41,27 +41,27 @@ const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const ProfileStyle = styled(Stack)(({theme}) => ({
   marginLeft: 'auto',
   marginRight: 'auto',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   },
   [theme.breakpoints.up('sm')]: {
-    marginTop: 120,
+    marginTop: 120
   },
   [theme.breakpoints.up('xs')]: {
-    marginTop: 0,
-  },
+    marginTop: 0
+  }
 }))
 
 const useStyles = makeStyles({
   root: {
-    width: 'auto',
+    width: 'auto'
   },
   nav_item: {
     // textTransform: 'uppercase',
@@ -73,26 +73,26 @@ const useStyles = makeStyles({
       maxWidth: 'auto',
       padding: '6px 0',
       margin: '0 3px',
-      fontSize: 12,
+      fontSize: 12
     },
     '@media (max-width: 475px)': {
-      fontSize: 11,
+      fontSize: 11
     },
     '&.Mui-selected': {
       borderBottom: `1px solid ${color.starjobs.main}`,
       border: 'none',
-      borderRadius: 0,
-    },
+      borderRadius: 0
+    }
   },
   icon: {
     width: 27,
-    height: 27,
-  },
+    height: 27
+  }
 })
 
 const STATIC_TAB = [
   {value: 2, label: 'Credentials', disabled: false},
-  {value: 3, label: 'Activity History', disabled: false},
+  {value: 3, label: 'Activity History', disabled: false}
 ]
 
 const Details = () => {
@@ -127,7 +127,7 @@ const Details = () => {
 
       const result = await user_api.get_user_profile_client(currentUser._id)
       if (!result.ok) return
-    
+
       let {details, gigs} = result.data
       if (details && details.length <= 0) {
         enqueueSnackbar('Kindly complete your account details to in order to proceed', {variant: 'warning'})
@@ -144,7 +144,7 @@ const Details = () => {
     return () => {
       componentMounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [currentUser])
 
   const handleClose = () => {
@@ -159,7 +159,7 @@ const Details = () => {
   const handleApply = async () => {
     let data = {
       status: 'Applying',
-      uid: currentUser._id,
+      uid: currentUser._id
     }
     const result = await gigs_api.patch_gigs_apply(applyDetails._id, data)
 
@@ -175,7 +175,7 @@ const Details = () => {
       body: `${currentUser.name} is applying`,
       targetUsers: [`${applyDetails.uid}`],
       additionalData: result,
-      userId: currentUser._id,
+      userId: currentUser._id
     })
 
     //todo
@@ -185,7 +185,7 @@ const Details = () => {
     navigate(`/gigs/apply/success`, {replace: true})
   }
 
-  const renderTab = (type, current_user) => {
+  const renderTab = (type) => {
     if (type === 1)
       return (
         <Stack>
@@ -226,7 +226,7 @@ const Details = () => {
               mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
               width: '100%',
               alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-              px: 0,
+              px: 0
             }}
           >
             {/* image */}
@@ -236,7 +236,7 @@ const Details = () => {
                 display: 'flex',
                 alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
                 px: {sm: 0, xs: 0},
-                mb: 1,
+                mb: 1
               }}
             >
               <MAvatar
@@ -306,8 +306,8 @@ const Details = () => {
                 onChange={handleChange}
                 TabIndicatorProps={{
                   style: {
-                    display: 'none',
-                  },
+                    display: 'none'
+                  }
                 }}
               >
                 {SIMPLE_TAB.map((tab, index) => (
@@ -321,7 +321,7 @@ const Details = () => {
                   mt: 1,
                   width: '100%',
                   borderRadius: 1,
-                  ...(location.pathname !== '/client/profile' ? {} : {mb: 20}),
+                  ...(location.pathname !== '/client/profile' ? {} : {mb: 20})
                 }}
               >
                 {SIMPLE_TAB.map((panel, index) => (

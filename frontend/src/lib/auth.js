@@ -1,5 +1,5 @@
-import request from 'utils/header'
-import storage from 'utils/storage'
+import request from 'src/utils/header'
+import storage from 'src/utils/storage'
 const sign_in_email = (form_data) => request.post(`/auth/sign-in`, form_data)
 
 const sign_in_phone = (phone) => request.post('/phone', {phone: phone})
@@ -46,6 +46,6 @@ const _expObject = {
   post_verify,
   post_refresh_access,
   post_forgot_password,
-  post_reset_password,
+  post_reset_password
 }
 export default _expObject

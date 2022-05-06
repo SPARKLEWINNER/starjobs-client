@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import {Link as RouterLink} from 'react-router-dom'
 // material
-import {Box, Card, Link, Typography, Stack} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Box, Card, Link, Typography, Stack} from '@mui/material'
+import {styled} from '@mui/material/styles'
 // utils
 import {fCurrency} from '../../../utils/formatNumber'
 //
@@ -14,11 +14,11 @@ const ProductImgStyle = styled('img')({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  position: 'absolute',
+  position: 'absolute'
 })
 
 ShopProductCard.propTypes = {
-  product: PropTypes.object,
+  product: PropTypes.object
 }
 
 export default function ShopProductCard({product}) {
@@ -36,7 +36,7 @@ export default function ShopProductCard({product}) {
               top: 16,
               right: 16,
               position: 'absolute',
-              textTransform: 'uppercase',
+              textTransform: 'uppercase'
             }}
           >
             {status}
@@ -60,7 +60,7 @@ export default function ShopProductCard({product}) {
               variant="body1"
               sx={{
                 color: 'text.disabled',
-                textDecoration: 'line-through',
+                textDecoration: 'line-through'
               }}
             >
               {priceSale && fCurrency(priceSale)}

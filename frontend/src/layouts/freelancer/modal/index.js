@@ -1,18 +1,18 @@
 import React from 'react'
 import {Global} from '@emotion/react'
-import {styled} from '@material-ui/styles'
-import {grey} from '@material-ui/core/colors'
+import {styled} from '@mui/styles'
+import {grey} from '@mui/material/colors'
 import moment from 'moment'
-import {Box, Typography, SwipeableDrawer, Stack, Button, CardContent, CardMedia} from '@material-ui/core'
+import {Box, Typography, SwipeableDrawer, Stack, Button, CardContent, CardMedia} from '@mui/material'
 
 import {Icon} from '@iconify/react'
 import closeIcon from '@iconify/icons-eva/close-circle-outline'
-import {LoadingButton} from '@material-ui/lab'
+import {LoadingButton} from '@mui/lab'
 
 const drawerBleeding = 56
 
 const StyledBox = styled(Box)(({theme}) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
+  backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800]
 }))
 
 const Puller = styled(Box)(({theme}) => ({
@@ -22,7 +22,7 @@ const Puller = styled(Box)(({theme}) => ({
   borderRadius: 3,
   position: 'absolute',
   top: 8,
-  left: 'calc(50% - 15px)',
+  left: 'calc(50% - 15px)'
 }))
 
 export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift}) {
@@ -59,7 +59,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
   const handleClick = (value) => {
     let form_data = {
       new_status: _label(value.status),
-      ...value,
+      ...value
     }
     onClick(form_data)
   }
@@ -72,8 +72,8 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
         styles={{
           '.current-gig-details-drawer > .MuiPaper-root': {
             height: `calc(85%)`,
-            overflow: 'visible',
-          },
+            overflow: 'visible'
+          }
         }}
       />
       <Box
@@ -82,7 +82,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
           backgroundColor: '#FFF',
           overflow: 'hidden',
           borderRadius: '6px',
-          border: '2px solid white',
+          border: '2px solid white'
         }}
       >
         <SwipeableDrawer
@@ -93,7 +93,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
           swipeAreaWidth={drawerBleeding}
           disableSwipeToOpen={true}
           ModalProps={{
-            keepMounted: true,
+            keepMounted: true
           }}
           className="current-gig-details-drawer"
         >
@@ -105,7 +105,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
               borderTopRightRadius: 8,
               visibility: 'visible',
               right: 0,
-              left: 0,
+              left: 0
             }}
           >
             <Puller />
@@ -119,7 +119,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
               px: 2,
               pb: 2,
               height: '100%',
-              overflow: 'auto',
+              overflow: 'auto'
             }}
           >
             <Box sx={{py: 1}}>
@@ -144,7 +144,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
                       borderRadius: '8px',
                       width: '130px',
                       height: '130px',
-                      margin: '0 auto',
+                      margin: '0 auto'
                     }}
                     image={`${user['thumbnail']}`}
                     alt={position}

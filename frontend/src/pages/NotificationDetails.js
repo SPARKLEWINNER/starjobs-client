@@ -1,24 +1,24 @@
 // material
 import {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
-import {Stack, Typography} from '@material-ui/core'
-import {styled} from '@material-ui/core/styles'
+import {Stack, Typography} from '@mui/material'
+import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'components/Page'
-import NotificationsDetailsCard from 'components/notifications/details'
+import Page from 'src/components/Page'
+import NotificationsDetailsCard from 'src/components/notifications/details'
 
-import user_api from 'api/users'
+import user_api from 'src/lib/users'
 
-import {useAuth} from 'utils/context/AuthContext'
+import {useAuth} from 'src/contexts/AuthContext'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({
   margin: '0 auto',
   display: 'block',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
-  },
+    width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
+  }
 }))
 
 const NotificationDetailsPage = () => {

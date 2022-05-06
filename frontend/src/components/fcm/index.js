@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {getToken} from './../../firebase'
 
-import fcm_api from 'api/fcm'
-import user_api from 'api/users'
+import fcm_api from 'src/lib/fcm'
+import user_api from 'src/lib/users'
 
 export default function Notifications() {
   const [isTokenFound, setTokenFound] = useState(false)
@@ -11,10 +11,7 @@ export default function Notifications() {
   const checkIfPushIsEnabled = () => {
     var ua = navigator.userAgent.toLowerCase()
     if (ua.indexOf('safari') !== -1) {
-      if (ua.indexOf('chrome') > -1) {
-      } else {
-        return
-      }
+      if (ua.indexOf('chrome') <= -1) return
     }
     //---check if push notification permission has been denied by the user---
     if (Notification.permission === 'denied') {
@@ -40,7 +37,6 @@ export default function Notifications() {
         .then(function (subscription) {
           if (subscription) {
             console.log(subscription)
-          } else {
           }
         })
         .catch(function (error) {
@@ -51,6 +47,7 @@ export default function Notifications() {
 
   useEffect(() => {
     let token
+    let componentMounted = true
 
     async function tokenFunc() {
       checkIfPushIsEnabled()
@@ -67,11 +64,18 @@ export default function Notifications() {
             await fcm_api.patch_subscriber_token(user._id, token)
           }
         }
-        return token
+
+        if (componentMounted) {
+          return token
+        }
       }
     }
 
     tokenFunc()
+
+    return () => {
+      componentMounted = false
+    }
   }, [isTokenFound])
 
   return <></>

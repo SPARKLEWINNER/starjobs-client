@@ -2,17 +2,26 @@ import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import {Stack, TextField, Box, Typography, Select} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
-import {fCamelCase} from 'utils/formatCase'
+import {Stack, TextField, Box, Typography, Select} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
+import {fCamelCase} from 'src/utils/formatCase'
+
+import PropTypes from 'prop-types'
+
+RateForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
 
 const E_WALLETS = [
   {label: 'None', image: '', value: 'none'},
-  {label: 'GCash', image: '', value: 'gcash'},
+  {label: 'GCash', image: '', value: 'gcash'}
 ]
 
-export default function PersonalForm({user, stored, onNext, onStoreData}) {
+export default function RateForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
 
@@ -21,14 +30,14 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
   const Schema = Yup.object().shape({
     accountType: Yup.string(),
     accountName: Yup.string(),
-    accountNumber: Yup.string(),
+    accountNumber: Yup.string()
   })
 
   const formik = useFormik({
     initialValues: {
       accountType: store.accountType || '',
       accountName: store.accountName || '',
-      accountNumber: store.accountNumber || '',
+      accountNumber: store.accountNumber || ''
     },
     enableReinitialize: true,
     validationSchema: Schema,
@@ -65,11 +74,11 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
       let data = {
         accountType: values.accountType,
         accountName: values.accountName,
-        accountNumber: values.accountNumber,
+        accountNumber: values.accountNumber
       }
       onStoreData(data, 'rate')
       onNext()
-    },
+    }
   })
 
   const {errors, values, touched, handleSubmit, getFieldProps} = formik

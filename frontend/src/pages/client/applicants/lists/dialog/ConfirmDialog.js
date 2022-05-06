@@ -1,5 +1,7 @@
-import {Dialog, DialogContent, DialogTitle, DialogActions, Button, Typography, Stack} from '@material-ui/core'
+import {Dialog, DialogContent, DialogTitle, DialogActions, Button, Typography, Stack} from '@mui/material'
 import {useState} from 'react'
+import PropTypes from 'prop-types'
+
 const ConfirmDialog = ({open, onConfirm, handleClose}) => {
   const [loading, setLoading] = useState(false)
   const handleConfirmGig = () => {
@@ -35,5 +37,9 @@ const ConfirmDialog = ({open, onConfirm, handleClose}) => {
     </div>
   )
 }
-
+ConfirmDialog.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  onConfirm: PropTypes.func,
+  handleClose: PropTypes.func
+}
 export default ConfirmDialog

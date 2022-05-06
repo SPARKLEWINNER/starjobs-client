@@ -1,17 +1,18 @@
-import React from 'react'
-import {Icon} from '@iconify/react'
-import {capitalCase} from 'change-case'
+import PropTypes from 'prop-types'
 import {Link as RouterLink} from 'react-router-dom'
+import {capitalCase} from 'change-case'
+
+import {Icon} from '@iconify/react'
 import map from '@iconify/icons-eva/map-outline'
 // material
-import {Box, Stack, Card, Avatar, Typography, Link} from '@material-ui/core'
+import {Box, Stack, Card, Avatar, Typography, Link} from '@mui/material'
 // component
-import Label from 'components/Label'
-// import {getUser} from 'utils/hooks/auth'
-// import useSendNotif from 'utils/hooks/useSendNotif'
+import Label from 'src/components/Label'
+// import {getUser} from 'src/utils/hooks/auth'
+// import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 const image_url = process.env.REACT_APP_IMAGE_URL
-export default function FreelancerCard({data, onClick, onClickApplicantId}) {
+export default function FreelancerCard({data}) {
   // const [isSendingInterest, setIsSendingInterest] = useState(false)
   // const {sendInterestNotification} = useSendNotif()
 
@@ -40,7 +41,7 @@ export default function FreelancerCard({data, onClick, onClickApplicantId}) {
                 fontWeight: 'bold',
                 fontSize: '0.85rem !important',
                 wordBreak: 'break-all',
-                width: '200px',
+                width: '200px'
               }}
             >
               <Box component={Icon} icon={map} sx={{width: 16, height: 16, mr: 0.5}} />
@@ -49,13 +50,21 @@ export default function FreelancerCard({data, onClick, onClickApplicantId}) {
 
             <Box>
               {data.expertise.skillOffer &&
-                data.expertise.skillOffer.split('=>').map((v, k) => {
-                  return <Label color="default">{v}</Label>
-                })}
+                data.expertise.skillOffer.split('=>').map((value, key) => (
+                  <Label color="default" key={key}>
+                    {value}
+                  </Label>
+                ))}
             </Box>
           </Link>
         </Box>
       </Stack>
     </Card>
   )
+}
+
+FreelancerCard.propTypes = {
+  data: PropTypes.object,
+  onClick: PropTypes.func,
+  onClickApplicantId: PropTypes.string
 }

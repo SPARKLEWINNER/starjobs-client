@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { Button } from '@material-ui/core'
-import { Icon } from '@iconify/react'
+import React, {useEffect, useState} from 'react'
+import {Button} from '@mui/material'
+import {Icon} from '@iconify/react'
 import helpIcon from '@iconify/icons-eva/question-mark-circle-outline'
 import DiscordDialog from './DiscordDialog'
 
@@ -16,7 +16,7 @@ export default function HelpButton() {
   }
 
   return (
-    <div style={{ width: '100%', textAlign: 'center', marginBottom: '16px' }}>
+    <div style={{width: '100%', textAlign: 'center', marginBottom: '16px'}}>
       <Button
         fullWidth
         color="inherit"

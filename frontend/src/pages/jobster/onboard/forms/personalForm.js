@@ -1,13 +1,21 @@
 import * as Yup from 'yup'
 import {useState} from 'react'
+import PropTypes from 'prop-types'
 import {useFormik, Form, FormikProvider} from 'formik'
 
 // material
-import {Stack, TextField, FormControlLabel, Box, Typography, Checkbox, Select} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Stack, TextField, FormControlLabel, Box, Typography, Checkbox, Select} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
-import {fCamelCase} from 'utils/formatCase'
+import {fCamelCase} from 'src/utils/formatCase'
+
+PersonalForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
 
 export default function PersonalForm({user, stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
@@ -40,7 +48,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
     permanentBlkNo: Yup.string(),
     permanentZipCode: Yup.string(),
     permanentStreetName: Yup.string(),
-    permanentCity: Yup.string(),
+    permanentCity: Yup.string()
   })
 
   const formik = useFormik({
@@ -64,7 +72,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
       permanentBlkNo: store.permanentBlkNo || '',
       permanentZipCode: store.permanentZipCode || '',
       permanentStreetName: store.permanentStreetName || '',
-      permanentCity: store.permanentCity || '',
+      permanentCity: store.permanentCity || ''
     },
     enableReinitialize: true,
     validationSchema: PersonalSchema,
@@ -128,7 +136,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
         permanentBlkNo: values.permanentBlkNo,
         permanentZipCode: values.permanentZipCode,
         permanentStreetName: values.permanentStreetName,
-        permanentCity: values.permanentCity,
+        permanentCity: values.permanentCity
       }
 
       if (values.samePermanentAddress) {
@@ -140,7 +148,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
 
       onStoreData(data, 'personal')
       onNext()
-    },
+    }
   })
 
   const {values, errors, touched, handleSubmit, getFieldProps} = formik

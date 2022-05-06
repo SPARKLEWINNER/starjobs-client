@@ -1,8 +1,8 @@
 import {Link as RouterLink} from 'react-router-dom'
 import moment from 'moment'
-import {Box, Card, CardContent, Link, Typography, Stack} from '@material-ui/core'
-import CircleIcon from '@material-ui/icons/Circle'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import {Box, Card, CardContent, Link, Typography, Stack} from '@mui/material'
+import CircleIcon from '@mui/icons-material/Circle'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 const NotificationCard = ({gig, details, type}) => {
   if (!gig || !details) return ''
@@ -46,18 +46,18 @@ const NotificationCard = ({gig, details, type}) => {
       case 'Accepted':
         if (type === 1)
           return `You have accepted the jobster's application in ${position} - ${user.location} - (Start: ${moment(
-            details.from,
+            details.from
           ).format('MMM-DD hh:mm A')} - End: ${moment(details.time).format('MMM-DD hh:mm A')})})`
         return `Your application has been accepted in ${position} - ${user.location} -(Start: ${moment(
-          details.from,
+          details.from
         ).format('MMM-DD hh:mm A')} - End: ${moment(details.time).format('MMM-DD hh:mm A')})})`
       case 'Confirm-Gig':
         if (type === 1)
           return `The jobster's confirmed his/her gig for ${position} - ${user.location} - (Start: ${moment(
-            details.from,
+            details.from
           ).format('MMM-DD hh:mm A')} - End: ${moment(details.time).format('MMM-DD hh:mm A')})})`
         return `You have confirmed your gig in ${position} - ${user.location} -(Start: ${moment(details.from).format(
-          'MMM-DD hh:mm A',
+          'MMM-DD hh:mm A'
         )} - End: ${moment(details.time).format('MMM-DD hh:mm A')})`
       case 'On-the-way':
       case 'Arrived':
@@ -66,11 +66,11 @@ const NotificationCard = ({gig, details, type}) => {
       case 'Cancelled':
       case 'End-Shift':
         return `${position} - ${user.location}- (Start: ${moment(details.from).format(
-          'MMM-DD hh:mm A',
+          'MMM-DD hh:mm A'
         )} - End: ${moment(details.time).format('MMM-DD hh:mm A')}) has been updated to "${status}" status`
       case 'Confirm-End-Shift':
         return `${position} - ${user.location}- (Start: ${moment(details.from).format(
-          'MMM-DD hh:mm A',
+          'MMM-DD hh:mm A'
         )} - End: ${moment(details.time).format('MMM-DD hh:mm A')}) has been marked completed.`
 
       default:

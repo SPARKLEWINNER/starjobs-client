@@ -7,13 +7,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
-} from '@material-ui/core'
-import storage from 'utils/storage'
+  TextField
+} from '@mui/material'
+import storage from 'src/utils/storage'
 import {Formik, useField} from 'formik'
 import * as yup from 'yup'
 
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
+import PropTypes from 'prop-types'
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY} = process.env
 const webhook = require('webhook-discord')
@@ -22,7 +23,7 @@ const validationSchema = yup.object({
   name: yup.string().max(50, 'Too long').required(),
   email: yup.string().email('Invalid email').required(),
   phone: yup.string().max(20, 'Too long').required(),
-  issue: yup.string().required(),
+  issue: yup.string().required()
 })
 
 const CustomTextField = ({type, label, placeholder, InputProps, ...props}) => {
@@ -81,7 +82,7 @@ const DiscordDialog = ({open, handleClose}) => {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   return (
@@ -96,7 +97,7 @@ const DiscordDialog = ({open, handleClose}) => {
             initialValues={{
               name: `${user.name}`,
               email: `${user.email}`,
-              phone: ``,
+              phone: ``
             }}
             validationSchema={validationSchema}
             onSubmit={async (data, {setSubmitting}) => {
@@ -104,7 +105,7 @@ const DiscordDialog = ({open, handleClose}) => {
 
               const result = await discordHook.info(
                 `Starjobs Help `,
-                `Starjobs Help\n**from:**\n ${data.name}\n**Email:**\n ${data.email}\n**Phone:**\n ${data.phone} \n**Issue:**\n ${data.issue}`,
+                `Starjobs Help\n**from:**\n ${data.name}\n**Email:**\n ${data.email}\n**Phone:**\n ${data.phone} \n**Issue:**\n ${data.issue}`
               )
 
               if (!result.ok) return enqueueSnackbar('Unable to submit your request for assitance', {variant: 'error'})
@@ -114,7 +115,7 @@ const DiscordDialog = ({open, handleClose}) => {
               return enqueueSnackbar('Thank you for your patience, we will contact you ASAP.', {variant: 'success'})
             }}
           >
-            {({values, handleChange, handleSubmit, isSubmitting}) => (
+            {({handleChange, handleSubmit, isSubmitting}) => (
               <form onSubmit={handleSubmit}>
                 <CustomTextField
                   autoFocus
@@ -171,3 +172,22 @@ const DiscordDialog = ({open, handleClose}) => {
 }
 
 export default DiscordDialog
+
+CustomTextField.propTypes = {
+  type: PropTypes.string,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  InputProps: PropTypes.object
+}
+
+CustomMultiLineTextField.propTypes = {
+  type: PropTypes.string,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  InputProps: PropTypes.object
+}
+
+DiscordDialog.propTypes = {
+  open: PropTypes.oneOfType([PropTypes.string, PropTypes.bool, PropTypes.number]),
+  handleClose: PropTypes.func
+}

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import {Helmet} from 'react-helmet-async'
 import {forwardRef} from 'react'
-import {Box} from '@material-ui/core'
+import {Box} from '@mui/material'
 
 const {REACT_APP_USERSNAP_API_KEY, REACT_APP_USERSNAP_GLOBAL_API_KEY} = process.env
 
@@ -29,7 +29,7 @@ const Page = forwardRef(({children, title = '', ...other}, ref) => (
 
 Page.propTypes = {
   children: PropTypes.node.isRequired,
-  title: PropTypes.string,
+  title: PropTypes.string
 }
 
 export default Page

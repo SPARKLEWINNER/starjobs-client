@@ -1,12 +1,10 @@
-import request from 'utils/header'
+import request from 'src/utils/header'
 
-const { REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY } = process.env
+const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY} = process.env
 
 const send_message = (params) => request.post(`${REACT_APP_DISCORD_URL}/${REACT_APP_DISCORD_KEY}`, params)
 
-
 const _expObject = {
-    send_message,
-
+  send_message
 }
 export default _expObject

@@ -1,24 +1,25 @@
 import {useState, useEffect} from 'react'
-import {Box, Stack, Typography, Card} from '@material-ui/core'
+import PropTypes from 'prop-types'
+import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import AliceCarousel from 'react-alice-carousel'
 import {CurrentCard} from './../cards'
 import CurrentModalPopup from './../modal'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const responsive = {
   0: {items: 1},
   568: {items: 1},
-  1024: {items: 2},
+  1024: {items: 2}
 }
 
-export default function CurrentTab({gigs, user, onEndShift}) {
+const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
   const [FILTERED_GIGS, setFilter] = useState([])
   const [isLoading, setLoading] = useState(false)
@@ -29,7 +30,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     if (!user) return
     let form_data = {
       status: value.new_status,
-      uid: user._id,
+      uid: user._id
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -62,6 +63,11 @@ export default function CurrentTab({gigs, user, onEndShift}) {
         gigs.map((value) => {
           const now = moment(new Date())
           const {status, from, date} = value
+          const diff = moment(from).diff(now)
+
+          //express as a duration
+          const diffDuration = moment.duration(diff)
+
           if (!moment(date).isSame(moment(), 'day')) return false
           switch (status) {
             case 'Accepted':
@@ -73,10 +79,7 @@ export default function CurrentTab({gigs, user, onEndShift}) {
             case 'End-Shift':
             case 'Confirm-End-Shift':
               if (status === 'Confirm-End-Shift') return false
-              const diff = moment(from).diff(now)
 
-              //express as a duration
-              const diffDuration = moment.duration(diff)
               if (diffDuration.hours() > 3) return false
               return setFilter((prevState) => [...prevState, ...[value]])
             default:
@@ -131,3 +134,11 @@ export default function CurrentTab({gigs, user, onEndShift}) {
     </Box>
   )
 }
+
+CurrentTab.propTypes = {
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.array,
+  onEndShift: PropTypes.func
+}
+
+export default CurrentTab

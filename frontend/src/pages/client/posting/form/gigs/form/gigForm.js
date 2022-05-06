@@ -3,12 +3,20 @@ import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 // material
-import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox, Select} from '@material-ui/core'
-import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@material-ui/lab'
-import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
-import {useSnackbar} from 'notistack5'
+import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox, Select} from '@mui/material'
+import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import {useSnackbar} from 'notistack'
 import DatePicker from 'react-datepicker'
-import {calculations} from 'utils/gigComputation'
+import {calculations} from 'src/utils/gigComputation'
+
+import PropTypes from 'prop-types'
+
+GigForm.propTypes = {
+  formData: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
 
 export default function GigForm({formData, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
@@ -28,7 +36,7 @@ export default function GigForm({formData, onNext, onStoreData}) {
     to: Yup.string().required('Gig End time is required'),
     breakHr: Yup.number().required('Break hour/s is required'),
     locationRate: Yup.string().required('Gig location rate'),
-    notes: Yup.string(),
+    notes: Yup.string()
   })
 
   const formik = useFormik({
@@ -42,7 +50,7 @@ export default function GigForm({formData, onNext, onStoreData}) {
       to: formData?.time ?? '', // time
       breakHr: formData?.breakHr ?? 0,
       notes: formData?.notes ?? '',
-      locationRate: formData?.locationRate ?? '',
+      locationRate: formData?.locationRate ?? ''
     },
     enableReinitialize: true,
     validationSchema: GigSchema,
@@ -67,7 +75,7 @@ export default function GigForm({formData, onNext, onStoreData}) {
         grossVAT,
         grossWithHolding,
         serviceCost,
-        jobsterTotal,
+        jobsterTotal
       } = calculations(values.hours, values.fee, values.locationRate)
 
       let data = {
@@ -90,13 +98,13 @@ export default function GigForm({formData, onNext, onStoreData}) {
           grossVAT: grossVAT,
           grossWithHolding: grossWithHolding,
           serviceCost: serviceCost,
-          jobsterTotal: jobsterTotal,
-        },
+          jobsterTotal: jobsterTotal
+        }
       }
       setLoading(false)
       onStoreData(data)
       onNext()
-    },
+    }
   })
 
   const {values, errors, touched, handleSubmit, setFieldValue, getFieldProps} = formik

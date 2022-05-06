@@ -1,14 +1,14 @@
-import {Box, Grid, Stack, Typography} from '@material-ui/core'
+import {Box, Grid, Stack, Typography} from '@mui/material'
 import {Icon} from '@iconify/react'
 import starIcon from '@iconify/icons-eva/star-fill'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const ratings = [
   {label: 'Payment Rate', value: '100%'},
   {label: 'Cancellation Rate', value: '95%'},
-  {label: 'Completion', value: '100%'},
+  {label: 'Completion', value: '100%'}
 ]
 
 export default function About() {
@@ -23,7 +23,7 @@ export default function About() {
         {ratings &&
           ratings.map((v, k) => {
             return (
-              <Grid item xs={6} md={6} sx={{my: 1}}>
+              <Grid item xs={6} md={6} sx={{my: 1}} key={k}>
                 <Stack direction="row">
                   <Box sx={{mr: 1}}>
                     <Icon icon={starIcon} color="#ffc107" width={25} height={25} />

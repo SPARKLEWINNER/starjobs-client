@@ -1,1 +1,1 @@
-export { default as CreateParcelDialog } from './CreateParcelDialog'
+export {default as CreateParcelDialog} from './CreateParcelDialog'

@@ -1,24 +1,34 @@
-import * as Yup from 'yup'
 import {useState} from 'react'
+import PropTypes from 'prop-types'
+
+import * as Yup from 'yup'
 import {useFormik, Form, FormikProvider} from 'formik'
+
 // material
-import {Stack, TextField, Box, Typography, Select} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
-import {fCamelCase} from 'utils/formatCase'
+import {Stack, TextField, Box, Typography, Select} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
+import {fCamelCase} from 'src/utils/formatCase'
 
 const E_WALLETS = [
   {label: 'None', image: '', value: 'none'},
-  {label: 'GCash', image: '', value: 'gcash'},
+  {label: 'GCash', image: '', value: 'gcash'}
 ]
 
 const RATE_TYPE = [
   {label: 'Hourly', value: 'Hourly'},
   {label: 'Daily', value: 'Daily'},
-  {label: 'Monthly', value: 'Monthly'},
+  {label: 'Monthly', value: 'Monthly'}
 ]
 
-export default function PersonalForm({user, stored, onNext, onStoreData}) {
+PersonalForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.object
+}
+
+export default function PersonalForm({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const store = stored.rate ? stored.rate : undefined
@@ -28,7 +38,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
     rateType: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Rate billing is required'),
     accountType: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Account type is required'),
     accountName: Yup.string(),
-    accountNumber: Yup.string(),
+    accountNumber: Yup.string()
   })
 
   const formik = useFormik({
@@ -37,7 +47,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
       rateType: store.rateType || '',
       accountType: store.accountType || '',
       accountName: store.accountName || '',
-      accountNumber: store.accountNumber || '',
+      accountNumber: store.accountNumber || ''
     },
     enableReinitialize: true,
     validationSchema: Schema,
@@ -76,11 +86,11 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
         rateType: values.rateType,
         accountType: values.accountType,
         accountName: values.accountName,
-        accountNumber: values.accountNumber,
+        accountNumber: values.accountNumber
       }
       onStoreData(data, 'rate')
       onNext()
-    },
+    }
   })
 
   const {errors, values, touched, handleSubmit, getFieldProps} = formik

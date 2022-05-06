@@ -1,6 +1,6 @@
-import {Box, Card, CardContent, Typography, Stack} from '@material-ui/core'
+import {Box, Card, CardContent, Typography, Stack} from '@mui/material'
 import moment from 'moment'
-import Label from 'components/Label'
+import Label from 'src/components/Label'
 export default function CurrentCard({gig, onView}) {
   let {position, hours, fee, time, from, status, category} = gig
   fee = parseFloat(fee)
@@ -18,7 +18,7 @@ export default function CurrentCard({gig, onView}) {
         width: '320px',
         boxShadow: 'none',
         borderRadius: 2,
-        cursor: 'pointer',
+        cursor: 'pointer'
       }}
       onClick={() => onView()}
     >

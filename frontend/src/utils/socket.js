@@ -1,9 +1,11 @@
 import io from 'socket.io-client'
 import storage from './storage'
+
+const {REACT_APP_SOCKET_URL} = process.env
 const _socket = () => {
-  return io.connect(process.env.REACT_APP_SOCKET_URL, {
+  return io.connect(REACT_APP_SOCKET_URL, {
     secure: true,
-    rejectUnauthorized: false,
+    rejectUnauthorized: false
   })
 }
 
@@ -43,6 +45,6 @@ const _expObject = {
   employee_connect,
   employee_disconnect,
   store__employee_connect,
-  employee_action,
+  employee_action
 }
 export default _expObject

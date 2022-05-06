@@ -1,21 +1,21 @@
 import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 // material
-import {Box, Paper, Button, Avatar, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Box, Paper, Button, Avatar, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
 // component form
-import PersonalForm from 'components/editClient/form/personalForm'
-import ContactForm from 'components/editClient/form/contactForm'
-import IndustryForm from 'components/editClient/form/industryForm'
-import RateForm from 'components/editClient/form/rateForm'
-import ProfileForm from 'components/editClient/form/profileForm'
+import PersonalForm from 'src/components/editClient/form/personalForm'
+import ContactForm from 'src/components/editClient/form/contactForm'
+import IndustryForm from 'src/components/editClient/form/industryForm'
+import RateForm from 'src/components/editClient/form/rateForm'
+import ProfileForm from 'src/components/editClient/form/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
-import user_api from 'api/users'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
+import user_api from 'src/lib/users'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 const steps = ['Personal Information', 'Company Contacts', 'Industry', 'Rate & Payment', 'Company Logo & Permits']
@@ -33,7 +33,7 @@ export default function EditClientForm() {
     industry: [],
     rate: [],
     photo: '',
-    documents: '',
+    documents: ''
   })
 
   useEffect(() => {
@@ -71,14 +71,14 @@ export default function EditClientForm() {
             companyName: details[0].companyName,
             companyPosition: details[0].companyPosition,
             location: details[0].location,
-            website: details[0].website,
+            website: details[0].website
           },
           rate: {
             accountType: details[0].payment.accountPaymentType,
             accountName: details[0].payment.acccountPaymentName,
-            accountNumber: details[0].payment.acccountPaymentNumber,
+            accountNumber: details[0].payment.acccountPaymentNumber
           },
-          photo: `${details[0].photo}`,
+          photo: `${details[0].photo}`
         }
 
         sessionStorage.setItem(
@@ -92,8 +92,8 @@ export default function EditClientForm() {
             companyName: details[0].companyName,
             companyPosition: details[0].companyPosition,
             location: details[0].location,
-            website: details[0].website,
-          }),
+            website: details[0].website
+          })
         )
 
         sessionStorage.setItem('contact', JSON.stringify(details[0].contact))
@@ -107,8 +107,8 @@ export default function EditClientForm() {
               rateType: details[0].rate.rateType,
               accountType: details[0].payment.acccountPaymentName,
               accountName: details[0].payment.acccountPaymentNumber,
-              accountNumber: details[0].payment.accountPaymentType,
-            }),
+              accountNumber: details[0].payment.accountPaymentType
+            })
           )
         }
 
@@ -121,7 +121,7 @@ export default function EditClientForm() {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -162,9 +162,9 @@ export default function EditClientForm() {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
-      photo: form.photo,
+      photo: form.photo
     }
 
     const result = await onboard_api.patch_client_profile(form_data, user._id)

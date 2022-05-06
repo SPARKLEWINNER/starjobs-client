@@ -1,14 +1,20 @@
 import {useState, useCallback} from 'react'
 // material
-import {Box, Stack, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Box, Stack, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 // utils
-import {fData} from 'utils/formatNumber'
+import {fData} from 'src/utils/formatNumber'
 // components
-import {UploadAvatar, UploadMultiFile} from 'components/upload'
+import {UploadAvatar, UploadMultiFile} from 'src/components/upload'
+import PropTypes from 'prop-types'
 
-import onboard_api from 'api/onboard'
+Upload.propTypes = {
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
+
+import onboard_api from 'src/lib/onboard'
 export default function Upload({onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [avatarUrl, setAvatarUrl] = useState('')
@@ -22,7 +28,7 @@ export default function Upload({onNext, onStoreData}) {
       setAvatarUrl({
         ...file,
         preview: URL.createObjectURL(file),
-        file: file,
+        file: file
       })
     }
   }, [])
@@ -33,12 +39,12 @@ export default function Upload({onNext, onStoreData}) {
         acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
-            file: file,
-          }),
-        ),
+            file: file
+          })
+        )
       )
     },
-    [setFiles],
+    [setFiles]
   )
 
   const handleRemoveAll = () => {
@@ -70,11 +76,11 @@ export default function Upload({onNext, onStoreData}) {
     }
 
     await Promise.all(
-      files.map(async (value, k) => {
+      files.map(async (value) => {
         const upload = await onboard_api.request_upload_url(value.file)
         if (!upload) console.log(upload)
         documents.push(upload)
-      }),
+      })
     )
 
     if (documents.length !== files.length) {
@@ -110,7 +116,7 @@ export default function Upload({onNext, onStoreData}) {
                   mx: 'auto',
                   display: 'block',
                   textAlign: 'center',
-                  color: 'text.secondary',
+                  color: 'text.secondary'
                 }}
               >
                 Allowed *.jpeg, *.jpg, *.png, *.gif

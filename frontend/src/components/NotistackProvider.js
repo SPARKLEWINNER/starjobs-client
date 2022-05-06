@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import {Icon} from '@iconify/react'
-import {SnackbarProvider} from 'notistack5'
+import {SnackbarProvider} from 'notistack'
 
 // material
-import {Box} from '@material-ui/core'
-import {makeStyles, createStyles} from '@material-ui/styles'
-import {alpha} from '@material-ui/core/styles'
+import {Box} from '@mui/material'
+import {makeStyles, createStyles} from '@mui/styles'
+import {alpha} from '@mui/material/styles'
 
 // icons
 import infoFill from '@iconify/icons-eva/info-fill'
@@ -18,15 +18,15 @@ const useStyles = makeStyles((theme) => {
 
   const createStyle = {
     color: `${theme.palette.text.primary} !important`,
-    backgroundColor: `${theme.palette.background.paper} !important`,
+    backgroundColor: `${theme.palette.background.paper} !important`
   }
 
   return createStyles({
     containerRoot: {
       pointerEvents: 'unset',
       '& .MuiCollapse-wrapperInner': {
-        width: '100%',
-      },
+        width: '100%'
+      }
     },
     contentRoot: {
       width: '280px',
@@ -35,11 +35,11 @@ const useStyles = makeStyles((theme) => {
       boxShadow: theme.customShadows.z8,
       borderRadius: theme.shape.borderRadius,
       color: theme.palette.grey[isLight ? 0 : 800],
-      backgroundColor: theme.palette.grey[isLight ? 900 : 0],
+      backgroundColor: theme.palette.grey[isLight ? 900 : 0]
     },
     message: {
       padding: 0,
-      fontWeight: theme.typography.fontWeightMedium,
+      fontWeight: theme.typography.fontWeightMedium
     },
     action: {
       marginRight: -4,
@@ -47,19 +47,19 @@ const useStyles = makeStyles((theme) => {
         width: 20,
         height: 20,
         opacity: 0.48,
-        '&:hover': {opacity: 1},
-      },
+        '&:hover': {opacity: 1}
+      }
     },
     info: {...createStyle},
     success: {...createStyle},
     warning: {...createStyle},
-    error: {...createStyle},
+    error: {...createStyle}
   })
 })
 
 SnackbarIcon.propTypes = {
   icon: PropTypes.object,
-  color: PropTypes.string,
+  color: PropTypes.string
 }
 
 function SnackbarIcon({icon, color}) {
@@ -75,7 +75,7 @@ function SnackbarIcon({icon, color}) {
         alignItems: 'center',
         justifyContent: 'center',
         color: `${color}.main`,
-        bgcolor: (theme) => alpha(theme.palette[color].main, 0.16),
+        bgcolor: (theme) => alpha(theme.palette[color].main, 0.16)
       }}
     >
       <Icon icon={icon} width={24} height={24} />
@@ -84,7 +84,7 @@ function SnackbarIcon({icon, color}) {
 }
 
 NotistackProvider.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 }
 
 export default function NotistackProvider({children}) {
@@ -98,13 +98,13 @@ export default function NotistackProvider({children}) {
       autoHideDuration={3000}
       anchorOrigin={{
         vertical: 'top',
-        horizontal: 'center',
+        horizontal: 'center'
       }}
       iconVariant={{
         success: <SnackbarIcon icon={checkmarkCircle2Fill} color="success" />,
         error: <SnackbarIcon icon={infoFill} color="error" />,
         warning: <SnackbarIcon icon={alertTriangleFill} color="warning" />,
-        info: <SnackbarIcon icon={alertCircleFill} color="info" />,
+        info: <SnackbarIcon icon={alertCircleFill} color="info" />
       }}
       classes={{
         containerRoot: classes.containerRoot,
@@ -114,7 +114,7 @@ export default function NotistackProvider({children}) {
         variantInfo: classes.info,
         variantSuccess: classes.success,
         variantWarning: classes.warning,
-        variantError: classes.error,
+        variantError: classes.error
       }}
     >
       {children}

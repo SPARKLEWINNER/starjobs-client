@@ -1,9 +1,9 @@
-import {Box, Grid, Stack, Typography} from '@material-ui/core'
+import {Box, Grid, Stack, Typography} from '@mui/material'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'
 
 // theme
-import color from 'theme/palette'
+import color from 'src/theme/palette'
 
 const reviews = [{name: 'DTI'}, {name: 'BIR'}, {name: 'NBI clearance'}]
 

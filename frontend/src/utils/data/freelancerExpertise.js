@@ -9,7 +9,7 @@ export const SKILL_QUALIFICATION = [
   {label: 'IT and Computer systems', value: 'IT_COMPUTER_SYSTEMS'},
   {label: 'Design and Graphics', value: 'DESIGN_GRAPHICS'},
   {label: 'Tutorial and consultation', value: 'TUTORIAL_CONSULTATION'},
-  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'},
+  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'}
 ]
 
 export const SKILL_OFFER = [
@@ -23,7 +23,7 @@ export const SKILL_OFFER = [
   {label: 'IT and Computer systems', value: 'IT_COMPUTER_SYSTEMS'},
   {label: 'Design and Graphics', value: 'DESIGN_GRAPHICS'},
   {label: 'Tutorial and consultation', value: 'TUTORIAL_CONSULTATION'},
-  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'},
+  {label: 'Retail and Merchandising ', value: 'RETAIL_MERCHANDISING'}
 ]
 
 export const INDIVIDUAL_ERRANDS = [
@@ -45,7 +45,7 @@ export const INDIVIDUAL_ERRANDS = [
   'Van and Vehicle',
   'Motorcycle Riders',
   'Bikers',
-  'Walkers',
+  'Walkers'
 ]
 export const FOOD_RESTAURANT = [
   'Service Crew',
@@ -53,7 +53,7 @@ export const FOOD_RESTAURANT = [
   'Cook',
   'Dishwasher',
   'Repair and Maintenance',
-  'Utility Cleaners',
+  'Utility Cleaners'
 ]
 export const PARCELS_LOGISTICS = [
   'Bulk Riders',
@@ -61,7 +61,7 @@ export const PARCELS_LOGISTICS = [
   'Delivery Trucks',
   'Van and Vehicle',
   'Motorcycle Riders',
-  'Dispatchers',
+  'Dispatchers'
 ]
 export const WAREHOUSING_MANUFACTURING = ['Sorters', 'Baggers', 'Pick and Packers']
 export const SALES_MARKETING = ['Social Media Artist', 'Digital Marketing', 'Content Creator', 'SEO Writer']
@@ -77,7 +77,7 @@ export const MUSIC_BAND = [
   'Cook',
   'Waiter',
   'Videographer',
-  'Photographer',
+  'Photographer'
 ]
 export const HOTEL_HOSPITALITY_MANAGEMENT = ['Receptionist', 'Housekeeping', 'Ushers']
 export const IT_COMPUTER_SYSTEMS = ['Computer Repair', 'Web Developer', 'UI/UX Designer']

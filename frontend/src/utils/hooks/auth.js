@@ -1,5 +1,5 @@
 const SecureLS = require('secure-ls')
-const ls = new SecureLS({ encodingType: 'aes' })
+const ls = new SecureLS({encodingType: 'aes'})
 export const isBrowser = () => typeof window !== 'undefined'
 
 export const getUser = () => {

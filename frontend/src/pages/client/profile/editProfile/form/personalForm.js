@@ -2,8 +2,17 @@ import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
-import {Stack, TextField, Box, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
+import {Stack, TextField, Box, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+
+import PropTypes from 'prop-types'
+
+PersonalForm.propTypes = {
+  user: PropTypes.object,
+  stored: PropTypes.object,
+  onNext: PropTypes.func,
+  onStoreData: PropTypes.func
+}
 
 export default function PersonalForm({user, stored, onNext, onStoreData}) {
   const [isLoading, setLoading] = useState(false)
@@ -14,7 +23,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name is required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name is required'),
     middleInitial: Yup.string().required('Middle initial is required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email address is required'),
+    email: Yup.string().email('Email must be a valid email address').required('Email address is required')
   })
 
   const formik = useFormik({
@@ -27,7 +36,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
       brandName: store.brandName || '',
       location: store.location || '',
       website: store.website || '',
-      companyPosition: store.companyPosition || '',
+      companyPosition: store.companyPosition || ''
     },
     enableReinitialize: true,
     validationSchema: PersonalSchema,
@@ -56,12 +65,12 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
         brandName: values.brandName,
         location: values.location,
         website: values.website,
-        companyPosition: values.companyPosition,
+        companyPosition: values.companyPosition
       }
 
       onStoreData(data, 'personal')
       onNext()
-    },
+    }
   })
 
   const {errors, touched, handleSubmit, getFieldProps} = formik
@@ -110,7 +119,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             type="email"
             label="Email address"
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             {...getFieldProps('email')}
             disabled

@@ -2,8 +2,8 @@ import Slider from 'react-slick'
 import PropTypes from 'prop-types'
 import {useRef} from 'react'
 // material
-import {useTheme, styled} from '@material-ui/core/styles'
-import {Box} from '@material-ui/core'
+import {useTheme, styled} from '@mui/material/styles'
+import {Box} from '@mui/material'
 // utils
 //
 import {CarouselControlsPaging2, CarouselControlsArrowsBasic2} from './controls'
@@ -13,19 +13,19 @@ const MOCK_CAROUSELS = [...Array(5)].map((_, index) => ({
   id: faker.datatype.uuid(),
   title: faker.lorem.sentence(),
   description: faker.lorem.paragraph(),
-  image: faker.image.nature(),
+  image: faker.image.nature()
 }))
 
 const RootStyle = styled('div')(({theme}) => ({
   position: 'relative',
   '& .slick-list': {
     boxShadow: theme.customShadows.z16,
-    borderRadius: theme.shape.borderRadiusMd,
-  },
+    borderRadius: theme.shape.borderRadiusMd
+  }
 }))
 
 CarouselItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object
 }
 
 function CarouselItem({item}) {
@@ -46,8 +46,8 @@ export default function CarouselBasic3() {
     slidesToScroll: 1,
     rtl: Boolean(theme.direction === 'rtl'),
     ...CarouselControlsPaging2({
-      sx: {mt: 3},
-    }),
+      sx: {mt: 3}
+    })
   }
 
   const handlePrevious = () => {

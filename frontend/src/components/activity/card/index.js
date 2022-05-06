@@ -1,9 +1,10 @@
 import {Link as RouterLink} from 'react-router-dom'
 import moment from 'moment'
-import {Box, Card, CardContent, Link, Typography, Stack} from '@material-ui/core'
-import MonetizationOnOutlined from '@material-ui/icons/MonetizationOnOutlined'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
-import Label from 'components/Label'
+import {Box, Card, CardContent, Link, Typography, Stack} from '@mui/material'
+import MonetizationOnOutlined from '@mui/icons-material/MonetizationOnOutlined'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import Label from 'src/components/Label'
+import PropTypes from 'prop-types'
 
 const ActivityCard = ({gig, details}) => {
   if (!gig || !details) return ''
@@ -50,5 +51,8 @@ const ActivityCard = ({gig, details}) => {
     </Card>
   )
 }
-
+ActivityCard.propTypes = {
+  gig: PropTypes.object,
+  details: PropTypes.object
+}
 export default ActivityCard

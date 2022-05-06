@@ -1,20 +1,21 @@
 import {useState, useEffect} from 'react'
+import {useNavigate} from 'react-router-dom'
+
 // material
-import {Box, Paper, Button, Avatar, Typography} from '@material-ui/core'
-import {LoadingButton} from '@material-ui/lab'
-import {useSnackbar} from 'notistack5'
+import {Box, Paper, Button, Avatar, Typography} from '@mui/material'
+import {LoadingButton} from '@mui/lab'
+import {useSnackbar} from 'notistack'
 
 // component form
-import PersonalForm from 'components/clientOnboard/form/personalForm'
-import ContactForm from 'components/clientOnboard/form/contactForm'
-import IndustryForm from 'components/clientOnboard/form/industryForm'
-import RateForm from 'components/clientOnboard/form/rateForm'
-import ProfileForm from 'components/clientOnboard/form/profileForm'
+import PersonalForm from 'src/components/clientOnboard/form/personalForm'
+import ContactForm from 'src/components/clientOnboard/form/contactForm'
+import IndustryForm from 'src/components/clientOnboard/form/industryForm'
+import RateForm from 'src/components/clientOnboard/form/rateForm'
+import ProfileForm from 'src/components/clientOnboard/form/profileForm'
 
 // hooks
-import storage from 'utils/storage'
-import onboard_api from 'api/onboard'
-import {useNavigate} from 'react-router-dom'
+import storage from 'src/utils/storage'
+import onboard_api from 'src/lib/onboard'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 const steps = ['Personal Information', 'Company Contacts', 'Industry', 'Rate & Payment', 'Company Logo & Permits']
@@ -32,7 +33,7 @@ export default function ClientOnboardForm() {
     industry: [],
     rate: [],
     photo: '',
-    documents: '',
+    documents: ''
   })
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function ClientOnboardForm() {
     }
 
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [])
 
   const isStepSkipped = (step) => skipped.has(step)
@@ -99,10 +100,10 @@ export default function ClientOnboardForm() {
       payment: {
         accountPaymentType: form.rate.accountType,
         acccountPaymentName: form.rate.accountName,
-        acccountPaymentNumber: form.rate.accountNumber,
+        acccountPaymentNumber: form.rate.accountNumber
       },
       photo: form.photo,
-      documents: form.documents,
+      documents: form.documents
     }
 
     const result = await onboard_api.post_client_onboard(form_data, user._id)

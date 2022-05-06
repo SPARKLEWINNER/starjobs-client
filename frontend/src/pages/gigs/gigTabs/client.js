@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import moment from 'moment'
-
+import PropTypes from 'prop-types'
 // material
 import {
   Stack,
@@ -12,16 +12,20 @@ import {
   RadioGroup,
   DialogActions,
   Radio,
-  FormControlLabel,
-} from '@material-ui/core'
-import Sort from '@material-ui/icons/Sort'
+  FormControlLabel
+} from '@mui/material'
+import Sort from '@mui/icons-material/Sort'
 
 // api
-import gigs_api from 'api/gigs'
+import gigs_api from 'src/lib/gigs'
 
 // component
 import {WaitingCard} from '../cards'
-import ProgressCircle from 'components/progressCircle'
+import ProgressCircle from 'src/components/progressCircle'
+
+ClientTab.propTypes = {
+  category: PropTypes.string
+}
 
 export default function ClientTab({category}) {
   const [data, setData] = useState([])
@@ -52,7 +56,7 @@ export default function ClientTab({category}) {
     switch (sortType) {
       case 'N-O':
         finalSortedData = data.sort((a, b) =>
-          a.dateCreated > b.dateCreated ? -1 : a.dateCreated < b.dateCreated ? 1 : 0,
+          a.dateCreated > b.dateCreated ? -1 : a.dateCreated < b.dateCreated ? 1 : 0
         )
         setData(finalSortedData)
         //Needs to put this here cause for some reason useEffect doesn't execute even if the [data] is changed
@@ -60,7 +64,7 @@ export default function ClientTab({category}) {
         break
       case 'O-N':
         finalSortedData = data.sort((a, b) =>
-          a.dateCreated < b.dateCreated ? -1 : a.dateCreated > b.dateCreated ? 1 : 0,
+          a.dateCreated < b.dateCreated ? -1 : a.dateCreated > b.dateCreated ? 1 : 0
         )
         setData(finalSortedData)
         setRenderData(data.slice(0, 3))
@@ -87,18 +91,21 @@ export default function ClientTab({category}) {
           } else {
             result = await gigs_api.get_gigs_no_category()
           }
-
-          let {data} = result
-          if (!data || data.length === 0) {
-            setData([])
-            setRenderData([])
+          if (!result.ok) {
             return
           }
 
-          data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-          const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-
           if (componentMounted) {
+            let {data} = result
+            if (!data || data.length === 0) {
+              setData([])
+              setRenderData([])
+              return
+            }
+
+            data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+            const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
+
             setData(FILTERED)
             setRenderData(FILTERED.slice(0, 3))
             setLoading(false)
@@ -106,11 +113,9 @@ export default function ClientTab({category}) {
         } catch (err) {
           console.log(err)
         } finally {
-          setLoading(false)
-        }
-
-        if (!result.ok) {
-          return
+          if (componentMounted) {
+            setLoading(false)
+          }
         }
       }
       load()
@@ -119,11 +124,17 @@ export default function ClientTab({category}) {
       }
     },
     // eslint-disable-next-line
-    [],
+    []
   )
 
   useEffect(() => {
-    data && setRenderData(data.slice(0, 3))
+    let componentMounted = true
+    if (componentMounted) {
+      data && setRenderData(data.slice(0, 3))
+    }
+    return () => {
+      componentMounted = false
+    }
   }, [data])
 
   return (

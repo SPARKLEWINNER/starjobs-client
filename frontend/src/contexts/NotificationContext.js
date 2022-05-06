@@ -1,22 +1,33 @@
 import {last} from 'lodash'
+import PropTypes from 'prop-types'
 import {useEffect, useState, createContext, useContext} from 'react'
 
 import {useLocation} from 'react-router-dom'
 
-import user_api from 'api/users'
+import user_api from 'src/lib/users'
 import {useAuth} from './AuthContext'
 import {unauthenticatedPages} from './SessionContext'
+
+NotificationsProvider.propTypes = {
+  children: PropTypes.node
+}
 
 const NotificationsContext = createContext({})
 
 export function NotificationsProvider({children}) {
   const router = useLocation()
-  const {currentUser} = useAuth()
+  const {currentUser, sessionUser} = useAuth()
   const [notification, setNotifications] = useState(0)
 
   const load = async () => {
     const current_page = last(router.pathname.replace('/', '').split('/'))
     if (unauthenticatedPages.includes(current_page)) {
+      return
+    }
+
+    await sessionUser()
+
+    if (!currentUser) {
       return
     }
 

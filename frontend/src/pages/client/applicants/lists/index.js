@@ -66,9 +66,7 @@ const ListApplicants = ({details: gig, applicants}) => {
           applicants.map((v, k) => {
             if (gig.status === 'Applying' || (gig.isExtended && v.status === 'Applying'))
               return (
-                <div key={k}>
-                  <ApplicantCard data={v} onClick={handleConfirm} gigDetails={gig} />
-                </div>
+                <div key={k}>{gig && v && <ApplicantCard data={v} onClick={handleConfirm} gigDetails={gig} />}</div>
               )
 
             return ''
@@ -90,7 +88,7 @@ const ListApplicants = ({details: gig, applicants}) => {
                 No applicants{' '}
                 <Link
                   component={RouterLink}
-                  to="/client/app"
+                  to="/client/gig/create?tab=3"
                   underline="none"
                   sx={{display: 'block', mt: 2, fontSize: '1.25rem'}}
                 >
@@ -105,8 +103,8 @@ const ListApplicants = ({details: gig, applicants}) => {
   )
 }
 ListApplicants.propTypes = {
-  details: PropTypes.object,
-  applicants: PropTypes.object
+  details: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  applicants: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 }
 
 export default ListApplicants

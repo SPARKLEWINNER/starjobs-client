@@ -6,24 +6,23 @@ import {alpha, styled} from '@mui/material/styles'
 import {BottomNavigation, BottomNavigationAction} from '@mui/material'
 import {Link} from 'react-router-dom'
 
-import HomeIcon from '@material-ui/icons/HomeOutlined'
-import HomeIconActive from '@material-ui/icons/Home'
+import HomeIcon from '@mui/icons-material/HomeOutlined'
+import HomeIconActive from '@mui/icons-material/Home'
 
-import SearchIcon from '@material-ui/icons/SearchOutlined'
-import SearchIconActive from '@material-ui/icons/Search'
+import SearchIcon from '@mui/icons-material/SearchOutlined'
+import SearchIconActive from '@mui/icons-material/Search'
 
-import PersonIcon from '@material-ui/icons/PersonOutline'
-import PersonIconActive from '@material-ui/icons/Person'
+import PersonIcon from '@mui/icons-material/PersonOutline'
+import PersonIconActive from '@mui/icons-material/Person'
 
-import FormatListNumberedRtlIcon from '@material-ui/icons/FormatListNumberedRtlOutlined'
+import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtlOutlined'
 
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
-import NotificationsIconActive from '@material-ui/icons/Notifications'
+import NotificationsIcon from '@mui/icons-material/NotificationsOutlined'
+import NotificationsIconActive from '@mui/icons-material/Notifications'
 
 import {useAuth} from 'src/contexts/AuthContext'
-
-import {useNotifications} from 'utils/context/NotificationContext'
-import {useSession} from 'utils/context/SessionContext'
+import {useNotifications} from 'src/contexts/NotificationContext'
+import {useSession} from 'src/contexts/SessionContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,15 +53,15 @@ const useStyles = makeStyles((theme) => ({
       height: 52,
       borderRadius: 52,
       padding: 10,
-      marginTop: -43,
+      marginTop: -43
     },
     '& .MuiBottomNavigationAction-label': {
       position: 'absolute',
-      top: '53%',
+      top: '53%'
     },
     '@media (max-width: 500px)': {
-      minWidth: 'auto',
-    },
+      minWidth: 'auto'
+    }
   },
   icon: {
     width: 30,

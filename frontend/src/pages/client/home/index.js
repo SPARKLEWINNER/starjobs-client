@@ -287,7 +287,6 @@ const Dashboard = () => {
             onCommit={handleAccepted}
             onReject={handleCancelled}
           />
-          
           <IncomingNotification
             open={open ?? false}
             handleClose={handleNoticeClose}

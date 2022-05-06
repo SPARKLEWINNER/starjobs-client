@@ -3,7 +3,6 @@ import {useLocation} from 'react-router-dom'
 
 import {capitalCase} from 'change-case'
 import {useSnackbar} from 'notistack'
-import moment from 'moment'
 
 // icon
 import {Icon} from '@iconify/react'
@@ -13,15 +12,15 @@ import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 
 // material
-import {Box, Tab, Stack, Grid, Typography, Card} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
+import {Box, Tab, Stack, Grid, Typography, Card} from '@mui/material'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 
 // components
-import Page from 'components/Page'
-import {CredentialsTab, ActivityTab} from 'pages/client/profile/tabs'
-import MAvatar from 'components/@material-extend/MAvatar'
+import Page from 'src/components/Page'
+import {CredentialsTab, ActivityTab} from 'src/pages/client/profile/tabs'
+import MAvatar from 'src/components/@material-extend/MAvatar'
 
 // api
 import user_api from 'src/lib/users'
@@ -99,6 +98,7 @@ const Profile = () => {
   const {enqueueSnackbar} = useSnackbar()
   const [value, setValue] = useState('1')
   const [user, setUser] = useState([])
+  const [displayName, setDisplayName] = useState(null)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -120,6 +120,9 @@ const Profile = () => {
         enqueueSnackbar('Kindly complete your account details to in order to proceed', {variant: 'warning'})
         return
       }
+
+      const capitalizeName = capitalCase(`${details?.firstName} ${details.lastName}`)
+      setDisplayName(capitalizeName)
 
       if (componentMounted) {
         setUser(details)
@@ -199,8 +202,7 @@ const Profile = () => {
             <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
               <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
                 <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '200px'}}>
-                  {capitalCase(`${user && user?.firstName} ${user && user?.middleName} ${user && user?.lastName}`)}
-
+                  {user && displayName}
                   <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
                     <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
                   </Box>
@@ -224,7 +226,7 @@ const Profile = () => {
                   variant="body2"
                   sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                 >
-                  {user && capitalCase(user.location)}
+                  {user && user.location && capitalCase(user.location)}
                 </Typography>
               </Box>
               <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>

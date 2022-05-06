@@ -62,7 +62,6 @@ function useProvideAuth() {
         name: data?.name,
         _id: data?._id
       }
-
       setCurrentUser(user)
       setAuthToken(data.token)
 

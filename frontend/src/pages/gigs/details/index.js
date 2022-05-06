@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {useNavigate, useParams, useLocation} from 'react-router-dom'
 
 import {capitalCase} from 'change-case'
-import {useSnackbar} from 'notistack5'
+import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
 // icon
@@ -13,25 +13,25 @@ import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 
 // material
-import {Box, Tab, Stack, Grid, Typography, Divider, Card} from '@material-ui/core'
-import {TabContext, TabList, TabPanel} from '@material-ui/lab'
-import {styled} from '@material-ui/core/styles'
-import {makeStyles} from '@material-ui/styles'
+import {Box, Tab, Stack, Grid, Typography, Divider, Card} from '@mui/material'
+import {TabContext, TabList, TabPanel} from '@mui/lab'
+import {styled} from '@mui/material/styles'
+import {makeStyles} from '@mui/styles'
 
 // components
-import Page from 'components/Page'
-import {CredentialsTab, ActivityTab} from 'pages/client/profile/tabs'
-import {ApplyCard, ConfirmGig} from 'pages/gigs/cards'
-import MAvatar from 'components/@material-extend/MAvatar'
+import Page from 'src/components/Page'
+import {CredentialsTab, ActivityTab} from 'src/pages/client/profile/tabs'
+import {ApplyCard, ConfirmGig} from 'src/pages/gigs/cards'
+import MAvatar from 'src/components/@material-extend/MAvatar'
 
 // api
-import user_api from 'api/users'
-import gigs_api from 'api/gigs'
-import useSendNotif from 'utils/hooks/useSendNotif'
+import user_api from 'src/lib/users'
+import gigs_api from 'src/lib/gigs'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // theme
-import color from 'theme/palette'
-import {useAuth} from 'utils/context/AuthContext'
+import color from 'src/theme/palette'
+import {useAuth} from 'src/contexts/AuthContext'
 
 // variables
 const image_bucket = process.env.REACT_APP_IMAGE_URL
@@ -108,7 +108,6 @@ const Details = () => {
   const [gigs, setGigs] = useState([])
   const [applyDetails, setApplyDetails] = useState(null)
   const [SIMPLE_TAB, setTabs] = useState(STATIC_TAB)
-
   const {sendGigNotification} = useSendNotif()
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -122,10 +121,9 @@ const Details = () => {
         setProfile(currentUser)
       }
       // set tabs to active if
-      currentUser._id = params.id
       setTabs(STATIC_TAB.filter((obj) => obj.value !== 3))
 
-      const result = await user_api.get_user_profile_client(currentUser._id)
+      const result = await user_api.get_user_profile_client(params.id)
       if (!result.ok) return
 
       let {details, gigs} = result.data
@@ -207,6 +205,7 @@ const Details = () => {
     }
   }
 
+  console.log('currentUser', currentUser)
   return (
     <Page title="Gigs Details - Starjobs">
       <MainStyle

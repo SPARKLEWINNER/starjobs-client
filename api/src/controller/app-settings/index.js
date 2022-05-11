@@ -1,5 +1,5 @@
 const Ads = require('../../models/Ads');
-const AppSettings = require('../../models/appSettingsSchema');
+const AppSettings = require('../../models/appSettings');
 
 const logger = require('../../services/logger');
 

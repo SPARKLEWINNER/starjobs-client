@@ -64,7 +64,7 @@ export function SessionProvider({children}) {
     const check_settings = await settings_api.get_settings()
     if (!check_settings.ok) return
     const current_version = localStorage.getItem('appversion')
-    if (!current_version) {
+    if (!current_version || current_version === 'undefined' || current_version === undefined) {
       localStorage.setItem('appversion', check_settings.data.appVersion)
     } else {
       if (check_settings.data.appVersion !== current_version) {

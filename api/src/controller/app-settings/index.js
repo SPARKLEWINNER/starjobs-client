@@ -12,9 +12,15 @@ var controllers = {
             const ads = await Ads.find({}).lean().exec();
             const appSettings = await AppSettings.find({}).lean().exec()
 
-            result = {
-                ads,
-                appSettings
+            if(appSettings && appSettings.length > 0){
+                result = {
+                    ads,
+                    ...appSettings[0]
+                }
+            } else{
+                result = {
+                    appVersions: undefined
+                }
             }
         } catch (error) {
             console.error(error);

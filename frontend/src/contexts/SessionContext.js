@@ -8,7 +8,7 @@ import {useAuth} from './AuthContext'
 import storage from 'src/utils/storage'
 
 import jwt_decode from 'jwt-decode'
-
+import settings_api from 'src/lib/settings'
 SessionProvider.propTypes = {
   children: PropTypes.node
 }
@@ -35,6 +35,8 @@ export function SessionProvider({children}) {
 
     await sessionToken(token)
     await sessionUser()
+
+    check_app_version()
     return true
   }
 
@@ -56,6 +58,20 @@ export function SessionProvider({children}) {
     }
 
     if (!isToken) return navigation('/')
+  }
+
+  const check_app_version = async () => {
+    const check_settings = await settings_api.get_settings()
+    if (!check_settings.ok) return
+    const current_version = localStorage.getItem('appversion')
+    if (!current_version) {
+      localStorage.setItem('appversion', check_settings.data.appVersion)
+    } else {
+      if (check_settings.data.appVersion !== current_version) {
+        localStorage.setItem('appversion', check_settings.data.appVersion)
+        return window.location.reload(false)
+      }
+    }
   }
 
   const handleSessionScreen = (tab) => {

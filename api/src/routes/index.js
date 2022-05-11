@@ -12,6 +12,7 @@ const Notifications = require('./notifications');
 const Ratings = require('./ratings');
 const Activity = require('./activity');
 const Logger = require('./logger');
+const AppSettings = require('./app-settings');
 
 module.exports = function (app) {
     Initial(app);
@@ -28,4 +29,5 @@ module.exports = function (app) {
     Ratings(app);
     Activity(app);
     Logger(app);
+    AppSettings(app);
 };

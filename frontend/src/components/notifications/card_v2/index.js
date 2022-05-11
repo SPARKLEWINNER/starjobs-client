@@ -16,6 +16,7 @@ const NotificationCardV2 = ({
   isRead = false,
   onCardClick = () => {}
 }) => {
+  const parseData = notifData && JSON.parse(notifData)
   const navigate = useNavigate()
 
   const notifClickHandler = () => {
@@ -65,6 +66,7 @@ const NotificationCardV2 = ({
     }
   }
 
+  console.log(parseData)
   return (
     <Card
       sx={{p: 0, display: 'flex', my: 1}}

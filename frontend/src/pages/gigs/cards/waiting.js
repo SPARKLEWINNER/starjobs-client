@@ -1,6 +1,8 @@
 import {Link as RouterLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
+import {capitalCase} from 'change-case'
+
 import {Box, Card, CardContent, CardMedia, Link, Typography, Stack} from '@mui/material'
 import moment from 'moment'
 import {Icon} from '@iconify/react'
@@ -52,7 +54,7 @@ export default function WaitingCard({gig, category}) {
             </Label>
           </Stack>
           <Typography variant="body2" sx={{fontSize: 13, mb: 0}}>
-            Location: {location}
+            Location: {gig && type !== 'parcels' ? (gig.location ? capitalCase(gig.location) : location) : location}
           </Typography>
 
           <Stack direction="column" sx={{my: 1}}>

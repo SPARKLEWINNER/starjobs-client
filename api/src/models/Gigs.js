@@ -29,10 +29,13 @@ const gigsData = {
     },
     category: String,
     position: String,
+    location: String,
+    contactNumber: String,
     isApprove: {
         type: Boolean,
         default: false
     },
+    notes: String,
     dateCreated: Date,
     user: [userSchema],
     status: {

@@ -25,7 +25,6 @@ export function SessionProvider({children}) {
 
   const check_token = async () => {
     const token = await storage.getToken()
-
     // assume user have a token or signed in
     if (!token) return false
 

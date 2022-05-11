@@ -28,8 +28,10 @@ export default function GigForm({formData, onNext, onStoreData}) {
 
   const GigSchema = Yup.object().shape({
     position: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig position is required'),
+    location: Yup.string().required('Location'),
     date: Yup.string(),
     shift: Yup.string().min(2, 'Too Short!').required('Gig Shift is required'),
+    contactNumber: Yup.string().min(2, 'Too Short!').required('Contact number is required'),
     hours: Yup.number().required('Gig hours is calculated by From and To selection'),
     fee: Yup.number().min(1, 'Min value 1.').required('Gig fee is required'),
     from: Yup.string().required('Gig Start time is required'),
@@ -86,6 +88,8 @@ export default function GigForm({formData, onNext, onStoreData}) {
         fee: values.fee,
         time: values.to,
         from: values.from,
+        location: values.location,
+        contactNumber: values.contactNumber,
         breakHr: values.break,
         notes: values.notes ?? '',
         locationRate: values.locationRate,
@@ -185,6 +189,24 @@ export default function GigForm({formData, onNext, onStoreData}) {
             />
           </Stack>
 
+          <TextField
+            fullWidth
+            label="Location"
+            type="text"
+            {...getFieldProps('location')}
+            error={Boolean(touched.location && errors.location)}
+            helperText={touched.location && errors.location}
+          />
+
+          <TextField
+            fullWidth
+            label="Contact person number"
+            type="text"
+            {...getFieldProps('contactNumber')}
+            error={Boolean(touched.contactNumber && errors.contactNumber)}
+            helperText={touched.contactNumber && errors.contactNumber}
+          />
+
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <MobileDatePicker
@@ -240,18 +262,28 @@ export default function GigForm({formData, onNext, onStoreData}) {
             />
           </Stack>
 
-          <TextField
-            fullWidth
-            label="Shift"
-            type="text"
-            {...getFieldProps('shift')}
-            error={Boolean(touched.shift && errors.shift)}
-            helperText={touched.shift && errors.shift}
-          />
+          <Select native onChange={(e) => setFieldValue('shift', e.target.value)} defaultValue={''}>
+            <option value="" disabled key="initial">
+              Select Shift
+            </option>
+
+            <option key="Morning-key" value="Morning">
+              Morning Shift
+            </option>
+            <option key="Mid-key" value="Mid">
+              Mid Shift
+            </option>
+            <option key="Night-key" value="Night">
+              Night Shift
+            </option>
+            <option key="Graveyard-key" value="Graveyard">
+              Graveyard Shift
+            </option>
+          </Select>
 
           <TextField
             fullWidth
-            label="No. of hours"
+            label="No. of gig hours"
             type="number"
             {...getFieldProps('hours')}
             error={Boolean(touched.hours && errors.hours)}
@@ -288,15 +320,17 @@ export default function GigForm({formData, onNext, onStoreData}) {
           </FormControl>
 
           {values.isBreak && (
-            <TextField
-              fullWidth
-              label="No. of break hour/s"
-              type="number"
-              InputProps={{inputProps: {min: 0}}}
-              onChange={(event) => handleBreakTimeReduceHours(event.currentTarget.value)}
-              error={Boolean(touched.breakHr && errors.breakHr)}
-              helperText={touched.breakHr && errors.breakHr}
-            />
+            <Select native onChange={(event) => handleBreakTimeReduceHours(event.target.value)} defaultValue={''}>
+              <option value="" disabled key="initial">
+                No. of break hour/s
+              </option>
+              <option key="one-hour-key" value="1">
+                1 hour
+              </option>
+              <option key="two-hour-key" value="2">
+                2 hours
+              </option>
+            </Select>
           )}
 
           <TextField

@@ -8,7 +8,7 @@ import {useSnackbar} from 'notistack'
 
 // component form
 import {GigForm, BillingForm} from './form'
-import {CreateGigDialog} from './dialog'
+import {CreateGigDialog, OnboardDialog} from './dialog'
 
 // hooks
 import gigs_api from 'src/lib/gigs'
@@ -22,6 +22,7 @@ export default function CreatGigForm({user, category}) {
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set())
   const [isLoading, setLoading] = useState(false)
+  const [openOnboard, setOpenOnboard] = useState(false)
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState([])
 
@@ -50,6 +51,10 @@ export default function CreatGigForm({user, category}) {
   }
 
   const handleConfirm = () => {
+    if (user && !user.isActive) {
+      setOpenOnboard(true)
+      return
+    }
     setOpen(true)
   }
 
@@ -127,7 +132,8 @@ export default function CreatGigForm({user, category}) {
           </Button>
         )}
       </Box>
-      <CreateGigDialog open={open} onConfirm={handleSubmit} handleClose={handleCancelConfirm} />
+      {open && <CreateGigDialog open={open} onConfirm={handleSubmit} handleClose={handleCancelConfirm} />}
+      {openOnboard && <OnboardDialog open={openOnboard} handleClose={() => setOpenOnboard(false)} />}
     </>
   )
 }

@@ -152,6 +152,38 @@ export default function AccountPopover({user}) {
           <Box sx={{p: 2, pt: 1.5}}>
             <nav aria-label="secondary mailbox folders">
               <List>
+                {user && !user.isActive && user.accountType === 1 && (
+                  <ListItem sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
+                    <ListItemButton
+                      component="a"
+                      onClick={() => {
+                        navigate('/client/onboard')
+                      }}
+                    >
+                      <ListItemIcon>
+                        <PersonIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Complete my details" />
+                      <ArrowRightIcon />
+                    </ListItemButton>
+                  </ListItem>
+                )}
+                {user && !user.isActive && user.accountType === 0 && (
+                  <ListItem sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
+                    <ListItemButton
+                      component="a"
+                      onClick={() => {
+                        navigate('/freelancer/onboard')
+                      }}
+                    >
+                      <ListItemIcon>
+                        <PersonIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Complete my details" />
+                      <ArrowRightIcon />
+                    </ListItemButton>
+                  </ListItem>
+                )}
                 {user.isActive && (
                   <ListItem sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
                     <ListItemButton>
@@ -186,6 +218,7 @@ export default function AccountPopover({user}) {
                     <ArrowRightIcon />
                   </ListItemButton>
                 </ListItem>
+
                 <ListItem sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
                   <ListItemButton component="a" onClick={handleClickOpen}>
                     <ListItemIcon>
@@ -232,46 +265,6 @@ export default function AccountPopover({user}) {
         </Box>
         <DiscordDialog open={openDialog} handleClose={handleCloseDialog} />
       </SwipeableDrawer>
-
-      {/* 
-      <MenuPopover open={open} onClose={handleClose} anchorEl={anchorRef.current} sx={{ width: 220 }}>
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle1" noWrap>
-            {user.name}
-          </Typography>
-
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user.email}
-          </Typography>
-
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user.accountType === 0 ? 'Freelancer' : 'Client '}
-          </Typography>
-
-          {user.accountType === 0 ?
-            <Button variant="outlined" fullWidth sx={{ my: 2 }}>
-              Be a Client
-            </Button> : ""}
-
-        </Box>
-
-        <Divider sx={{ my: 1 }} />
-
-        <Box sx={{ p: 2, pt: 1.5 }}>
-          <HelpButton />
-          <Button
-            fullWidth
-            color="inherit"
-            variant="outlined"
-            onClick={(e) => {
-              handleSignOut(e)
-            }}
-          >
-            Sign out
-          </Button>
-        </Box>
-      </MenuPopover>
-      */}
     </>
   )
 }

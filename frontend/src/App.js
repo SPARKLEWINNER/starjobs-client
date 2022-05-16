@@ -13,7 +13,7 @@ import FirebaseToken from './components/fcm'
 import NotistackProvider from './components/NotistackProvider'
 import ThemePrimaryColor from './components/ThemePrimaryColor'
 
-// import TawktoPageOverlay from 'src/layouts/tawkto/tawkto_page_overlay'
+import TawktoPageOverlay from 'src/layouts/tawkto/tawkto_page_overlay'
 
 import {AuthProvider} from 'src/contexts/AuthContext'
 import {SessionProvider} from 'src/contexts/SessionContext'
@@ -53,11 +53,11 @@ export default function App() {
             <NotificationsProvider>
               <NotistackProvider>
                 <RatingsProvider>
-                  {/* <TawktoPageOverlay> */}
-                  <AppRoute />
-                  <FirebaseToken />
-                  <GenericNotification open={open ?? false} details={payload} handleClose={handleClose} />
-                  {/* </TawktoPageOverlay> */}
+                  <TawktoPageOverlay>
+                    <AppRoute />
+                    <FirebaseToken />
+                    <GenericNotification open={open ?? false} details={payload} handleClose={handleClose} />
+                  </TawktoPageOverlay>
                 </RatingsProvider>
               </NotistackProvider>
             </NotificationsProvider>

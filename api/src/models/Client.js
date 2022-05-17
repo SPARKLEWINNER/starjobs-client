@@ -72,7 +72,7 @@ const data = {
             type: String
         },
         acccountPaymentNumber: {
-            type: Number
+            type: String
         }
     },
     photo: {

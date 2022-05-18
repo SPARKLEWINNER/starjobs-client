@@ -79,22 +79,30 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
         enqueueSnackbar('Select Skill Qualification to Offer', {variant: 'warning'})
         return setLoading(false)
       } else {
-        selected.SKILL_QUALIFICATION.length > 1
-          ? Object.values(selected.SKILL_QUALIFICATION).forEach((item) => {
-              if (item !== undefined) return skillQualification.push(item.label)
-            })
-          : skillQualification.push(values.skillQualification.pop().label)
+        if (selected.SKILL_QUALIFICATION.length > 1) {
+          Object.values(selected.SKILL_QUALIFICATION).forEach((item) => {
+            if (item !== undefined) return skillQualification.push(item.label)
+          })
+        } else {
+          if (selected.SKILL_QUALIFICATION.length <= 1) {
+            skillQualification.push(selected.SKILL_QUALIFICATION[0].label)
+          }
+        }
       }
 
       if (selected.SKILL_OFFER.length === 0) {
         enqueueSnackbar('Select Skills to Offer', {variant: 'warning'})
         return setLoading(false)
       } else {
-        selected.SKILL_OFFER.length > 1
-          ? Object.values(selected.SKILL_OFFER).forEach((item) => {
-              if (item !== undefined) return skillOffer.push(item.label)
-            })
-          : skillOffer.push(values.skillOffer.pop().label)
+        if (selected.SKILL_OFFER.length > 1) {
+          Object.values(selected.SKILL_OFFER).forEach((item) => {
+            if (item !== undefined) return skillOffer.push(item.label)
+          })
+        } else {
+          if (selected.SKILL_OFFER.length <= 1) {
+            skillOffer.push(selected.SKILL_OFFER[0].label)
+          }
+        }
       }
 
       Object.values(selected.SKILL_OFFER).forEach((skill_offer) => {

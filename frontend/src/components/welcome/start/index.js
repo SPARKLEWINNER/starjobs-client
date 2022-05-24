@@ -5,7 +5,7 @@ export default function VerifiedWelcome() {
   return (
     <Stack sx={{mb: 5}}>
       <Box sx={{display: 'flex', justifyContent: 'center', mb: 1}}>
-        <RouterLink to="/">
+        <RouterLink to="/dashboard">
           <Box component="img" src="/static/illustrations/start.png" sx={{width: '100%', objectFit: 'contain'}} />
         </RouterLink>
       </Box>

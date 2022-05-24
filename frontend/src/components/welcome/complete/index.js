@@ -20,8 +20,11 @@ export default function VerifiedWelcome({user}) {
         <Typography color="common.white">
           Fill-up required details upon clicking the "Complete my details" button.
         </Typography>
-
-        <Link component={RouterLink} to={`${user.accessType}/onboard`} sx={{textDecoration: 'none'}}>
+        <Link
+          component={RouterLink}
+          to={`/${user && user.accessType === 0 ? 'freelancer' : 'client'}/onboard`}
+          sx={{textDecoration: 'none'}}
+        >
           <Button variant="contained" sx={{mt: 5, mb: 1, ...LoadingButtonInvertedStyle}} size="large" fullWidth>
             Complete my details
           </Button>

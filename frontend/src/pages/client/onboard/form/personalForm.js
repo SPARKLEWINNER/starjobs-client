@@ -8,7 +8,7 @@ import {LoadingButton} from '@mui/lab'
 import PropTypes from 'prop-types'
 
 PersonalForm.propTypes = {
-  user: PropTypes.object,
+  user: PropTypes.oneOf([PropTypes.object, PropTypes.array]),
   stored: PropTypes.object,
   onNext: PropTypes.func,
   onStoreData: PropTypes.func

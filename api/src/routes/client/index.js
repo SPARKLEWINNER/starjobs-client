@@ -8,4 +8,5 @@ module.exports = function (app) {
     app.route(`${default_uri}/:id`).patch(auth.require_sign_in, client.patch_client_details);
     app.route(`${default_uri}/documents/:id`).patch(auth.require_sign_in, client.patch_client_documents);
     app.route(`${default_uri}/:id`).get(auth.require_sign_in, client.get_client_gigs);
+    app.route(`${default_uri}/edit/:id`).get(auth.require_sign_in, client.get_client_edit_profile);
 };

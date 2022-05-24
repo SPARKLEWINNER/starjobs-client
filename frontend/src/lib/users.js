@@ -43,6 +43,8 @@ const get_user_profile = async () => {
 
 const get_user_profile_client = async (client_id) => request.get(`/clients/${client_id}`)
 
+const get_user_edit_profile_client = async (client_id) => request.get(`/clients/edit/${client_id}`)
+
 const get_user_profile_freelancer = async (freelancer_id) => request.get(`/applicant/details/${freelancer_id}`)
 
 const get_user_notifications = async () => request.get(`/notifications`)
@@ -86,7 +88,8 @@ const _expObject = {
   put_user_notification_read,
   patch_user_password,
   get_user_activity,
-  get_user_activity_client
+  get_user_activity_client,
+  get_user_edit_profile_client
 }
 
 export default _expObject

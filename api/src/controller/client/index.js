@@ -333,6 +333,22 @@ var controllers = {
         }
 
         return res.status(200).json(client);
+    },
+    get_client_edit_profile: async function (req, res) {
+        const { id } = req.params;
+        if (!id || id === 'undefined') return res.status(502).json({ success: false, msg: 'User id missing' });
+        
+        const user = await User.find({id: mongoose.Types.ObjectId(id)}).lean().exec()
+        if(!user) return res.status(502).json({ success: false, msg: 'User not found' });
+
+        let client = await Client.find({ uid: mongoose.Types.ObjectId(id) }).lean().exec();
+
+        return res.status(201).json({
+            ...user,
+            ...client
+        });
+        
+       
     }
 };
 

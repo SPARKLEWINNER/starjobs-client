@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 // material
@@ -8,45 +8,24 @@ import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack'
 import DatePicker from 'react-datepicker'
-// api
-import category_api from 'src/lib/category'
 
 import PropTypes from 'prop-types'
 
 ParcelForm.propTypes = {
   onNext: PropTypes.func,
-  onStoreData: PropTypes.func
+  onStoreData: PropTypes.func,
+  category: PropTypes.string
 }
 
-export default function ParcelForm({onNext, onStoreData}) {
+export default function ParcelForm({onNext, onStoreData, category}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
-  const [categories, setCategory] = useState([])
   const [date, setDate] = useState(new Date())
   const [from, setFrom] = useState()
   const [to, setTo] = useState()
   const current_date = new Date()
 
-  useEffect(() => {
-    let componentMounted = true
-    const load = async () => {
-      setLoading(true)
-      const result = await category_api.get_categories()
-      if (!result.ok) return setLoading(false)
-      let category_data = result.data.sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
-      if (componentMounted) {
-        setLoading(false)
-        setCategory(category_data.filter((obj) => obj['status'] !== 1))
-      }
-    }
-    load()
-    return () => {
-      componentMounted = false
-    }
-  }, [])
-
   const Schema = Yup.object().shape({
-    category: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig category is required'),
     position: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig position is required'),
     date: Yup.string(),
     shift: Yup.string().min(2, 'Too Short!').required('Gig Shift is required'),
@@ -73,7 +52,7 @@ export default function ParcelForm({onNext, onStoreData}) {
     validationSchema: Schema,
     onSubmit: () => {
       setLoading(true)
-      if (!values.category) {
+      if (!category) {
         enqueueSnackbar('Gig category is not selected', {variant: 'error'})
         return setLoading(false)
       }
@@ -88,7 +67,7 @@ export default function ParcelForm({onNext, onStoreData}) {
       if (!values.position || !values.shift || !values.hours || !values.fee) return setLoading(false)
 
       let data = {
-        category: values.category,
+        category: category,
         position: values.position,
         date: values.date,
         shift: values.shift,
@@ -156,28 +135,6 @@ export default function ParcelForm({onNext, onStoreData}) {
     <FormikProvider value={formik}>
       <Form noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-          <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
-            <Select
-              {...getFieldProps('category')}
-              labelId="select-category"
-              label="*Select Category"
-              value={values.category ?? ''}
-              error={Boolean(touched.category && errors.category)}
-            >
-              <MenuItem value="" disabled>
-                Select Category
-              </MenuItem>
-              {categories &&
-                categories.map((category) => {
-                  if (category.slug !== 'parcels') return ''
-                  return (
-                    <MenuItem key={category.slug} value={category.slug}>
-                      {category.name}
-                    </MenuItem>
-                  )
-                })}
-            </Select>
-          </Stack>
 
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <Select

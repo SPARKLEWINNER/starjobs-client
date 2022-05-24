@@ -13,13 +13,14 @@ import gigs_api from 'src/lib/gigs'
 import PropTypes from 'prop-types'
 
 CreateParcelForm.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  category: PropTypes.string
 }
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
 
-export default function CreateParcelForm({user}) {
+export default function CreateParcelForm({user, category}) {
   const discordHook = new webhook.Webhook(`${REACT_APP_DISCORD_URL}/${REACT_APP_DISCORD_KEY_STARJOBS}`)
   const {enqueueSnackbar} = useSnackbar()
   const [activeStep, setActiveStep] = useState(0)
@@ -105,7 +106,7 @@ export default function CreateParcelForm({user}) {
       <Box sx={{textAlign: 'center', mt: 5, mb: 3}}>
         <Typography variant="h4">Parcel</Typography>
       </Box>
-      {activeStep === 0 ? <ParcelForm onNext={handleNext} onStoreData={handleFormData} /> : ''}
+      {activeStep === 0 ? <ParcelForm onNext={handleNext} onStoreData={handleFormData} category={category} /> : ''}
       {activeStep === 1 ? <BillingForm onNext={handleNext} storeData={form} /> : ''}
       <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
         {activeStep === 1 && (

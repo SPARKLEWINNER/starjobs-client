@@ -54,14 +54,14 @@ const EditProfile = () => {
 
   useEffect(() => {
     let componentMounted = true
-
     const load = async () => {
-      const user = await user_api.get_user_profile_client(currentUser['_id'])
+      const user = await user_api.get_user_edit_profile_client(currentUser._id)
+      console.log(user.data[0])
       if (!user.ok) {
         return setLoading(false)
       }
 
-      let {details} = user.data
+      let details = user.data
       const isEdit = localStorage.getItem('isEdit')
       if (isEdit && JSON.parse(isEdit)) {
         Object.keys(form).forEach((val) => {
@@ -72,6 +72,7 @@ const EditProfile = () => {
           }
         })
       } else {
+        console.log(details[0])
         let form_data = {
           contact: details[0].contact[0],
           industry: details[0].industry,

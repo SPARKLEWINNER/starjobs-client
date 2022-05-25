@@ -135,7 +135,6 @@ export default function ParcelForm({onNext, onStoreData, category}) {
     <FormikProvider value={formik}>
       <Form noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
-
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <Select
               {...getFieldProps('position')}

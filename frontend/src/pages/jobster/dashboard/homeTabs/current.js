@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import PropTypes from 'prettier'
+import PropTypes from 'prop-types'
 import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
@@ -123,7 +123,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
 
 CurrentTab.propTypes = {
   gigs: PropTypes.array,
-  user: PropTypes.object,
+  user: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   onEndShift: PropTypes.func
 }
 

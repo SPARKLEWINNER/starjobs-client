@@ -63,7 +63,7 @@ const IncomingTab = ({gigs, user}) => {
 
 IncomingTab.propTypes = {
   gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  user: PropTypes.array
+  user: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 }
 
 export default IncomingTab

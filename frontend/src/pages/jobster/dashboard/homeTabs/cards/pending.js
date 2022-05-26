@@ -4,11 +4,13 @@ import moment from 'moment'
 import Label from 'src/components/Label'
 
 PendingCard.propTypes = {
-  gig: PropTypes.object
+  gig: PropTypes.object,
+  onView: PropTypes.func
 }
 
-export default function PendingCard({gig}) {
-  let {user, position, hours, fee, from, category, time} = gig
+export default function PendingCard({gig, onView}) {
+  let {user, position, hours, fee, from, category, time, status} = gig
+  console.log(gig)
   const {location, thumbnail} = user[0]
   fee = parseFloat(fee)
   let computedGigFee = parseFloat(fee * hours)
@@ -16,7 +18,7 @@ export default function PendingCard({gig}) {
   let _total = parseFloat(fee + voluntaryFee)
 
   return (
-    <Card sx={{p: 0, display: 'flex', height: 120, boxShadow: 'none'}}>
+    <Card sx={{p: 0, display: 'flex', height: 140, boxShadow: 'none'}} onClick={() => onView()}>
       <Box sx={{pt: 2, pb: 1, pl: 2, pr: 1, width: '100px', display: 'flex', alignItems: 'flex-start'}}>
         <CardMedia
           component="img"
@@ -44,7 +46,7 @@ export default function PendingCard({gig}) {
             </Typography>
           </Stack>
 
-          <Box sx={{my: 1}}>
+          <Box sx={{mt: 1}}>
             <Label sx={{fontSize: 10}} color="secondary">
               <span>&#8369;</span>
               {parseFloat(_total).toFixed(2)} / {category === 'parcels' ? 'parcels' : 'hr'}
@@ -53,6 +55,26 @@ export default function PendingCard({gig}) {
               {hours} {category === 'parcels' ? 'parcels' : 'hr shift'}
             </Label>
           </Box>
+
+          {status === 'Applying' && (
+            <Typography
+              variant="caption"
+              sx={{
+                textTransform: 'uppercase',
+                fontSize: 12,
+                mb: '0 !important',
+                mt: '0 !important',
+                pt: 1,
+                pb: 2,
+                pr: 2,
+                textAlign: 'right',
+                display: 'block',
+                width: '100%'
+              }}
+            >
+              For Client review
+            </Typography>
+          )}
 
           {/* <Box sx={{position: 'absolute', bottom: 20, right: 20}}>
             <Typography variant="overline" sx={{fontWeight: 'bold'}}>

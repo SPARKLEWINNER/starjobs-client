@@ -230,6 +230,14 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift}) => {
                     </Typography>
                   </Stack>
 
+                  {status === 'Applying' && (
+                    <Stack sx={{mt: 3, mb: 5}}>
+                      <Button size="large" variant="text" sx={{textTransform: 'initial !important'}}>
+                        For Client review
+                      </Button>
+                    </Stack>
+                  )}
+
                   {status === 'On-the-way' ||
                     (status === 'Accepted' && (
                       <Stack sx={{mt: 3, mb: 5}}>
@@ -283,7 +291,7 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift}) => {
 }
 
 CurrentModalPopup.propTypes = {
-  gig: PropTypes.array,
+  gig: PropTypes.object,
   open: PropTypes.bool,
   onClick: PropTypes.func,
   onClose: PropTypes.func,

@@ -79,9 +79,8 @@ var controllers = {
     },
     get_notification_details: async function (req, res) {
         const {id} = req.params;
-        let result;
         try {
-            result = await Gigs.aggregate([
+            let result = await Gigs.aggregate([
                 {
                     $lookup: {
                         from: 'history',

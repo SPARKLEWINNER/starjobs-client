@@ -52,7 +52,7 @@ const NotificationDetailsPage = () => {
         <Typography variant="h4" sx={{display: 'block', width: '100%', textAlign: 'center', mt: 5}}>
           Notification Details
         </Typography>
-        <NotificationsDetailsCard details={data} />
+        <NotificationsDetailsCard details={data} currentUser={currentUser} />
       </MainStyle>
     </Page>
   )

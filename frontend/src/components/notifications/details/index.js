@@ -27,7 +27,7 @@ const ListWrapperStyle = styled(Paper)(() => ({
   width: '100%'
 }))
 
-const NotificationDetailsCard = ({details}) => {
+const NotificationDetailsCard = ({details, currentUser}) => {
   if (!details || details === undefined) return ''
 
   let {_id, status, position, from, time, fee, hours, history, locationRate} = details
@@ -80,31 +80,33 @@ const NotificationDetailsCard = ({details}) => {
           </Grid>
         </Grid>
       </Card>
-      <Card sx={{p: {xs: 1, sm: 2}, my: 3}}>
-        <ListWrapperStyle>
-          <List>
-            {history &&
-              history.map((v, k) => {
-                return (
-                  <ListItem key={k}>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <CheckIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={v.status}
-                      secondary={`${new Date(v.updatedAt).toDateString()} ${new Date(
-                        v.updatedAt
-                      ).toLocaleTimeString()}`}
-                      sx={{fontSize: {xs: '0.85rem !important'}}}
-                    />
-                  </ListItem>
-                )
-              })}
-          </List>
-        </ListWrapperStyle>
-      </Card>
+      {currentUser && status !== 'Waiting' && (
+        <Card sx={{p: {xs: 1, sm: 2}, my: 3}}>
+          <ListWrapperStyle>
+            <List>
+              {history &&
+                history.map((v, k) => {
+                  return (
+                    <ListItem key={k}>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <CheckIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={v.status}
+                        secondary={`${new Date(v.updatedAt).toDateString()} ${new Date(
+                          v.updatedAt
+                        ).toLocaleTimeString()}`}
+                        sx={{fontSize: {xs: '0.85rem !important'}}}
+                      />
+                    </ListItem>
+                  )
+                })}
+            </List>
+          </ListWrapperStyle>
+        </Card>
+      )}
 
       <Card sx={{p: {xs: 1, sm: 2}, my: 3}}>
         <Typography variant="overline" sx={{py: 2, px: 3}}>
@@ -114,7 +116,25 @@ const NotificationDetailsCard = ({details}) => {
           {_id}
         </Typography>
       </Card>
-      {(status === 'Applying' || status === 'Waiting') && (
+
+      {currentUser && currentUser.accountType === 0 && (status === 'Applying' || status === 'Waiting') && (
+        <Button
+          component="a"
+          href={`/gigs/det/${_id}`}
+          variant="contained"
+          sx={{
+            backgroundColor: 'starjobs.main',
+            boxShadow: 'none',
+            color: 'common.white',
+            py: 2,
+            mt: {xs: 5, sm: 5}
+          }}
+        >
+          View Gig
+        </Button>
+      )}
+
+      {currentUser && currentUser.accountType === 1 && (status === 'Applying' || status === 'Waiting') && (
         <Button
           component="a"
           href={`/client/gigs/applicants/${_id}`}
@@ -130,26 +150,30 @@ const NotificationDetailsCard = ({details}) => {
           View Gig details
         </Button>
       )}
-      <Button
-        endIcon={<ChevronIconRight />}
-        variant="text"
-        sx={{
-          backgroundColor: '#FFF',
-          boxShadow: 'none',
-          color: 'text.primary',
-          py: 2,
-          mt: {xs: 5, sm: 10},
-          opacity: 0.35
-        }}
-      >
-        Report an Issue
-      </Button>
+
+      {currentUser && currentUser.accountType !== 0 && (status === 'Applying' || status === 'Waiting') && (
+        <Button
+          endIcon={<ChevronIconRight />}
+          variant="text"
+          sx={{
+            backgroundColor: '#FFF',
+            boxShadow: 'none',
+            color: 'text.primary',
+            py: 2,
+            mt: {xs: 5, sm: 10},
+            opacity: 0.35
+          }}
+        >
+          Report an Issue
+        </Button>
+      )}
     </Stack>
   )
 }
 
 NotificationDetailsCard.propTypes = {
-  details: PropTypes.object
+  details: PropTypes.oneOfType[(PropTypes.object, PropTypes.array)],
+  currentUser: PropTypes.object
 }
 
 export default NotificationDetailsCard

@@ -70,7 +70,7 @@ var controllers = {
             updatedToken = await User.findByIdAndUpdate(id, params);
         } catch (error) {
             console.error(error);
-            await logError(error, 'FCM.patch_token', null, id, 'PATCH');
+            await logger.logError(error, 'FCM.patch_token', null, id, 'PATCH');
 
             return res.status(502).json({success: false, msg: 'Unable to patch fcm'});
         }

@@ -5,6 +5,8 @@ const History = require('./../../models/History');
 const Notification = require('./../../models/Notification');
 const mongoose = require('mongoose');
 
+const logger = require('../../services/logger');
+
 var controllers = {
     get_notifications: async function (req, res) {
         const {id} = req.params;
@@ -37,7 +39,7 @@ var controllers = {
             return res.status(200).json({success: false, data: result});
         } catch (error) {
             console.error('error', error);
-            await logError(error, 'Accounts.get_notifications', null, id, 'GET');
+            await logger.logError(error, 'Accounts.get_notifications', null, id, 'GET');
             return res.status(502).json({success: false, msg: 'User not found'});
         }
     },
@@ -71,7 +73,7 @@ var controllers = {
             return res.status(200).json({success: false, data: result});
         } catch (error) {
             console.error('error', error);
-            await logError(error, 'Accounts.get_notifications_clients', null, id, 'GET');
+            await logger.logError(error, 'Accounts.get_notifications_clients', null, id, 'GET');
             return res.status(502).json({success: false, msg: 'User not found'});
         }
     },
@@ -101,7 +103,7 @@ var controllers = {
             return res.status(200).json({success: false, data: result});
         } catch (error) {
             console.error('error', error);
-            await logError(error, 'Accounts.get_notification_details', null, id, 'GET');
+            await logger.logError(error, 'Accounts.get_notification_details', null, id, 'GET');
             return res.status(502).json({success: false, msg: 'User not found'});
         }
     },
@@ -131,7 +133,7 @@ var controllers = {
             return res.status(200).json({success: false, data: result});
         } catch (error) {
             console.error('error', error);
-            await logError(error, 'Accounts.get_notification_details', null, id, 'GET');
+            await logger.logError(error, 'Accounts.get_notification_details', null, id, 'GET');
             return res.status(502).json({success: false, msg: 'User not found'});
         }
     },
@@ -139,9 +141,8 @@ var controllers = {
     get_notifications_v2: async function (req, res) {
         const token = req.headers.authorization.split(' ')[1]
         const {id} = jwt_decode(token);
-        let result;
         try {
-            result = await Notification.find({
+            await Notification.find({
                 $or: [{targetUsers: id}, {target: 'General'}]
             })
                 .populate('targetUsers')
@@ -164,7 +165,7 @@ var controllers = {
                 });
         } catch (error) {
             console.error('error', error);
-            await logError(error, 'Accounts.get_notifications', null, id, 'GET');
+            await logger.logError(error, 'Accounts.get_notifications', null, id, 'GET');
             return res.status(502).json({success: false, msg: 'User not found'});
         }
     },
@@ -194,7 +195,7 @@ var controllers = {
             });
         } catch (error) {
             console.error('error', error);
-            await logError(error, 'Accounts.post_notification', null, id, 'POST');
+            await logger.logError(error, 'Accounts.post_notification', null, id, 'POST');
             return res.status(502).json({success: false, msg: 'User not found'});
         }
     },
@@ -216,7 +217,7 @@ var controllers = {
             });
         } catch (error) {
             console.error('error', error);
-            await logError(error, 'Accounts.patch_notification_addviewer', null, id, 'put');
+            await logger.logError(error, 'Accounts.patch_notification_addviewer', null, id, 'put');
             return res.status(502).json({success: false, msg: 'User not found'});
         }
     }

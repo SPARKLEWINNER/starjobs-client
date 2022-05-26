@@ -15,6 +15,8 @@ const logger = require('../../services/logger');
 const { timeCal } = require('../../services/timeCalculator');
 const { BUCKET_URL } = process.env;
 
+const notification = require('../../services/notification')
+
 var controllers = {
     // list of gigs
     get_gigs: async function (req, res) {
@@ -194,6 +196,7 @@ var controllers = {
         const { time, shift, hours, fee, date, category, position, breakHr, from, fees, locationRate, location, contactNumber, notes } = req.body;
         const now = new Date();
 
+
         const isUserExists = await User.find({ _id: mongoose.Types.ObjectId(id), accountType: 1 })
             .lean()
             .exec();
@@ -237,9 +240,12 @@ var controllers = {
             uid: mongoose.Types.ObjectId(id),
             dateCreated: now.toISOString()
         });
-
+        
+ 
+        
         try {
-            await Gigs.create(gigsObj);
+            const postedGig = await Gigs.create(gigsObj);
+            await notification.globalNotification(postedGig);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Gigs.post_gig', gigsObj, client[0]._id, 'POST');

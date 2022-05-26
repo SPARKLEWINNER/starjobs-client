@@ -156,7 +156,6 @@ export default function TabsComponent() {
       uid: current_user._id
     }
 
-    console.log('data', data)
     const result = await gigs_api.patch_gigs_apply(applyDetails._id, data)
 
     if (!result.ok) {

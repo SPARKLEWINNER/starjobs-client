@@ -83,11 +83,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
 
   const handleClick = (value) => {
     try {
-      let form_data = {
-        new_status: _label(value.status),
-        ...value
-      }
-      onClick(form_data)
+      onClick(value)
     } catch (error) {
       console.log(error)
     }

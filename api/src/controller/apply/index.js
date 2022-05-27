@@ -2,6 +2,7 @@ const fetch = require('axios');
 const mongoose = require('mongoose');
 
 const Gigs = require('./../../models/Gigs');
+const FeeHistory = require('./../../models/FeeHistory');
 const Account = require('./../../models/Account');
 const History = require('./../../models/History');
 const User = require('./../../models/User');
@@ -14,6 +15,7 @@ const { FCM_SERVER_KEY } = process.env;
 const client = ['Applying', 'Confirm-Gig', 'On-the-way', 'Arrived', 'On-going', 'End-Shift', 'Cancelled'];
 const freelancer = ['Accepted', 'Confirm-End-Shift', 'Confirm-Arrived'];
 
+const calculations = require('../../services/gigComputations');
 const { Types } = mongoose;
 
 async function sendNotification(request, gigs, status) {
@@ -174,6 +176,49 @@ var controllers = {
                                 fees: { ...gigs.fees, proposedWorkTime: actualTime, proposedRate: actualRate }
                             }
                         );
+                    } else if (status === 'Confirm-End-Shift') {
+                        const {
+                            computedFeeByHr,
+                            voluntaryFee,
+                            appFee,
+                            transactionFee,
+                            grossGigFee,
+                            grossVAT,
+                            grossWithHolding,
+                            serviceCost,
+                            jobsterTotal
+                        } = calculations.default_calculations(
+                            gigs.fees.proposedWorkTime,
+                            gigs.fees.proposedRate,
+                            gigs.locationRate
+                        );
+
+                        const feeHistoryInput = new FeeHistory({
+                            gigid: Types.ObjectId(id),
+                            ...gigs
+                        });
+
+                        await Gigs.findOneAndUpdate(
+                            { _id: Types.ObjectId(id) },
+                            {
+                                status: status,
+                                hours: gigs.proposedWorkTime,
+                                fee: gigs.proposedRate,
+                                fees: {
+                                    computedFeeByHr: computedFeeByHr,
+                                    voluntaryFee: voluntaryFee,
+                                    appFee: appFee,
+                                    transactionFee: transactionFee,
+                                    grossGigFee: grossGigFee,
+                                    grossVAT: grossVAT,
+                                    grossWithHolding: grossWithHolding,
+                                    serviceCost: serviceCost,
+                                    jobsterTotal: jobsterTotal
+                                }
+                            }
+                        );
+
+                        await FeeHistory.create(feeHistoryInput);
                     } else {
                         await Gigs.findOneAndUpdate({ _id: Types.ObjectId(id) }, { status: status });
                     }

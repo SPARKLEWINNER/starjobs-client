@@ -19,7 +19,7 @@ import gigs_api from 'src/lib/gigs'
 import {useAuth} from 'src/contexts/AuthContext'
 
 import {useLocation} from 'react-router-dom'
-import {useNotifications} from 'src/contexts/NotificationContext'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 const useStyles = makeStyles({
   nav_item: {
@@ -56,7 +56,7 @@ export default function TabsComponent() {
   const [gigs, setGigs] = useState([])
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
-  const {sendGigNotification} = useNotifications()
+  const {sendGigNotification} = useSendNotif()
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -110,12 +110,22 @@ export default function TabsComponent() {
         enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
         return
       }
+
+      console.log(values)
       await sendGigNotification({
         title: 'Gig success',
         body: 'To monitor gig fee View gig in progress',
         targetUsers: [gigConfirm.auid],
         additionalData: values
       })
+
+      await sendGigNotification({
+        title: 'Gig success',
+        body: 'To monitor gig fee View gig in progress',
+        targetUsers: [values.uid],
+        additionalData: values
+      })
+
       setConfirmOpen(false)
       await toggleDrawer(true, gigConfirm._id)
       enqueueSnackbar('Success confirmed gig has ended', {variant: 'success'})

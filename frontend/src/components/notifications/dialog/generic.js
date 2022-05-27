@@ -64,7 +64,7 @@ const GenericNotification = ({open = false, details = {}, handleClose = () => {}
 
 GenericNotification.propTypes = {
   open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
-  details: PropTypes.array,
+  details: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   handleClose: PropTypes.func
 }
 

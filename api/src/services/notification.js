@@ -34,12 +34,12 @@ var controller = {
             .exec();
 
         let targetUsers = [];
-        if (jobster && jobster.length > 1) {
+        if (jobster && jobster.length >= 1) {
             await jobster.forEach((item) => {
                 targetUsers.push(item._id);
             });
         } else {
-            targetUsers.push(jobster[0]._id);
+            return;
         }
 
         const notificationInput = new Notification({

@@ -67,7 +67,6 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
 
           if (!moment(date).isSame(moment(), 'day')) return false
           switch (status) {
-            case 'Accepted':
             case 'Confirm-Gig':
             case 'On-the-way':
             case 'Arrived':
@@ -115,6 +114,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
           onClick={handleAction}
           onClose={handleCloseView}
           onEndShift={handleEndShift}
+          loading={isLoading}
         />
       )}
     </Box>

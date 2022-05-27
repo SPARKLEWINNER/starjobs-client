@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
-import {Link as RouterLink} from 'react-router-dom'
+import PropTypes from 'prop-types'
+import {Link as RouterLink, useNavigate} from 'react-router-dom'
 import {Box, Stack, Typography, Grid, Link, Card} from '@mui/material'
 import moment from 'moment'
 import {useSnackbar} from 'notistack'
@@ -10,10 +11,10 @@ import CurrentModalPopup from '../modal'
 
 // api
 import gigs_api from 'src/lib/gigs'
-import PropTypes from 'prop-types'
 
 // theme
 import color from 'src/theme/palette'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // status
 const current_status = [
@@ -28,12 +29,25 @@ const current_status = [
 
 const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
+  const navigate = useNavigate()
   const [FILTERED_DATA, setData] = useState([])
   const [SELECTED_GIG, setSelectedGig] = useState([])
   const [openModal, setOpenModal] = useState(false)
+  const {sendGigNotification} = useSendNotif()
 
   const handleAction = async (value) => {
     if (!user) return
+    const {new_status, auid: jobster_id} = value
+
+    if (new_status === 'Confirm-Arrived') {
+      await sendGigNotification({
+        title: `Client confirmed your arrival`,
+        body: 'View gig in progress',
+        targetUsers: [jobster_id],
+        additionalData: value
+      })
+    }
+
     let form_data = {
       status: value.new_status,
       uid: user._id
@@ -45,8 +59,8 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
       return
     }
 
-    enqueueSnackbar('Success informing the client', {variant: 'success'})
-    window.location.reload()
+    enqueueSnackbar('Success informing the jobster', {variant: 'success'})
+    navigate('/client/gig/create?tab=1')
   }
 
   const handleEndShift = (value) => {
@@ -57,10 +71,9 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
   const handleView = async (gig) => {
     const get_gig_details = await gigs_api.get_gig_details(gig._id)
     if (!get_gig_details.ok) return enqueueSnackbar('Unable to get gig details', {variant: 'error'})
+    setSelectedGig(get_gig_details.data)
     if (!get_gig_details.data.isExtended) {
-      setOpenModal(true)
-      setSelectedGig(get_gig_details.data)
-      return
+      return setOpenModal(true)
     }
   }
 

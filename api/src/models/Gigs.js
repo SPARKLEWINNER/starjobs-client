@@ -76,7 +76,9 @@ const gigsData = {
         grossVAT: String,
         grossWithHolding: String,
         serviceCost: String,
-        jobsterTotal: String
+        jobsterTotal: String,
+        proposedRate: String,
+        proposedWorkTime: String,
     }
 };
 

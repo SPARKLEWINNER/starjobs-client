@@ -5,11 +5,12 @@ import moment from 'moment'
 import Label from 'src/components/Label'
 
 IncomingCard.propTypes = {
-  gig: PropTypes.object
+  gig: PropTypes.object,
+  onView: PropTypes.func
 }
 
-export default function IncomingCard({gig}) {
-  let {user, position, hours, fee, from, category, time} = gig
+export default function IncomingCard({gig, onView}) {
+  let {user, position, hours, fee, from, category, time, status} = gig
   const {location, thumbnail} = user[0]
   fee = parseFloat(fee)
   let computedGigFee = parseFloat(fee * hours)
@@ -17,7 +18,7 @@ export default function IncomingCard({gig}) {
   let _total = parseFloat(fee + voluntaryFee)
 
   return (
-    <Card sx={{p: 0, display: 'flex', height: 120, boxShadow: 'none'}}>
+    <Card sx={{p: 0, display: 'flex', height: 160, boxShadow: 'none'}} onClick={() => onView()}>
       <Box sx={{pt: 2, pb: 1, pl: 2, pr: 1, width: '100px', display: 'flex', alignItems: 'flex-start'}}>
         <CardMedia
           component="img"
@@ -55,11 +56,22 @@ export default function IncomingCard({gig}) {
             </Label>
           </Box>
 
-          {/* <Box sx={{position: 'absolute', bottom: 20, right: 20}}>
-            <Typography variant="overline" sx={{fontWeight: 'bold'}}>
-              {status}
+          {status === 'Accepted' && (
+            <Typography
+              variant="overline"
+              sx={{
+                textTransform: 'uppercase',
+                fontSize: 12,
+                pt: 1,
+                pr: 2,
+                textAlign: 'right',
+                display: 'block',
+                width: '100%'
+              }}
+            >
+              For Pushing through
             </Typography>
-          </Box> */}
+          )}
         </CardContent>
       </Box>
     </Card>

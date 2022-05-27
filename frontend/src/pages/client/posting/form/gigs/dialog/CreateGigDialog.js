@@ -13,6 +13,9 @@ import {
 import {LoadingButton} from '@mui/lab'
 import PropTypes from 'prop-types'
 
+import {Icon} from '@iconify/react'
+import closeIcon from '@iconify/icons-eva/close-circle-outline'
+
 const CreateGigDialog = ({open, onConfirm, handleClose}) => {
   const [loading, setLoading] = useState(false)
 
@@ -24,8 +27,11 @@ const CreateGigDialog = ({open, onConfirm, handleClose}) => {
 
   return (
     <div>
-      <Dialog open={open}>
-        <DialogTitle sx={{textAlign: 'center', pt: 5, pb: 0}}>
+      <Dialog open={open} onClose={handleClose}>
+        <Button sx={{ml: 'auto', p: 2}} onClick={handleClose}>
+          <Icon icon={closeIcon} width={32} height={32} color="#b2b2b2" />
+        </Button>
+        <DialogTitle sx={{textAlign: 'center', pb: 0}}>
           <Typography variant="h4" component="span">
             Confirm Gig Posting
           </Typography>

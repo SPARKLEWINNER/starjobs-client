@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {useSnackbar} from 'notistack'
+// import {useSnackbar} from 'notistack'
 import PropTypes from 'prop-types'
 
 import {Box, Stack, Typography, Link, Card} from '@mui/material'
@@ -8,34 +8,36 @@ import {PendingCard} from './cards'
 import CurrentModalPopup from './modal'
 
 // api
-import gigs_api from 'src/lib/gigs'
+// import gigs_api from 'src/lib/gigs'
 
 // theme
 import color from 'src/theme/palette'
 
 const PendingTab = ({gigs, user}) => {
-  const {enqueueSnackbar} = useSnackbar()
+  // const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
   const [SELECTED_GIG, setSelectedGig] = useState([])
   const [openModal, setOpenModal] = useState(false)
 
-  const handleAction = async (value) => {
+  const handleAction = async () => {
     setLoading(true)
     if (!user) return
-    let form_data = {
-      status: value.new_status,
-      uid: user._id
-    }
 
-    const result = await gigs_api.patch_gigs_apply(value._id, form_data)
-    if (!result.ok) {
-      enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-      return setLoading(false)
-    }
+    console.log(user)
+    // let form_data = {
+    //   status: value.new_status,
+    //   uid: user._id
+    // }
 
-    enqueueSnackbar('Success informing the client', {variant: 'success'})
-    setLoading(false)
-    window.location.reload()
+    // const result = await gigs_api.patch_gigs_apply(value._id, form_data)
+    // if (!result.ok) {
+    //   enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
+    //   return setLoading(false)
+    // }
+
+    // enqueueSnackbar('Success informing the client', {variant: 'success'})
+    // setLoading(false)
+    // window.location.reload()
   }
 
   const handleView = (gig) => {

@@ -215,22 +215,22 @@ var controllers = {
                 gigs = await Gigs.aggregate([
                     {
                         $lookup: {
-                            from: 'extends',
-                            localField: '_id',
+                            localField: 'gigs._id',
+                            from: 'extended',
                             foreignField: 'gigId',
-                            as: 'extends'
+                            as: 'extended'
                         }
                     },
                     {
                         $unwind: {
-                            path: '$extends',
+                            path: '$extended',
                             preserveNullAndEmptyArrays: true
                         }
                     },
                     {
                         $lookup: {
+                            localField: 'gigs._id',
                             from: 'history',
-                            localField: 'extends.gid',
                             foreignField: 'gid',
                             as: 'history'
                         }
@@ -261,10 +261,11 @@ var controllers = {
                             date: 1,
                             dateCreated: 1,
                             auid: 1,
-                            maximumApplicants: '$extends.maximumApplicants',
+                            history: 1,
+                            maximumApplicants: '$extended.maximumApplicants',
                             numberofApplicants: {
                                 $filter: {
-                                    input: '$extends.applicants',
+                                    input: '$extended.applicants',
                                     as: 's',
                                     cond: [
                                         {
@@ -284,39 +285,42 @@ var controllers = {
                     })
                     .exec();
                 gigs = await Promise.all(
-                    gigs && gigs.filter((obj) =>!moment(obj.time).isBefore(moment(), 'day')).map(async (obj) => {
-                        if (!obj.isExtended) {
-                            const account = await Account.find({ uuid: mongoose.Types.ObjectId(obj.auid) })
-                                .lean()
-                                .exec();
+                    gigs &&
+                        gigs
+                            .filter((obj) => !moment(new Date(obj.time)).isBefore(moment(), 'day'))
+                            .map(async (obj) => {
+                                if (!obj.isExtended) {
+                                    const account = await Account.find({ uuid: mongoose.Types.ObjectId(obj.auid) })
+                                        .lean()
+                                        .exec();
 
-                            // add applicant list since to prevent re-apply of jobsters
-                            if (obj.status === 'Applying' || obj.status === 'Waiting') {
-                                const history = await History.find(
-                                    {
-                                        gid: mongoose.Types.ObjectId(obj._id),
-                                        status: ['Waiting', 'Applying']
-                                    },
-                                    { uid: 1, status: 1, _id: 1, createdAt: 1 }
-                                )
-                                    .find()
-                                    .lean();
+                                    // add applicant list since to prevent re-apply of jobsters
+                                    if (obj.status === 'Applying' || obj.status === 'Waiting') {
+                                        const history = await History.find(
+                                            {
+                                                gid: mongoose.Types.ObjectId(obj._id),
+                                                status: ['Waiting', 'Applying']
+                                            },
+                                            { uid: 1, status: 1, _id: 1, createdAt: 1 }
+                                        )
+                                            .find()
+                                            .lean();
 
-                                return {
-                                    ...obj,
-                                    applicants: history,
-                                    account
-                                };
-                            }
+                                        return {
+                                            ...obj,
+                                            applicants: history,
+                                            account
+                                        };
+                                    }
 
-                            return {
-                                ...obj,
-                                account
-                            };
-                        } else {
-                            return obj;
-                        }
-                    })
+                                    return {
+                                        ...obj,
+                                        account
+                                    };
+                                } else {
+                                    return obj;
+                                }
+                            })
                 );
 
                 client = {
@@ -337,18 +341,20 @@ var controllers = {
     get_client_edit_profile: async function (req, res) {
         const { id } = req.params;
         if (!id || id === 'undefined') return res.status(502).json({ success: false, msg: 'User id missing' });
-        
-        const user = await User.find({id: mongoose.Types.ObjectId(id)}).lean().exec()
-        if(!user) return res.status(502).json({ success: false, msg: 'User not found' });
 
-        let client = await Client.find({ uid: mongoose.Types.ObjectId(id) }).lean().exec();
+        const user = await User.find({ id: mongoose.Types.ObjectId(id) })
+            .lean()
+            .exec();
+        if (!user) return res.status(502).json({ success: false, msg: 'User not found' });
+
+        let client = await Client.find({ uid: mongoose.Types.ObjectId(id) })
+            .lean()
+            .exec();
 
         return res.status(201).json({
             ...user,
             ...client
         });
-        
-       
     }
 };
 

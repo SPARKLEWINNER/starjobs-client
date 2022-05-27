@@ -8,10 +8,12 @@ function change_label_by_status(status) {
   switch (status) {
     case 'Applying':
       return 'Waiting for client approval'
+    case 'Accepted':
+      return 'Click to Push through'
     case 'Confirm-Gig':
       return 'Client will confirm your arrival'
     case 'Confirm-Arrived':
-      return 'Client confirmed your arrival'
+      return 'Click to End Shift'
     case 'End-Shift':
       return "You've ended your shift"
     default:

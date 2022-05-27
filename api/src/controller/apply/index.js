@@ -90,7 +90,7 @@ async function sendNotification(request, gigs, status) {
 
 var controllers = {
     gig_apply: async function (req, res) {
-        const { uid, status } = req.body;
+        const { uid, status, actualTime, actualRate } = req.body;
         const { id } = req.params;
         await getSpecificData({ uuid: Types.ObjectId(uid) }, Account, 'Account', uid);
 
@@ -166,7 +166,17 @@ var controllers = {
                         }
                     );
                 } else {
-                    await Gigs.findOneAndUpdate({ _id: Types.ObjectId(id) }, { status: status });
+                    if (status === 'End-Shift') {
+                        await Gigs.findOneAndUpdate(
+                            { _id: Types.ObjectId(id) },
+                            {
+                                status: status,
+                                fees: { ...gigs.fees, proposedWorkTime: actualTime, proposedRate: actualRate }
+                            }
+                        );
+                    } else {
+                        await Gigs.findOneAndUpdate({ _id: Types.ObjectId(id) }, { status: status });
+                    }
                 }
             }
 

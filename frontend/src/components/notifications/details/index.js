@@ -34,6 +34,98 @@ const NotificationDetailsCard = ({details, currentUser}) => {
 
   let {serviceCost} = calculations(hours, fee, locationRate)
 
+  const renderJobster = (status) => {
+    let link = '/freelancer/dashboard?tab=1'
+    let button_label = 'View Gig'
+    switch (status) {
+      case 'Waiting':
+        link = `/gigs/det/${_id}`
+        break
+      case 'Applying':
+        link = '/freelancer/dashboard?tab=3'
+        break
+      case 'Accepted':
+        button_label = 'View Gig progress'
+        link = '/freelancer/dashboard?tab=2'
+        break
+      case 'Confirm-Gig':
+      case 'Confirm-Arrived':
+      case 'End-Shift':
+        button_label = 'View Gig progress'
+        link = '/freelancer/dashboard?tab=1'
+        break
+      case 'Confirm-End-Shift':
+        button_label = 'View Gig billing'
+        link = '/freelancer/dashboard?tab=4'
+        break
+      default:
+        break
+    }
+    return (
+      <Button
+        component="a"
+        href={link}
+        variant="contained"
+        sx={{
+          backgroundColor: 'starjobs.main',
+          boxShadow: 'none',
+          color: 'common.white',
+          py: 2,
+          mt: {xs: 5, sm: 5},
+          mb: 20
+        }}
+      >
+        {button_label}
+      </Button>
+    )
+  }
+
+  const renderClient = (status) => {
+    let link = '/client/gig/create?tab=1'
+    let button_label = 'View Gig'
+    switch (status) {
+      case 'Waiting':
+        link = '/client/gig/create?tab=3'
+        break
+      case 'Applying':
+        button_label = 'View Gig proposals'
+        link = `/client/gigs/applicants/${_id}`
+        break
+      case 'Accepted':
+        button_label = 'View Gig progress'
+        link = '/client/gig/create?tab=2'
+        break
+      case 'Confirm-Gig':
+      case 'Confirm-Arrived':
+      case 'End-Shift':
+        button_label = 'View Gig progress'
+        link = '/client/gig/create?tab=1'
+        break
+      case 'Confirm-End-Shift':
+        button_label = 'View Gig billing'
+        link = '/client/gig/create?tab=4'
+        break
+      default:
+        break
+    }
+    return (
+      <Button
+        component="a"
+        href={link}
+        variant="contained"
+        sx={{
+          backgroundColor: 'starjobs.main',
+          boxShadow: 'none',
+          color: 'common.white',
+          py: 2,
+          mt: {xs: 5, sm: 5}
+        }}
+      >
+        {button_label}
+      </Button>
+    )
+  }
+
   return (
     <Stack sx={{mt: 3, mb: 5}}>
       <Label
@@ -107,7 +199,6 @@ const NotificationDetailsCard = ({details, currentUser}) => {
           </ListWrapperStyle>
         </Card>
       )}
-
       <Card sx={{p: {xs: 1, sm: 2}, my: 3}}>
         <Typography variant="overline" sx={{py: 2, px: 3}}>
           Gid ID
@@ -116,41 +207,8 @@ const NotificationDetailsCard = ({details, currentUser}) => {
           {_id}
         </Typography>
       </Card>
-
-      {currentUser && currentUser.accountType === 0 && (status === 'Applying' || status === 'Waiting') && (
-        <Button
-          component="a"
-          href={`/gigs/det/${_id}`}
-          variant="contained"
-          sx={{
-            backgroundColor: 'starjobs.main',
-            boxShadow: 'none',
-            color: 'common.white',
-            py: 2,
-            mt: {xs: 5, sm: 5}
-          }}
-        >
-          View Gig
-        </Button>
-      )}
-
-      {currentUser && currentUser.accountType === 1 && (status === 'Applying' || status === 'Waiting') && (
-        <Button
-          component="a"
-          href={`/client/gigs/applicants/${_id}`}
-          variant="contained"
-          sx={{
-            backgroundColor: 'starjobs.main',
-            boxShadow: 'none',
-            color: 'common.white',
-            py: 2,
-            mt: {xs: 5, sm: 5}
-          }}
-        >
-          View Gig details
-        </Button>
-      )}
-
+      {currentUser && currentUser.accountType === 0 && renderJobster(status)}
+      {currentUser && currentUser.accountType === 1 && renderClient(status)}
       {currentUser && currentUser.accountType !== 0 && (status === 'Applying' || status === 'Waiting') && (
         <Button
           endIcon={<ChevronIconRight />}
@@ -172,8 +230,8 @@ const NotificationDetailsCard = ({details, currentUser}) => {
 }
 
 NotificationDetailsCard.propTypes = {
-  details: PropTypes.oneOfType[(PropTypes.object, PropTypes.array)],
-  currentUser: PropTypes.object
+  details: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  currentUser: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 }
 
 export default NotificationDetailsCard

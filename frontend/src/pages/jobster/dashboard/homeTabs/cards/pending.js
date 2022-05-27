@@ -10,7 +10,6 @@ PendingCard.propTypes = {
 
 export default function PendingCard({gig, onView}) {
   let {user, position, hours, fee, from, category, time, status} = gig
-  console.log(gig)
   const {location, thumbnail} = user[0]
   fee = parseFloat(fee)
   let computedGigFee = parseFloat(fee * hours)

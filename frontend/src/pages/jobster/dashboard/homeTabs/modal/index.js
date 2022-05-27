@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import React, {useState} from 'react'
+import React from 'react'
 import {Global} from '@emotion/react'
 import {styled} from '@mui/styles'
 import {grey} from '@mui/material/colors'
@@ -27,8 +27,7 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)'
 }))
 
-const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift}) => {
-  const [loading, setLoading] = useState(false)
+const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) => {
   let {user, shift, position, hours, fee, time, from, status, category} = gig
 
   fee = parseFloat(fee)
@@ -37,15 +36,10 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift}) => {
   let _total = parseFloat(fee + voluntaryFee)
 
   const handleEndShift = (value) => {
-    setLoading(true)
     try {
       onEndShift(value)
     } catch (error) {
       console.log(error)
-    } finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 3000)
     }
   }
 
@@ -69,17 +63,14 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift}) => {
   }
 
   const handleClick = (value) => {
-    setLoading(true)
     try {
       let form_data = {
         new_status: _label(value.status),
         ...value
       }
-      onClick(form_data)
+      onClick(form_data, value)
     } catch (error) {
       console.log(error)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -295,7 +286,8 @@ CurrentModalPopup.propTypes = {
   open: PropTypes.bool,
   onClick: PropTypes.func,
   onClose: PropTypes.func,
-  onEndShift: PropTypes.func
+  onEndShift: PropTypes.func,
+  loading: PropTypes.bool
 }
 
 export default CurrentModalPopup

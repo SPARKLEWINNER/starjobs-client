@@ -20,6 +20,7 @@ import {EndShiftNotification} from 'src/components/notifications'
 // api
 import gigs_api from 'src/lib/gigs'
 import {useAuth} from 'src/contexts/AuthContext'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // variable
 const DRAWER_WIDTH = 280
@@ -63,9 +64,11 @@ const Dashboard = () => {
   const [gigs, setGigs] = useState([])
   // const [gigPop, setGigPop] = useState([])
   // const [open, setOpen] = useState(false)
+  const [isLoading, setLoading] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
   const [value, setValue] = useState('1')
+  const {sendGigNotification} = useSendNotif()
 
   useEffect(() => {
     let componentMounted = true
@@ -165,21 +168,34 @@ const Dashboard = () => {
     setConfirmOpen(false)
   }
 
-  const handleConfirmEndShift = async () => {
+  const handleConfirmEndShift = async (values) => {
+    setLoading(true)
     let form_data = {
       status: 'End-Shift',
-      uid: gigConfirm.auid
+      uid: gigConfirm.auid,
+      actualTime: values.actualTime,
+      actualRate: values.actualRate
     }
 
-    const result = await gigs_api.patch_gigs_apply(gigConfirm._id, form_data)
-    if (!result.ok) {
-      enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-      return
+    try {
+      const result = await gigs_api.patch_gigs_apply(gigConfirm._id, form_data)
+      if (!result.ok) {
+        enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
+        return
+      }
+      await sendGigNotification({
+        title: `${currentUser.name} has indicated end-shift`,
+        body: 'Check gig in progress',
+        targetUsers: [values.uid],
+        additionalData: values
+      })
+      enqueueSnackbar('Success informing the client you have ended your shift', {variant: 'success'})
+      navigate('/freelancer/dashboard?tab=1')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-
-    enqueueSnackbar('Success informing the client you are pushing through', {variant: 'success'})
-    // setOpen(false)
-    navigate('/freelancer/dashboard?tab=1')
   }
 
   const handleChange = (event, newValue) => {
@@ -219,6 +235,7 @@ const Dashboard = () => {
           handleClose={handleEndShiftClose}
           gig={gigConfirm}
           onCommit={handleConfirmEndShift}
+          loading={isLoading}
         />
 
         {/* <IncomingNotification

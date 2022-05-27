@@ -32,6 +32,7 @@ export default function About({form}) {
                         <Typography
                           key={ix}
                           variant="body2"
+                          component="span"
                           sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
                         >
                           - {im}
@@ -58,7 +59,12 @@ export default function About({form}) {
                 {form.expertise.skillOffer &&
                   form.expertise.skillOffer.split('=>').map((im, ix) => {
                     return (
-                      <Typography key={ix} variant="body2" sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}>
+                      <Typography
+                        key={ix}
+                        variant="body2"
+                        component="span"
+                        sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
+                      >
                         - {im}
                       </Typography>
                     )
@@ -88,6 +94,7 @@ export default function About({form}) {
                           <Typography
                             key={ix}
                             variant="body2"
+                            component="span"
                             sx={{mb: 0, marginTop: '0 !important', fontWeight: 'bold'}}
                           >
                             - {im}
@@ -225,7 +232,7 @@ export default function About({form}) {
             <Box sx={{mt: 2}}>
               <Typography variant="body2">Vocational Program</Typography>
               <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
-                <Typography variant="body2" sx={{fontWeight: 'bold'}}>
+                <Typography variant="body2" component="span" sx={{fontWeight: 'bold'}}>
                   {form.education.vocationalProgram}
                 </Typography>
               </Stack>

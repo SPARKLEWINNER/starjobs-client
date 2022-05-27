@@ -159,10 +159,10 @@ var controllers = {
                     })
                     .sort({ createdAt: -1 })
                     .exec();
-
+                
                 details = {
                     ...user,
-                    account: user[0].isActive ? user[0].account[0] : [],
+                    account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
                     gigs: reports.filter((obj) => {
                         const diff = moment(obj.from).diff(now);
 
@@ -232,7 +232,11 @@ var controllers = {
             category,
             position,
             breakHr,
-            fees,
+            fees: {
+                ...fees,
+                proposedWorkTime: 0,
+                proposedRate: 0,
+            },
             location,
             contactNumber,
             notes,

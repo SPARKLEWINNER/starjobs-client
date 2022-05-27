@@ -12,10 +12,11 @@ import {BillingCard} from './cards'
 import CurrentModalPopup from './modal'
 
 // api
-import gigs_api from 'src/lib/gigs'
+// import gigs_api from 'src/lib/gigs'
 
 // theme
 import color from 'src/theme/palette'
+// import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
@@ -23,19 +24,30 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
   const [isLoading, setLoading] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [SELECTED_GIG, setSelectedGig] = useState([])
-  const handleAction = async (value) => {
+  // const {sendGigNotification} = useSendNotif()
+
+  const handleAction = async () => {
     setLoading(true)
     if (!user) return
-    let form_data = {
-      status: value.new_status,
-      uid: user._id
-    }
+    // let form_data = {
+    //   status: value.new_status,
+    //   uid: user._id
+    // }
 
-    const result = await gigs_api.patch_gigs_apply(value._id, form_data)
-    if (!result.ok) {
-      enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-      return setLoading(false)
-    }
+    console.log(user)
+
+    // const result = await gigs_api.patch_gigs_apply(value._id, form_data)
+    // if (!result.ok) {
+    //   enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
+    //   return setLoading(false)
+    // }
+
+    // await sendGigNotification({
+    //   title: 'You have been accepted',
+    //   body: 'Please report to the location at the correct time',
+    //   targetUsers: [applicantId],
+    //   additionalData: result
+    // })
 
     enqueueSnackbar('Success informing the client', {variant: 'success'})
     setLoading(false)

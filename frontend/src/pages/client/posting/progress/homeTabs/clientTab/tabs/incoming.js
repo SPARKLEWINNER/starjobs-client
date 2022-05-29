@@ -30,16 +30,15 @@ export default function IncomingTab({gigs, user, selected}) {
 
   const handleAction = async (value) => {
     if (!user) return
-    const {new_status, auid: jobster_id} = value
+    const {auid: jobster_id} = value
+    console.log('IncomingTab', value)
 
-    if (new_status === 'Confirm-Arrived') {
-      await sendGigNotification({
-        title: `Client confirmed your arrival`,
-        body: 'View gig in progress',
-        targetUsers: [jobster_id],
-        additionalData: value
-      })
-    }
+    await sendGigNotification({
+      title: `Client confirmed your arrival`,
+      body: 'View gig in progress',
+      targetUsers: [jobster_id],
+      additionalData: value
+    })
 
     let form_data = {
       status: 'Confirm-Arrived',

@@ -38,6 +38,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
   const handleAction = async (value) => {
     if (!user) return
     const {new_status, auid: jobster_id} = value
+    console.log('CurrentTab', new_status)
 
     if (new_status === 'Confirm-Arrived') {
       await sendGigNotification({

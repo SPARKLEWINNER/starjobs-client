@@ -71,7 +71,6 @@ const Dashboard = () => {
   const {sendGigNotification} = useSendNotif()
 
   useEffect(() => {
-    let componentMounted = true
     const load = async () => {
       if (params?.search) {
         const get_tab = params?.search?.split('?tab=')[1]
@@ -91,16 +90,10 @@ const Dashboard = () => {
       const data = result.data.gigs.sort((a, b) =>
         moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1
       )
-
-      if (componentMounted) {
-        setGigs(data)
-      }
+      setGigs(data)
     }
 
     load()
-    return () => {
-      componentMounted = false
-    }
     // eslint-disable-next-line
   }, [])
 

@@ -205,8 +205,8 @@ var controllers = {
                             { _id: Types.ObjectId(id) },
                             {
                                 status: status,
-                                hours: gigs.proposedWorkTime,
-                                fee: gigs.proposedRate,
+                                hours: gigs.fees.proposedWorkTime,
+                                fee: gigs.fees.proposedRate,
                                 fees: {
                                     computedFeeByHr: computedFeeByHr,
                                     voluntaryFee: voluntaryFee,

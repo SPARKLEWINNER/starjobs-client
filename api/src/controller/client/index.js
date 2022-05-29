@@ -284,6 +284,7 @@ var controllers = {
                         // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
                     })
                     .exec();
+                console.log("gigs", gigs)
                 gigs = await Promise.all(
                     gigs &&
                         gigs

@@ -59,13 +59,13 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
       gigs &&
         gigs.map((value) => {
           const now = moment(new Date())
-          const {status, from, date} = value
+          const {status, from} = value
           const diff = moment(from).diff(now)
 
           //express as a duration
           const diffDuration = moment.duration(diff)
 
-          if (!moment(date).isSame(moment(), 'day')) return false
+          if (diffDuration.hours() < -10) return false
           switch (status) {
             case 'Confirm-Gig':
             case 'On-the-way':

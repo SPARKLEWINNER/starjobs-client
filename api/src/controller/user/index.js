@@ -24,7 +24,7 @@ var controllers = {
             user = await User.find({_id: mongoose.Types.ObjectId(id)})
                 .lean()
                 .exec();
-
+            
             if (user[0].accountType === 1) {
                 result = await Client.find({uid: mongoose.Types.ObjectId(id)}, {photo: 1})
                     .lean()

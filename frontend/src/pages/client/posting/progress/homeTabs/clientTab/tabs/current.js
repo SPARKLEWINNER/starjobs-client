@@ -37,10 +37,9 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
 
   const handleAction = async (value) => {
     if (!user) return
-    const {new_status, auid: jobster_id} = value
-    console.log('CurrentTab', new_status)
+    const {auid: jobster_id} = value
 
-    if (new_status === 'Confirm-Arrived') {
+    if (value.status === 'Confirm-Gig') {
       await sendGigNotification({
         title: `Client confirmed your arrival`,
         body: 'View gig in progress',
@@ -50,7 +49,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
     }
 
     let form_data = {
-      status: value.new_status,
+      status: 'Confirm-Arrived',
       uid: user._id
     }
 

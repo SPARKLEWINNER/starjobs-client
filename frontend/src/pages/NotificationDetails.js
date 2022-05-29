@@ -41,18 +41,13 @@ const NotificationDetailsPage = () => {
     // eslint-disable-next-line
   }, [])
 
-  useEffect(() => {
-    load()
-    // eslint-disable-next-line
-  }, [params])
-
   return (
     <Page title="Notification Details - Starjobs">
       <MainStyle alignItems="center" justify="center" sx={{my: 3, paddingLeft: {xs: 3}, paddingRight: {xs: 3}}}>
         <Typography variant="h4" sx={{display: 'block', width: '100%', textAlign: 'center', mt: 5}}>
           Notification Details
         </Typography>
-        <NotificationsDetailsCard details={data} />
+        <NotificationsDetailsCard details={data} currentUser={currentUser} />
       </MainStyle>
     </Page>
   )

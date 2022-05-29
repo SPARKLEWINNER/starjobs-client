@@ -29,6 +29,8 @@ import storage from 'src/utils/storage'
 // theme
 import color from 'src/theme/palette'
 
+import useSendNotif from 'src/utils/hooks/useSendNotif'
+
 // variables
 const DRAWER_WIDTH = 280
 const APPBAR_DESKTOP = 200
@@ -94,6 +96,8 @@ export default function TabsComponent() {
   const [open, setOpen] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [isNotVerified, setNotVerified] = useState(true)
+  const {sendGigNotification} = useSendNotif()
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
@@ -188,9 +192,16 @@ export default function TabsComponent() {
       return setLoading(false)
     }
 
+    await sendGigNotification({
+      title: 'You have been accepted',
+      body: 'View gig in progress',
+      targetUsers: [params.id],
+      additionalData: result
+    })
+
     enqueueSnackbar('Applicant accepted and notified', {variant: 'success'})
     setLoading(false)
-    navigate('/client/app')
+    navigate('/client/gig/create?tab=2')
 
     setLoading(false)
   }
@@ -266,7 +277,7 @@ export default function TabsComponent() {
 
               <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
                 <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
-                  <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative'}}>
+                  <Typography variant="h3" sx={{mr: 1, width: '75%', wordBreak: 'break-all', position: 'relative'}}>
                     {capitalCase(`${user.firstName} ${user.middleInitial} ${user.lastName}`)}
                     <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
                       <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
@@ -292,12 +303,12 @@ export default function TabsComponent() {
                     sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
                   >
                     {!user.permanentCity ? (
-                      <Typography variant="body2" sx={{mb: 3}}>
+                      <Typography variant="body2" component="span" sx={{mb: 3}}>
                         {' '}
                         {user.presentCity}{' '}
                       </Typography>
                     ) : (
-                      <Typography variant="body2" sx={{ml: 1}}>
+                      <Typography variant="body2" component="span" sx={{ml: 1}}>
                         {' '}
                         {user.permanentCity}{' '}
                       </Typography>
@@ -367,7 +378,7 @@ export default function TabsComponent() {
               Accept
             </Button>
             <Button variant="outlined" sx={{mb: 5}} onClick={handleDeclineApplication}>
-              Decline Application
+              Decline Proposal
             </Button>
 
             <ConfirmApplicationDialog open={open} onCommit={handleSubmit} handleClose={handleClose} />

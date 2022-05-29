@@ -12,13 +12,14 @@ import {RatingsContext} from 'src/contexts/rating'
 
 // component
 import {PendingTab, IncomingTab, CurrentTab, BillingTab} from './tabs'
-import {IncomingNotification, ConfirmEndShiftNotification} from 'src/components/notifications'
+import {ConfirmEndShiftNotification} from 'src/components/notifications'
 
 // api
 import gigs_api from 'src/lib/gigs'
 import {useAuth} from 'src/contexts/AuthContext'
 
 import {useLocation} from 'react-router-dom'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 const useStyles = makeStyles({
   nav_item: {
@@ -49,13 +50,13 @@ export default function TabsComponent() {
   const params = useLocation()
   const classes = useStyles()
   const {toggleDrawer} = useContext(RatingsContext)
+  const [isLoading, setLoading] = useState(false)
   const [value, setValue] = useState('1')
   const {enqueueSnackbar} = useSnackbar()
   const [gigs, setGigs] = useState([])
-  const [gigPop, setGigPop] = useState([])
-  const [open, setOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
+  const {sendGigNotification} = useSendNotif()
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -77,7 +78,6 @@ export default function TabsComponent() {
         moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1
       )
       if (componentMounted) {
-        checkNotice(data)
         setGigs(data)
       }
     }
@@ -89,62 +89,6 @@ export default function TabsComponent() {
     // eslint-disable-next-line
   }, [])
 
-  const checkNotice = (data) => {
-    if (!data) return
-    const arrived = data.filter((obj) => obj['status'] && obj['status'].includes('Arrived'))
-    if (!arrived) return
-    Object.values(arrived).forEach((value) => {
-      if (value.auid !== currentUser._id) return
-      if (moment(value.date).isBefore(moment(), 'day')) return
-      if (moment(value.date).isSame(moment(), 'day')) {
-        handleNotice(value)
-      }
-    })
-  }
-
-  const handleNotice = (value) => {
-    setOpen(true)
-    setGigPop(value)
-  }
-
-  const handleNoticeClose = () => {
-    setOpen(false)
-  }
-
-  const handleAccepted = async (value) => {
-    let form_data = {
-      status: value.new_status,
-      uid: currentUser._id
-    }
-
-    const result = await gigs_api.patch_gigs_apply(value._id, form_data)
-    if (!result.ok) {
-      enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-      return
-    }
-
-    enqueueSnackbar('Success informing the client you are pushing through', {variant: 'success'})
-    setOpen(false)
-    window.location.reload()
-  }
-
-  const handleCancelled = async (value) => {
-    let form_data = {
-      status: value.new_status,
-      uid: currentUser._id
-    }
-
-    const result = await gigs_api.patch_gigs_apply(value._id, form_data)
-    if (!result.ok) {
-      enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-      return
-    }
-
-    enqueueSnackbar('Success informing the client that you are not pushing through', {variant: 'success'})
-    setOpen(false)
-    window.location.reload()
-  }
-
   const handleEndShift = (value) => {
     setConfirmGig(value)
     setConfirmOpen(true)
@@ -154,21 +98,42 @@ export default function TabsComponent() {
     setConfirmOpen(false)
   }
 
-  const handleConfirmEndShift = async () => {
+  const handleConfirmEndShift = async (values) => {
+    setLoading(true)
     let form_data = {
       status: 'Confirm-End-Shift',
       uid: gigConfirm.auid
     }
+    try {
+      const result = await gigs_api.patch_gigs_apply(gigConfirm._id, form_data)
+      if (!result.ok) {
+        enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
+        return
+      }
 
-    const result = await gigs_api.patch_gigs_apply(gigConfirm._id, form_data)
-    if (!result.ok) {
-      enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-      return
+      console.log(values)
+      await sendGigNotification({
+        title: 'Gig success',
+        body: 'To monitor gig fee View gig in progress',
+        targetUsers: [gigConfirm.auid],
+        additionalData: values
+      })
+
+      await sendGigNotification({
+        title: 'Gig success',
+        body: 'To monitor gig fee View gig in progress',
+        targetUsers: [values.uid],
+        additionalData: values
+      })
+
+      setConfirmOpen(false)
+      await toggleDrawer(true, gigConfirm._id)
+      enqueueSnackbar('Success confirmed gig has ended', {variant: 'success'})
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(true)
     }
-    setConfirmOpen(false)
-    await toggleDrawer(true, gigConfirm._id)
-    enqueueSnackbar('Success informing the client you are pushing through', {variant: 'success'})
-    setOpen(false)
   }
 
   const renderTab = (type) => {
@@ -206,14 +171,7 @@ export default function TabsComponent() {
         handleClose={handleEndShiftClose}
         gig={gigConfirm}
         onCommit={handleConfirmEndShift}
-      />
-
-      <IncomingNotification
-        open={open ?? false}
-        handleClose={handleNoticeClose}
-        gig={gigPop}
-        onCommit={handleAccepted}
-        onReject={handleCancelled}
+        loading={isLoading}
       />
     </>
   )

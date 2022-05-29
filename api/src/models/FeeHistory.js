@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema, Types } = mongoose;
-const collectionName = 'gigs';
+const collectionName = 'feehistory';
 const userSchema = new Schema(
     {
         _id: { type: Types.ObjectId, ref: 'Client' },
@@ -13,7 +13,8 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-const gigsData = {
+const feeHistoryData = {
+    gigid: { type: Types.ObjectId, ref: 'Gigs' },
     auid: { type: Types.ObjectId, ref: 'Client' },
     from: String,
     time: String,
@@ -31,37 +32,9 @@ const gigsData = {
     position: String,
     location: String,
     contactNumber: String,
-    isApprove: {
-        type: Boolean,
-        default: false
-    },
     notes: String,
     dateCreated: Date,
     user: [userSchema],
-    status: {
-        type: String,
-        default: 'Waiting',
-        enum: [
-            'Waiting',
-            'Applying',
-            'Accepted',
-            'Confirm-Gig',
-            'On-the-way',
-            'Arrived',
-            'Confirm-Arrived',
-            'On-going',
-            'End-Shift',
-            'Confirm-End-Shift',
-            'Paid',
-            'Complete',
-            'No-Appearance',
-            'Cancelled',
-            'Archived'
-        ]
-    },
-    statusMessage: {
-        type: String
-    },
     locationRate: {
         default: 'NCR',
         type: String,
@@ -79,8 +52,8 @@ const gigsData = {
         jobsterTotal: String,
         proposedRate: String,
         proposedWorkTime: String,
-    }
+    },
 };
 
-const gigsSchema = new Schema(gigsData, { timestamps: true });
-module.exports = mongoose.model('Gigs', gigsSchema, collectionName);
+const feeHistorySchema = new Schema(feeHistoryData, { timestamps: true });
+module.exports = mongoose.model('FeeHistory', feeHistorySchema, collectionName);

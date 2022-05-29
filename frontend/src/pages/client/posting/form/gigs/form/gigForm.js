@@ -13,7 +13,7 @@ import {calculations} from 'src/utils/gigComputation'
 import PropTypes from 'prop-types'
 
 GigForm.propTypes = {
-  formData: PropTypes.object,
+  formData: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   onNext: PropTypes.func,
   onStoreData: PropTypes.func
 }

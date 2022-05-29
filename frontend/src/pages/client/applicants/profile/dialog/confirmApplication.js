@@ -20,7 +20,7 @@ const ConfirmApplicationDialog = ({open, onCommit, handleClose}) => {
     <div>
       <Dialog open={open}>
         <DialogTitle sx={{textAlign: 'center', pt: 5, pb: 0}}>
-          <Typography variant="h4">Confirm Application</Typography>
+          <Typography variant="h4">Confirm Proposal</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>

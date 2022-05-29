@@ -15,6 +15,8 @@ const logger = require('../../services/logger');
 const { timeCal } = require('../../services/timeCalculator');
 const { BUCKET_URL } = process.env;
 
+const notification = require('../../services/notification')
+
 var controllers = {
     // list of gigs
     get_gigs: async function (req, res) {
@@ -157,10 +159,10 @@ var controllers = {
                     })
                     .sort({ createdAt: -1 })
                     .exec();
-
+                
                 details = {
                     ...user,
-                    account: user[0].isActive ? user[0].account[0] : [],
+                    account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
                     gigs: reports.filter((obj) => {
                         const diff = moment(obj.from).diff(now);
 
@@ -193,6 +195,7 @@ var controllers = {
         const { id } = req.params;
         const { time, shift, hours, fee, date, category, position, breakHr, from, fees, locationRate, location, contactNumber, notes } = req.body;
         const now = new Date();
+
 
         const isUserExists = await User.find({ _id: mongoose.Types.ObjectId(id), accountType: 1 })
             .lean()
@@ -229,7 +232,11 @@ var controllers = {
             category,
             position,
             breakHr,
-            fees,
+            fees: {
+                ...fees,
+                proposedWorkTime: 0,
+                proposedRate: 0,
+            },
             location,
             contactNumber,
             notes,
@@ -237,9 +244,12 @@ var controllers = {
             uid: mongoose.Types.ObjectId(id),
             dateCreated: now.toISOString()
         });
-
+        
+ 
+        
         try {
-            await Gigs.create(gigsObj);
+            const postedGig = await Gigs.create(gigsObj);
+            await notification.globalNotification(postedGig);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Gigs.post_gig', gigsObj, client[0]._id, 'POST');

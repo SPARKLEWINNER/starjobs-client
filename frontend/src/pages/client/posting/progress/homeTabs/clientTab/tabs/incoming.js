@@ -2,21 +2,69 @@ import {useState, useEffect} from 'react'
 import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
 import {IncomingCard} from '../../../cards'
+import CurrentModalPopup from '../modal'
 
 // theme
 import color from 'src/theme/palette'
 import PropTypes from 'prop-types'
+import {useSnackbar} from 'notistack'
+import gigs_api from 'src/lib/gigs'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
+import {useNavigate} from 'react-router-dom'
 
 IncomingTab.propTypes = {
-  gigs: PropTypes.array,
-  user: PropTypes.array,
+  gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   selected: PropTypes.string
 }
 
 const incoming_status = ['Accepted']
 
-export default function IncomingTab({gigs, selected}) {
+export default function IncomingTab({gigs, user, selected}) {
+  const {enqueueSnackbar} = useSnackbar()
+  const navigate = useNavigate()
   const [FILTERED_DATA, setData] = useState([])
+  const [SELECTED_GIG, setSelectedGig] = useState([])
+  const [openModal, setOpenModal] = useState(false)
+  const {sendGigNotification} = useSendNotif()
+
+  const handleAction = async (value) => {
+    if (!user) return
+    const {new_status, auid: jobster_id} = value
+
+    if (new_status === 'Confirm-Arrived') {
+      await sendGigNotification({
+        title: `Client confirmed your arrival`,
+        body: 'View gig in progress',
+        targetUsers: [jobster_id],
+        additionalData: value
+      })
+    }
+
+    let form_data = {
+      status: 'Confirm-Arrived',
+      uid: user._id
+    }
+
+    const result = await gigs_api.patch_gigs_apply(value._id, form_data)
+    if (!result.ok) {
+      enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
+      return
+    }
+
+    enqueueSnackbar('Success informing the jobster', {variant: 'success'})
+    navigate('/client/gig/create?tab=1')
+  }
+  const handleView = async (gig) => {
+    setOpenModal(true)
+    const get_gig_details = await gigs_api.get_gig_details(gig._id)
+    if (!get_gig_details.ok) return enqueueSnackbar('Unable to get gig details', {variant: 'error'})
+    setSelectedGig(get_gig_details.data)
+  }
+
+  const handleCloseView = () => {
+    setOpenModal(false)
+  }
 
   useEffect(() => {
     const processFilter = () => {
@@ -45,7 +93,7 @@ export default function IncomingTab({gigs, selected}) {
       <Box sx={{px: 1}}>
         {FILTERED_DATA &&
           FILTERED_DATA.map((v, k) => {
-            return <IncomingCard gig={v} key={k} />
+            return <IncomingCard gig={v} key={k} onView={() => handleView(v)} />
           })}
 
         {(!FILTERED_DATA || FILTERED_DATA.length === 0) && (
@@ -56,6 +104,10 @@ export default function IncomingTab({gigs, selected}) {
           </Card>
         )}
       </Box>
+
+      {SELECTED_GIG.length !== 0 && (
+        <CurrentModalPopup gig={SELECTED_GIG || []} open={openModal} onClick={handleAction} onClose={handleCloseView} />
+      )}
     </Box>
   )
 }

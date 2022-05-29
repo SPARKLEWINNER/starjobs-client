@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import PropTypes from 'prettier'
+import PropTypes from 'prop-types'
 import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
@@ -67,7 +67,6 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
 
           if (!moment(date).isSame(moment(), 'day')) return false
           switch (status) {
-            case 'Accepted':
             case 'Confirm-Gig':
             case 'On-the-way':
             case 'Arrived':
@@ -115,6 +114,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
           onClick={handleAction}
           onClose={handleCloseView}
           onEndShift={handleEndShift}
+          loading={isLoading}
         />
       )}
     </Box>
@@ -123,7 +123,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
 
 CurrentTab.propTypes = {
   gigs: PropTypes.array,
-  user: PropTypes.object,
+  user: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   onEndShift: PropTypes.func
 }
 

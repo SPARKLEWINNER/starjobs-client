@@ -8,7 +8,6 @@ import PropTypes from 'prop-types'
 const NotificationCardV2 = ({
   id = '',
   uid = '',
-  userType = 0,
   title = 'Title',
   body = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
   type = 'Notification',
@@ -16,7 +15,6 @@ const NotificationCardV2 = ({
   isRead = false,
   onCardClick = () => {}
 }) => {
-  const parseData = notifData && JSON.parse(notifData)
   const navigate = useNavigate()
 
   const notifClickHandler = () => {
@@ -28,13 +26,12 @@ const NotificationCardV2 = ({
 
   const gigNotifClickHandler = () => {
     let jsonData = JSON.parse(notifData)
-    console.log(jsonData)
     //route to gig details page
     if (notifData) {
-      if (userType === 1) {
-        navigate(`/notification/details/${jsonData.data._id}/${jsonData.data._id}`)
+      if (jsonData.data) {
+        return navigate(`/notification/details/${jsonData.data._id}/${jsonData.data._id}`)
       } else {
-        navigate(`/notification/details/${jsonData.data._id}/${jsonData.data._id}`)
+        return navigate(`/notification/details/${jsonData._id}/${jsonData._id}`)
       }
     }
   }
@@ -66,7 +63,6 @@ const NotificationCardV2 = ({
     }
   }
 
-  console.log(parseData)
   return (
     <Card
       sx={{p: 0, display: 'flex', my: 1}}

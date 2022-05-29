@@ -49,13 +49,13 @@ const ListApplicants = ({details: gig, applicants}) => {
 
     await sendGigNotification({
       title: 'You have been accepted',
-      body: 'Please report to the location at the correct time',
+      body: 'View gig in progress',
       targetUsers: [applicantId],
       additionalData: result
     })
 
     enqueueSnackbar('Applicant accepted and notified', {variant: 'success'})
-    navigation('/client/gig/create?tab=1')
+    navigation('/client/gig/create?tab=2')
   }
 
   return (

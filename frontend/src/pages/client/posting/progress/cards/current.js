@@ -10,11 +10,11 @@ import PropTypes from 'prop-types'
 function change_label_by_status(status) {
   switch (status) {
     case 'Confirm-Gig':
-      return 'Jobster confirmed the gig'
+      return 'Click when jobster arrived'
     case 'Confirm-Arrived':
       return 'Jobster working'
     case 'End-Shift':
-      return 'Jobster shift ended'
+      return 'Click to Confirm End Shift'
     default:
       return status
   }

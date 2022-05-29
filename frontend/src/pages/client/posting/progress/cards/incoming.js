@@ -9,25 +9,17 @@ import Label from 'src/components/Label'
 import PropTypes from 'prop-types'
 
 IncomingCard.propTypes = {
-  gig: PropTypes.object
+  gig: PropTypes.object,
+  onView: PropTypes.func
 }
 
-export default function IncomingCard({gig}) {
-  let applicants
-  if (gig && gig.numberofApplicants > 0) {
-    applicants = `${gig.numberofApplicants} ${
-      gig && gig.numberofApplicants && gig.numberofApplicants.length > 0 ? 'applicants' : 'applicant'
-    }`
-  } else {
-    applicants = '0 Applicant'
-  }
-
+export default function IncomingCard({gig, onView}) {
   const {position, _id, hours, fee, from, date, status, time, locationRate} = gig
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
   let {serviceCost} = calculations(hours, fee, locationRate)
 
   return (
-    <Card sx={{p: 1, display: 'flex', mb: 2}}>
+    <Card sx={{p: 1, display: 'flex', mb: 2}} onClick={() => onView()}>
       <Box sx={{display: 'flex', flexDirection: 'column', width: {sm: '100%', xs: '100%'}, p: 1}}>
         <CardContent sx={{p: '0 !important'}}>
           <Stack direction="row" sx={{width: '100%', alignItems: 'center'}}>
@@ -65,8 +57,8 @@ export default function IncomingCard({gig}) {
 
           <Stack direction="row" sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
             <Box sx={{mr: 2}}>
-              <Typography variant="overline" sx={{fontSize: 10}} color="default">
-                {applicants}
+              <Typography variant="overline" sx={{fontSize: 10, textTransform: 'uppercase'}} color="default">
+                {status === 'Accepted' && 'For Pushing through'}
               </Typography>
             </Box>
             {(status === 'Waiting' || status === 'Applying') && (

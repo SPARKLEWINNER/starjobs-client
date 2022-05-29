@@ -242,7 +242,7 @@ var controllers = {
         } catch (error) {
             console.error(error);
 
-            await logError(error, 'Accounts', null, id, 'GET');
+            await logger.logError(error, 'Accounts', null, id, 'GET');
             return res.status(502).json({ success: false, msg: 'User not found' });
         }
 

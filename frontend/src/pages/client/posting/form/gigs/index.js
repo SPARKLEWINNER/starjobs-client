@@ -139,6 +139,6 @@ export default function CreatGigForm({user, category}) {
 }
 
 CreatGigForm.propTypes = {
-  user: PropTypes.object,
-  category: PropTypes.object
+  user: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string])
 }

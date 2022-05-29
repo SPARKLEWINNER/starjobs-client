@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {Global} from '@emotion/react'
 import {styled} from '@mui/styles'
 import {grey} from '@mui/material/colors'
@@ -36,7 +36,8 @@ CurrentModalPopup.propTypes = {
   open: PropTypes.bool,
   onClick: PropTypes.func,
   onClose: PropTypes.func,
-  onEndShift: PropTypes.func
+  onEndShift: PropTypes.func,
+  loading: PropTypes.bool
 }
 
 // variable
@@ -62,8 +63,7 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)'
 }))
 
-export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift}) {
-  const [loading, setLoading] = useState(false)
+export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift, loading}) {
   let {history, position, hours, fee, time, from, status, category, account, locationRate} = gig
 
   const {firstName, middleInitial, lastName, photo} = account[0]
@@ -74,34 +74,18 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
   fee = parseFloat(fee)
 
   const handleEndShift = (value) => {
-    setLoading(true)
-
     try {
       onEndShift(value)
     } catch (error) {
       console.log(error)
-    } finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 3000)
     }
   }
 
   const handleClick = (value) => {
-    setLoading(true)
-
     try {
-      let form_data = {
-        new_status: _label(value.status),
-        ...value
-      }
-      onClick(form_data)
+      onClick(value)
     } catch (error) {
       console.log(error)
-    } finally {
-      setTimeout(() => {
-        setLoading(false)
-      }, 3000)
     }
   }
 
@@ -226,7 +210,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
                         <Stack sx={{my: 1}}>
                           <Typography variant="body2">No. of {category === 'parcels' ? 'Parcels' : 'Hours'}</Typography>
                           <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                            {hours} {category === 'parcels' ? 'Parcels' : 'Hours'}
+                            {hours && hours} {category && category === 'parcels' ? 'Parcels' : 'Hours'}
                           </Typography>
                         </Stack>
 
@@ -242,23 +226,25 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
                   <Stack>
                     <ListWrapperStyle>
                       <List>
-                        {Object.values(history).map((v, k) => {
-                          return (
-                            <ListItem key={k}>
-                              <ListItemAvatar>
-                                <Avatar>
-                                  <CheckIcon />
-                                </Avatar>
-                              </ListItemAvatar>
-                              <ListItemText
-                                primary={v.status}
-                                secondary={`${new Date(v.updatedAt).toDateString()} ${new Date(
-                                  v.updatedAt
-                                ).toLocaleTimeString()}`}
-                              />
-                            </ListItem>
-                          )
-                        })}
+                        {history &&
+                          history.length > 0 &&
+                          Object.values(history).map((v, k) => {
+                            return (
+                              <ListItem key={k}>
+                                <ListItemAvatar>
+                                  <Avatar>
+                                    <CheckIcon />
+                                  </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                  primary={v.status}
+                                  secondary={`${new Date(v.updatedAt).toDateString()} ${new Date(
+                                    v.updatedAt
+                                  ).toLocaleTimeString()}`}
+                                />
+                              </ListItem>
+                            )
+                          })}
                       </List>
                     </ListWrapperStyle>
 

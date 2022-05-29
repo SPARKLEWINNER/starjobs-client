@@ -19,7 +19,6 @@ var controllers = {
             return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'});
         const id = jwt_decode(token)['id'];
 
-        console.log(id)
         try {
             user = await User.find({_id: mongoose.Types.ObjectId(id)})
                 .lean()

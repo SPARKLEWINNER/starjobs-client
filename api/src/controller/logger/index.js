@@ -12,7 +12,6 @@ var controllers = {
                 }
             })
                 .exec();
-            console.log(logs)
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'LOGS.get_logs', null, null, 'GET');

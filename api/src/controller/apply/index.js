@@ -65,7 +65,6 @@ async function sendNotification(request, gigs, status) {
             if (!user || !user[0].deviceId) return true;
     
             message = message.pop();
-            console.log(message);
     
             await fetch('https://fcm.googleapis.com/fcm/send', {
                 method: 'post',

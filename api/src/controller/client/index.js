@@ -171,7 +171,6 @@ var controllers = {
 
         try {
             result = await Client.findOneAndUpdate({ uid: mongoose.Types.ObjectId(id) }, { documents: documents });
-            console.log(result);
             user = await User.find({ _id: mongoose.Types.ObjectId(result.uid) })
                 .lean()
                 .exec();
@@ -284,7 +283,6 @@ var controllers = {
                         // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
                     })
                     .exec();
-                console.log("gigs", gigs)
                 gigs = await Promise.all(
                     gigs &&
                         gigs

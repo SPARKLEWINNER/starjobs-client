@@ -55,35 +55,38 @@ async function sendNotification(request, gigs, status) {
             user = await User.find(jobster_id).lean().exec();
         }
 
-        user = user.pop();
-        let message = messageList.filter((obj) => {
-            if (obj.status === status) return obj;
-        });
-
-        // return still to process top level request.
-        if (!message) return true;
-        if (!user || !user.deviceId) return true;
-
-        message = message.pop();
-        console.log(message);
-
-        await fetch('https://fcm.googleapis.com/fcm/send', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'key=' + FCM_SERVER_KEY
-            },
-            data: {
-                notification: {
-                    title: message.description,
-                    icon: 'https://app.starjobs.com.ph/images/72x72.png',
-                    click_action: message.type
+        if(user && user.length > 0) {
+            let message = messageList.filter((obj) => {
+                if (obj.status === status) return obj;
+            });
+    
+            // return still to process top level request.
+            if (!message) return true;
+            if (!user || !user[0].deviceId) return true;
+    
+            message = message.pop();
+            console.log(message);
+    
+            await fetch('https://fcm.googleapis.com/fcm/send', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'key=' + FCM_SERVER_KEY
                 },
-                to: user.deviceId
-            }
-        });
-
-        return true;
+                data: {
+                    notification: {
+                        title: message.description,
+                        icon: 'https://app.starjobs.com.ph/images/72x72.png',
+                        click_action: message.type
+                    },
+                    to: user[0].deviceId
+                }
+            });
+            return true;
+        }else{
+            return false;
+        }
+      
     } catch (error) {
         console.log(error);
         await logger.logError(error, 'Apply.send_notification', user.deviceId, null, 'FETCH');

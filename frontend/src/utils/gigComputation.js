@@ -1,13 +1,13 @@
 let pronvicialRate = {
-  sss: 4.3365385,
-  pagibig: 0.7211538,
-  philhealth: 0.4807692
+  sss: 4.3365385, // prev 4.3365385
+  pagibig: 1.00317308, // prev 0.7211538
+  philhealth: 0.4807692 // 0.4807692
 }
 
 let ncrRate = {
-  sss: 5.7692308,
-  pagibig: 1.0096154,
-  philhealth: 0.4807692
+  sss: 6.274033846, // prev 5.7692308,
+  pagibig: 1.34682692, // prev 1.0096154
+  philhealth: 0.4807692 // prev 0.4807692
 }
 
 export function calculations(hours, fee, locationRate) {

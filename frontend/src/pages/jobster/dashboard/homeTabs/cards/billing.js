@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
-
-import {Box, Card, CardContent, Typography} from '@mui/material'
+import {Box, Card, CardContent, Typography, Accordion, AccordionSummary, Stack} from '@mui/material'
+import {Icon} from '@iconify/react'
+import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
+import moment from 'moment'
 
 import {calculations} from 'src/utils/gigComputation'
 
@@ -9,25 +11,66 @@ BillingCard.propTypes = {
 }
 
 export default function BillingCard({gig}) {
-  let {position, hours, fee, locationRate} = gig
+  let {position, hours, from, time, locationRate, fee, _id} = gig
 
   fee = parseFloat(fee)
   let {jobsterTotal} = calculations(hours, fee, locationRate)
 
   return (
     <Card sx={{p: 0, my: 2}}>
-      <Box sx={{p: 3}}>
-        <CardContent sx={{px: 0, paddingBottom: '0 !important', pt: 0, alignItems: 'flex-start'}}>
-          <Typography variant="h5" sx={{fontWeight: 'bold'}}>
-            {position}
-          </Typography>
-          <Typography variant="body2">
-            Pending for remittance: <b>You will receive your gig fee in the next three (3) days</b>. Thank you for using
-            Starjobs.
-            <br /> Gig Fee: <b> P {parseFloat(jobsterTotal).toFixed(2)} / hr</b>
-          </Typography>
-        </CardContent>
-      </Box>
+      <Accordion sx={{p: 0}} key={_id}>
+        <AccordionSummary expandIcon={<Icon icon={arrowIosDownwardFill} width={20} height={20} />}>
+          <Stack direction="column" sx={{alignItems: 'flex-start', px: 1}}>
+            <Typography variant="h5" sx={{fontWeight: 'bold'}}>
+              {position}
+            </Typography>
+            <Typography variant="body2">
+              {' '}
+              Pending for remittance: <b>You will receive your gig fee in the next three (3) days</b>. Thank you for
+              using Starjobs.
+            </Typography>
+          </Stack>
+        </AccordionSummary>
+        <Box sx={{px: 3}}>
+          <CardContent sx={{px: 0, paddingBottom: '0 !important', pt: 0, alignItems: 'flex-start'}}>
+            <Stack direction="row">
+              <Box sx={{p: 1}}>
+                <CardContent sx={{flex: '1 0 auto', p: 0, alignItems: 'flex-start'}}>
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">Position</Typography>
+                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                      {position}
+                    </Typography>
+                  </Stack>
+
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">Date & Time</Typography>
+                    <Typography variant="body1" color="default" sx={{fontWeight: 'bold'}}>
+                      Start: {moment(from).format('MMM-DD hh:mm A')}
+                    </Typography>
+                    <Typography variant="body1" color="default" sx={{fontWeight: 'bold'}}>
+                      End: {moment(time).format('MMM-DD hh:mm A')}
+                    </Typography>
+                  </Stack>
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">No. of Hours</Typography>
+                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                      {hours}
+                    </Typography>
+                  </Stack>
+
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">Total Service Payment</Typography>
+                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                      {parseFloat(jobsterTotal).toFixed(2)}
+                    </Typography>
+                  </Stack>
+                </CardContent>
+              </Box>
+            </Stack>
+          </CardContent>
+        </Box>
+      </Accordion>
     </Card>
   )
 }

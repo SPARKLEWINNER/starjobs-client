@@ -1,4 +1,8 @@
-const moment = require('moment');
+const Moment = require('moment');
+const MomentRange = require('moment-range');
+
+const moment = MomentRange.extendMoment(Moment);
+
 const mongoose = require('mongoose');
 const jwt_decode = require('jwt-decode');
 
@@ -15,7 +19,7 @@ const logger = require('../../services/logger');
 const { timeCal } = require('../../services/timeCalculator');
 const { BUCKET_URL } = process.env;
 
-const notification = require('../../services/notification')
+const notification = require('../../services/notification');
 
 var controllers = {
     // list of gigs
@@ -159,7 +163,7 @@ var controllers = {
                     })
                     .sort({ createdAt: -1 })
                     .exec();
-                
+
                 details = {
                     ...user,
                     account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
@@ -169,8 +173,12 @@ var controllers = {
                         //express as a duration
                         const diffDuration = moment.duration(diff);
 
+                        const previousDays = moment().subtract(3, 'days')
+                        const aheadDays = moment().add(3, 'days')
+                        const range = moment().range(previousDays, aheadDays);
+
                         // between 0 days and 2 days before current day
-                        if (diffDuration.days() >= 0 && diffDuration.days() <= 2) {
+                        if (range.contains(moment(obj.date))) {
                             return obj;
                         }
                         return;
@@ -193,9 +201,24 @@ var controllers = {
     // create gigs
     post_gig: async function (req, res) {
         const { id } = req.params;
-        const { time, shift, hours, fee, date, category, position, breakHr, from, fees, locationRate, location, contactNumber, notes } = req.body;
+        const {
+            time,
+            shift,
+            hours,
+            fee,
+            date,
+            category,
+            position,
+            breakHr,
+            from,
+            fees,
+            locationRate,
+            location,
+            contactNumber,
+            notes,
+            areas
+        } = req.body;
         const now = new Date();
-
 
         const isUserExists = await User.find({ _id: mongoose.Types.ObjectId(id), accountType: 1 })
             .lean()
@@ -235,7 +258,7 @@ var controllers = {
             fees: {
                 ...fees,
                 proposedWorkTime: 0,
-                proposedRate: 0,
+                proposedRate: 0
             },
             location,
             contactNumber,
@@ -244,12 +267,20 @@ var controllers = {
             uid: mongoose.Types.ObjectId(id),
             dateCreated: now.toISOString()
         });
-        
- 
-        
+
         try {
             const postedGig = await Gigs.create(gigsObj);
-            await notification.globalNotification(postedGig);
+
+            if (areas && areas.length > 0) {
+                if (areas.length > 1) {
+                    await areas.map(async (item) => {
+                        await notification.globalNotification(postedGig, item);
+                    });
+                } else {
+                    await notification.globalNotification(postedGig, areas[0]);
+                }
+            }
+            areas && areas.length > 0 && console.log(areas);
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Gigs.post_gig', gigsObj, client[0]._id, 'POST');

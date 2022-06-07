@@ -1,5 +1,6 @@
 import {useState} from 'react'
-// import {useSnackbar} from 'notistack'
+import {useNavigate} from 'react-router-dom'
+import {useSnackbar} from 'notistack'
 import PropTypes from 'prop-types'
 
 import {Box, Stack, Typography, Link, Card} from '@mui/material'
@@ -8,41 +9,57 @@ import {PendingCard} from './cards'
 import CurrentModalPopup from './modal'
 
 // api
-// import gigs_api from 'src/lib/gigs'
+import gigs_api from 'src/lib/gigs'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // theme
 import color from 'src/theme/palette'
 
 const PendingTab = ({gigs, user}) => {
-  // const {enqueueSnackbar} = useSnackbar()
+  const navigate = useNavigate()
+  const {enqueueSnackbar} = useSnackbar()
+  const {sendGigNotification} = useSendNotif()
+
   const [isLoading, setLoading] = useState(false)
   const [SELECTED_GIG, setSelectedGig] = useState([])
   const [openModal, setOpenModal] = useState(false)
 
-  const handleAction = async () => {
+  const handleAction = async (value) => {
     setLoading(true)
     if (!user) return
+    const {new_status, uid: client_id} = value
 
-    console.log(user)
-    // let form_data = {
-    //   status: value.new_status,
-    //   uid: user._id
-    // }
+    if (new_status === 'Confirm-Gig') {
+      await sendGigNotification({
+        title: `${user.name} is pushing through`,
+        body: 'Check gig in progress',
+        targetUsers: [client_id],
+        additionalData: value
+      })
+    }
 
-    // const result = await gigs_api.patch_gigs_apply(value._id, form_data)
-    // if (!result.ok) {
-    //   enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-    //   return setLoading(false)
-    // }
+    let form_data = {
+      status: value.new_status,
+      uid: user._id
+    }
+    try {
+      const result = await gigs_api.patch_gigs_apply(value._id, form_data)
+      if (!result.ok) return enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
 
-    // enqueueSnackbar('Success informing the client', {variant: 'success'})
-    // setLoading(false)
-    // window.location.reload()
+      enqueueSnackbar('Success informing the client', {variant: 'success'})
+      navigate('/freelancer/dashboard?tab=1')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleView = (gig) => {
+  const handleView = async (gig) => {
     setOpenModal(true)
-    setSelectedGig(gig)
+    const get_gig_details = await gigs_api.get_gig_details(gig._id)
+    if (!get_gig_details.ok) return enqueueSnackbar('Unable to get gig details', {variant: 'error'})
+    setSelectedGig(get_gig_details.data)
   }
 
   const handleCloseView = () => {
@@ -75,25 +92,25 @@ const PendingTab = ({gigs, user}) => {
       <Stack sx={{}}>
         {gigs &&
           gigs.map((v, key) => {
-            const {status, date} = v
+            const {status} = v
             if (status === 'Waiting' || status === 'Applying') {
-              if (!moment(date).isBefore(moment(), 'day')) {
-                return (
-                  <Box sx={{mb: 1}} key={key}>
-                    <PendingCard gig={v} onView={() => handleView(v)} isLoading={isLoading} />
-                  </Box>
-                )
-              } else {
-                return ''
-              }
-            } else {
-              return ''
+              return (
+                <Box sx={{mb: 1}} key={key}>
+                  <PendingCard gig={v} onView={() => handleView(v)} isLoading={isLoading} />
+                </Box>
+              )
             }
           })}
       </Stack>
 
       {SELECTED_GIG.length !== 0 && (
-        <CurrentModalPopup gig={SELECTED_GIG || []} open={openModal} onClick={handleAction} onClose={handleCloseView} />
+        <CurrentModalPopup
+          gig={SELECTED_GIG || []}
+          open={openModal}
+          onClick={handleAction}
+          onClose={handleCloseView}
+          loading={isLoading}
+        />
       )}
     </Box>
   )

@@ -143,3 +143,16 @@ input[type='tel'] {
 .react-datepicker__time-container {
   border-left: 1px solid #aeaeae;
 }
+
+#react-select-2-placeholder,
+#react-select-5-placeholder{
+  padding: 0.75rem;
+  background: none !important;
+}
+
+#react-select-2-listbox,
+#react-select-5-listbox{
+  background-color: white;
+  z-index: 99;
+
+}

@@ -4,6 +4,7 @@ export function fCamelCase(text) {
 }
 
 export function nameInitials(text) {
+  if (!text) return ''
   if (text.split(' ').length === 1) {
     return `${text.split('')[0]}.`
   } else {

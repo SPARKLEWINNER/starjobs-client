@@ -93,7 +93,8 @@ function useProvideAuth() {
   }
 
   const sessionUser = () => {
-    setCurrentUser(JSON.parse(storage.getUser()))
+    const store_user = storage.getUser()
+    store_user && setCurrentUser(JSON.parse(store_user))
   }
 
   return {

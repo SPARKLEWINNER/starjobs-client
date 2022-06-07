@@ -62,8 +62,6 @@ const Dashboard = () => {
   const classes = useStyles()
   const {enqueueSnackbar} = useSnackbar()
   const [gigs, setGigs] = useState([])
-  // const [gigPop, setGigPop] = useState([])
-  // const [open, setOpen] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [gigConfirm, setConfirmGig] = useState([])
@@ -96,61 +94,6 @@ const Dashboard = () => {
     load()
     // eslint-disable-next-line
   }, [])
-
-  // const checkNotice = (data) => {
-  //   const incoming = data.filter((obj) => obj['status'].includes('Accepted'))
-  //   if (!incoming) return
-  //   Object.values(incoming).forEach((value) => {
-  //     if (value.auid !== currentUser._id) return
-  //     if (moment(value.date).isBefore(moment(), 'day')) return
-  //     if (moment(value.date).isSame(moment(), 'day')) {
-  //       handleNotice(value)
-  //     }
-  //   })
-  // }
-
-  // const handleNotice = (value) => {
-  //   setOpen(true)
-  //   setGigPop(value)
-  // }
-
-  // const handleNoticeClose = () => {
-  //   setOpen(false)
-  // }
-
-  // const handleAccepted = async (value) => {
-  //   let form_data = {
-  //     status: value.new_status,
-  //     uid: currentUser._id
-  //   }
-
-  //   const result = await gigs_api.patch_gigs_apply(value._id, form_data)
-  //   if (!result.ok) {
-  //     enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-  //     return
-  //   }
-
-  //   enqueueSnackbar('Success informing the client you are pushing through', {variant: 'success'})
-  //   setOpen(false)
-  //   navigate('/freelancer/dashboard?tab=1')
-  // }
-
-  // const handleCancelled = async (value) => {
-  //   let form_data = {
-  //     status: value.new_status,
-  //     uid: currentUser._id
-  //   }
-
-  //   const result = await gigs_api.patch_gigs_apply(value._id, form_data)
-  //   if (!result.ok) {
-  //     enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
-  //     return
-  //   }
-
-  //   enqueueSnackbar('Success informing the client that you are not pushing through', {variant: 'success'})
-  //   setOpen(false)
-  //   navigate('/freelancer/dashboard?tab=1')
-  // }
 
   const handleEndShift = (value) => {
     setConfirmGig(value)
@@ -230,14 +173,6 @@ const Dashboard = () => {
           onCommit={handleConfirmEndShift}
           loading={isLoading}
         />
-
-        {/* <IncomingNotification
-          open={open ?? false}
-          handleClose={handleNoticeClose}
-          gig={gigPop}
-          onCommit={handleAccepted}
-          onReject={handleCancelled}
-        /> */}
       </MainStyle>
     </Page>
   )

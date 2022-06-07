@@ -58,7 +58,7 @@ export default function IncomingCard({gig, onView}) {
           <Stack direction="row" sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
             <Box sx={{mr: 2}}>
               <Typography variant="overline" sx={{fontSize: 10, textTransform: 'uppercase'}} color="default">
-                {status === 'Accepted' && 'For Pushing through'}
+                {status === 'Accepted' && 'Click to push through'}
               </Typography>
             </Box>
             {(status === 'Waiting' || status === 'Applying') && (

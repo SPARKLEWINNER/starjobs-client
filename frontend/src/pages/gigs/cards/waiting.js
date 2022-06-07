@@ -42,7 +42,7 @@ export default function WaitingCard({gig, category}) {
               <Link
                 underline="none"
                 component={RouterLink}
-                to={`/gigs/details/${uid}/${category}`}
+                to={`/gigs/details/${uid}/${category}#${gig._id}`}
                 sx={{wordBreak: 'break-all'}}
               >
                 {position}
@@ -78,7 +78,7 @@ export default function WaitingCard({gig, category}) {
               variant="caption"
               component={RouterLink}
               sx={{textTransform: 'uppercase', fontWeight: 'bold'}}
-              to={`/gigs/details/${uid}/${category}`}
+              to={`/gigs/details/${uid}/${category}#${gig._id}`}
             >
               View {category === 'parcels' ? 'delivery gig' : 'gig'} <Icon icon={arrowRight} />
             </Link>

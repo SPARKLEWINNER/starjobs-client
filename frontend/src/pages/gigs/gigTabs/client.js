@@ -79,8 +79,6 @@ export default function ClientTab({category}) {
 
   useEffect(
     () => {
-      let componentMounted = true
-
       const load = async () => {
         let result = ''
         setLoading(true)
@@ -95,33 +93,26 @@ export default function ClientTab({category}) {
             return
           }
 
-          if (componentMounted) {
-            let {data} = result
-            if (!data || data.length === 0) {
-              setData([])
-              setRenderData([])
-              return
-            }
-
-            data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-            const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-
-            setData(FILTERED)
-            setRenderData(FILTERED.slice(0, 3))
-            setLoading(false)
+          let {data} = result
+          if (!data || data.length === 0) {
+            setData([])
+            setRenderData([])
+            return
           }
+
+          data.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+          const FILTERED = data.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
+
+          setData(FILTERED)
+          setRenderData(FILTERED.slice(0, 3))
+          setLoading(false)
         } catch (err) {
           console.log(err)
         } finally {
-          if (componentMounted) {
-            setLoading(false)
-          }
+          setLoading(false)
         }
       }
       load()
-      return () => {
-        componentMounted = false
-      }
     },
     // eslint-disable-next-line
     []

@@ -57,7 +57,7 @@ export default function PendingCard({gig, onView}) {
 
           {status === 'Applying' && (
             <Typography
-              variant="caption"
+              variant="overline"
               sx={{
                 textTransform: 'uppercase',
                 fontSize: 12,

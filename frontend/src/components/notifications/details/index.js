@@ -39,7 +39,7 @@ const NotificationDetailsCard = ({details, currentUser}) => {
     let button_label = 'View Gig'
     switch (status) {
       case 'Waiting':
-        link = `/gigs/det/${_id}`
+        link = `/gigs/details/${details?.uid}/${details?.category}#${details._id}`
         break
       case 'Applying':
         link = '/freelancer/dashboard?tab=3'

@@ -63,7 +63,6 @@ export default function TabsComponent() {
   }
 
   useEffect(() => {
-    let componentMounted = true
     const load = async () => {
       if (params?.search) {
         setValue(params?.search?.split('?tab=')[1])
@@ -77,15 +76,12 @@ export default function TabsComponent() {
       const data = result.data.gigs.sort((a, b) =>
         moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1
       )
-      if (componentMounted) {
-        setGigs(data)
-      }
+
+      setGigs(data)
     }
 
     load()
-    return () => {
-      componentMounted = false
-    }
+
     // eslint-disable-next-line
   }, [])
 

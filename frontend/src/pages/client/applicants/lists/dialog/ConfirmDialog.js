@@ -14,13 +14,13 @@ const ConfirmDialog = ({open, onConfirm, handleClose}) => {
 
   return (
     <div>
-      <Dialog open={open}>
+      <Dialog open={open ?? false}>
         <Button sx={{ml: 'auto', p: 2}} onClick={handleClose}>
           <Icon icon={closeIcon} width={32} height={32} color="#b2b2b2" />
         </Button>
         <DialogTitle sx={{textAlign: 'center', pb: 0}}>
           <Typography variant="h4" component="span">
-            Confirm Gig Posting
+            Confirm Gig Proposal
           </Typography>
         </DialogTitle>
         <DialogContent>

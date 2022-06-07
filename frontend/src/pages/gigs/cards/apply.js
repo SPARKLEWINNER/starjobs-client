@@ -1,4 +1,5 @@
-import {Link as RouterLink} from 'react-router-dom'
+import {useLayoutEffect, useRef} from 'react'
+import {Link as RouterLink, useLocation} from 'react-router-dom'
 import moment from 'moment'
 import {capitalCase} from 'change-case'
 
@@ -17,6 +18,15 @@ import {calculations} from 'src/utils/gigComputation'
 import PropTypes from 'prop-types'
 
 const ApplyCard = ({path, gig, currentUser, onClick}) => {
+  const myRef = useRef(null)
+  const params = useLocation()
+
+  useLayoutEffect(() => {
+    if (params.hash) {
+      myRef.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [])
+
   let {position, hours, fee, user, time, from, category, uid, _id, locationRate} = gig
   const isApplied =
     gig.applicants &&
@@ -37,7 +47,18 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
   }
 
   return (
-    <Card sx={{py: 3, px: 3, display: 'flex', my: 2}}>
+    <Card
+      sx={{
+        py: 3,
+        px: 3,
+        display: 'flex',
+        my: 2,
+        border: '2px solid',
+        borderColor: params?.hash?.replace('#', '') === gig._id ? 'primary.main' : 'common.white'
+      }}
+      id={gig._id}
+      ref={myRef}
+    >
       <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', p: 0}}>
         <CardContent sx={{flex: '1 0 auto', px: 0, pt: 0, alignItems: 'flex-start', paddingBottom: '0 !important'}}>
           <Stack direction="row" sx={{alignItems: 'center', mb: 1}}>
@@ -59,7 +80,12 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
           </Stack>
 
           <Typography variant="body2" sx={{fontSize: 13, mb: 0}}>
-            Location: {gig && type !== 'parcels' ? (gig.location ? capitalCase(gig.location) : location) : location}
+            Location:{' '}
+            {gig && type !== 'parcels'
+              ? gig.location
+                ? capitalCase(gig.location)
+                : capitalCase(location)
+              : capitalCase(location)}
           </Typography>
 
           <Stack direction="row" sx={{my: 1}}>
@@ -77,7 +103,7 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
             </Label>
           </Stack>
           {currentUser.isActive && currentUser.accountType !== 1 && (
-            <Box sx={{position: 'absolute', bottom: 10, right: 16}}>
+            <Box sx={{textAlign: 'right'}}>
               {!isApplied ? (
                 <Button
                   onClick={() => handleClick(gig)}
@@ -87,14 +113,27 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
                   Apply <Icon icon={arrowRight} width={12} height={12} sx={{ml: 2}} />
                 </Button>
               ) : (
-                <Typography variant="overline" component="h6" color="primary.main" sx={{mb: 1, mr: 1}}>
-                  For client review
-                </Typography>
+                <>
+                  <Typography
+                    variant="overline"
+                    component="h6"
+                    color="common.black"
+                    sx={{mb: 1, mr: 1, textAlign: 'right'}}
+                  >
+                    For client review
+                  </Typography>
+                  <Link underline="none" component={RouterLink} to="/freelancer/dashboard?tab=3">
+                    <Button fullWidth={true} variant="contained" sx={{mb: 1, mr: 1, textTransform: 'uppercase'}}>
+                      View gig in progress
+                    </Button>
+                  </Link>
+                </>
               )}
             </Box>
           )}
+
           {!currentUser.isActive && currentUser.accountType !== 1 && (
-            <Box sx={{position: 'absolute', bottom: 10, right: 16}}>
+            <Box sx={{position: 'absolute', bottom: 10, right: 16, textAlign: 'right'}}>
               <Link
                 sx={{textDecoration: 'none'}}
                 component={RouterLink}

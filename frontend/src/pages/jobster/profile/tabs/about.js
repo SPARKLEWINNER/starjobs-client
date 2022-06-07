@@ -24,7 +24,8 @@ export default function About({form}) {
             <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{mt: 2}}>
               <Typography variant="body2">Skills Qualification</Typography>
               <Typography variant="body2" sx={{marginTop: '0 !important', fontWeight: 'bold'}}>
-                {form.expertise.skillQualification &&
+                {form.expertise &&
+                  form.expertise.skillQualification &&
                   form.expertise.skillQualification.split('=>').map((im, ix) => {
                     return (
                       <Typography
@@ -43,7 +44,8 @@ export default function About({form}) {
             <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{mt: 2}}>
               <Typography variant="body2">Skills offer</Typography>
               <Typography variant="body2" sx={{marginTop: '0 !important', fontWeight: 'bold'}}>
-                {form.expertise.skillOffer &&
+                {form.expertise &&
+                  form.expertise.skillOffer &&
                   form.expertise.skillOffer.split('=>').map((im, ix) => {
                     return (
                       <Typography
@@ -63,7 +65,7 @@ export default function About({form}) {
               Skill/s offer
             </Typography>
             <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
-              {form.expertise.workType.split('=>').length > 0 ? (
+              {form.expertise && form.expertise.workType.split('=>').length > 0 ? (
                 form.expertise.workType.split('//').map((v) => {
                   return v
                     .replace(',', '')
@@ -85,14 +87,14 @@ export default function About({form}) {
                 })
               ) : (
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.expertise.skillOfferOthers}
+                  {form.expertise && form.expertise.skillOfferOthers}
                 </Typography>
               )}
 
               <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
                 <Typography variant="body2">Other Skills Expertise:</Typography>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.expertise.othersExpertise}
+                  {form.expertise && form.expertise.othersExpertise}
                 </Typography>
               </Stack>
             </Stack>
@@ -110,27 +112,27 @@ export default function About({form}) {
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <Typography variant="body2">Company Name:</Typography>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.work.currentCompany}
+                {form.work && form.work?.currentCompany}
               </Typography>
             </Stack>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <Typography variant="body2">Position:</Typography>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.work.currentPosition}
+                {form.work && form.work?.currentPosition}
               </Typography>
             </Stack>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <Typography variant="body2">Start Date:</Typography>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.work.currentStartDate}
+                {form?.work && form.work?.currentStartDate}
               </Typography>
             </Stack>
 
-            {form.work.isCurrentWork && (
+            {form.work && form.work.isCurrentWork && (
               <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
                 <Typography variant="body2">End Date:</Typography>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.work.currentEndDate}
+                  {form.work && form.work?.currentEndDate}
                 </Typography>
               </Stack>
             )}
@@ -138,11 +140,11 @@ export default function About({form}) {
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <Typography variant="body2">Place of Work:</Typography>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.work.currentPlaceOfWork}
+                {form.work && form.work?.currentPlaceOfWork}
               </Typography>
             </Stack>
           </Box>
-          {!form.work.isFreshGraduate ? (
+          {form.work && !form.work.isFreshGraduate ? (
             <Box sx={{mt: 2}}>
               <Typography variant="body2" sx={{mb: 1}}>
                 Past Employment
@@ -150,35 +152,35 @@ export default function About({form}) {
               <Stack direction={{xs: 'row', sm: 'row'}} sx={{my: 1}} spacing={2}>
                 <Typography variant="body2">Company Name:</Typography>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.work.pastCompany}
+                  {form.work && form.work.pastCompany}
                 </Typography>
               </Stack>
 
               <Stack direction={{xs: 'row', sm: 'row'}} sx={{my: 1}} spacing={2}>
                 <Typography variant="body2">Position:</Typography>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.work.pastPosition}
+                  {form.work && form.work.pastPosition}
                 </Typography>
               </Stack>
 
               <Stack direction={{xs: 'row', sm: 'row'}} sx={{my: 1}} spacing={2}>
                 <Typography variant="body2">Start Date:</Typography>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.work.pastStartDate}
+                  {form.work && form.work.pastStartDate}
                 </Typography>
               </Stack>
 
               <Stack direction={{xs: 'row', sm: 'row'}} sx={{my: 1}} spacing={2}>
                 <Typography variant="body2">End Date:</Typography>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.work.pastEndDate}
+                  {form.work && form.work.pastEndDate}
                 </Typography>
               </Stack>
 
               <Stack direction={{xs: 'row', sm: 'row'}} sx={{my: 1}} spacing={2}>
                 <Typography variant="body2">Place of Work:</Typography>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.work.pastPlaceOfWork}
+                  {form.work && form.work.pastPlaceOfWork}
                 </Typography>
               </Stack>
             </Box>
@@ -195,10 +197,10 @@ export default function About({form}) {
             <Typography variant="body2">High School</Typography>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.education.highSchoolName}
+                {form.education && form.education.highSchoolName}
               </Typography>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.education.highSchoolName}
+                {form.education && form.education.highSchoolName}
               </Typography>
             </Stack>
           </Box>
@@ -206,19 +208,19 @@ export default function About({form}) {
             <Typography variant="body2">College</Typography>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.education.collegeName}
+                {form.education && form.education.collegeName}
               </Typography>
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                {form.education.collegeYear}
+                {form.education && form.education.collegeYear}
               </Typography>
             </Stack>
           </Box>
-          {form.education.vocationalProgram || form.education.vocationalProgram !== 'N/A' ? (
+          {(form.education && form.education?.vocationalProgram) || form.education?.vocationalProgram !== 'N/A' ? (
             <Box sx={{mt: 2}}>
               <Typography variant="body2">Vocational Program</Typography>
               <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
                 <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                  {form.education.vocationalProgram}
+                  {form.education && form.education?.vocationalProgram}
                 </Typography>
               </Stack>
             </Box>

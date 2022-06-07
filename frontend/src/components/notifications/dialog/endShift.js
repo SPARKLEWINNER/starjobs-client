@@ -15,10 +15,9 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
       let data = {
         new_status: 'End-Shift',
         actualTime: workTime,
-        actualRate: rate,
+        actualRate: rate ?? gig.fee,
         ...value
       }
-
       onCommit(data)
     } catch (error) {
       console.log(error)
@@ -41,7 +40,7 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
         <Icon icon={closeIcon} width={32} height={32} color="#b2b2b2" />
       </Button>
       <DialogTitle sx={{textAlign: 'center'}}>
-        <Typography variant="h6" component="h6" sx={{fontWeight: '600'}}>
+        <Typography variant="h4" component="span">
           Confirm End-Shift
         </Typography>
       </DialogTitle>
@@ -76,10 +75,17 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
           </Stack>
         </Typography>
         <Stack sx={{my: 2}}>
-          <LoadingButton color="primary" variant="contained" onClick={() => handleCommit(gig)} loading={loading}>
+          <LoadingButton
+            color="primary"
+            size="large"
+            variant="contained"
+            onClick={() => handleCommit(gig)}
+            loading={loading}
+            disabled={loading}
+          >
             Confirm End Shift
           </LoadingButton>
-          <LoadingButton onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}} loading={loading}>
+          <LoadingButton onClick={handleClose} size="large" variant="outlined" color="inherit" sx={{mt: 2}}>
             No
           </LoadingButton>
         </Stack>

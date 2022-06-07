@@ -8,7 +8,7 @@ const User = require('./../../models/User');
 const Account = require('./../../models/Account');
 const Client = require('./../../models/Client');
 
-const {getSpecificData} = require('../../services/validateExisting');
+const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
 
 var controllers = {
@@ -16,20 +16,22 @@ var controllers = {
         let user, result;
         let token = req.headers['authorization'];
         if (!token || typeof token === undefined)
-            return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'});
+            return res.status(401).json({ success: false, is_authorized: false, msg: 'Not authorized' });
         const id = jwt_decode(token)['id'];
 
         try {
-            user = await User.find({_id: mongoose.Types.ObjectId(id)})
+            user = await User.find({ _id: mongoose.Types.ObjectId(id) })
                 .lean()
                 .exec();
-            
-            if (user[0].accountType === 1) {
-                result = await Client.find({uid: mongoose.Types.ObjectId(id)}, {photo: 1})
+            if (!user || user.length === 0)
+                return res.status(404).json({ success: false, is_authorized: false, msg: 'User not found' });
+
+            if (user && user[0].accountType === 1) {
+                result = await Client.find({ uid: mongoose.Types.ObjectId(id) }, { photo: 1 })
                     .lean()
                     .exec();
             } else {
-                result = await Account.find({uuid: mongoose.Types.ObjectId(id)}, {photo: 1})
+                result = await Account.find({ uuid: mongoose.Types.ObjectId(id) }, { photo: 1 })
                     .lean()
                     .exec();
             }
@@ -37,17 +39,17 @@ var controllers = {
             console.error(error);
             await logger.logError(error, 'USER.get_user', null, id, 'GET');
 
-            return res.status(502).json({success: false, msg: 'Unable to get details'});
+            return res.status(502).json({ success: false, msg: 'Unable to get details' });
         }
 
         if (result.length > 0) {
-            return res.status(200).json({...user[0], photo: result[0].photo});
+            return res.status(200).json({ ...user[0], photo: result[0].photo });
         }
 
-        return res.status(200).json({...user[0], photo: undefined});
+        return res.status(200).json({ ...user[0], photo: undefined });
     },
     get_users: async function (req, res) {
-        let query = User.find({accountType: {$ne: 99}}, null, {sort: {dateCreated: -1}});
+        let query = User.find({ accountType: { $ne: 99 } }, null, { sort: { dateCreated: -1 } });
 
         const page = parseInt(req.query.page) || 1;
         const pageSize = parseInt(req.query.limit) || 100;
@@ -56,8 +58,8 @@ var controllers = {
         const reports = await User.aggregate([
             {
                 $group: {
-                    _id: {$month: '$dateCreated'},
-                    numberOfRegisters: {$sum: 1}
+                    _id: { $month: '$dateCreated' },
+                    numberOfRegisters: { $sum: 1 }
                 }
             }
         ]);
@@ -88,11 +90,11 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'USER.get_users', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     },
     get_users_specific: async function (req, res) {
-        let {id, type} = req.params;
+        let { id, type } = req.params;
         let user_details;
 
         try {
@@ -107,7 +109,7 @@ var controllers = {
                         }
                     }
                 ])
-                    .match({_id: mongoose.Types.ObjectId(id)})
+                    .match({ _id: mongoose.Types.ObjectId(id) })
                     .exec((err, data) => {
                         if (err) return false;
 
@@ -124,7 +126,7 @@ var controllers = {
                         }
                     }
                 ])
-                    .match({_id: mongoose.Types.ObjectId(id)})
+                    .match({ _id: mongoose.Types.ObjectId(id) })
                     .exec((err, data) => {
                         if (err) return false;
 
@@ -134,41 +136,41 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'USER.get_users', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     },
     patch_change_password: async function (req, res) {
         let update_user = {};
-        const {id} = req.params;
-        let {oldPassword, newPassword} = req.body;
+        const { id } = req.params;
+        let { oldPassword, newPassword } = req.body;
 
-        const user = await User.find({_id: mongoose.Types.ObjectId(id)})
+        const user = await User.find({ _id: mongoose.Types.ObjectId(id) })
             .lean()
             .exec();
         if (!user) {
-            return res.status(502).json({success: false, msg: 'Unable to change password'});
+            return res.status(502).json({ success: false, msg: 'Unable to change password' });
         }
 
         let encryptPassword = crypto.createHmac('sha1', user[0].salt).update(oldPassword).digest('hex');
         if (encryptPassword !== user[0].hashed_password) {
-            return res.status(402).json({success: false, msg: "Old password doesn't match."});
+            return res.status(402).json({ success: false, msg: "Old password doesn't match." });
         }
 
         update_user['hashed_password'] = crypto.createHmac('sha1', user[0].salt).update(newPassword).digest('hex');
         try {
-            update_user = await User.findByIdAndUpdate({_id: mongoose.Types.ObjectId(id)}, update_user)
+            update_user = await User.findByIdAndUpdate({ _id: mongoose.Types.ObjectId(id) }, update_user)
                 .lean()
                 .exec();
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'USER.get_user', null, id, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get details'});
+            return res.status(502).json({ success: false, msg: 'Unable to get details' });
         }
 
         return res.status(200).json(update_user);
     },
     get_search_users: async function (req, res) {
-        let query = User.find({accountType: {$ne: 99}, name: {$regex: '.*' + req.query.keyword + '.*'}});
+        let query = User.find({ accountType: { $ne: 99 }, name: { $regex: '.*' + req.query.keyword + '.*' } });
         const page = parseInt(req.query.page) || 1;
         const pageSize = parseInt(req.query.limit) || 100;
         const skip = (page - 1) * pageSize;
@@ -177,8 +179,8 @@ var controllers = {
         const reports = await User.aggregate([
             {
                 $group: {
-                    _id: {$month: '$dateCreated'},
-                    numberOfRegisters: {$sum: 1}
+                    _id: { $month: '$dateCreated' },
+                    numberOfRegisters: { $sum: 1 }
                 }
             }
         ]);
@@ -208,14 +210,14 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'USER.get_users', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     },
     get_user_exports: async function (req, res) {
         try {
             let query = await User.find(
-                {accountType: {$ne: 99}},
-                {name: 1, _id: 1, email: 1, isActive: 1, dateCreated: 1, accountType: 1}
+                { accountType: { $ne: 99 } },
+                { name: 1, _id: 1, email: 1, isActive: 1, dateCreated: 1, accountType: 1 }
             )
                 .lean()
                 .exec();
@@ -227,7 +229,7 @@ var controllers = {
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'USER.get_user_exports', null, null, 'GET');
-            return res.status(502).json({success: false, msg: 'Unable to get lists'});
+            return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
     }
 };

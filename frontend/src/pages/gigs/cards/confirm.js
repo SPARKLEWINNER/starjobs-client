@@ -27,7 +27,7 @@ const ConfirmGig = ({open, onConfirm, handleClose}) => {
     <div>
       <Dialog open={open}>
         <DialogTitle sx={{textAlign: 'center', pt: 5, pb: 0}}>
-          <Typography variant="text">Confirm Application!</Typography>
+          <Typography variant="text">Confirm Proposal?</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>

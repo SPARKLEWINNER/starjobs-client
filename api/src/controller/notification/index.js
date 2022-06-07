@@ -1,6 +1,7 @@
 const jwt_decode = require('jwt-decode');
 const User = require('./../../models/User');
 const Gigs = require('./../../models/Gigs');
+const Account = require('./../../models/Account');
 const History = require('./../../models/History');
 const Notification = require('./../../models/Notification');
 const mongoose = require('mongoose');
@@ -9,7 +10,7 @@ const logger = require('../../services/logger');
 
 var controllers = {
     get_notifications: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let result;
         try {
             result = await History.aggregate([
@@ -29,22 +30,22 @@ var controllers = {
                         $gte: new Date(new Date().setDate(new Date().getDate() - 1))
                     }
                 })
-                .sort({createdAt: -1})
+                .sort({ createdAt: -1 })
                 .exec();
 
             if (!result) {
-                return res.status(400).json({success: false, msg: 'Empty notifications'});
+                return res.status(400).json({ success: false, msg: 'Empty notifications' });
             }
 
-            return res.status(200).json({success: false, data: result});
+            return res.status(200).json({ success: false, data: result });
         } catch (error) {
             console.error('error', error);
             await logger.logError(error, 'Accounts.get_notifications', null, id, 'GET');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
     },
     get_notifications_clients: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         let result;
         try {
             let query = await History.aggregate([
@@ -63,22 +64,22 @@ var controllers = {
                         $gte: new Date(new Date().setDate(new Date().getDate() - 1))
                     }
                 })
-                .sort({createdAt: -1})
+                .sort({ createdAt: -1 })
                 .exec();
 
             if (!query) {
-                return res.status(400).json({success: false, msg: 'Empty notifications'});
+                return res.status(400).json({ success: false, msg: 'Empty notifications' });
             }
             result = query.filter((obj) => obj.details[0].uid.toString() === id);
-            return res.status(200).json({success: false, data: result});
+            return res.status(200).json({ success: false, data: result });
         } catch (error) {
             console.error('error', error);
             await logger.logError(error, 'Accounts.get_notifications_clients', null, id, 'GET');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
     },
     get_notification_details: async function (req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         try {
             let result = await Gigs.aggregate([
                 {
@@ -88,7 +89,7 @@ var controllers = {
                         foreignField: 'gid',
                         as: 'history'
                     }
-                }
+                },
             ])
                 .match({
                     _id: mongoose.Types.ObjectId(id)
@@ -96,56 +97,59 @@ var controllers = {
                 .exec();
 
             if (!result) {
-                return res.status(400).json({success: false, msg: 'Empty notifications'});
+                return res.status(400).json({ success: false, msg: 'Empty notifications' });
             }
 
-            return res.status(200).json({success: false, data: result});
+            return res.status(200).json({ success: false, data: result });
         } catch (error) {
             console.error('error', error);
             await logger.logError(error, 'Accounts.get_notification_details', null, id, 'GET');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
     },
     patch_notification: async function (req, res) {
-        const {id} = req.params;
-        const {uid, isRead} = req.body;
+        const { id } = req.params;
+        const { uid, isRead } = req.body;
         let result;
         try {
-            const userType = await User.find({_id: mongoose.Types.ObjectId(uid)})
+            const userType = await User.find({ _id: mongoose.Types.ObjectId(uid) })
                 .lean()
                 .exec();
             if (userType[0].accountType === 1) {
                 // client
-                result = await History.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {readAuthor: true}).exec();
+                result = await History.findOneAndUpdate(
+                    { _id: mongoose.Types.ObjectId(id) },
+                    { readAuthor: true }
+                ).exec();
             } else {
                 // jobster
                 result = await History.findOneAndUpdate(
-                    {_id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(uid)},
-                    {readUser: true}
+                    { _id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(uid) },
+                    { readUser: true }
                 ).exec();
             }
 
             if (!result) {
-                return res.status(400).json({success: false, msg: 'Empty notifications'});
+                return res.status(400).json({ success: false, msg: 'Empty notifications' });
             }
 
-            return res.status(200).json({success: false, data: result});
+            return res.status(200).json({ success: false, data: result });
         } catch (error) {
             console.error('error', error);
             await logger.logError(error, 'Accounts.get_notification_details', null, id, 'GET');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
     },
 
     get_notifications_v2: async function (req, res) {
-        const token = req.headers.authorization.split(' ')[1]
-        const {id} = jwt_decode(token);
+        const token = req.headers.authorization.split(' ')[1];
+        const { id } = jwt_decode(token);
         try {
             await Notification.find({
-                $or: [{targetUsers: id}, {target: 'General'}]
+                $or: [{ targetUsers: id }, { target: 'General' }]
             })
                 .populate('targetUsers')
-                .sort({createdAt: -1})
+                .sort({ createdAt: -1 })
                 .exec((err, data) => {
                     if (err) {
                         return res.status(400).json({
@@ -156,22 +160,22 @@ var controllers = {
                     let finalData = [];
 
                     for (let index = 0; index < data.length; index++) {
-                        finalData.push({...data[index]._doc, isRead: data[index].viewedBy.includes(id)});
+                        finalData.push({ ...data[index]._doc, isRead: data[index].viewedBy.includes(id) });
                     }
 
                     // return res.json(finalData);
-                    return res.status(200).json({success: true, data: finalData});
+                    return res.status(200).json({ success: true, data: finalData });
                 });
         } catch (error) {
             console.error('error', error);
             await logger.logError(error, 'Accounts.get_notifications', null, id, 'GET');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
     },
 
     post_notification_v2: async function (req, res) {
         try {
-            const {title, body} = req.body;
+            const { title, body } = req.body;
 
             if (!title || !body) {
                 return res.status(400).json({
@@ -195,16 +199,16 @@ var controllers = {
         } catch (error) {
             console.error('error', error);
             await logger.logError(error, 'Accounts.post_notification', null, id, 'POST');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
     },
 
     put_notification_addviewer: async function (req, res) {
         try {
             Notification.findOneAndUpdate(
-                {_id: req.params.notificationId},
-                {$addToSet: {viewedBy: req.params.userId}},
-                {new: true}
+                { _id: req.params.notificationId },
+                { $addToSet: { viewedBy: req.params.userId } },
+                { new: true }
             ).exec((err, result) => {
                 if (err) {
                     return res.status(400).json({
@@ -217,7 +221,25 @@ var controllers = {
         } catch (error) {
             console.error('error', error);
             await logger.logError(error, 'Accounts.patch_notification_addviewer', null, id, 'put');
-            return res.status(502).json({success: false, msg: 'User not found'});
+            return res.status(502).json({ success: false, msg: 'User not found' });
+        }
+    },
+
+    get_area_notification: async function (req, res) {
+        try {
+            const areas = await Account.distinct('presentCity');
+            let result =
+                areas &&
+                areas.length > 0 &&
+                areas.map(function (item) {
+                    return typeof item === 'string' ? item.toString().toLowerCase() : item;
+                });
+            result = [...new Set(result)];
+            return res.status(200).json({ success: true, data: result });
+        } catch (error) {
+            console.log(error);
+            await logger.logError(error, 'Accounts.get_notifications', null, null, 'GET');
+            return res.status(502).json({ success: false, msg: 'User not found' });
         }
     }
 };

@@ -4,7 +4,7 @@ const User = require('../models/User');
 const logger = require('./logger')
 
 var controller = {
-    globalNotification: async function (additionalData) {
+    globalNotification: async function (additionalData, location) {
         const jobster = await User.aggregate([
             {
                 $lookup: {
@@ -22,7 +22,7 @@ var controller = {
             },
             {
                 $match: {
-                    'account.presentCity': { $regex: new RegExp(additionalData.location, "i") }
+                    'account.presentCity': { $regex: new RegExp(location, "i") }
                 }
             }
         ])

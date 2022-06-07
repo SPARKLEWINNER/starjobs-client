@@ -69,7 +69,7 @@ export default function IncomingCard({gig, onView}) {
                 width: '100%'
               }}
             >
-              For Pushing through
+              Click to push through
             </Typography>
           )}
         </CardContent>

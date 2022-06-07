@@ -13,27 +13,26 @@ const GigsForm = () => {
   const {currentUser} = useAuth()
   const [category, setCategory] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
+  const [areaNotification, setAreaNotification] = useState([])
 
   const handleSelectedCategory = (value) => {
     setSelectedCategory(value)
   }
 
   useEffect(() => {
-    let componentMounted = true
     const load = async () => {
-      const result = await category_api.get_categories()
-      if (!result.ok) return
-      let category_data = result.data.sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
-      if (componentMounted) {
-        setCategory(category_data.filter((obj) => obj['status'] !== 1))
+      const categories_result = await category_api.get_categories()
+      const notification_area_result = await category_api.get_notification_area()
+      if (!categories_result.ok) return
+      let category_data = categories_result.data.sort((a, b) => (a.sortOrder > b.sortOrder ? 1 : -1))
+      setCategory(category_data.filter((obj) => obj['status'] !== 1))
+
+      if (notification_area_result.ok) {
+        setAreaNotification(notification_area_result.data.data)
       }
     }
 
     load()
-
-    return () => {
-      componentMounted = false
-    }
   }, [])
 
   const renderTab = (type) => {
@@ -48,7 +47,7 @@ const GigsForm = () => {
       case 'parcels':
         return <CreateParcelForm user={currentUser} category={selectedCategory} />
       default:
-        return <CreatGigForm user={currentUser} category={selectedCategory} />
+        return <CreatGigForm user={currentUser} category={selectedCategory} notificationArea={areaNotification} />
     }
   }
 

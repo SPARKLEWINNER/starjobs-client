@@ -1,7 +1,9 @@
 import * as Yup from 'yup'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
+import {capitalCase} from 'change-case'
+import SelectMultiple from 'react-select'
 // material
 import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox, Select} from '@mui/material'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
@@ -15,16 +17,32 @@ import PropTypes from 'prop-types'
 GigForm.propTypes = {
   formData: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   onNext: PropTypes.func,
-  onStoreData: PropTypes.func
+  onStoreData: PropTypes.func,
+  areasAvailable: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 }
 
-export default function GigForm({formData, onNext, onStoreData}) {
+export default function GigForm({formData, onNext, onStoreData, areasAvailable}) {
   const {enqueueSnackbar} = useSnackbar()
   const [isLoading, setLoading] = useState(false)
+  const [areasNotif, setAreasNotif] = useState([])
   const [date, setDate] = useState(new Date())
   const [from, setFrom] = useState()
   const [to, setTo] = useState()
+  const [areas, setAreas] = useState([])
   const current_date = new Date()
+
+  useEffect(() => {
+    const formatNotificationArea = () => {
+      let arrArea = []
+      areasAvailable.map((item) => {
+        arrArea.push({value: item, label: capitalCase(item)})
+      })
+
+      setAreas(arrArea)
+    }
+
+    formatNotificationArea()
+  }, [areasAvailable])
 
   const GigSchema = Yup.object().shape({
     position: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Gig position is required'),
@@ -38,7 +56,8 @@ export default function GigForm({formData, onNext, onStoreData}) {
     to: Yup.string().required('Gig End time is required'),
     breakHr: Yup.number().required('Break hour/s is required'),
     locationRate: Yup.string().required('Gig location rate'),
-    notes: Yup.string()
+    notes: Yup.string(),
+    notifyArea: Yup.array()
   })
 
   const formik = useFormik({
@@ -52,7 +71,8 @@ export default function GigForm({formData, onNext, onStoreData}) {
       to: formData?.time ?? '', // time
       breakHr: formData?.breakHr ?? 0,
       notes: formData?.notes ?? '',
-      locationRate: formData?.locationRate ?? ''
+      locationRate: formData?.locationRate ?? '',
+      notifyArea: formData.notifyArea ?? []
     },
     enableReinitialize: true,
     validationSchema: GigSchema,
@@ -80,6 +100,11 @@ export default function GigForm({formData, onNext, onStoreData}) {
         jobsterTotal
       } = calculations(values.hours, values.fee, values.locationRate)
 
+      let areas = []
+      areasNotif && areasNotif.length > 0 && areasNotif.map((obj) => areas.push(obj.value))
+
+      console.log(areas)
+
       let data = {
         position: values.position,
         date: values.date,
@@ -103,7 +128,8 @@ export default function GigForm({formData, onNext, onStoreData}) {
           grossWithHolding: grossWithHolding,
           serviceCost: serviceCost,
           jobsterTotal: jobsterTotal
-        }
+        },
+        areas: areas
       }
       setLoading(false)
       onStoreData(data)
@@ -206,6 +232,15 @@ export default function GigForm({formData, onNext, onStoreData}) {
             error={Boolean(touched.contactNumber && errors.contactNumber)}
             helperText={touched.contactNumber && errors.contactNumber}
           />
+          {areas && areas.length > 0 && (
+            <SelectMultiple
+              onChange={(e) => setAreasNotif(e)}
+              value={areasNotif}
+              isMulti={true}
+              options={areas}
+              className="area-select"
+            />
+          )}
 
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>

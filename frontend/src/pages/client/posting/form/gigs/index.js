@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
 
-export default function CreatGigForm({user, category}) {
+export default function CreatGigForm({user, category, notificationArea}) {
   const {enqueueSnackbar} = useSnackbar()
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set())
@@ -106,7 +106,9 @@ export default function CreatGigForm({user, category}) {
           Gig Posting <br /> ({category && capitalCase(category.replace('-', ' '))}){' '}
         </Typography>
       </Box>
-      {activeStep === 0 && <GigForm onNext={handleNext} formData={form} onStoreData={handleFormData} />}
+      {activeStep === 0 && (
+        <GigForm onNext={handleNext} formData={form} onStoreData={handleFormData} areasAvailable={notificationArea} />
+      )}
       {activeStep === 1 && <BillingForm onNext={handleNext} storeData={form} />}
 
       <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
@@ -140,5 +142,6 @@ export default function CreatGigForm({user, category}) {
 
 CreatGigForm.propTypes = {
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  category: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string])
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]),
+  notificationArea: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string])
 }

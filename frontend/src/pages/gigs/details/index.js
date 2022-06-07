@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {useNavigate, useParams, useLocation} from 'react-router-dom'
+import {useParams, useLocation} from 'react-router-dom'
 
 import {capitalCase} from 'change-case'
 import {useSnackbar} from 'notistack'
@@ -99,7 +99,6 @@ const Details = () => {
   const params = useParams()
   const {currentUser} = useAuth()
   const location = useLocation()
-  const navigate = useNavigate()
   const classes = useStyles()
   const {enqueueSnackbar} = useSnackbar()
   const [open, setOpen] = useState(false)
@@ -114,8 +113,6 @@ const Details = () => {
   }
 
   useEffect(() => {
-    let componentMounted = true
-
     const load = async () => {
       if (!currentUser.isActive) {
         setProfile(currentUser)
@@ -132,16 +129,11 @@ const Details = () => {
         return
       }
 
-      if (componentMounted) {
-        setProfile(details)
-        setGigs(gigs)
-      }
+      setProfile(details)
+      setGigs(gigs)
     }
     load()
 
-    return () => {
-      componentMounted = false
-    }
     // eslint-disable-next-line
   }, [currentUser])
 
@@ -178,9 +170,9 @@ const Details = () => {
 
     //todo
     //Fixed implementation for gig updates
-    enqueueSnackbar('Your application has been submitted!', {variant: 'success'})
+    enqueueSnackbar('Your proposal has been submitted!', {variant: 'success'})
     setOpen(false)
-    navigate(`/gigs/apply/success`, {replace: true})
+    window.location.reload()
   }
 
   const renderTab = (type) => {

@@ -3,6 +3,7 @@ import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
 import {IncomingCard} from '../../../cards'
 import CurrentModalPopup from '../modal'
+import {ConfirmLateNotification} from 'src/components/notifications'
 
 // theme
 import color from 'src/theme/palette'
@@ -22,6 +23,7 @@ const incoming_status = ['Accepted']
 
 export default function IncomingTab({gigs, user, selected}) {
   const {enqueueSnackbar} = useSnackbar()
+  const [confirmArrive, setConfirmArrive] = useState(false)
   const navigate = useNavigate()
   const [FILTERED_DATA, setData] = useState([])
   const [SELECTED_GIG, setSelectedGig] = useState([])
@@ -31,7 +33,6 @@ export default function IncomingTab({gigs, user, selected}) {
   const handleAction = async (value) => {
     if (!user) return
     const {auid: jobster_id} = value
-    console.log('IncomingTab', value)
 
     await sendGigNotification({
       title: `Client confirmed your arrival`,
@@ -42,7 +43,8 @@ export default function IncomingTab({gigs, user, selected}) {
 
     let form_data = {
       status: 'Confirm-Arrived',
-      uid: user._id
+      uid: user._id,
+      late: value.late ?? null
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -63,6 +65,10 @@ export default function IncomingTab({gigs, user, selected}) {
 
   const handleCloseView = () => {
     setOpenModal(false)
+  }
+
+  const handleArrived = () => {
+    setConfirmArrive(!confirmArrive)
   }
 
   useEffect(() => {
@@ -105,8 +111,21 @@ export default function IncomingTab({gigs, user, selected}) {
       </Box>
 
       {SELECTED_GIG.length !== 0 && (
-        <CurrentModalPopup gig={SELECTED_GIG || []} open={openModal} onClick={handleAction} onClose={handleCloseView} />
+        <CurrentModalPopup
+          gig={SELECTED_GIG || []}
+          open={openModal}
+          onClick={handleAction}
+          onClose={handleCloseView}
+          onArrived={handleArrived}
+        />
       )}
+
+      <ConfirmLateNotification
+        open={confirmArrive}
+        gig={SELECTED_GIG}
+        handleClose={() => setConfirmArrive(false)}
+        onClick={handleAction}
+      />
     </Box>
   )
 }

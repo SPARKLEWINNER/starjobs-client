@@ -35,7 +35,7 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText sx={{textAlign: 'center'}}>
             <Typography variant="h4" component="span" sx={{textAlign: 'center', fontWeight: 'bold'}} color="#000">
               Confirm End-Shift
             </Typography>
@@ -46,7 +46,7 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
             The jobster has indicated a successful gig engagement with a rate of{' '}
             <b>P{gig.fees && gig.fees.proposedRate && parseFloat(gig.fees.proposedRate).toFixed(2)}</b>/ hour and an
             actual number of hours/ minutes of{' '}
-            <b>{gig.fees && gig.fees.proposedWorkTime && parseFloat(gig.fees.proposedWorkTime).toFixed(0)} hr/s.</b>{' '}
+            <b>{gig.fees && gig.fees.proposedWorkTime && parseFloat(gig.fees.proposedWorkTime).toFixed(2)} hr/s.</b>{' '}
             Kindly ensure all tasks has been completely, accurately and efficiently done. Also, take note of your
             inventories, equipment and machines for the reporting of damages before confirmation a successful gig.
             Remember, confirming today’s gig as successful means that no untoward incidents or issues occurred during

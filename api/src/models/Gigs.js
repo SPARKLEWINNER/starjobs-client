@@ -67,6 +67,10 @@ const gigsData = {
         type: String,
         enum: ['NCR', 'Provincial']
     },
+    late: {
+        type: String,
+        default: null,
+    },
     fees: {
         computedFeeByHr: String,
         voluntaryFee: String,

@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react'
 import {Box, Stack, Typography} from '@mui/material'
-import moment from 'moment'
 import {PendingCard} from '../../../cards'
 
 import ProgressCircle from 'src/components/progressCircle'
@@ -8,6 +7,10 @@ import ProgressCircle from 'src/components/progressCircle'
 // theme
 import color from 'src/theme/palette'
 import PropTypes from 'prop-types'
+
+const Moment = require('moment')
+const MomentRange = require('moment-range')
+const moment = MomentRange.extendMoment(Moment)
 
 PendingTab.propTypes = {
   gigs: PropTypes.array,
@@ -26,11 +29,14 @@ export default function PendingTab({gigs, selected}) {
       const data = []
       filtered_gig &&
         filtered_gig.map((value) => {
-          const {time, status} = value
+          const {date, status} = value
+          const previousDays = moment().subtract(3, 'days')
+          const aheadDays = moment().add(3, 'days')
+          const range = moment().range(previousDays, aheadDays)
           switch (status) {
             case 'Waiting':
             case 'Applying':
-              if (moment(time).isBefore(moment(), 'day')) return ''
+              if (!range.contains(moment(date))) return false
               return data.push(value)
             default:
               return ''

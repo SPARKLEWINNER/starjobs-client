@@ -103,8 +103,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       let areas = []
       areasNotif && areasNotif.length > 0 && areasNotif.map((obj) => areas.push(obj.value))
 
-      console.log(areas)
-
       let data = {
         position: values.position,
         date: values.date,

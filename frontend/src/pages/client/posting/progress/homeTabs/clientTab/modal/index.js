@@ -37,6 +37,7 @@ CurrentModalPopup.propTypes = {
   onClick: PropTypes.func,
   onClose: PropTypes.func,
   onEndShift: PropTypes.func,
+  onArrived: PropTypes.func,
   loading: PropTypes.bool
 }
 
@@ -63,7 +64,7 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)'
 }))
 
-export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShift, loading}) {
+export default function CurrentModalPopup({gig, open, onClose, onEndShift, onArrived, loading}) {
   let {history, position, hours, fee, time, from, status, category, account, locationRate} = gig
 
   const {firstName, middleInitial, lastName, photo} = account[0]
@@ -76,14 +77,6 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
   const handleEndShift = (value) => {
     try {
       onEndShift(value)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const handleClick = (value) => {
-    try {
-      onClick(value)
     } catch (error) {
       console.log(error)
     }
@@ -248,7 +241,7 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
                       </List>
                     </ListWrapperStyle>
 
-                    {status === 'Confirm-Gig' && (
+                    {/* {status === 'Confirm-Gig' && (
                       <Stack sx={{mt: 3, mb: 5}}>
                         <LoadingButton
                           size="large"
@@ -256,6 +249,13 @@ export default function CurrentModalPopup({gig, open, onClick, onClose, onEndShi
                           onClick={() => handleClick(gig)}
                           loading={loading}
                         >
+                          {_label(status)}
+                        </LoadingButton>
+                      </Stack>
+                    )} */}
+                    {status === 'Confirm-Gig' && (
+                      <Stack sx={{mt: 3, mb: 5}}>
+                        <LoadingButton size="large" variant="contained" onClick={() => onArrived()} loading={loading}>
                           {_label(status)}
                         </LoadingButton>
                       </Stack>

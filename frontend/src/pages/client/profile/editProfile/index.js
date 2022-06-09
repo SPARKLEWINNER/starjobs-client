@@ -56,7 +56,6 @@ const EditProfile = () => {
     let componentMounted = true
     const load = async () => {
       const user = await user_api.get_user_edit_profile_client(currentUser._id)
-      console.log(user.data[0])
       if (!user.ok) {
         return setLoading(false)
       }
@@ -72,7 +71,6 @@ const EditProfile = () => {
           }
         })
       } else {
-        console.log(details[0])
         let form_data = {
           contact: details[0].contact[0],
           industry: details[0].industry,

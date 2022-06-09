@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react'
 import {Box, Stack, Typography, Grid, Card} from '@mui/material'
-import moment from 'moment'
 
 // components
 import {BillingCard} from '../../../cards'
@@ -8,6 +7,10 @@ import {BillingCard} from '../../../cards'
 // theme
 import color from 'src/theme/palette'
 import PropTypes from 'prop-types'
+
+const Moment = require('moment')
+const MomentRange = require('moment-range')
+const moment = MomentRange.extendMoment(Moment)
 
 // status
 const current_status = [
@@ -29,8 +32,13 @@ const CurrentTab = ({gigs}) => {
       const data = []
       filtered_gig &&
         filtered_gig.map((value) => {
-          const {from} = value
-          if (moment(from).isBefore(moment(), 'day')) return ''
+          const {date} = value
+
+          const previousDays = moment().subtract(3, 'days')
+          const aheadDays = moment().add(3, 'days')
+          const range = moment().range(previousDays, aheadDays)
+
+          if (!range.contains(moment(date))) return false
           return data.push(value)
         })
       setData(data)

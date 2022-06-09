@@ -89,7 +89,7 @@ const IncomingNotification = ({open = false, gig, onCommit, onReject}) => {
 
 IncomingNotification.propTypes = {
   open: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
-  gig: PropTypes.array,
+  gig: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   onCommit: PropTypes.func,
   onReject: PropTypes.func
 }

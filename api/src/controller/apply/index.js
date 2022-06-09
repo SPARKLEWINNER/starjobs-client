@@ -55,17 +55,17 @@ async function sendNotification(request, gigs, status) {
             user = await User.find(jobster_id).lean().exec();
         }
 
-        if(user && user.length > 0) {
+        if (user && user.length > 0) {
             let message = messageList.filter((obj) => {
                 if (obj.status === status) return obj;
             });
-    
+
             // return still to process top level request.
             if (!message) return true;
             if (!user || !user[0].deviceId) return true;
-    
+
             message = message.pop();
-    
+
             await fetch('https://fcm.googleapis.com/fcm/send', {
                 method: 'post',
                 headers: {
@@ -82,10 +82,9 @@ async function sendNotification(request, gigs, status) {
                 }
             });
             return true;
-        }else{
+        } else {
             return false;
         }
-      
     } catch (error) {
         console.log(error);
         await logger.logError(error, 'Apply.send_notification', user.deviceId, null, 'FETCH');
@@ -94,7 +93,7 @@ async function sendNotification(request, gigs, status) {
 
 var controllers = {
     gig_apply: async function (req, res) {
-        const { uid, status, actualTime, actualRate } = req.body;
+        const { uid, status, actualTime, actualRate, late } = req.body;
         const { id } = req.params;
         await getSpecificData({ uuid: Types.ObjectId(uid) }, Account, 'Account', uid);
 
@@ -222,7 +221,10 @@ var controllers = {
 
                         await FeeHistory.create(feeHistoryInput);
                     } else {
-                        await Gigs.findOneAndUpdate({ _id: Types.ObjectId(id) }, { status: status });
+                        await Gigs.findOneAndUpdate(
+                            { _id: Types.ObjectId(id) },
+                            { status: status, late: late ?? null }
+                        );
                     }
                 }
             }

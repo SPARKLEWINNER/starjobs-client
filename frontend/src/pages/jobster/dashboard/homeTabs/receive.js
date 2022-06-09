@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 
 import {useState, useEffect} from 'react'
 import {useSnackbar} from 'notistack'
-import moment from 'moment'
 
 // components
 import {Box, Stack, Typography, Card} from '@mui/material'
@@ -17,6 +16,10 @@ import CurrentModalPopup from './modal'
 // theme
 import color from 'src/theme/palette'
 // import useSendNotif from 'src/utils/hooks/useSendNotif'
+
+const Moment = require('moment')
+const MomentRange = require('moment-range')
+const moment = MomentRange.extendMoment(Moment)
 
 const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
@@ -33,8 +36,6 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
     //   status: value.new_status,
     //   uid: user._id
     // }
-
-    console.log(user)
 
     // const result = await gigs_api.patch_gigs_apply(value._id, form_data)
     // if (!result.ok) {
@@ -71,14 +72,12 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
     const load = () => {
       gigs &&
         gigs.map((value) => {
-          const now = moment(new Date())
-          const {status, from, date} = value
-          const diff = moment(from).diff(now)
+          const {status, date} = value
+          const previousDays = moment().subtract(3, 'days')
+          const aheadDays = moment().add(3, 'days')
+          const range = moment().range(previousDays, aheadDays)
 
-          //express as a duration
-          const diffDuration = moment.duration(diff)
-
-          if (!moment(date).isSame(moment(), 'day')) return false
+          if (!range.contains(moment(date))) return false
           switch (status) {
             case 'Accepted':
             case 'Confirm-Gig':
@@ -88,7 +87,6 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
             case 'On-going':
             case 'End-Shift':
             case 'Confirm-End-Shift':
-              if (diffDuration.hours() > 3) return false
               return setFilter((prevState) => [...prevState, ...[value]])
             default:
               return false

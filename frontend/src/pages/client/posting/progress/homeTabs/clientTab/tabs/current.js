@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import {Link as RouterLink, useNavigate} from 'react-router-dom'
 import {Box, Stack, Typography, Grid, Link, Card} from '@mui/material'
-import moment from 'moment'
 import {useSnackbar} from 'notistack'
+import {ConfirmLateNotification} from 'src/components/notifications'
 
 // components
 import {CurrentCard} from '../../../cards'
@@ -15,6 +15,10 @@ import gigs_api from 'src/lib/gigs'
 // theme
 import color from 'src/theme/palette'
 import useSendNotif from 'src/utils/hooks/useSendNotif'
+
+const Moment = require('moment')
+const MomentRange = require('moment-range')
+const moment = MomentRange.extendMoment(Moment)
 
 // status
 const current_status = [
@@ -33,10 +37,12 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
   const [FILTERED_DATA, setData] = useState([])
   const [SELECTED_GIG, setSelectedGig] = useState([])
   const [openModal, setOpenModal] = useState(false)
+  const [confirmArrive, setConfirmArrive] = useState(false)
   const {sendGigNotification} = useSendNotif()
 
   const handleAction = async (value) => {
     if (!user) return
+
     const {auid: jobster_id} = value
 
     if (value.status === 'Confirm-Gig') {
@@ -50,7 +56,8 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
 
     let form_data = {
       status: 'Confirm-Arrived',
-      uid: user._id
+      uid: user._id,
+      late: parseFloat(value.timeLate).toFixed(2) ?? null
     }
 
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
@@ -66,6 +73,10 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
   const handleEndShift = (value) => {
     setOpenModal(false)
     onEndShift(value)
+  }
+
+  const handleArrived = () => {
+    setConfirmArrive(!confirmArrive)
   }
 
   const handleView = async (gig) => {
@@ -87,8 +98,13 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
       const data = []
       filtered_gig &&
         filtered_gig.map((value) => {
-          const {from} = value
-          if (moment(from).isBefore(moment(), 'day')) return ''
+          const {date} = value
+
+          const previousDays = moment().subtract(3, 'days')
+          const aheadDays = moment().add(3, 'days')
+          const range = moment().range(previousDays, aheadDays)
+
+          if (!range.contains(moment(date))) return false
           return data.push(value)
         })
       setData(data)
@@ -147,11 +163,18 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
         <CurrentModalPopup
           gig={SELECTED_GIG || []}
           open={openModal}
-          onClick={handleAction}
           onClose={handleCloseView}
           onEndShift={handleEndShift}
+          onArrived={handleArrived}
         />
       )}
+
+      <ConfirmLateNotification
+        open={confirmArrive}
+        gig={SELECTED_GIG}
+        handleClose={() => setConfirmArrive(false)}
+        onClick={handleAction}
+      />
     </Box>
   )
 }

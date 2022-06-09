@@ -265,7 +265,7 @@ var controllers = {
             notes,
             locationRate: locationRate,
             uid: mongoose.Types.ObjectId(id),
-            dateCreated: now.toISOString()
+            dateCreated: now.toISOString(),
         });
 
         try {

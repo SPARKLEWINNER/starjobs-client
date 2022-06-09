@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {useSnackbar} from 'notistack'
-import moment from 'moment'
 
 // components
 import {Box, Stack, Typography, Card} from '@mui/material'
@@ -15,6 +14,11 @@ import gigs_api from 'src/lib/gigs'
 
 // theme
 import color from 'src/theme/palette'
+
+const Moment = require('moment')
+const MomentRange = require('moment-range')
+
+const moment = MomentRange.extendMoment(Moment)
 
 const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
@@ -58,14 +62,13 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
     const load = () => {
       gigs &&
         gigs.map((value) => {
-          const now = moment(new Date())
-          const {status, from} = value
-          const diff = moment(from).diff(now)
+          const {status, date} = value
+          const previousDays = moment().subtract(3, 'days')
+          const aheadDays = moment().add(3, 'days')
+          const range = moment().range(previousDays, aheadDays)
 
-          //express as a duration
-          const diffDuration = moment.duration(diff)
+          if (!range.contains(moment(date))) return false
 
-          if (diffDuration.hours() < -10) return false
           switch (status) {
             case 'Confirm-Gig':
             case 'On-the-way':
@@ -73,7 +76,6 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
             case 'Confirm-Arrived':
             case 'On-going':
             case 'End-Shift':
-              if (diffDuration.hours() > 3) return false
               return setFilter((prevState) => [...prevState, ...[value]])
             default:
               return false

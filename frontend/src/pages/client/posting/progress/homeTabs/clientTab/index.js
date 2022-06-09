@@ -107,7 +107,6 @@ export default function TabsComponent() {
         return
       }
 
-      console.log(values)
       await sendGigNotification({
         title: 'Gig success',
         body: 'To monitor gig fee View gig in progress',

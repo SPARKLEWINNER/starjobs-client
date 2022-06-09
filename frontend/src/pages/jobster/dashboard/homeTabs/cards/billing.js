@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import {Box, Card, CardContent, Typography, Accordion, AccordionSummary, Stack} from '@mui/material'
 import {Icon} from '@iconify/react'
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
-import moment from 'moment'
 
 import {calculations} from 'src/utils/gigComputation'
 
@@ -11,7 +10,7 @@ BillingCard.propTypes = {
 }
 
 export default function BillingCard({gig}) {
-  let {position, hours, from, time, locationRate, fee, _id} = gig
+  let {position, hours, breakHr, locationRate, fee, late, _id} = gig
 
   fee = parseFloat(fee)
   let {jobsterTotal} = calculations(hours, fee, locationRate)
@@ -44,25 +43,36 @@ export default function BillingCard({gig}) {
                   </Stack>
 
                   <Stack sx={{my: 1}}>
-                    <Typography variant="body2">Date & Time</Typography>
+                    <Typography variant="body2">No. of actual work</Typography>
                     <Typography variant="body1" color="default" sx={{fontWeight: 'bold'}}>
-                      Start: {moment(from).format('MMM-DD hh:mm A')}
-                    </Typography>
-                    <Typography variant="body1" color="default" sx={{fontWeight: 'bold'}}>
-                      End: {moment(time).format('MMM-DD hh:mm A')}
+                      {hours && parseFloat(hours).toFixed(2)}
                     </Typography>
                   </Stack>
                   <Stack sx={{my: 1}}>
-                    <Typography variant="body2">No. of Hours</Typography>
-                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                      {hours}
+                    <Typography variant="body2">Break hours</Typography>
+                    <Typography variant="body1" color="default" sx={{fontWeight: 'bold'}}>
+                      {breakHr && parseFloat(breakHr).toFixed(2)}
                     </Typography>
                   </Stack>
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">Proposed & Approved rate</Typography>
+                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                      P {fee && parseFloat(fee).toFixed(2)} / hour
+                    </Typography>
+                  </Stack>
+                  {late && (
+                    <Stack sx={{my: 1}}>
+                      <Typography variant="body2">Late</Typography>
+                      <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                        {late && parseFloat(late).toFixed(2)} / hour
+                      </Typography>
+                    </Stack>
+                  )}
 
                   <Stack sx={{my: 1}}>
                     <Typography variant="body2">Total Service Payment</Typography>
                     <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                      {parseFloat(jobsterTotal).toFixed(2)}
+                      P {jobsterTotal && (parseFloat(jobsterTotal).toFixed(2) * hours).toFixed(2)}
                     </Typography>
                   </Stack>
                 </CardContent>

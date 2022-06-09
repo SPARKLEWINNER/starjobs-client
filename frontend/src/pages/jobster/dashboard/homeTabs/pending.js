@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import {Box, Stack, Typography, Link, Card} from '@mui/material'
 import moment from 'moment'
 import {PendingCard} from './cards'
+import {ConfirmLateNotification} from 'src/components/notifications'
 import CurrentModalPopup from './modal'
 
 // api
@@ -18,6 +19,7 @@ import color from 'src/theme/palette'
 const PendingTab = ({gigs, user}) => {
   const navigate = useNavigate()
   const {enqueueSnackbar} = useSnackbar()
+  const [confirmArrive, setConfirmArrive] = useState(false)
   const {sendGigNotification} = useSendNotif()
 
   const [isLoading, setLoading] = useState(false)
@@ -112,6 +114,13 @@ const PendingTab = ({gigs, user}) => {
           loading={isLoading}
         />
       )}
+
+      <ConfirmLateNotification
+        open={confirmArrive}
+        gig={SELECTED_GIG}
+        handleClose={() => setConfirmArrive(false)}
+        onClick={handleAction}
+      />
     </Box>
   )
 }

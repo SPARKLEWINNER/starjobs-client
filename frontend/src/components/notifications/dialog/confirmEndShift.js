@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -6,7 +7,9 @@ import {
   Stack,
   DialogContent,
   DialogContentText,
-  Button
+  Button,
+  Box,
+  TextField
 } from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 import {Icon} from '@iconify/react'
@@ -15,12 +18,23 @@ import closeIcon from '@iconify/icons-eva/close-circle-outline'
 import PropTypes from 'prop-types'
 
 export default function ConfirmEndShiftNotification({open, gig, onCommit, handleClose, loading}) {
+  const [hoursLate, setHoursLate] = useState(undefined)
+  const [isLate, setLate] = useState(false)
+
   const handleCommit = (value) => {
     try {
-      onCommit(value)
+      let data = {
+        timeLate: hoursLate ? JSON.parse(hoursLate) : null,
+        ...value
+      }
+      onCommit(data)
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleChangeValue = (event) => {
+    setHoursLate(event.target.value)
   }
 
   return (
@@ -52,20 +66,65 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
             Remember, confirming today’s gig as successful means that no untoward incidents or issues occurred during
             the gig-engagement.” If successful, please confirm.
           </Typography>
+
+          {!isLate && (
+            <Typography variant="h6" sx={{mb: 3, textAlign: 'center', fontWeight: '400'}}>
+              Did the Jobster arrived on-time?
+            </Typography>
+          )}
+          {isLate && (
+            <Box>
+              <Typography sx={{mt: 2}} variant="h6">
+                No. of hour/minutes the jobster is late.{' '}
+              </Typography>
+              <TextField
+                key="gig-rate"
+                label="Hours and minutes"
+                sx={{width: '100%', mt: 2}}
+                onChange={handleChangeValue}
+                error={!hoursLate}
+                type="number"
+              />
+              <Typography sx={{my: 2}} variant="caption">
+                (ex 1.30 = 1 hour and 30 minutes)
+              </Typography>
+              {!hoursLate && (
+                <Typography sx={{my: 2}} variant="body2" color="red">
+                  Kindly indicate the number of hours/minute the jobster is late.
+                </Typography>
+              )}
+            </Box>
+          )}
+
           <Stack>
-            <LoadingButton
+            <Button
               color="primary"
               variant="contained"
+              size="large"
               onClick={() => handleCommit(gig)}
               disabled={loading}
               loading={loading}
-              size="large"
             >
-              Confirm End Shift
-            </LoadingButton>
-            <LoadingButton size="large" onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}}>
-              No
-            </LoadingButton>
+              {!isLate ? 'Yes, Confirm End Shift' : 'Submit and Confirm End Shift'}
+            </Button>
+
+            {!isLate ? (
+              <LoadingButton
+                onClick={() => {
+                  setLate(!isLate)
+                }}
+                variant="outlined"
+                size="large"
+                color="inherit"
+                sx={{mt: 2}}
+              >
+                No
+              </LoadingButton>
+            ) : (
+              <Button onClick={() => setLate(!isLate)} variant="outlined" size="large" color="inherit" sx={{mt: 2}}>
+                Cancel
+              </Button>
+            )}
           </Stack>
         </DialogActions>
       </Dialog>

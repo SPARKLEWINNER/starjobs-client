@@ -215,7 +215,8 @@ var controllers = {
                                     grossWithHolding: grossWithHolding,
                                     serviceCost: serviceCost,
                                     jobsterTotal: jobsterTotal
-                                }
+                                },
+                                late: late ?? null
                             }
                         );
 

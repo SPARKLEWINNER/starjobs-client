@@ -98,7 +98,8 @@ export default function TabsComponent() {
     setLoading(true)
     let form_data = {
       status: 'Confirm-End-Shift',
-      uid: gigConfirm.auid
+      uid: gigConfirm.auid,
+      late: parseFloat(values.timeLate).toFixed(2) ?? null
     }
     try {
       const result = await gigs_api.patch_gigs_apply(gigConfirm._id, form_data)

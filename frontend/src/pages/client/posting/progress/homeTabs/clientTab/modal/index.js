@@ -34,10 +34,8 @@ import PropTypes from 'prop-types'
 CurrentModalPopup.propTypes = {
   gig: PropTypes.object,
   open: PropTypes.bool,
-  onClick: PropTypes.func,
   onClose: PropTypes.func,
   onEndShift: PropTypes.func,
-  onArrived: PropTypes.func,
   loading: PropTypes.bool
 }
 
@@ -64,7 +62,7 @@ const Puller = styled(Box)(({theme}) => ({
   left: 'calc(50% - 15px)'
 }))
 
-export default function CurrentModalPopup({gig, open, onClose, onEndShift, onArrived, loading}) {
+export default function CurrentModalPopup({gig, open, onClose, onEndShift, loading}) {
   let {history, position, hours, fee, time, from, status, category, account, locationRate} = gig
 
   const {firstName, middleInitial, lastName, photo} = account[0]
@@ -84,8 +82,6 @@ export default function CurrentModalPopup({gig, open, onClose, onEndShift, onArr
 
   const _label = (_status) => {
     switch (_status) {
-      case 'Confirm-Gig':
-        return 'Confirm-Arrived'
       case 'End-Shift':
         return 'Confirm-End-Shift'
       default:
@@ -240,26 +236,6 @@ export default function CurrentModalPopup({gig, open, onClose, onEndShift, onArr
                           })}
                       </List>
                     </ListWrapperStyle>
-
-                    {/* {status === 'Confirm-Gig' && (
-                      <Stack sx={{mt: 3, mb: 5}}>
-                        <LoadingButton
-                          size="large"
-                          variant="contained"
-                          onClick={() => handleClick(gig)}
-                          loading={loading}
-                        >
-                          {_label(status)}
-                        </LoadingButton>
-                      </Stack>
-                    )} */}
-                    {status === 'Confirm-Gig' && (
-                      <Stack sx={{mt: 3, mb: 5}}>
-                        <LoadingButton size="large" variant="contained" onClick={() => onArrived()} loading={loading}>
-                          {_label(status)}
-                        </LoadingButton>
-                      </Stack>
-                    )}
                     {status === 'End-Shift' && (
                       <Stack sx={{mt: 3, mb: 5}}>
                         <LoadingButton

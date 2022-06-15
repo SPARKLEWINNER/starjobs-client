@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 function change_label_by_status(status) {
   switch (status) {
     case 'Confirm-Gig':
-      return 'Click when jobster arrived'
+      return 'Waiting for Arrival'
     case 'Confirm-Arrived':
       return 'Jobster working'
     case 'End-Shift':
@@ -51,7 +51,7 @@ const CurrentCard = ({gig, onView}) => {
           </Box>
 
           <Box sx={{position: 'absolute', bottom: 15, right: 20}}>
-            <Typography variant="overline" sx={{fontWeight: 'bold', fontSize: 8}}>
+            <Typography variant="overline" sx={{fontWeight: 'bold'}}>
               {change_label_by_status(status)}
             </Typography>
           </Box>

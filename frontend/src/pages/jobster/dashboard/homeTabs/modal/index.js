@@ -50,6 +50,8 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
         return ''
       case 'Accepted':
         return 'Confirm-Gig'
+      case 'Confirm-Gig':
+        return 'Confirm-Arrived'
       case 'Confirm-Arrived':
       case 'Arrived':
         return 'End-Shift'
@@ -243,6 +245,19 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                       </Stack>
                     ))}
 
+                  {status === 'Confirm-Gig' && (
+                    <Stack sx={{mt: 3, mb: 5}}>
+                      <LoadingButton
+                        size="large"
+                        variant="contained"
+                        onClick={() => handleClick(gig)}
+                        loading={loading}
+                      >
+                        {_label(status)}
+                      </LoadingButton>
+                    </Stack>
+                  )}
+
                   {status === 'Confirm-Arrived' && (
                     <Stack sx={{mt: 3, mb: 5}}>
                       <LoadingButton
@@ -253,14 +268,6 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                       >
                         {_label(status)}
                       </LoadingButton>
-                    </Stack>
-                  )}
-
-                  {status === 'Confirm-Gig' && (
-                    <Stack sx={{mt: 3, mb: 5}}>
-                      <Button size="large" variant="text" sx={{textTransform: 'initial !important'}}>
-                        Client will confirm your arrival
-                      </Button>
                     </Stack>
                   )}
 

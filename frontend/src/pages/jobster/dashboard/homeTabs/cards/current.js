@@ -11,7 +11,7 @@ function change_label_by_status(status) {
     case 'Accepted':
       return 'Click to Push through'
     case 'Confirm-Gig':
-      return 'Client will confirm your arrival'
+      return 'Click to confirm your arrival'
     case 'Confirm-Arrived':
       return 'Click to End Shift'
     case 'End-Shift':
@@ -64,7 +64,7 @@ const CurrentCard = ({gig, onView}) => {
           </Box>
 
           <Box sx={{position: 'absolute', bottom: 15, right: 20}}>
-            <Typography variant="overline" sx={{fontWeight: 'bold', fontSize: 8}}>
+            <Typography variant="overline" sx={{fontWeight: 'bold'}}>
               {change_label_by_status(status)}
             </Typography>
           </Box>

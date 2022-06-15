@@ -29,7 +29,7 @@ const PromotionsBanner = ({banners}) => {
         wrapAround={true}
         cellSpacing={40}
         cellAlign={'center'}
-        slidesToShow={1.5}
+        slidesToShow={1.2}
         transitionMode={'scroll3d'}
       >
         {banners &&

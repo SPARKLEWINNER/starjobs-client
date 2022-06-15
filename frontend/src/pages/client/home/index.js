@@ -77,6 +77,14 @@ const mockBanner = [
   {
     title: 'banner-four',
     image: '/static/home/banner/client/banner-four.png'
+  },
+  {
+    title: 'banner-five',
+    image: '/static/home/banner/client/banner-five.png'
+  },
+  {
+    title: 'banner-six',
+    image: '/static/home/banner/client/banner-six.jpg'
   }
 ]
 

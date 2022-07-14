@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import moment from 'moment'
 import {capitalCase} from 'change-case'
+import {useNavigate} from 'react-router-dom'
 // material
 import {Box, Button, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
@@ -19,6 +20,7 @@ const webhook = require('webhook-discord')
 
 export default function CreatGigForm({user, category, notificationArea}) {
   const {enqueueSnackbar} = useSnackbar()
+  const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set())
   const [isLoading, setLoading] = useState(false)
@@ -97,6 +99,7 @@ export default function CreatGigForm({user, category, notificationArea}) {
     enqueueSnackbar('Gig post success', {variant: 'success'})
     setLoading(false)
     setActiveStep(0)
+    navigate('/client/gig/create?tab=3')
   }
 
   return (

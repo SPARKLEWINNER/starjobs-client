@@ -54,7 +54,7 @@ const GigsForm = () => {
   return (
     <>
       <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{mt: 4}}>
-        <Select native onChange={(e) => handleSelectedCategory(e.target.value)} defaultValue={''}>
+        <Select id="createGig" native onChange={(e) => handleSelectedCategory(e.target.value)} defaultValue={''}>
           <option value="" disabled key="initial">
             Select Gig Category
           </option>

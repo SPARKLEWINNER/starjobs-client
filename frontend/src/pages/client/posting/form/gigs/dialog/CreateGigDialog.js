@@ -45,7 +45,7 @@ const CreateGigDialog = ({open, onConfirm, handleClose}) => {
         </DialogContent>
         <DialogActions sx={{display: 'block', pb: 5, px: 5}}>
           <Stack row>
-            <LoadingButton color="primary" variant="contained" onClick={handleConfirmGig} loading={loading}>
+            <LoadingButton id="gigCon" color="primary" variant="contained" onClick={handleConfirmGig} loading={loading}>
               Confirm
             </LoadingButton>
             <Button onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}}>

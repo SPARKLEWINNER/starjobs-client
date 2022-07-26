@@ -204,6 +204,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
         <Stack spacing={3}>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
+              id="workType"
               fullWidth
               label="Type of work"
               type="text"
@@ -214,6 +215,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           </Stack>
 
           <TextField
+            id="location"
             fullWidth
             label="Location"
             type="text"
@@ -223,6 +225,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           />
 
           <TextField
+            id="contactNumber"
             fullWidth
             label="Contact person number"
             type="text"
@@ -232,6 +235,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           />
           {areas && areas.length > 0 && (
             <SelectMultiple
+              id="area"
               onChange={(e) => setAreasNotif(e)}
               value={areasNotif}
               isMulti={true}
@@ -258,6 +262,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
 
           <Stack direction={{sm: 'row', xs: 'column'}} spacing={2}>
             <DatePicker
+              id="startDate"
               onChange={(date) => handleFrom(date)}
               minDate={current_date}
               selected={from || ''}
@@ -276,6 +281,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               }
             />
             <DatePicker
+              id="endDate"
               onChange={(date) => handleCalculate(date)}
               minDate={current_date}
               selected={to || ''}
@@ -284,6 +290,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               dateFormat="MMMM d, yyyy h:mm aa"
               customInput={
                 <TextField
+                  id="endDate"
                   type="text"
                   fullWidth
                   margin="normal"
@@ -295,7 +302,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             />
           </Stack>
 
-          <Select native onChange={(e) => setFieldValue('shift', e.target.value)} defaultValue={''}>
+          <Select id="shifts" native onChange={(e) => setFieldValue('shift', e.target.value)} defaultValue={''}>
             <option value="" disabled key="initial">
               Select Shift
             </option>
@@ -315,6 +322,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           </Select>
 
           <TextField
+            id="hours"
             fullWidth
             label="No. of gig hours"
             type="number"
@@ -367,6 +375,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           )}
 
           <TextField
+            id="inputFee"
             fullWidth
             label="Gig Fee per hour"
             type="number"
@@ -375,7 +384,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             helperText={touched.fee && errors.fee}
           />
 
-          <Select native onChange={(e) => setFieldValue('locationRate', e.target.value)} defaultValue={''}>
+          <Select id="locRate" native onChange={(e) => setFieldValue('locationRate', e.target.value)} defaultValue={''}>
             <option value="" disabled key="initial">
               Select Gig Location Rate
             </option>
@@ -389,6 +398,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           </Select>
 
           <TextField
+            id="instruction"
             label="Special Instruction"
             key="notes"
             rows={6}
@@ -413,7 +423,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               ))}
           </Stack>
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton id="continue" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
             Continue
           </LoadingButton>
         </Stack>

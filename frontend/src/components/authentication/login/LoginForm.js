@@ -57,6 +57,7 @@ export default function LoginForm() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{my: 3}}>
           <TextField
+            id="useremail"
             fullWidth
             type="email"
             label="Email address"
@@ -67,6 +68,7 @@ export default function LoginForm() {
           />
 
           <TextField
+            id="userpassword"
             fullWidth
             type={showPassword ? 'text' : 'password'}
             label="Password"
@@ -97,6 +99,7 @@ export default function LoginForm() {
         </Link>
 
         <LoadingButton
+          id="loginBtn"
           fullWidth
           size="large"
           type="submit"

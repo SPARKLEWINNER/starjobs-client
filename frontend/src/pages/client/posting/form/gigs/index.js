@@ -117,6 +117,7 @@ export default function CreatGigForm({user, category, notificationArea}) {
       <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
         {activeStep === 1 && (
           <LoadingButton
+            id="postGig"
             variant="contained"
             size="large"
             sx={{width: '100%'}}
@@ -128,6 +129,7 @@ export default function CreatGigForm({user, category, notificationArea}) {
         )}
         {activeStep !== 0 && (
           <Button
+            id="goBack"
             size="large"
             variant="outlined"
             sx={{width: '100%', textAlign: 'center', mt: 3, mb: 5}}

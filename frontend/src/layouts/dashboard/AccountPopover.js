@@ -65,6 +65,7 @@ export default function AccountPopover({user}) {
   return (
     <>
       <IconButton
+        id="menu"
         ref={anchorRef}
         onClick={handleOpen}
         sx={{
@@ -179,7 +180,7 @@ export default function AccountPopover({user}) {
                       <ListItemIcon>
                         <PersonIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Complete my details" />
+                      <ListItemText id="complete" primary="Complete my details" />
                       <ArrowRightIcon />
                     </ListItemButton>
                   </ListItem>

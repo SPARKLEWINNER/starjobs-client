@@ -6,8 +6,8 @@ it('Client Sign-up ', () => {
  const lastName="Testing";
   const email="testing21@gmail.com ";
  const phoneNumber="09393231312";
- const password="testing123";
-    
+ const password="testing21";
+
  cy.visit('http://localhost:7002/login');
  cy.get('#createAcc').click();
  cy.get('#firstName').type(`${firstName}`);

@@ -12,7 +12,7 @@ export default function VerifiedWelcome() {
 
       <Box sx={{textAlign: 'center'}}>
         <Typography variant="h4" color="common.white" gutterBottom>
-          Awesome! Registration is Verified
+          <div id="verified">Awesome! Registration is Verified</div>
         </Typography>
         <Typography color="common.white">Let's setup your settings, Click the Next button.</Typography>
       </Box>

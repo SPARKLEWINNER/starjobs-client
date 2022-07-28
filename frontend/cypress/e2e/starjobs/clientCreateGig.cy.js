@@ -2,7 +2,7 @@
 import moment from 'moment'
 
 
-context('Client should be able to login', () => {
+context('Client should be able to Create a Gig', () => {
 
 
     beforeEach(() => {

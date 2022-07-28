@@ -108,6 +108,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
           <Box>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
+                id="rateAmount"
                 autoFocus
                 type="number"
                 fullWidth
@@ -117,7 +118,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
                 helperText={touched.rateAmount && errors.rateAmount}
               />
 
-              <Select native {...getFieldProps('rateType')}>
+              <Select id="rateType" native {...getFieldProps('rateType')}>
                 <option selected value="" key="initialRateType" disabled>
                   Select Rate type
                 </option>
@@ -146,7 +147,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
               <Typography variant="body2" sx={{mb: 3, marginTop: '0 !important'}}>
                 plus SSS, PhilHealth, Pag-Ibig Mutual Fund
               </Typography>
-              <Select native {...getFieldProps('accountType')} value={values.accountType}>
+              <Select id="wallet" native {...getFieldProps('accountType')} value={values.accountType}>
                 <option selected value="" key="initialAccountType" disabled>
                   Select mode of wallet
                 </option>
@@ -161,6 +162,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
               {values.accountType === 'gcash' && (
                 <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
                   <TextField
+                    id="accountName"
                     fullWidth
                     label="Account Name"
                     {...getFieldProps('accountName')}
@@ -168,6 +170,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
                     helperText={touched.accountName && errors.accountName}
                   />
                   <TextField
+                    id="accountNumber"
                     fullWidth
                     label="Account Number"
                     {...getFieldProps('accountNumber')}
@@ -179,7 +182,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
             </Stack>
           </Box>
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton id="continueRate" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
             Continue
           </LoadingButton>
         </Stack>

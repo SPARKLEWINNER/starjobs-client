@@ -15,6 +15,7 @@ import CurrentModalPopup from './modal'
 
 // theme
 import color from 'src/theme/palette'
+import {useAuth} from 'src/contexts/AuthContext'
 // import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 const Moment = require('moment')
@@ -23,6 +24,7 @@ const moment = MomentRange.extendMoment(Moment)
 
 const CurrentTab = ({gigs, user, onEndShift}) => {
   const {enqueueSnackbar} = useSnackbar()
+  const {currentUser} = useAuth()
   const [FILTERED_GIGS, setFilter] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [openModal, setOpenModal] = useState(false)
@@ -116,6 +118,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
             <BillingCard
               key={k}
               gig={v}
+              user={currentUser}
               onClick={handleAction}
               isLoading={isLoading}
               onView={() => handleView(v)}

@@ -6,12 +6,12 @@ import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
 import {calculations} from 'src/utils/gigComputation'
 
 BillingCard.propTypes = {
-  gig: PropTypes.object
+  gig: PropTypes.object,
+  user: PropTypes.object
 }
 
-export default function BillingCard({gig}) {
-  let {position, hours, breakHr, locationRate, fee, late, _id} = gig
-
+export default function BillingCard({gig, user}) {
+  let {position, hours, breakHr, locationRate, fee, late, _id, location} = gig
   fee = parseFloat(fee)
   let {jobsterTotal} = calculations(hours, fee, locationRate)
 
@@ -35,6 +35,19 @@ export default function BillingCard({gig}) {
             <Stack direction="row">
               <Box sx={{p: 1}}>
                 <CardContent sx={{flex: '1 0 auto', p: 0, alignItems: 'flex-start'}}>
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">Jobster Name</Typography>
+                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                      {user?.name}
+                    </Typography>
+                  </Stack>
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">Location</Typography>
+                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                      {location}
+                    </Typography>
+                  </Stack>
+
                   <Stack sx={{my: 1}}>
                     <Typography variant="body2">Position</Typography>
                     <Typography variant="body1" sx={{fontWeight: 'bold'}}>

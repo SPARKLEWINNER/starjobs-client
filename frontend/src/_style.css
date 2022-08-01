@@ -155,3 +155,24 @@ input[type='tel'] {
   background-color: white;
   z-index: 99;
 }
+
+
+#react-select-1-listbox,
+#react-select-2-listbox,
+#react-select-3-listbox,
+#react-select-4-listbox,
+#react-select-5-listbox,
+#react-select-7-listbox,
+#react-select-8-listbox,
+#react-select-9-listbox,
+#react-select-10-listbox,
+#react-select-11-listbox,
+#react-select-12-listbox,
+#react-select-6-listbox{
+  background-color: #FFFFFF;
+  z-index: 99;
+}
+
+.repeat-every-select {
+  margin-top: 0.5rem !important;
+}

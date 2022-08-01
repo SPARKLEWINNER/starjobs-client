@@ -24,9 +24,10 @@ const TawktoPageOverlay = ({children}) => {
   const [isDragging, setIsDragging] = useState(false)
 
   const handleClickOpen = () => {
-    if (isDragging === false) {
-      setOpen(true)
-    }
+    return;
+    // if (isDragging === false) {
+    //   setOpen(true)
+    // }
   }
 
   const handleClose = () => {
@@ -52,7 +53,7 @@ const TawktoPageOverlay = ({children}) => {
                 position: 'fixed',
                 bottom: '5em',
                 right: 16,
-                padding: '10px',
+                padding: '10px',    
                 zIndex: '999'
               }}
             >

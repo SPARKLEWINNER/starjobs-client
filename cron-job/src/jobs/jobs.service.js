@@ -81,6 +81,9 @@ async function checkJobs() {
 }
 
 module.exports = (app) => {
+
+  console.log('cron schedules loaded')
+
   cronJob.schedule('*/5 * * * * *', () => {
     console.log('running a task every 5 seconds')
     checkJobs()

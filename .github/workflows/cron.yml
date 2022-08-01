@@ -1,4 +1,4 @@
-name: Production Deploy 
+name: Cron Job Deploy 
 on:
   push:
     branches:

@@ -10,13 +10,6 @@
         "watch": "concurrently \"js --watch\" \"nodemon  server.js\"",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/SPARKLEWINNER/starjobs-api-node.git"
-    },
-    "keywords": [
-        "starjobs"
-    ],
     "author": "Miguel Quintos",
     "license": "ISC",
     "dependencies": {

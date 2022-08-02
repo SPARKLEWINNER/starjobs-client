@@ -87,7 +87,7 @@ export default function RateForm({stored, onNext, onStoreData}) {
               <Typography variant="body2" sx={{mb: 3, marginTop: '0 !important'}}>
                 plus SSS, PhilHealth, Pag-Ibig Mutual Fund
               </Typography>
-              <Select native {...getFieldProps('accountType')} value={values.accountType}>
+              <Select id="wallet" native {...getFieldProps('accountType')} value={values.accountType}>
                 <option selected value="" key="initialAccountType" disabled>
                   Select mode of wallet
                 </option>
@@ -102,6 +102,7 @@ export default function RateForm({stored, onNext, onStoreData}) {
               {values.accountType === 'gcash' && (
                 <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
                   <TextField
+                    id="accountName"
                     fullWidth
                     label="Account Name"
                     {...getFieldProps('accountName')}
@@ -109,6 +110,7 @@ export default function RateForm({stored, onNext, onStoreData}) {
                     helperText={touched.accountName && errors.accountName}
                   />
                   <TextField
+                    id="accountNumber"
                     fullWidth
                     label="Account Number"
                     {...getFieldProps('accountNumber')}

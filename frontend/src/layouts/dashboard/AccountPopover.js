@@ -164,7 +164,7 @@ export default function AccountPopover({user}) {
                       <ListItemIcon>
                         <PersonIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Complete my details" />
+                      <ListItemText id="completeClient" primary="Complete my details" />
                       <ArrowRightIcon />
                     </ListItemButton>
                   </ListItem>
@@ -192,6 +192,7 @@ export default function AccountPopover({user}) {
                         <PersonIcon />
                       </ListItemIcon>
                       <ListItemText
+                        id="editProfile"
                         primary="Edit profile"
                         onClick={() => handleRoute(`${user.accountType === 1 ? `/client` : `/freelancer`}/edit`)}
                       />
@@ -210,7 +211,7 @@ export default function AccountPopover({user}) {
                     </ListItemButton>
                   </ListItem>
                 )}
-                <ListItem sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
+                <ListItem id="changePass" sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
                   <ListItemButton>
                     <ListItemIcon>
                       <PasswordOutlinedIcon />
@@ -220,7 +221,7 @@ export default function AccountPopover({user}) {
                   </ListItemButton>
                 </ListItem>
 
-                <ListItem sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
+                <ListItem id="needHelp" sx={{paddingLeft: '0 !important', paddingRight: '0 !important'}}>
                   <ListItemButton component="a" onClick={handleClickOpen}>
                     <ListItemIcon>
                       <HelpIcon />
@@ -239,7 +240,7 @@ export default function AccountPopover({user}) {
                     <ListItemIcon>
                       <ExitToAppOutlinedIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Sign out" />
+                    <ListItemText id="signout" primary="Sign out" />
                     <ArrowRightIcon />
                   </ListItemButton>
                 </ListItem>

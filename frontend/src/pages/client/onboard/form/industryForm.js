@@ -249,6 +249,7 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
               Type of industry do you belong
             </Typography>
             <Select
+              id="industryType"
               onChange={(e) => handleChangeSelect('industryType', e, 'SKILL_QUALIFICATION')}
               value={selected.SKILL_QUALIFICATION}
               isMulti={true}
@@ -262,6 +263,7 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
             </Typography>
 
             <Select
+              id="skillLooking"
               onChange={(e) => handleChangeSelect('skillLooking', e, 'SKILL_OFFER')}
               value={selected.SKILL_OFFER}
               isMulti={true}
@@ -290,6 +292,7 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
                               sx={{marginTop: '0 !important'}}
                               control={
                                 <Checkbox
+                                  id="skills"
                                   color="primary"
                                   checked={CHECKBOX[v.value].length > 0 && CHECKBOX[v.value].indexOf(item) !== -1}
                                   onChange={(e) => handleChange(e, v.value)}
@@ -314,6 +317,7 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
               })}
 
             <TextField
+              id="salesMarketingOthers"
               key="salesMarketingOthers"
               rows={6}
               fullWidth
@@ -341,7 +345,7 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
             </Stack>
           </Stack>
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton id="contunueInd" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
             Continue
           </LoadingButton>
         </Stack>

@@ -89,6 +89,7 @@ export default function LoginForm() {
         </Stack>
 
         <Link
+          id="forgot"
           component={RouterLink}
           variant="subtitle2"
           sx={{textDecoration: 'none', float: 'right', fontSize: '0.75rem'}}

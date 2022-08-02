@@ -81,6 +81,7 @@ export default function ContactForm({stored, onNext, onStoreData}) {
         <Stack spacing={3}>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
+              id="telephone"
               autoFocus
               fullWidth
               label="Telephone"
@@ -91,6 +92,7 @@ export default function ContactForm({stored, onNext, onStoreData}) {
           </Stack>
 
           <TextField
+            id="mobile"
             fullWidth
             label="Mobile no."
             {...getFieldProps('mobile')}
@@ -99,6 +101,7 @@ export default function ContactForm({stored, onNext, onStoreData}) {
           />
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
+              id="blkNo"
               fullWidth
               label="Blk. no."
               {...getFieldProps('blkNo')}
@@ -106,6 +109,7 @@ export default function ContactForm({stored, onNext, onStoreData}) {
               helperText={touched.blkNo && errors.blkNo}
             />
             <TextField
+              id="zipCode"
               fullWidth
               label="Zip code"
               {...getFieldProps('zipCode')}
@@ -114,6 +118,7 @@ export default function ContactForm({stored, onNext, onStoreData}) {
             />
 
             <TextField
+              id="streetName"
               fullWidth
               label="Street name"
               {...getFieldProps('streetName')}
@@ -122,6 +127,7 @@ export default function ContactForm({stored, onNext, onStoreData}) {
             />
 
             <TextField
+              id="city"
               fullWidth
               label="City"
               {...getFieldProps('city')}
@@ -130,7 +136,7 @@ export default function ContactForm({stored, onNext, onStoreData}) {
             />
           </Stack>
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton id="continueCont" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
             Continue
           </LoadingButton>
         </Stack>

@@ -1,30 +1,8 @@
 name: Render Cron Jobs Deploy 
-on:
-  push:
-    branches:
-      - main
-    paths:
-    - 'cron-job/**'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: Bump Version
-        default: v1.0.0
-        required: true
+on: [push]:
 jobs:
   deploy:
     name: Wait for Deploy
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Wait for Render Deployment
-        uses: bounceapp/render-action@0.2.0
-        with:
-          email: ${{ secrets.RENDER_EMAIL }}
-          password: ${{ secrets.RENDER_PASSWORD }}
-          token: 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 
-          service-id: rnd_jvNRRSo6kc3keRn1CpzjIgt8zf9n
-  bump-version:
-    name: Bump Package Version
     runs-on: ubuntu-18.04
     steps:
       - name: Wait for Render Deployment

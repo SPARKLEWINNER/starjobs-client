@@ -25,7 +25,12 @@ jobs:
           service-id: rnd_jvNRRSo6kc3keRn1CpzjIgt8zf9n
   bump-version:
     name: Bump Package Version
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
-      - name: Example variable usage
-        run: git tag ${{ github.event.inputs.version }}
+      - name: Wait for Render Deployment
+        uses: bounceapp/render-action@0.2.0
+        with:
+          email: ${{ secrets.RENDER_EMAIL }}
+          password: ${{ secrets.RENDER_PASSWORD }}
+          token: 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 
+          service-id: rnd_jvNRRSo6kc3keRn1CpzjIgt8zf9n

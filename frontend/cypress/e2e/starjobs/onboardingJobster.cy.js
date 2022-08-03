@@ -3,7 +3,7 @@
 describe('Jobster Should be able to login, verify and fill onboarding form', () => {
   it('New account should be able to login', () => {
     //Personal Information
-    const email="angelotesting21+6@gmail.com";
+    const email="angelotesting21+9@gmail.com";
     const password="testing21";
     const firstName="Test";
     const lastName="Testing";

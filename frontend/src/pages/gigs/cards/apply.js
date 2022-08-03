@@ -133,7 +133,7 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
           )}
 
           {!currentUser.isActive && currentUser.accountType !== 1 && (
-            <Box sx={{position: 'absolute', bottom: 10, right: 16, textAlign: 'right'}}>
+            <Box id="apply" sx={{position: 'absolute', bottom: 10, right: 16, textAlign: 'right'}}>
               <Link
                 sx={{textDecoration: 'none'}}
                 component={RouterLink}

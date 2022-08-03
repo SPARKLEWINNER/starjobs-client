@@ -61,7 +61,7 @@ export default function Upload({stored, onNext, onStoreData}) {
         <Typography variant="body1" sx={{mb: 0, fontWeight: 'bold', textAlign: 'center'}}>
           Please upload a professional portrait that clearly shows your face
         </Typography>
-        <Box sx={{textAlign: 'center'}}>
+        <Box id="upload" sx={{textAlign: 'center'}}>
           {!stored.photo || isUpload ? (
             <UploadAvatar
               accept="image/*"
@@ -92,7 +92,7 @@ export default function Upload({stored, onNext, onStoreData}) {
         ) : (
           <Button onClick={() => setUpload(false)}>Cancel</Button>
         )}
-        <LoadingButton fullWidth size="large" onClick={handleContinue} variant="contained" loading={isLoading}>
+        <LoadingButton id="con" fullWidth size="large" onClick={handleContinue} variant="contained" loading={isLoading}>
           Continue
         </LoadingButton>
       </Stack>

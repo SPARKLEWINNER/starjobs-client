@@ -290,7 +290,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               dateFormat="MMMM d, yyyy h:mm aa"
               customInput={
                 <TextField
-                  id="endDate"
                   type="text"
                   fullWidth
                   margin="normal"

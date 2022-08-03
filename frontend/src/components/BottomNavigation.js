@@ -207,6 +207,7 @@ export default function SimpleBottomNavigation() {
             label="Home"
           />
           <BottomNavigationAction
+            id="search"
             className={classes.nav_item}
             icon={
               sessionScreen === 1 ? (

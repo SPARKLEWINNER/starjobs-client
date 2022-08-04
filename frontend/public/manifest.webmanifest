@@ -1,0 +1,29 @@
+{
+  "short_name": "Starjobs",
+  "name": "Starjobs",
+  "description": "Starjobs",
+  "theme_color": "#0d7bc9",
+  "background_color": "#0d7bc9",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "static/favicon/icon-72x72.png",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "static/favicon/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "static/favicon/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    }
+  ]
+}

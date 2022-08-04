@@ -1,4 +1,6 @@
 import Pusher from 'pusher-js'
+import {usePwa} from 'react-pwa-app'
+
 import {last} from 'lodash'
 import PropTypes from 'prop-types'
 import {useEffect, useState, createContext, useContext} from 'react'
@@ -16,6 +18,7 @@ NotificationsProvider.propTypes = {
 const NotificationsContext = createContext({})
 
 export function NotificationsProvider({children}) {
+  const pwa = usePwa()
   const router = useLocation()
   const {currentUser, sessionUser} = useAuth()
   const [notification, setNotifications] = useState(0)
@@ -24,6 +27,15 @@ export function NotificationsProvider({children}) {
     encrypted: true
   })
   const channel = pusher.subscribe('notifications')
+
+  // beamsClient
+  //   .start()
+  //   .then(() => beamsClient.addDeviceInterest('hello'))
+  //   .then(() => console.log('Successfully registered and subscribed!'))
+  //   .catch(console.error)
+
+  console.log(pwa.registration) // ServiceWorkerRegistration
+  console.log(pwa.isInstalled) // ServiceWorkerRegistration
 
   const load = async () => {
     const current_page = last(router.pathname.replace('/', '').split('/'))
@@ -53,6 +65,42 @@ export function NotificationsProvider({children}) {
     setNotifications(unread.length)
   }
 
+  const checkPushNotification = () => {
+    var ua = navigator.userAgent.toLowerCase()
+    if (ua.indexOf('safari') !== -1) {
+      if (ua.indexOf('chrome') <= -1) return
+    }
+    //---check if push notification permission has been denied by the user---
+    if (Notification.permission === 'denied') {
+      console.log('User has blocked push notification.')
+      Notification.requestPermission()
+      return
+    }
+    if (Notification.permission === 'default') {
+      Notification.requestPermission()
+      return
+    }
+
+    //---check if push notification is supported or not---
+    if (!('PushManager' in window)) {
+      alert(`Sorry, Push notification is not supported on this browser.`)
+      return
+    }
+    //---get push notification subscription if serviceWorker is registered and ready---
+    navigator.serviceWorker.ready.then(function (registration) {
+      registration.pushManager
+        .getSubscription()
+        .then(function (subscription) {
+          if (subscription) {
+            console.log(subscription)
+          }
+        })
+        .catch(function (error) {
+          console.error('Error occurred enabling push ', error)
+        })
+    })
+  }
+
   const loadSocketConnection = () => {
     channel.bind('new_notification', () => {
       load()
@@ -61,8 +109,10 @@ export function NotificationsProvider({children}) {
       load()
     })
   }
+
   useEffect(() => {
     loadSocketConnection()
+    checkPushNotification()
   }, [])
 
   useEffect(() => {

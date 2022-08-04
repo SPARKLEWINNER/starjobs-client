@@ -103,7 +103,7 @@ export default function Upload({onNext, onStoreData}) {
         <Typography variant="body2" sx={{mb: 0, fontWeight: 'bold', textAlign: 'center'}}>
           Please upload a professional portrait that clearly shows your face
         </Typography>
-        <Box id="upload" sx={{textAlign: 'center', marginTop: '1rem !important', mb: 10}}>
+        <Box id="uploadProfileContainer" sx={{textAlign: 'center', marginTop: '1rem !important', mb: 10}}>
           <UploadAvatar
             accept="image/*"
             file={avatarUrl}

@@ -200,7 +200,14 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             </Stack>
           </Box>
 
-          <LoadingButton id="continue" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continuePersonalForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

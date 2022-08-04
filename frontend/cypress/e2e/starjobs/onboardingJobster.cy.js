@@ -78,7 +78,7 @@ describe('Jobster Should be able to login, verify and fill onboarding form', () 
     cy.get('#emergencyName').type(emergencyName);
     cy.get('#emergencyContact').type(emergencyContact);
     cy.get('#emergencyRelation').type(emergencyRelation);
-    cy.get('#continue').click();
+    cy.get('#continuePersonalForm').click();
 
     //WOrk Experience
     cy.get('#currentCompany').type(currentCompany)
@@ -91,7 +91,7 @@ describe('Jobster Should be able to login, verify and fill onboarding form', () 
     cy.get('#pastStartDate').type(pastStartDate);
     cy.get('#pastEndDate').type(pastEndDate);
     cy.get('#pastPlaceOfWork').type(currentPlaceOfWork);
-    cy.get('#continueExp').click();
+    cy.get('#continueEmploymentForm').click();
 
     //Expertise
     cy.get('#industry').type('IT and Computer systems{enter}');
@@ -99,33 +99,31 @@ describe('Jobster Should be able to login, verify and fill onboarding form', () 
     // cy.findByText('Web Development')
     cy.get('#skillCheck').check();
     cy.get('#otherSkills').type("QA Tester");
-    cy.get('#continueEx').click();
+    cy.get('#continueExpertiseForm').click();
 
     //Educational Background
-    cy.get('#highSchool').type(highSchool);
-    cy.get('#highSchoolYear').type(highSchoolYear);
-    cy.get('#highSchoolAwards').type(highSchoolAwards);
-    cy.get('#collegeName').type(collegeName);
-    cy.get('#collegeYear').type(collegeYear);
-    cy.get('#collegeAwards').type(collegeAwards);
-    cy.get('#vocationalProgram').type(vocationalProgram);
-    cy.get('#vocationalYear').type(vocationalYear);
-    cy.get('#vocationalAwards').type(vocationalAwards);
-    cy.get('#program').select("Overachiever Award");
-    cy.get('#continueEduc').click();
+    cy.get('#highSchool').type(highSchool)
+    cy.get('#highSchoolYear').type(highSchoolYear)
+    cy.get('#highSchoolAwards').type(highSchoolAwards)
+    cy.get('#collegeName').type(collegeName)
+    cy.get('#collegeYear').type(collegeYear)
+    cy.get('#collegeAwards').type(collegeAwards)
+    cy.get('#vocationalProgram').type(vocationalProgram)
+    cy.get('#vocationalYear').type(vocationalYear)
+    cy.get('#vocationalAwards').type(vocationalAwards)
+    cy.get('#vocationalProgramSelect').select('Overachiever Award')
+    cy.get('#continueEducationForm').click()
 
     //Rate and Payment
-    cy.get('#rateType').select('Hourly');
+    cy.get('#rateTypeSelect').select('Hourly');
     cy.get('#rateAmount').type(rateAmount);
-    cy.get('#wallet').select('GCash');
+    cy.get('#walletSelect').select('GCash');
     cy.get('#accountName').type(accountName);
     cy.get('#accountNumber').type(accountNumber);
-    cy.get('#continueRate').click();
-    // cy.get('#upload').attachFile("profile.png").;
-    cy.get('#upload')
-  .attachFile('profile.png', { subjectType: 'drag-n-drop' });
-    cy.get('#con').click();
-    cy.wait(1000);
+    cy.get('#continueRateForm').click();
+    cy.get('#uploadProfileContainer').attachFile('starjobsLogo.png', {subjectType: 'drag-n-drop'})
+    cy.get('#continueUpload').click();
+    cy.wait(1000)
     cy.get('#mui-12').click();
 })
 })

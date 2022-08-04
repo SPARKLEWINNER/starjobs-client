@@ -211,7 +211,12 @@ export default function EducationForm({stored, onNext, onStoreData}) {
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
                 Program / Course
               </Typography>
-              <Select id="program" native {...getFieldProps('vocationalProgramCourse')} value={values.civilStatus}>
+              <Select
+                id="vocationalProgramSelect"
+                native
+                {...getFieldProps('vocationalProgramCourse')}
+                value={values.civilStatus}
+              >
                 <option selected value="" key="initialProgramCourse" disabled>
                   Select Program / Course
                 </option>
@@ -226,7 +231,14 @@ export default function EducationForm({stored, onNext, onStoreData}) {
             </Stack>
           </Box>
 
-          <LoadingButton id="continueEduc" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueEducationForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

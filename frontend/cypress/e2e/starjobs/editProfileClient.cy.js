@@ -52,7 +52,7 @@ describe('Should be able to edit profile ', () => {
     cy.get('#location').clear().type(location);
     cy.get('#website').clear().type(website);
     cy.get('#companyPosition').clear().type(companyPosition);
-    cy.get('#continue').click();
+    cy.get('#continuePersonalForm').click();
 
     // Company contact
     // cy.get('#companyPosition').check( );
@@ -62,23 +62,22 @@ describe('Should be able to edit profile ', () => {
     cy.get('#zipCode').clear().type(zipCode);
     cy.get('#streetName').clear().type(streetName);
     cy.get('#city').clear().type(city);
-    cy.get('#continueCont').click();
+    cy.get('#continueContactForm').click();
 
     // Industry
-    cy.get('#industryType').type(`{backspace}${industryType}{enter}`);
+    cy.get('#industryTypeSelect').type(`{backspace}${industryType}{enter}`);
     cy.get('#skillLooking').type(`{backspace}${skillLooking}{enter}`);
     cy.get(`[value=${skills}]`).check();
     cy.get('#salesMarketingOthers').clear().type(salesMarketingOthers);
-    cy.get('#contunueInd').click();
+    cy.get('#continueIndustryForm').click();
 
     //   //Rate and Payment
-    cy.get('#wallet').select('GCash');
+    cy.get('#walletSelect').select('GCash');
     cy.get('#accountName').clear().type(accountName);
     cy.get('#accountNumber').clear().type(accountNumber);
     cy.get('#mui-34').click();
-
-    cy.get('#upload')
-    .attachFile('newClientProfile.jpg', { subjectType: 'drag-n-drop' });
+    cy.get('#uploadProfileContainer')
+    .attachFile('starjobsLogo.png', { subjectType: 'drag-n-drop' });
     // cy.get('#file')
     // .attachFile('document.pdf', { subjectType: 'drag-n-drop' });
     cy.wait(3000);

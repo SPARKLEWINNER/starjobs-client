@@ -150,7 +150,14 @@ export default function ContactForm({stored, onNext, onStoreData}) {
             </Stack>
           </Stack>
 
-          <LoadingButton id="continueCont" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueContactForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

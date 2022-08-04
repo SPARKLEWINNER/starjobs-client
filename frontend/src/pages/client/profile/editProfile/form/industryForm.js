@@ -241,7 +241,7 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
               Type of industry do you belong
             </Typography>
             <Select
-              id="industryType"
+              id="industryTypeSelect"
               onChange={(e) => handleChangeSelect('industryType', e, 'SKILL_QUALIFICATION')}
               value={selected.SKILL_QUALIFICATION}
               isMulti={true}
@@ -323,7 +323,14 @@ export default function IndustryForm({stored, onNext, onStoreData}) {
             </Typography>
           </Stack>
 
-          <LoadingButton id="contunueInd" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueIndustryForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

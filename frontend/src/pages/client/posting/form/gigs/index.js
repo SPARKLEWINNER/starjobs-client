@@ -117,7 +117,7 @@ export default function CreatGigForm({user, category, notificationArea}) {
       <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
         {activeStep === 1 && (
           <LoadingButton
-            id="postGig"
+            id="postGigButton"
             variant="contained"
             size="large"
             sx={{width: '100%'}}

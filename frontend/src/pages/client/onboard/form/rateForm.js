@@ -106,7 +106,7 @@ export default function RateForm({stored, onNext, onStoreData}) {
               <Typography variant="body2" sx={{mb: 3, marginTop: '0 !important'}}>
                 plus SSS, PhilHealth, Pag-Ibig Mutual Fund
               </Typography>
-              <Select id="wallet" native {...getFieldProps('accountType')} value={values.accountType}>
+              <Select id="walletSelect" native {...getFieldProps('accountType')} value={values.accountType}>
                 <option selected value="" key="initialAccountType" disabled>
                   Select mode of wallet
                 </option>

@@ -235,7 +235,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           />
           {areas && areas.length > 0 && (
             <SelectMultiple
-              id="area"
+              id="areaNotifSelect"
               onChange={(e) => setAreasNotif(e)}
               value={areasNotif}
               isMulti={true}
@@ -301,7 +301,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             />
           </Stack>
 
-          <Select id="shifts" native onChange={(e) => setFieldValue('shift', e.target.value)} defaultValue={''}>
+          <Select id="shiftSelect" native onChange={(e) => setFieldValue('shift', e.target.value)} defaultValue={''}>
             <option value="" disabled key="initial">
               Select Shift
             </option>
@@ -374,7 +374,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           )}
 
           <TextField
-            id="inputFee"
+            id="inputGigFee"
             fullWidth
             label="Gig Fee per hour"
             type="number"
@@ -383,7 +383,12 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             helperText={touched.fee && errors.fee}
           />
 
-          <Select id="locRate" native onChange={(e) => setFieldValue('locationRate', e.target.value)} defaultValue={''}>
+          <Select
+            id="locationRateSelect"
+            native
+            onChange={(e) => setFieldValue('locationRate', e.target.value)}
+            defaultValue={''}
+          >
             <option value="" disabled key="initial">
               Select Gig Location Rate
             </option>
@@ -422,7 +427,14 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               ))}
           </Stack>
 
-          <LoadingButton id="continue" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueGigForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

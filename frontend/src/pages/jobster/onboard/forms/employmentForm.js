@@ -193,7 +193,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
 
           <FormControlLabel
             sx={{mb: 3}}
-            control={<Checkbox id="freshGrad" color="primary" {...getFieldProps('isFreshGraduate')} />}
+            control={<Checkbox id="isFreshGraduateCheckbox" color="primary" {...getFieldProps('isFreshGraduate')} />}
             label={
               <Typography variant="body2" align="left" sx={{color: 'text.secondary'}}>
                 Fresh Graduate
@@ -259,7 +259,14 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
             ''
           )}
 
-          <LoadingButton id="continueExp" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueEmploymentForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

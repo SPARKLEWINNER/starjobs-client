@@ -261,7 +261,14 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
             ''
           )}
 
-          <LoadingButton id="continueExp" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueEmploymentForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

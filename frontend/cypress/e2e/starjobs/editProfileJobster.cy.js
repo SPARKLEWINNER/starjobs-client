@@ -81,7 +81,7 @@ describe('Should be able to edit profile ', () => {
     cy.get('#emergencyName').clear().type(emergencyName);
     cy.get('#emergencyContact').clear().type(emergencyContact);
     cy.get('#emergencyRelation').clear().type(emergencyRelation);
-    cy.get('#continue').click();
+    cy.get('#continuePersonalForm').click();
 
     //WOrk Experience
     cy.get('#currentCompany').clear().type(currentCompany)
@@ -94,7 +94,7 @@ describe('Should be able to edit profile ', () => {
     // cy.get('#pastStartDate').clear().type(pastStartDate);
     // cy.get('#pastEndDate').clear().type(pastEndDate);
     // cy.get('#pastPlaceOfWork').clear().type(currentPlaceOfWork);
-    cy.get('#continueExp').click();
+    cy.get('#continueEmploymentForm').click();
 
     //Expertise
     cy.get('#industry').type(`{backspace}${industry}{enter}`);
@@ -102,7 +102,7 @@ describe('Should be able to edit profile ', () => {
     // cy.findByText('Web Development')
     cy.get(`[value="${skillsSelect}"]`).check();
     cy.get('#otherSkills').clear().type(otherSkills);
-    cy.get('#continueEx').click();
+    cy.get('#continueExpertiseForm').click();
 
     //Educational Background
     cy.get('#highSchool').clear().type(highSchool);
@@ -114,19 +114,18 @@ describe('Should be able to edit profile ', () => {
     cy.get('#vocationalProgram').clear().type(vocationalProgram);
     cy.get('#vocationalYear').clear().type(vocationalYear);
     cy.get('#vocationalAwards').clear().type(vocationalAwards);
-    cy.get('#program').select("Overachiever Award");
-    cy.get('#continueEduc').click();
+    cy.get('#vocationalProgramSelect').select("Overachiever Award");
+    cy.get('#continueEducationForm').click();
 
     //Rate and Payment
-    cy.get('#rateType').select('Hourly');
+    cy.get('#rateTypeSelect').select('Hourly');
     cy.get('#rateAmount').clear().type(rateAmount);
-    cy.get('#wallet').select('GCash');
+    cy.get('#walletSelect').select('GCash');
     cy.get('#accountName').clear().type(accountName);
     cy.get('#accountNumber').clear().type(accountNumber);
-    cy.get('#continueRate').click();
-    // cy.get('#upload').attachFile("profile.png").;
-    cy.get('#upload').attachFile('profile.png', { subjectType: 'drag-n-drop' });
-    cy.get('#con').click();
+    cy.get('#continueRateForm').click();
+    cy.get('#uploadProfileContainer').attachFile('starjobsLogo.png', { subjectType: 'drag-n-drop' });
+    cy.get('#continueUpload').click();
     cy.wait(1000);
     cy.get('#mui-12').click();
   })

@@ -118,7 +118,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
                 helperText={touched.rateAmount && errors.rateAmount}
               />
 
-              <Select id="rateType" native {...getFieldProps('rateType')}>
+              <Select id="rateTypeSelect" native {...getFieldProps('rateType')}>
                 <option selected value="" key="initialRateType" disabled>
                   Select Rate type
                 </option>
@@ -147,7 +147,7 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
               <Typography variant="body2" sx={{mb: 3, marginTop: '0 !important'}}>
                 plus SSS, PhilHealth, Pag-Ibig Mutual Fund
               </Typography>
-              <Select id="wallet" native {...getFieldProps('accountType')} value={values.accountType}>
+              <Select id="walletSelect" native {...getFieldProps('accountType')} value={values.accountType}>
                 <option selected value="" key="initialAccountType" disabled>
                   Select mode of wallet
                 </option>
@@ -182,7 +182,14 @@ export default function PersonalForm({stored, onNext, onStoreData}) {
             </Stack>
           </Box>
 
-          <LoadingButton id="continueRate" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueRateForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

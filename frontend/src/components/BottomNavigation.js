@@ -133,7 +133,7 @@ export default function SimpleBottomNavigation() {
             showLabel={true}
             label="Search"
           />
-          <Box id="gigsBtn">
+          <Box id="gigsContainer">
             <BottomNavigationAction
               onChange={() => {
                 handleSessionScreen(2)
@@ -207,7 +207,7 @@ export default function SimpleBottomNavigation() {
             label="Home"
           />
           <BottomNavigationAction
-            id="search"
+            id="searchBtn"
             className={classes.nav_item}
             icon={
               sessionScreen === 1 ? (

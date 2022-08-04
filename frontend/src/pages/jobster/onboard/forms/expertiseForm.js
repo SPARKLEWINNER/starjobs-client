@@ -321,7 +321,14 @@ export default function ExpertiseForm({stored, onNext, onStoreData}) {
               (ex. Encoding, Excel Computations)
             </Typography>
           </Stack>
-          <LoadingButton id="continueEx" fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueExpertiseForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

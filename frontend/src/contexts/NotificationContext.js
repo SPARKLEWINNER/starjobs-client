@@ -1,5 +1,5 @@
 import Pusher from 'pusher-js'
-// import * as PusherPushNotifications from '@pusher/push-notifications-web'
+import {usePwa} from 'react-pwa-app'
 
 import {last} from 'lodash'
 import PropTypes from 'prop-types'
@@ -18,6 +18,7 @@ NotificationsProvider.propTypes = {
 const NotificationsContext = createContext({})
 
 export function NotificationsProvider({children}) {
+  const pwa = usePwa()
   const router = useLocation()
   const {currentUser, sessionUser} = useAuth()
   const [notification, setNotifications] = useState(0)
@@ -26,6 +27,15 @@ export function NotificationsProvider({children}) {
     encrypted: true
   })
   const channel = pusher.subscribe('notifications')
+
+  // beamsClient
+  //   .start()
+  //   .then(() => beamsClient.addDeviceInterest('hello'))
+  //   .then(() => console.log('Successfully registered and subscribed!'))
+  //   .catch(console.error)
+
+  console.log(pwa.registration) // ServiceWorkerRegistration
+  console.log(pwa.isInstalled) // ServiceWorkerRegistration
 
   const load = async () => {
     const current_page = last(router.pathname.replace('/', '').split('/'))

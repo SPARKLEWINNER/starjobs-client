@@ -1,3 +1,4 @@
+import Pusher from 'pusher-js'
 import {last} from 'lodash'
 import PropTypes from 'prop-types'
 import {useEffect, useState, createContext, useContext} from 'react'
@@ -18,6 +19,11 @@ export function NotificationsProvider({children}) {
   const router = useLocation()
   const {currentUser, sessionUser} = useAuth()
   const [notification, setNotifications] = useState(0)
+  const pusher = new Pusher(process.env.REACT_APP_PUSHER_APP_KEY, {
+    cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER,
+    encrypted: true
+  })
+  const channel = pusher.subscribe('notifications')
 
   const load = async () => {
     const current_page = last(router.pathname.replace('/', '').split('/'))
@@ -47,12 +53,26 @@ export function NotificationsProvider({children}) {
     setNotifications(unread.length)
   }
 
+  const loadSocketConnection = () => {
+    channel.bind('new_notification', () => {
+      load()
+    })
+    channel.bind('notify_gig', () => {
+      load()
+    })
+  }
+  useEffect(() => {
+    loadSocketConnection()
+  }, [])
+
   useEffect(() => {
     load()
     // eslint-disable-next-line
   }, [router.pathname])
 
-  return <NotificationsContext.Provider value={{notification}}>{children}</NotificationsContext.Provider>
+  return (
+    <NotificationsContext.Provider value={{notification, pusher, channel}}>{children}</NotificationsContext.Provider>
+  )
 }
 
 export const useNotifications = () => {

@@ -4,15 +4,15 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const Pusher = require('pusher');
 const routes = require('./src/routes');
-// const sockets = require('./api/socket');
 
 const swaggerUi = require('swagger-ui-express');
 const passport = require('passport');
 const port = process.env.PORT || 3001;
 const app = express();
 const useragent = require('express-useragent');
-const fixieRequest = request.defaults({proxy: process.env.FIXIE_URL});
+const fixieRequest = request.defaults({ proxy: process.env.FIXIE_URL });
 
 swaggerDocument = require('./swagger.json');
 require('dotenv').config();
@@ -30,30 +30,32 @@ mongoose
     .then(() => console.log(`Database Connected`))
     .catch((err) => console.log(err));
 
-app.enable('trust proxy'); // We are using this for the express-rate-limit middleware See: https://github.com/nfriedly/express-rate-limit
-app.use(express.json()); // Set body parser middleware
+app.enable('trust proxy'); 
+app.use(express.json());
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(cors()); // Enable cross-origin for apex purpose;
+app.use(cors()); 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Expose-Headers', 'X-Total-Count');
     next();
 });
-app.use(useragent.express()); // device request origin
+app.use(useragent.express());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); // swagger
 
 routes(app);
-const server = app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+
+const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID,
+    key: process.env.PUSHER_APP_KEY,
+    secret: process.env.PUSHER_APP_SECRET,
+    cluster: process.env.PUSHER_APP_CLUSTER,
+    encrypted: true,
 });
 
-// const io = require('./socket').init(server);
-// const io = require('socket.io')(server, {
-//     cors: {origin: '*'}
-// });
+global.pusher = pusher;
 
-// io.on('connection', (_socket) => {
-//     sockets(io, _socket);
-// });
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+});

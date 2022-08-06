@@ -27,14 +27,9 @@ export function NotificationsProvider({children}) {
   })
   const channel = pusher.subscribe('notifications')
   const beamsClient = new PusherPushNotifications.Client({
-    instanceId: process.env.REACT_APP_PUSHER_BEAMS_INSTANCE_ID
+    instanceId: 'db50def2-7957-4a3d-80f2-6d78d1d4c322'
   })
 
-  beamsClient
-    .start()
-    .then((beamsClient) => beamsClient.getDeviceId())
-    .then((deviceId) => alert(`Successfully registered with Beams. Device ID: ${deviceId}`))
-    .catch(console.error)
   // beamsClient
   //   .start()
   //   .then(() => beamsClient.addDeviceInterest('hello'))

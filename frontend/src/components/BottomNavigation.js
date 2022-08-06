@@ -1,4 +1,5 @@
 import React from 'react'
+import {browserName} from 'react-device-detect'
 
 import {makeStyles} from '@mui/styles'
 import {Badge, Box} from '@mui/material'
@@ -38,22 +39,22 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   main_button: {
-    borderRadius: 78,
-    width: 82,
-    height: 120,
-    marginTop: -80,
-    marginBottom: -120,
+    borderTopLeftRadius: 78,
+    borderTopRightRadius: 78,
+    width: 72,
+    height: 130,
+    marginTop: -20,
     backgroundColor: theme.palette.common.white,
     boxShadow: '0px -16px 20px 0px rgba(128,125,125,0.25)',
     backdropFilter: 'blur(6px)',
     '& svg': {
+      marginTop: -60,
       color: theme.palette.common.white,
       backgroundColor: theme.palette.starjobs.main,
       width: 52,
       height: 52,
       borderRadius: 52,
-      padding: 10,
-      marginTop: -43
+      padding: 10
     },
     '& .MuiBottomNavigationAction-label': {
       position: 'absolute',
@@ -77,14 +78,14 @@ const BottomNavigationContainer = styled('div')(({theme}) => ({
   borderTopLeftRadius: '16px',
   borderTopRightRadius: '16px',
   position: 'fixed',
-  bottom: -4,
+  bottom: browserName == 'Mobile Safari' ? -5 : -10,
   right: 0,
   left: 0,
-  margin: '0 auto',
+  marginTop: '0 auto',
   WebkitBackdropFilter: 'blur(6px)',
   backgroundColor: alpha(theme.palette.background.default, 1),
   zIndex: 99,
-  height: '60px',
+  height: 80,
   [theme.breakpoints.up('lg')]: {
     width: `calc(100% - ${DRAWER_WIDTH + 1}px)`
   }

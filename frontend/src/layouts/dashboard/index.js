@@ -9,6 +9,8 @@ import DashboardNavbar from './DashboardNavbar'
 import FixedBottomNavigation from 'src/components/BottomNavigation'
 
 import {useAuth} from 'src/contexts/AuthContext'
+
+import {getWindowDimensions} from 'src/utils/dimensions'
 // import {SocketContext} from 'src/utils/contexts/socket'
 
 const APP_BAR_MOBILE = 64
@@ -24,7 +26,7 @@ const RootStyle = styled('div')({
 const MainStyle = styled('div')(({theme}) => ({
   flexGrow: 1,
   overflow: 'auto',
-  minHeight: '100%',
+  minHeight: getWindowDimensions().height,
   margin: '0 auto',
   paddingTop: APP_BAR_MOBILE + 24,
   [theme.breakpoints.up('lg')]: {
@@ -70,12 +72,16 @@ export default function DashboardLayout() {
         <DashboardNavbar location={location.pathname} user={currentUser} />
         {(renderContainer(location.pathname) || !renderContainer(location.pathname)) && (
           <MainStyle sx={{...(last(location.pathname.split('/')) === 'app' ? {paddingTop: 6} : {})}}>
-            <PullToRefresh onRefresh={handleRefresh}>
+            <PullToRefresh
+              onRefresh={handleRefresh}
+              pullDownThreshold={getWindowDimensions().height / 1.2}
+              maxPullDownDistance={getWindowDimensions().height / 1.2}
+            >
               <Outlet />
             </PullToRefresh>
-            <FixedBottomNavigation />
           </MainStyle>
         )}
+        <FixedBottomNavigation />
       </RootStyle>
     </>
   )

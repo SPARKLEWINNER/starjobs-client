@@ -276,6 +276,10 @@ var controllers = {
         try {
             const postedGig = await Gigs.create(gigsObj);
 
+
+            global.pusher.trigger('notifications', 'new_notification', postedGig)
+
+
             if (areas && areas.length > 0) {
                 if (areas.length > 1) {
                     await areas.map(async (item) => {

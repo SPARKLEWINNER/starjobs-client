@@ -27,7 +27,6 @@ import InstallPWA from 'src/components/pwa/install'
 export default function App() {
   const [open, setOpen] = useState(false)
   const [payload, setPayload] = useState([])
-
   const handleClose = () => {
     setOpen(false)
   }
@@ -55,27 +54,7 @@ export default function App() {
         </Box>
       }
       config={{
-        swUrl: '/service-worker.js', // sw file in public default is service-worker.js
-        onUpdate: (reg) => {
-          alert('sw cache was updated')
-          console.log(reg)
-        },
-        onSuccess: (reg) => {
-          alert('sw success installed')
-          console.log(reg)
-        },
-        onError: (reg) => {
-          alert('sw error to install')
-          alert(JSON.stringify(reg))
-        },
-        onPrompt: (e) => {
-          if (e.outcome === 'accepted') {
-            console.log('user click on install and accept')
-          }
-          if (e.outcome === 'dismissed') {
-            console.log('user click on install and refuse')
-          }
-        }
+        swUrl: '/service-worker.js' // sw file in public default is service-worker.js
       }}
     >
       <ThemeConfig>

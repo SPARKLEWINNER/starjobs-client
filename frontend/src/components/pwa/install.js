@@ -3,12 +3,24 @@ import {Dialog, DialogContent, DialogContentText, DialogActions, Button, Typogra
 import {useEffect, useState} from 'react'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import {isMobileOnly} from 'react-device-detect'
 
 const InstallPWA = () => {
   const pwa = usePwa()
-  const [isPWAInstall, setPWAInstall] = useState(pwa.isInstalled ?? false)
+  const [isPWAInstall, setPWAInstall] = useState(false)
   const [notSupported, setNotSupported] = useState(false)
   useEffect(() => {
+    if (isMobileOnly && pwa.isInstalled === 'none') {
+      setPWAInstall(true)
+    }
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
+    if (isMobileOnly && pwa.isInstalled === 'none') {
+      setPWAInstall(true)
+    }
+
     if (!pwa.supports) {
       setNotSupported(true)
     }

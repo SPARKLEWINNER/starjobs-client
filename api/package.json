@@ -23,6 +23,7 @@
     },
     "homepage": "https://github.com/SPARKLEWINNER/starjobs-api-node#readme",
     "dependencies": {
+        "@pusher/push-notifications-server": "^1.2.5",
         "@sendgrid/mail": "^7.4.7",
         "aws-sdk": "^2.639.0",
         "axios": "^0.21.1",

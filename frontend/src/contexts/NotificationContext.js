@@ -27,14 +27,9 @@ export function NotificationsProvider({children}) {
   })
   const channel = pusher.subscribe('notifications')
   const beamsClient = new PusherPushNotifications.Client({
-    instanceId: process.env.REACT_APP_PUSHER_BEAMS_INSTANCE_ID
+    instanceId: 'db50def2-7957-4a3d-80f2-6d78d1d4c322'
   })
 
-  beamsClient
-    .start()
-    .then((beamsClient) => beamsClient.getDeviceId())
-    .then((deviceId) => alert(`Successfully registered with Beams. Device ID: ${deviceId}`))
-    .catch(console.error)
   // beamsClient
   //   .start()
   //   .then(() => beamsClient.addDeviceInterest('hello'))
@@ -72,39 +67,46 @@ export function NotificationsProvider({children}) {
   }
 
   const checkPushNotification = () => {
-    var ua = navigator.userAgent.toLowerCase()
-    if (ua.indexOf('safari') !== -1) {
-      if (ua.indexOf('chrome') <= -1) return
-    }
-    //---check if push notification permission has been denied by the user---
-    if (Notification.permission === 'denied') {
-      console.log('User has blocked push notification.')
-      Notification.requestPermission()
-      return
-    }
-    if (Notification.permission === 'default') {
-      Notification.requestPermission()
-      return
-    }
+    beamsClient
+      .start()
+      .then((beamsClient) => beamsClient.getDeviceId())
+      .then(() => beamsClient.addDeviceInterest('hello'))
+      .then(() => beamsClient.addDeviceInterest('debug-hello'))
+      .then(() => beamsClient.getDeviceInterests())
+      .catch(console.error)
+    // var ua = navigator.userAgent.toLowerCase()
+    // if (ua.indexOf('safari') !== -1) {
+    //   if (ua.indexOf('chrome') <= -1) return
+    // }
+    // //---check if push notification permission has been denied by the user---
+    // if (Notification.permission === 'denied') {
+    //   console.log('User has blocked push notification.')
+    //   Notification.requestPermission()
+    //   return
+    // }
+    // if (Notification.permission === 'default') {
+    //   Notification.requestPermission()
+    //   return
+    // }
 
-    //---check if push notification is supported or not---
-    if (!('PushManager' in window)) {
-      alert(`Sorry, Push notification is not supported on this browser.`)
-      return
-    }
-    //---get push notification subscription if serviceWorker is registered and ready---
-    navigator.serviceWorker.ready.then(function (registration) {
-      registration.pushManager
-        .getSubscription()
-        .then(function (subscription) {
-          if (subscription) {
-            console.log(subscription)
-          }
-        })
-        .catch(function (error) {
-          console.error('Error occurred enabling push ', error)
-        })
-    })
+    // //---check if push notification is supported or not---
+    // if (!('PushManager' in window)) {
+    //   alert(`Sorry, Push notification is not supported on this browser.`)
+    //   return
+    // }
+    // //---get push notification subscription if serviceWorker is registered and ready---
+    // navigator.serviceWorker.ready.then(function (registration) {
+    //   registration.pushManager
+    //     .getSubscription()
+    //     .then(function (subscription) {
+    //       if (subscription) {
+    //         console.log(subscription)
+    //       }
+    //     })
+    //     .catch(function (error) {
+    //       console.error('Error occurred enabling push ', error)
+    //     })
+    // })
   }
 
   const loadSocketConnection = () => {

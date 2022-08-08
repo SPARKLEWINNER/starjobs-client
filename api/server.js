@@ -66,23 +66,25 @@ const beamsClient = new PushNotifications({
 
 global.beamsClient = beamsClient;
 
-beamsClient
-    .publishToInterests(['hello'], {
-        web: {
-            notification: {
-                title: 'Hello',
-                body: 'Hello, world!',
-                deep_link: 'https://www.pusher.com'
-            }
-        }
-    })
-    .then((publishResponse) => {
-        console.log('Just published:', publishResponse.publishId);
-    })
-    .catch((error) => {
-        console.log('Error:', error);
-    });
-
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
+
+setInterval(() => {
+    beamsClient
+        .publishToInterests(['hello'], {
+            web: {
+                notification: {
+                    title: 'Hello',
+                    body: 'Hello, world!',
+                    deep_link: 'https://www.pusher.com'
+                }
+            }
+        })
+        .then((publishResponse) => {
+            console.log('Just published:', publishResponse.publishId);
+        })
+        .catch((error) => {
+            console.log('Error:', error);
+        });
+}, 8000);

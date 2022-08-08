@@ -1,5 +1,5 @@
 import Pusher from 'pusher-js'
-import * as PusherPushNotifications from '@pusher/push-notifications-web'
+// import * as PusherPushNotifications from '@pusher/push-notifications-web'
 
 import {last} from 'lodash'
 import PropTypes from 'prop-types'
@@ -26,17 +26,6 @@ export function NotificationsProvider({children}) {
     encrypted: true
   })
   const channel = pusher.subscribe('notifications')
-  const beamsClient = new PusherPushNotifications.Client({
-    instanceId: 'db50def2-7957-4a3d-80f2-6d78d1d4c322'
-  })
-
-  // beamsClient
-  //   .start()
-  //   .then(() => beamsClient.addDeviceInterest('hello'))
-  //   .then(() => console.log('Successfully registered and subscribed!'))
-  //   .catch(console.error)
-
-  console.log(beamsClient) // ServiceWorkerRegistration
 
   const load = async () => {
     const current_page = last(router.pathname.replace('/', '').split('/'))
@@ -67,13 +56,6 @@ export function NotificationsProvider({children}) {
   }
 
   const checkPushNotification = () => {
-    beamsClient
-      .start()
-      .then((beamsClient) => beamsClient.getDeviceId())
-      .then(() => beamsClient.addDeviceInterest('hello'))
-      .then(() => beamsClient.addDeviceInterest('debug-hello'))
-      .then(() => beamsClient.getDeviceInterests())
-      .catch(console.error)
     // var ua = navigator.userAgent.toLowerCase()
     // if (ua.indexOf('safari') !== -1) {
     //   if (ua.indexOf('chrome') <= -1) return
@@ -88,7 +70,6 @@ export function NotificationsProvider({children}) {
     //   Notification.requestPermission()
     //   return
     // }
-
     // //---check if push notification is supported or not---
     // if (!('PushManager' in window)) {
     //   alert(`Sorry, Push notification is not supported on this browser.`)

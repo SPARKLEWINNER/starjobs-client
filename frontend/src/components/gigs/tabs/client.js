@@ -121,6 +121,7 @@ export default function ClientTab({category}) {
         {FILTERED_DATA.length > 0 && (
           <Stack>
             <Button
+              id="filterButton"
               variant="outlined"
               startIcon={<Sort />}
               onClick={() => {

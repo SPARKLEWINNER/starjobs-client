@@ -93,7 +93,7 @@ const GigPosting = () => {
         {isLoading && <LoadingScreen />}
 
         <TabContext value={value}>
-          <TabList onChange={handleChange}>
+          <TabList id="gigInProgressTab" onChange={handleChange}>
             {SIMPLE_TAB.map((tab, index) => (
               <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
             ))}

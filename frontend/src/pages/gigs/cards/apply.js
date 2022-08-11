@@ -59,7 +59,7 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
       id={gig._id}
       ref={myRef}
     >
-      <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', p: 0}}>
+      <Box id="applyContainer" sx={{display: 'flex', flexDirection: 'column', width: '100%', p: 0}}>
         <CardContent sx={{flex: '1 0 auto', px: 0, pt: 0, alignItems: 'flex-start', paddingBottom: '0 !important'}}>
           <Stack direction="row" sx={{alignItems: 'center', mb: 1}}>
             <Typography variant="overline" sx={{fontWeight: 'bold'}}>
@@ -124,7 +124,12 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
                     For client review
                   </Typography>
                   <Link underline="none" component={RouterLink} to="/freelancer/dashboard?tab=3">
-                    <Button id="v" fullWidth={true} variant="contained" sx={{mb: 1, mr: 1, textTransform: 'uppercase'}}>
+                    <Button
+                      id="viewGigInProgressButton"
+                      fullWidth={true}
+                      variant="contained"
+                      sx={{mb: 1, mr: 1, textTransform: 'uppercase'}}
+                    >
                       View gig in progress
                     </Button>
                   </Link>

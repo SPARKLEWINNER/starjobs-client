@@ -53,7 +53,7 @@ export default function PendingTab({gigs, selected}) {
 
   return (
     <Box sx={{my: 2}}>
-      <Stack spacing={3}>
+      <Stack id="pendingTabButton" spacing={3}>
         <Typography variant="h4" sx={{borderLeft: `4px solid ${color.starjobs.main}`, pl: 2, mb: 2}}>
           Pending
         </Typography>

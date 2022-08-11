@@ -183,7 +183,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               helperText={touched.lastName && errors.lastName}
             />
             <TextField
-              id="middleIni"
+              id="middleInitial"
               fullWidth
               label="Middle Initial (If not applicable put N/A or n/a)"
               {...getFieldProps('middleInitial')}

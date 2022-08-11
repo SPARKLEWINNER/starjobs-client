@@ -52,6 +52,7 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
           {gig.hours && JSON.parse(gig.hours).length > 1 ? 'hour' : 'hours'} If successful, press “end-shift”
           <Stack direction="column" alignItems="center" sx={{mt: 4, mb: 2}}>
             <TextField
+              id="hours"
               label="No. of hours "
               fullWidth
               type="number"
@@ -66,6 +67,7 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
               (ex. <b>6.30</b> = 6 hours and 30 minutes)
             </Typography>
             <TextField
+              id="rate"
               key="gig-rate"
               label="Rate per hour"
               defaultValue={parseFloat(gig.fee).toFixed(2)}
@@ -76,6 +78,7 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
         </Typography>
         <Stack sx={{my: 2}}>
           <LoadingButton
+            id="confirmEndShiftButton"
             color="primary"
             size="large"
             variant="contained"

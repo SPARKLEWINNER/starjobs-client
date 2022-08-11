@@ -72,7 +72,7 @@ export default function WaitingCard({gig, category}) {
             </Label>
           </Box>
 
-          <Box id="viewGig" sx={{position: 'absolute', bottom: 10, right: 16}}>
+          <Box id="viewWaitingButton" sx={{position: 'absolute', bottom: 10, right: 16}}>
             <Link
               underline="none"
               variant="caption"

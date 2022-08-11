@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 /// <reference types="cypress"/>
 
 describe('Jobster Should be able to login, verify and fill onboarding form', () => {
@@ -47,59 +48,54 @@ describe('Jobster Should be able to login, verify and fill onboarding form', () 
     const accountNumber="09111111111"
 
     cy.visit('http://localhost:7002/login  ')
-    cy.get('#useremail').type(email);
-    cy.get('#userpassword').type(password);
-    cy.get('#loginBtn').click();
-    cy.get('#menu').click();
-    cy.get('#complete').should('have.text','Complete my details');
-    // cy.get('#complete').should('have.text','Complete my details');
-    // cy.get('#complete').should('have.text','Complete my details');
-    // cy.get('#complete').should('have.text','Complete my details');
-    cy.wait(1000);
-    cy.get('#complete').click();
+    cy.get('#userEmail').type(email)
+    cy.get('#userPassword').type(password)
+    cy.get('#loginBtn').click()
+    cy.get('#menu').click()
+    cy.get('#complete').should('have.text', 'Complete my details')
+    cy.wait(1000)
+    cy.get('#complete').click()
 
     //Personal Information
-    cy.get('#firstName').clear().type(firstName);
-    cy.get('#lastName').clear().type(lastName);
-    cy.get('#middleIni').type(`${middleIni}`);
-    cy.get('#genderSelect').select("Male");
-    cy.get('#religion').type(religion);
-    cy.get('#civilStatus').select("Single");
-    cy.get('#citizenship').type(citizenship);
-    // cy.get('#sameAddress').check( );
-    cy.get('#blk').type(blk);
-    cy.get('#zipCode').type(zipCode);
-    cy.get('#city').type(city);
-    cy.get('#street').type(street);
-    cy.get('#permanentBlk').type(permanentBlk);
-    cy.get('#permanentStreetName').type(permanentStreetName);
-    cy.get('#permanentZip').type(permanentZip);
-    cy.get('#permanentCity').type(permanentCity);
-    cy.get('#emergencyName').type(emergencyName);
-    cy.get('#emergencyContact').type(emergencyContact);
-    cy.get('#emergencyRelation').type(emergencyRelation);
-    cy.get('#continuePersonalForm').click();
+    cy.get('#firstName').clear().type(firstName)
+    cy.get('#lastName').clear().type(lastName)
+    cy.get('#middleInitial').type(`${middleIni}`)
+    cy.get('#genderSelect').select('Male')
+    cy.get('#religion').type(religion)
+    cy.get('#civilStatus').select('Single')
+    cy.get('#citizenship').type(citizenship)
+    cy.get('#blk').type(blk)
+    cy.get('#zipCode').type(zipCode)
+    cy.get('#city').type(city)
+    cy.get('#street').type(street)
+    cy.get('#permanentBlk').type(permanentBlk)
+    cy.get('#permanentStreetName').type(permanentStreetName)
+    cy.get('#permanentZip').type(permanentZip)
+    cy.get('#permanentCity').type(permanentCity)
+    cy.get('#emergencyName').type(emergencyName)
+    cy.get('#emergencyContact').type(emergencyContact)
+    cy.get('#emergencyRelation').type(emergencyRelation)
+    cy.get('#continuePersonalForm').click()
 
     //WOrk Experience
     cy.get('#currentCompany').type(currentCompany)
-    cy.get('#currentPosition').type(currentPosition);
-    cy.get('#currentStartDate').type(currentStartDate);
-    cy.get('#currentEndDate').type(currentEndDate);
-    cy.get('#currentPlaceOfWork').type(currentPlaceOfWork);
-    cy.get('#pastCompany').type(pastCompany);
-    cy.get('#pastPosition').type(pastPosition);
-    cy.get('#pastStartDate').type(pastStartDate);
-    cy.get('#pastEndDate').type(pastEndDate);
-    cy.get('#pastPlaceOfWork').type(currentPlaceOfWork);
-    cy.get('#continueEmploymentForm').click();
+    cy.get('#currentPosition').type(currentPosition)
+    cy.get('#currentStartDate').type(currentStartDate)
+    cy.get('#currentEndDate').type(currentEndDate)
+    cy.get('#currentPlaceOfWork').type(currentPlaceOfWork)
+    cy.get('#pastCompany').type(pastCompany)
+    cy.get('#pastPosition').type(pastPosition)
+    cy.get('#pastStartDate').type(pastStartDate)
+    cy.get('#pastEndDate').type(pastEndDate)
+    cy.get('#pastPlaceOfWork').type(currentPlaceOfWork)
+    cy.get('#continueEmploymentForm').click()
 
     //Expertise
-    cy.get('#industry').type('IT and Computer systems{enter}');
-    cy.get('#skills').type('IT and Computer systems{enter}');
-    // cy.findByText('Web Development')
-    cy.get('#skillCheck').check();
-    cy.get('#otherSkills').type("QA Tester");
-    cy.get('#continueExpertiseForm').click();
+    cy.get('#industry').type('IT and Computer systems{enter}')
+    cy.get('#skills').type('IT and Computer systems{enter}')
+    cy.get('#skillCheck').check()
+    cy.get('#otherSkills').type('QA Tester')
+    cy.get('#continueExpertiseForm').click()
 
     //Educational Background
     cy.get('#highSchool').type(highSchool)
@@ -115,15 +111,15 @@ describe('Jobster Should be able to login, verify and fill onboarding form', () 
     cy.get('#continueEducationForm').click()
 
     //Rate and Payment
-    cy.get('#rateTypeSelect').select('Hourly');
-    cy.get('#rateAmount').type(rateAmount);
-    cy.get('#walletSelect').select('GCash');
-    cy.get('#accountName').type(accountName);
-    cy.get('#accountNumber').type(accountNumber);
-    cy.get('#continueRateForm').click();
+    cy.get('#rateTypeSelect').select('Hourly')
+    cy.get('#rateAmount').type(rateAmount)
+    cy.get('#walletSelect').select('GCash')
+    cy.get('#accountName').type(accountName)
+    cy.get('#accountNumber').type(accountNumber)
+    cy.get('#continueRateForm').click()
     cy.get('#uploadProfileContainer').attachFile('starjobsLogo.png', {subjectType: 'drag-n-drop'})
-    cy.get('#continueUpload').click();
+    cy.get('#continueUpload').click()
     cy.wait(1000)
-    cy.get('#mui-12').click();
-})
+    cy.get('#mui-12').click()
+  })
 })

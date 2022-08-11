@@ -27,7 +27,7 @@ export default function IncomingCard({gig, onView}) {
           alt={position}
         />
       </Box>
-      <Box sx={{display: 'flex', flexDirection: 'column', width: '90%', p: 0.5}}>
+      <Box id="incomingCardButton" sx={{display: 'flex', flexDirection: 'column', width: '90%', p: 0.5}}>
         <CardContent sx={{flex: '1 0 auto', px: 0, py: 1, alignItems: 'flex-start'}}>
           <Box sx={{width: '100%', alignItems: 'center', mb: '0 !important'}}>
             <Typography variant="overline" sx={{fontWeight: 'bold', mb: '0 !important', mt: '0 !important'}}>
@@ -58,6 +58,7 @@ export default function IncomingCard({gig, onView}) {
 
           {status === 'Accepted' && (
             <Typography
+              id="pushThroughButton"
               variant="overline"
               sx={{
                 textTransform: 'uppercase',

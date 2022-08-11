@@ -78,6 +78,7 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
                 No. of hour/minutes the jobster is late.{' '}
               </Typography>
               <TextField
+                id="hoursLate"
                 key="gig-rate"
                 label="Hours and minutes"
                 sx={{width: '100%', mt: 2}}
@@ -98,6 +99,7 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
 
           <Stack>
             <Button
+              id="confirmEndShiftButton"
               color="primary"
               variant="contained"
               size="large"
@@ -110,6 +112,7 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
 
             {!isLate ? (
               <LoadingButton
+                id="noConfirmEndShiftButton"
                 onClick={() => {
                   setLate(!isLate)
                 }}

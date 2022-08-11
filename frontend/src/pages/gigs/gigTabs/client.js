@@ -134,6 +134,7 @@ export default function ClientTab({category}) {
         {FILTERED_DATA.length > 0 && (
           <Stack sx={{width: '100%'}}>
             <Button
+              id="filterButton"
               variant="outlined"
               startIcon={<Sort />}
               onClick={() => {
@@ -189,6 +190,7 @@ export default function ClientTab({category}) {
 
         <DialogActions>
           <Button
+            id="runSortButton"
             onClick={() => {
               filterHandler()
             }}

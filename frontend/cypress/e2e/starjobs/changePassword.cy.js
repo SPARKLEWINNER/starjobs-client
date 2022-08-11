@@ -9,8 +9,8 @@ describe('Should be able to edit profile ', () => {
 
 
     cy.visit('http://localhost:7002/login')
-    cy.get('#useremail').type(email);
-    cy.get('#userpassword').type(password);
+    cy.get('#userEmail').type(email);
+    cy.get('#userPassword').type(password);
     cy.get('#loginBtn').click();
     cy.wait(1000);
     cy.get('#menu').click();
@@ -29,8 +29,8 @@ describe('Should be able to edit profile ', () => {
 
     // test new password
     cy.visit('http://localhost:7002/login')
-    cy.get('#useremail').type(email);
-    cy.get('#userpassword').type(newPassword);
+    cy.get('#userEmail').type(email);
+    cy.get('#userPassword').type(newPassword);
     cy.get('#loginBtn').click();
 
 

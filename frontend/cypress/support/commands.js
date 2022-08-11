@@ -1,4 +1,5 @@
-import 'cypress-file-upload';
+import 'cypress-file-upload'
+import '@testing-library/cypress/add-commands'
 
 // ***********************************************
 // This example commands.js shows you how to

@@ -223,7 +223,7 @@ export default function SimpleBottomNavigation() {
             label="Search"
           />
 
-          <Box>
+          <Box id="gigsContainer">
             <BottomNavigationAction
               className={classes.main_button}
               icon={<FormatListNumberedRtlIcon className={classes.icon} />}

@@ -248,6 +248,7 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                   {status === 'Confirm-Gig' && (
                     <Stack sx={{mt: 3, mb: 5}}>
                       <LoadingButton
+                        id="confirmArrivedButton"
                         size="large"
                         variant="contained"
                         onClick={() => handleClick(gig)}
@@ -261,6 +262,7 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                   {status === 'Confirm-Arrived' && (
                     <Stack sx={{mt: 3, mb: 5}}>
                       <LoadingButton
+                        id="endShiftButton"
                         size="large"
                         variant="contained"
                         onClick={() => handleEndShift(gig)}

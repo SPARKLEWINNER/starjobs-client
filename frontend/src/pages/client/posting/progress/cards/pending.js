@@ -80,7 +80,11 @@ export default function PendingCard({gig}) {
             </Box>
             {(status === 'Waiting' || status === 'Applying') && (
               <Link to={`/client/gigs/applicants/${_id}`} component={RouterLink} underline="none">
-                <Typography variant="overline" sx={{fontSize: 10, alignItems: 'center', display: 'flex'}}>
+                <Typography
+                  id="viewPendingButton"
+                  variant="overline"
+                  sx={{fontSize: 10, alignItems: 'center', display: 'flex'}}
+                >
                   View &nbsp; <Icon icon={arrowRight} />
                 </Typography>
               </Link>

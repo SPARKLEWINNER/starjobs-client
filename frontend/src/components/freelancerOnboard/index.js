@@ -123,7 +123,6 @@ export default function LinearAlternativeLabel() {
     Object.keys(form).forEach((val) => {
       localStorage.removeItem(val)
     })
-    console.log(form)
     enqueueSnackbar('Onboarding process success', {variant: 'success'})
     setLoading(false)
     navigate('/freelancer/onboard/success', {replace: true})
@@ -356,7 +355,7 @@ export default function LinearAlternativeLabel() {
             </Box>
           </Paper>
 
-          <Box id="saveng" sx={{marginBottom: '120px', display: 'block', mt: 1}}>
+          <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
             <LoadingButton
               loading={isLoading}
               size="large"

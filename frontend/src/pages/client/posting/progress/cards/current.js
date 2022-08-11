@@ -50,7 +50,7 @@ const CurrentCard = ({gig, onView}) => {
             </Label>
           </Box>
 
-          <Box sx={{position: 'absolute', bottom: 15, right: 20}}>
+          <Box id="clientCurrentCardContainer" sx={{position: 'absolute', bottom: 15, right: 20}}>
             <Typography variant="overline" sx={{fontWeight: 'bold'}}>
               {change_label_by_status(status)}
             </Typography>

@@ -374,7 +374,7 @@ export default function TabsComponent() {
 
         {location.pathname !== '/freelancer/profile' && (
           <Stack sx={{mt: 3, mb: 5}}>
-            <Button variant="contained" sx={{mb: 3}} onClick={handleConfirmApplication}>
+            <Button id="acceptJobsterProfileButton" variant="contained" sx={{mb: 3}} onClick={handleConfirmApplication}>
               Accept
             </Button>
             <Button variant="outlined" sx={{mb: 5}} onClick={handleDeclineApplication}>

@@ -137,7 +137,7 @@ const RatingsProvider = ({children}) => {
             </Box>
           </StyledBox>
 
-          <Button variant="text" onClick={closeRatingModal}>
+          <Button id="skipRatingButton" variant="text" onClick={closeRatingModal}>
             Skip Rating
           </Button>
         </SwipeableDrawer>

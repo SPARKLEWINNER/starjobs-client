@@ -75,9 +75,11 @@ export default function GigsDetailsLayout({details, shift}) {
         {/* actions */}
         <Stack direction="row">
           <Link component={RouterLink} sx={{mb: 3, ml: 'auto', mr: 1}} to={`/gigs/edit/${gig._id}`}>
-            <Button variant="contained">Edit Gig details</Button>
+            <Button id="editGigDetailsButton" variant="contained">
+              Edit Gig details
+            </Button>
           </Link>
-          <Button variant="outlined" sx={{mb: 3, mr: 1}} onClick={onClick}>
+          <Button id="deleteGigButton" variant="outlined" sx={{mb: 3, mr: 1}} onClick={onClick}>
             Delete Gig
           </Button>
         </Stack>

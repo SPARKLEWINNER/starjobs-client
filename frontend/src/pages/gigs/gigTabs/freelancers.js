@@ -155,6 +155,7 @@ export default function FreelancerTab() {
         {data.length > 0 && (
           <Stack>
             <Button
+              id="filterButton"
               variant="outlined"
               sx={{mb: 2}}
               startIcon={<Sort />}

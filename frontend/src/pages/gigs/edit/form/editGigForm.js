@@ -161,6 +161,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
             <Stack direction={{xs: 'column', sm: 'column', md: 'column'}} sx={{alignItems: 'flex-start'}} spacing={2}>
               <Box sx={{width: '100%'}}>
                 <Select
+                  id="gigCategorySelect"
                   native
                   onChange={(e) => handleSelectedCategory(e.target.value)}
                   defaultValue={GIG_DETAILS.category || ''}
@@ -185,6 +186,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
               </Box>
               <Box sx={{width: '100%'}}>
                 <TextField
+                  id="position"
                   fullWidth
                   label="Position"
                   {...getFieldProps('position')}
@@ -213,6 +215,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
 
           <Stack direction={{sm: 'row', xs: 'column'}} spacing={2}>
             <DatePicker
+              id="startDate"
               onChange={(date) => handleFrom(date)}
               minDate={current_date}
               selected={from || ''}
@@ -222,6 +225,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
               customInput={<TextField fullWidth margin="normal" sx={{marginTop: '0 !important'}} label="Start date" />}
             />
             <DatePicker
+              id="endDate"
               onChange={(date) => handleCalculate(date)}
               minDate={current_date}
               selected={to || ''}
@@ -234,6 +238,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
 
           <Stack sx={{mt: 2}} direction={{xs: 'column', sm: 'column', md: 'row'}} spacing={2}>
             <TextField
+              id="hours"
               fullWidth
               label="No. of hours"
               type="number"
@@ -246,6 +251,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
             />
             <Box sx={{width: '100%', display: 'block !important'}}>
               <TextField
+                id="inputGigFee"
                 fullWidth
                 label="Gig Fee per hour"
                 type="number"
@@ -264,6 +270,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
           </Stack>
           <Stack direction={{xs: 'column', sm: 'column'}}>
             <TextField
+              id="instructionInput"
               label="Special Instruction (optional)"
               key="notes"
               rows={6}
@@ -278,6 +285,7 @@ const EditGigForm = ({data, onNext, onStoreData}) => {
           </Stack>
 
           <LoadingButton
+            id="saveNewChangesButton"
             fullWidth
             size="large"
             type="submit"

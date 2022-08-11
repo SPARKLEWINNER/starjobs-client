@@ -11,8 +11,8 @@
 
       it('displays two todo items by default', () => {
         cy.visit('http://localhost:7002/login   ')
-        cy.get('#useremail').type('migquintos23@gmail.com');
-        cy.get('#userpassword').type('miguel23');
+        cy.get('#userEmail').type('migquintos23@gmail.com');
+        cy.get('#userPassword').type('miguel23');
         cy.get('#loginBtn').click();
         cy.get('#jobsterName').should('have.text','Miguel Quintos')
 

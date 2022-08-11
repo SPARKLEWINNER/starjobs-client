@@ -88,7 +88,9 @@ export default function Upload({stored, onNext, onStoreData}) {
           )}
         </Box>
         {!isUpload ? (
-          <Button onClick={() => setUpload(true)}>Upload Avatar</Button>
+          <Button id="uploadAvatarButton" onClick={() => setUpload(true)}>
+            Upload Avatar
+          </Button>
         ) : (
           <Button onClick={() => setUpload(false)}>Cancel</Button>
         )}

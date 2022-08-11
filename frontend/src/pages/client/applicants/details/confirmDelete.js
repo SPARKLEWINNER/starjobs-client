@@ -30,7 +30,7 @@ const ConfirmDeleteGig = ({open, onConfirm, handleClose}) => {
         </DialogContent>
         <DialogActions sx={{display: 'block', pb: 5, px: 5}}>
           <Stack row>
-            <Button color="primary" variant="contained" onClick={handleConfirmGig}>
+            <Button id="confirmDeleteButton" color="primary" variant="contained" onClick={handleConfirmGig}>
               Yes, delete it!
             </Button>
             <Button onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}}>

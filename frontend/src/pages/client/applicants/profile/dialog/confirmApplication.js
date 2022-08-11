@@ -31,7 +31,7 @@ const ConfirmApplicationDialog = ({open, onCommit, handleClose}) => {
         </DialogContent>
         <DialogActions sx={{display: 'block', pb: 5, px: 5}}>
           <Stack row>
-            <Button id="confirm" color="primary" variant="contained" onClick={handleConfirmGig}>
+            <Button id="confirmProposal" color="primary" variant="contained" onClick={handleConfirmGig}>
               Confirm
             </Button>
             <Button onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}}>

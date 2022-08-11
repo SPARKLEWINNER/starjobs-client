@@ -142,19 +142,26 @@ export default function TabsComponent() {
 
   return (
     <>
-      <TabContext value={value}>
+      <TabContext id="tabs" value={value}>
         <TabList
+          id="pending"
           onChange={handleChange}
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
           {SIMPLE_TAB.map((tab, index) => (
-            <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
+            <Tab
+              id="pendingTabButton"
+              className={classes.nav_item}
+              key={tab.value}
+              label={tab.label}
+              value={String(index + 1)}
+            />
           ))}
         </TabList>
         {SIMPLE_TAB.map((panel, index) => (
-          <TabPanel key={panel.value} value={String(index + 1)} sx={{p: '0 !important'}}>
+          <TabPanel id="tab" key={panel.value} value={String(index + 1)} sx={{p: '0 !important'}}>
             {renderTab(panel.value)}
           </TabPanel>
         ))}

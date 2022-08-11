@@ -84,7 +84,7 @@ const IncomingTab = ({gigs, user}) => {
             if (moment(from).isBefore(moment(), 'day')) return ''
             if (auid !== user._id) return ''
             return (
-              <Box sx={{my: 1}} key={`box - ${k}`}>
+              <Box id="incomingCard" sx={{my: 1}} key={`box - ${k}`}>
                 <IncomingCard gig={value} onView={() => handleView(value)} />
               </Box>
             )

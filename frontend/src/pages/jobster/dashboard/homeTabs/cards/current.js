@@ -37,7 +37,7 @@ const CurrentCard = ({gig, onView}) => {
       }}
       onClick={() => onView()}
     >
-      <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', p: 2, mx: 2}}>
+      <Box id="jobsterCurrentCardContainer" sx={{display: 'flex', flexDirection: 'column', width: '100%', p: 2, mx: 2}}>
         <CardContent sx={{flex: '1 0 auto', px: 0, py: 1, alignItems: 'flex-start'}}>
           <Box sx={{width: '100%', alignItems: 'center', mb: '0 !important'}}>
             <Typography variant="overline" sx={{fontWeight: 'bold', mb: '0 !important', mt: '0 !important'}}>

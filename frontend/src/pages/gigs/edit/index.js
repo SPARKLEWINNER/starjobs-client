@@ -129,6 +129,7 @@ const Edit = () => {
           <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
             {activeStep === 1 && (
               <LoadingButton
+                id="saveChangesButton"
                 variant="contained"
                 size="large"
                 sx={{width: '100%'}}

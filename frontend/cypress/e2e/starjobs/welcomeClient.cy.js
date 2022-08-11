@@ -7,8 +7,8 @@ describe('Jobster Should be able to login, verify and fill onboarding form', () 
         const code="772071"
 
         cy.visit('http://localhost:7002/login ')
-        cy.get('#useremail').type(`${email}`);
-        cy.get('#userpassword').type(`${password}`);
+        cy.get('#userEmail').type(`${email}`);
+        cy.get('#userPassword').type(`${password}`);
         cy.get('#loginBtn').click();
         cy.get('#code').type(`${code}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}${code}`);
         cy.get('#verifyBtn').click();

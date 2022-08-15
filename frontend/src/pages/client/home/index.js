@@ -192,7 +192,7 @@ const Dashboard = () => {
             Hello
           </Typography>
           <Typography variant="h5" sx={{fontWeight: 'bold', color: 'common.black', letterSpacing: 'initial'}}>
-            {currentUser.name}
+            <div id="jobsterName">{currentUser.name}</div>
           </Typography>
           <Box component="div" sx={{mb: 8}} />
         </Box>

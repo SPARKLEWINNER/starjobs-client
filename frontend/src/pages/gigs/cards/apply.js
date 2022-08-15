@@ -106,6 +106,7 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
             <Box sx={{textAlign: 'right'}}>
               {!isApplied ? (
                 <Button
+                  id="apply"
                   onClick={() => handleClick(gig)}
                   variant="contained"
                   sx={{textTransform: 'uppercase', fontWeight: 'bold', mb: 1, fontSize: '0.75rem'}}
@@ -123,7 +124,7 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
                     For client review
                   </Typography>
                   <Link underline="none" component={RouterLink} to="/freelancer/dashboard?tab=3">
-                    <Button fullWidth={true} variant="contained" sx={{mb: 1, mr: 1, textTransform: 'uppercase'}}>
+                    <Button id="v" fullWidth={true} variant="contained" sx={{mb: 1, mr: 1, textTransform: 'uppercase'}}>
                       View gig in progress
                     </Button>
                   </Link>
@@ -140,6 +141,7 @@ const ApplyCard = ({path, gig, currentUser, onClick}) => {
                 to={user.accountType === 1 ? '/client/onboard' : '/freelancer/onboard'}
               >
                 <Button
+                  id="apply"
                   variant="contained"
                   sx={{textTransform: 'uppercase', fontWeight: 'bold', mb: 1, fontSize: '0.75rem'}}
                 >

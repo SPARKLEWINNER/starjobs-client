@@ -38,7 +38,7 @@ const ConfirmGig = ({open, onConfirm, handleClose}) => {
         </DialogContent>
         <DialogActions sx={{display: 'block', pb: 5, px: 5}}>
           <Stack>
-            <Button color="primary" variant="contained" onClick={handleConfirmGig} disabled={isLoading}>
+            <Button id="confirm" color="primary" variant="contained" onClick={handleConfirmGig} disabled={isLoading}>
               Confirm
             </Button>
             <Button onClick={handleClose} variant="outlined" color="inherit" sx={{mt: 2}}>

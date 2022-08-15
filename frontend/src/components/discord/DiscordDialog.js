@@ -118,6 +118,7 @@ const DiscordDialog = ({open, handleClose}) => {
             {({handleChange, handleSubmit, isSubmitting}) => (
               <form onSubmit={handleSubmit}>
                 <CustomTextField
+                  id="name"
                   autoFocus
                   margin="dense"
                   name="name"
@@ -127,6 +128,7 @@ const DiscordDialog = ({open, handleClose}) => {
                   onChange={handleChange}
                 />
                 <CustomTextField
+                  id="phone"
                   autoFocus
                   margin="dense"
                   name="phone"
@@ -146,6 +148,7 @@ const DiscordDialog = ({open, handleClose}) => {
                   onChange={handleChange}
                 />
                 <CustomMultiLineTextField
+                  id="inquiry"
                   autoFocus
                   margin="dense"
                   name="issue"
@@ -158,7 +161,7 @@ const DiscordDialog = ({open, handleClose}) => {
                 />
                 <DialogActions>
                   <Button onClick={handleClose}>Cancel</Button>
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button id="submit" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? <CircularProgress /> : 'Send'}
                   </Button>
                 </DialogActions>

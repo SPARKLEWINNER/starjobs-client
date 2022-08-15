@@ -239,6 +239,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
         <Stack spacing={3}>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
+              id="workType"
               fullWidth
               label="Type of work"
               type="text"
@@ -248,6 +249,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             />
           </Stack>
           <TextField
+            id="location"
             fullWidth
             label="Location"
             type="text"
@@ -256,6 +258,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             helperText={touched.location && errors.location}
           />
           <TextField
+            id="contactNumber"
             fullWidth
             label="Contact person number"
             type="text"
@@ -266,6 +269,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           <Box sx={{mb: 2}}>
             {areas && areas.length > 0 && (
               <SelectMultiple
+                id="areaNotifSelect"
                 onChange={(e) => setAreasNotif(e)}
                 value={areasNotif}
                 isMulti={true}
@@ -295,6 +299,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           </Stack>
           <Stack direction={{sm: 'row', xs: 'column'}} spacing={2}>
             <DatePicker
+              id="startDate"
               onChange={(date) => handleFrom(date)}
               minDate={current_date}
               selected={from || ''}
@@ -313,6 +318,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               }
             />
             <DatePicker
+              id="endDate"
               onChange={(date) => handleCalculate(date)}
               minDate={current_date}
               selected={to || ''}
@@ -390,6 +396,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           </Typography>
           <Select
             native
+            id="shiftSelect"
             onChange={(e) => setFieldValue('shift', e.target.value)}
             defaultValue={''}
             sx={{mt: '0.5rem !important'}}
@@ -415,6 +422,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             No. of gig hours
           </Typography>
           <TextField
+            id="hours"
             fullWidth
             type="number"
             {...getFieldProps('hours')}
@@ -475,6 +483,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             </Typography>
           </Typography>
           <TextField
+            id="inputGigFee"
             fullWidth
             label="0.00"
             type="number"
@@ -494,6 +503,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             onChange={(e) => setFieldValue('locationRate', e.target.value)}
             defaultValue={''}
             sx={{mt: '0.5rem !important'}}
+            id="locationRateSelect"
           >
             <option value="" disabled key="initial">
               Select Gig Location Rate
@@ -507,6 +517,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             </option>
           </Select>
           <TextField
+            id="instruction"
             label="Special Instruction"
             key="notes"
             rows={6}
@@ -529,7 +540,14 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
                 </Typography>
               ))}
           </Stack>
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueGigForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

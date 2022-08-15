@@ -115,7 +115,7 @@ export default function ForgotPassword() {
                     fontWeight: 600
                   }}
                 >
-                  Go back
+                  <div id="back">Go back</div>
                 </Typography>
               </Typography>
             </Link>

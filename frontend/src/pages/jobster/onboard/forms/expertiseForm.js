@@ -238,6 +238,7 @@ export default function ExpertiseForm({stored, onNext, onStoreData}) {
               Type of industry do you belong
             </Typography>
             <Select
+              id="industry"
               onChange={(e) => handleChangeSelect('skillQualification', e, 'SKILL_QUALIFICATION')}
               value={selected.SKILL_QUALIFICATION}
               isMulti={true}
@@ -251,6 +252,8 @@ export default function ExpertiseForm({stored, onNext, onStoreData}) {
             </Typography>
 
             <Select
+              id="skills"
+              native
               onChange={(e) => handleChangeSelect('skillOffer', e, 'SKILL_OFFER')}
               value={selected.SKILL_OFFER}
               isMulti={true}
@@ -279,6 +282,8 @@ export default function ExpertiseForm({stored, onNext, onStoreData}) {
                               sx={{marginTop: '0 !important'}}
                               control={
                                 <Checkbox
+                                  id="skillCheck"
+                                  native
                                   color="primary"
                                   checked={CHECKBOX[v.value].length > 0 && CHECKBOX[v.value].indexOf(item) !== -1}
                                   onChange={(e) => handleChange(e, v.value)}
@@ -303,6 +308,7 @@ export default function ExpertiseForm({stored, onNext, onStoreData}) {
               })}
 
             <TextField
+              id="otherSkills"
               key="salesMarketingOthers"
               rows={6}
               fullWidth
@@ -315,7 +321,14 @@ export default function ExpertiseForm({stored, onNext, onStoreData}) {
               (ex. Encoding, Excel Computations)
             </Typography>
           </Stack>
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueExpertiseForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

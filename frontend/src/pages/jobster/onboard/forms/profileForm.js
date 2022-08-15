@@ -58,7 +58,7 @@ export default function Upload({onNext, onStoreData}) {
         <Typography variant="body1" sx={{mb: 0, fontWeight: 'bold', textAlign: 'center'}}>
           Please upload a professional portrait that clearly shows your face
         </Typography>
-        <Box sx={{textAlign: 'center'}}>
+        <Box id="uploadProfileContainer" sx={{textAlign: 'center'}}>
           <UploadAvatar
             accept="image/*"
             file={avatarUrl}
@@ -80,7 +80,14 @@ export default function Upload({onNext, onStoreData}) {
             }
           />
         </Box>
-        <LoadingButton fullWidth size="large" onClick={handleContinue} variant="contained" loading={isLoading}>
+        <LoadingButton
+          id="continueUpload"
+          fullWidth
+          size="large"
+          onClick={handleContinue}
+          variant="contained"
+          loading={isLoading}
+        >
           Continue
         </LoadingButton>
       </Stack>

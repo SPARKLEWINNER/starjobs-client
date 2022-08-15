@@ -55,6 +55,7 @@ export default function AccountChangePassword() {
           <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
             <Stack spacing={3} alignItems="flex-end">
               <TextField
+                id="oldPassword"
                 {...getFieldProps('oldPassword')}
                 fullWidth
                 autoComplete="on"
@@ -65,6 +66,7 @@ export default function AccountChangePassword() {
               />
 
               <TextField
+                id="newPassword"
                 {...getFieldProps('newPassword')}
                 fullWidth
                 autoComplete="on"
@@ -75,6 +77,7 @@ export default function AccountChangePassword() {
               />
 
               <TextField
+                id="confirmNewPassword"
                 {...getFieldProps('confirmNewPassword')}
                 fullWidth
                 autoComplete="on"
@@ -85,6 +88,7 @@ export default function AccountChangePassword() {
               />
 
               <LoadingButton
+                id="save"
                 type="submit"
                 variant="contained"
                 sx={{width: '100%', boxShadow: 'none !important'}}

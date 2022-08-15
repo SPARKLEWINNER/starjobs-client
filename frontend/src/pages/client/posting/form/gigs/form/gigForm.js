@@ -5,7 +5,17 @@ import moment from 'moment'
 import {capitalCase} from 'change-case'
 import SelectMultiple from 'react-select'
 // material
-import {Stack, TextField, Typography, FormControl, FormControlLabel, Checkbox, Select} from '@mui/material'
+import {
+  Box,
+  Stack,
+  TextField,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+  Select,
+  Divider
+} from '@mui/material'
 import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack'
@@ -30,6 +40,16 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
   const [to, setTo] = useState()
   const [areas, setAreas] = useState([])
   const current_date = new Date()
+  // const [weekdaySelected, setWeekdaySelected] = useState([])
+  // const [weekdays] = useState([
+  //   {value: 'Sunday', label: 'Every Sunday'},
+  //   {value: 'Monday', label: 'Every Monday'},
+  //   {value: 'Tuesday', label: 'Every Tuesday'},
+  //   {value: 'Wednesday', label: 'Every Wednesday'},
+  //   {value: 'Thursday', label: 'Every Thursday'},
+  //   {value: 'Friday', label: 'Every Friday'},
+  //   {value: 'Saturday', label: 'Every Saturday'}
+  // ])
 
   useEffect(() => {
     const formatNotificationArea = () => {
@@ -57,7 +77,10 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
     breakHr: Yup.number().required('Break hour/s is required'),
     locationRate: Yup.string().required('Gig location rate'),
     notes: Yup.string(),
-    notifyArea: Yup.array()
+    notifyArea: Yup.array(),
+    isRepeatable: Yup.bool(),
+    repeatTimes: Yup.number(),
+    repeatEvery: Yup.array()
   })
 
   const formik = useFormik({
@@ -72,7 +95,9 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       breakHr: formData?.breakHr ?? 0,
       notes: formData?.notes ?? '',
       locationRate: formData?.locationRate ?? '',
-      notifyArea: formData.notifyArea ?? []
+      notifyArea: formData.notifyArea ?? [],
+      repeatTimes: formData?.repeatTimes ?? 0,
+      repeatEvery: formData.repeatEvery ?? []
     },
     enableReinitialize: true,
     validationSchema: GigSchema,
@@ -129,6 +154,16 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
         },
         areas: areas
       }
+
+      if (values.isRepeatable) {
+        // let repeatSchedule = []
+        // weekdaySelected && weekdaySelected.length > 0 && weekdaySelected.map((obj) => repeatSchedule.push(obj.value))
+
+        data['isRepeatable'] = values.isRepeatable
+        data['repeatTimes'] = moment(values.to).diff(moment(values.from), 'days')
+        // data['repeatEvery'] = repeatSchedule
+      }
+
       setLoading(false)
       onStoreData(data)
       onNext()
@@ -213,7 +248,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               helperText={touched.position && errors.position}
             />
           </Stack>
-
           <TextField
             id="location"
             fullWidth
@@ -223,7 +257,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             error={Boolean(touched.location && errors.location)}
             helperText={touched.location && errors.location}
           />
-
           <TextField
             id="contactNumber"
             fullWidth
@@ -233,18 +266,23 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             error={Boolean(touched.contactNumber && errors.contactNumber)}
             helperText={touched.contactNumber && errors.contactNumber}
           />
-          {areas && areas.length > 0 && (
-            <SelectMultiple
-              id="areaNotifSelect"
-              onChange={(e) => setAreasNotif(e)}
-              value={areasNotif}
-              isMulti={true}
-              options={areas}
-              className="area-select"
-            />
-          )}
-
-          <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
+          <Box sx={{mb: 2}}>
+            {areas && areas.length > 0 && (
+              <SelectMultiple
+                id="areaNotifSelect"
+                onChange={(e) => setAreasNotif(e)}
+                value={areasNotif}
+                isMulti={true}
+                options={areas}
+                className="area-select"
+              />
+            )}
+          </Box>
+          <Divider />
+          <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+            Gig Post Schedule
+          </Typography>{' '}
+          <Stack direction={{xs: 'column', sm: 'column'}} spacing={2} sx={{mt: '0.5rem !important'}}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <MobileDatePicker
                 orientation="portrait"
@@ -259,7 +297,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               />
             </LocalizationProvider>
           </Stack>
-
           <Stack direction={{sm: 'row', xs: 'column'}} spacing={2}>
             <DatePicker
               id="startDate"
@@ -300,8 +337,70 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               }
             />
           </Stack>
+          <FormControl fullWidth sx={{my: 0}}>
+            <FormControlLabel
+              value="isRepeatable"
+              control={
+                <Checkbox
+                  onChange={(event) => {
+                    // if (!event.target.checked) {
+                    //   setWeekdaySelected([])
+                    // }
+                    setFieldValue('isRepeatable', event.target.checked)
+                  }}
+                  defaultValue="false"
+                />
+              }
+              label={
+                <>
+                  <Typography variant="body1" component="p">
+                    Repeat Posting ({moment(values.to).diff(moment(values.from), 'days')} days to be posted)
+                  </Typography>
 
-          <Select id="shiftSelect" native onChange={(e) => setFieldValue('shift', e.target.value)} defaultValue={''}>
+                  <Typography variant="body2" component="span" sx={{opacity: 0.5}}>
+                    Note: Automatically Post Gig for the span of Start date and End date
+                  </Typography>
+                </>
+              }
+              labelPlacement="end"
+            />
+          </FormControl>
+          {/* {values?.isRepeatable && weekdays && weekdays.length > 0 && (
+            <>
+              <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+                Repeat every
+              </Typography>
+              <SelectMultiple
+                onChange={(e) => setWeekdaySelected(e)}
+                value={weekdaySelected}
+                isMulti={true}
+                options={weekdays}
+                className="repeat-every-select"
+              />
+              <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+                Repeat times
+              </Typography>
+              <TextField
+                fullWidth
+                type="number"
+                {...getFieldProps('repeatTimes')}
+                error={Boolean(touched.repeatTimes && errors.repeatTimes)}
+                helperText={touched.repeatTimes && errors.repeatTimes}
+                sx={{mt: '0.5rem !important'}}
+              />
+            </>
+          )} */}
+          <Divider />
+          <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+            Work Shift
+          </Typography>
+          <Select
+            native
+            id="shiftSelect"
+            onChange={(e) => setFieldValue('shift', e.target.value)}
+            defaultValue={''}
+            sx={{mt: '0.5rem !important'}}
+          >
             <option value="" disabled key="initial">
               Select Shift
             </option>
@@ -319,17 +418,18 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               Graveyard Shift
             </option>
           </Select>
-
+          <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+            No. of gig hours
+          </Typography>
           <TextField
             id="hours"
             fullWidth
-            label="No. of gig hours"
             type="number"
             {...getFieldProps('hours')}
             error={Boolean(touched.hours && errors.hours)}
             helperText={touched.hours && errors.hours}
+            sx={{mt: '0.5rem !important'}}
           />
-
           <FormControl fullWidth sx={{my: 0}}>
             <FormControlLabel
               value="isClientUser"
@@ -358,7 +458,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               labelPlacement="end"
             />
           </FormControl>
-
           {values.isBreak && (
             <Select native onChange={(event) => handleBreakTimeReduceHours(event.target.value)} defaultValue={''}>
               <option value="" disabled key="initial">
@@ -372,22 +471,39 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               </option>
             </Select>
           )}
-
+          <Divider />
+          <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+            Gig Fee per hour
+            <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
+              (ex. P 537 / 8 ={' '}
+              <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'red'}}>
+                67.125
+              </Typography>
+              )
+            </Typography>
+          </Typography>
           <TextField
             id="inputGigFee"
             fullWidth
-            label="Gig Fee per hour"
+            label="0.00"
             type="number"
             onChange={(value) => handleFeeFormat(value.target.value)}
             error={Boolean(touched.fee && errors.fee)}
             helperText={touched.fee && errors.fee}
+            sx={{mt: '0.5rem !important'}}
           />
-
+          <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+            Location's Rate
+          </Typography>
+          <Typography variant="body2" component="span" sx={{opacity: 0.5, mt: '0 !important'}}>
+            Note: Gig fee will computed by state
+          </Typography>
           <Select
-            id="locationRateSelect"
             native
             onChange={(e) => setFieldValue('locationRate', e.target.value)}
             defaultValue={''}
+            sx={{mt: '0.5rem !important'}}
+            id="locationRateSelect"
           >
             <option value="" disabled key="initial">
               Select Gig Location Rate
@@ -400,7 +516,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               Provincial Rate
             </option>
           </Select>
-
           <TextField
             id="instruction"
             label="Special Instruction"
@@ -412,7 +527,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             sx={{mt: 3}}
             {...getFieldProps('notes')}
           />
-
           <Stack sx={{mt: 5}}>
             {errors &&
               Object.values(errors).map((message, index) => (
@@ -426,7 +540,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
                 </Typography>
               ))}
           </Stack>
-
           <LoadingButton
             id="continueGigForm"
             fullWidth

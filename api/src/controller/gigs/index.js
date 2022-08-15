@@ -12,6 +12,7 @@ const History = require('./../../models/History');
 const Gigs = require('./../../models/Gigs');
 const Client = require('./../../models/Client');
 const Extends = require('./../../models/Extends');
+const Jobs = require('./../../models/Jobs');
 
 const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
@@ -113,7 +114,8 @@ var controllers = {
     },
     // list of gigs by history
     get_gigs_history: async function (req, res) {
-        const { id } = req.params;
+        const token = req.headers.authorization.split(' ')[1];
+        const { id } = jwt_decode(token);
         const now = new Date();
         await getSpecificData({ uuid: mongoose.Types.ObjectId(id) }, Account, 'Account', id);
         let details;
@@ -173,8 +175,8 @@ var controllers = {
                         //express as a duration
                         const diffDuration = moment.duration(diff);
 
-                        const previousDays = moment().subtract(3, 'days')
-                        const aheadDays = moment().add(3, 'days')
+                        const previousDays = moment().subtract(3, 'days');
+                        const aheadDays = moment().add(3, 'days');
                         const range = moment().range(previousDays, aheadDays);
 
                         // between 0 days and 2 days before current day
@@ -216,7 +218,10 @@ var controllers = {
             location,
             contactNumber,
             notes,
-            areas
+            areas,
+            isRepeatable,
+            repeatTimes,
+            repeatEvery
         } = req.body;
         const now = new Date();
 
@@ -265,7 +270,7 @@ var controllers = {
             notes,
             locationRate: locationRate,
             uid: mongoose.Types.ObjectId(id),
-            dateCreated: now.toISOString(),
+            dateCreated: now.toISOString()
         });
 
         try {
@@ -280,7 +285,19 @@ var controllers = {
                     await notification.globalNotification(postedGig, areas[0]);
                 }
             }
-            areas && areas.length > 0 && console.log(areas);
+
+            if (isRepeatable) {
+                const jobsObj = new Jobs({
+                    repeatTimes: repeatTimes,
+                    repeatEvery: repeatEvery, 
+                    gid: mongoose.Types.ObjectId(postedGig._id),
+                    uid: mongoose.Types.ObjectId(id),
+                    dateCreated: now.toISOString()
+                });
+
+                await Jobs.create(jobsObj);
+            }
+
         } catch (error) {
             console.error(error);
             await logger.logError(error, 'Gigs.post_gig', gigsObj, client[0]._id, 'POST');

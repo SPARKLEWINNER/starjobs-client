@@ -21,13 +21,12 @@ const TawktoPageOverlay = ({children}) => {
 
   const [open, setOpen] = useState(false)
 
-  const [isDragging, setIsDragging] = useState(false)
-
-  const handleClickOpen = () => {
-    if (isDragging === false) {
-      setOpen(true)
-    }
-  }
+  // const [isDragging, setIsDragging] = useState(false)
+  // const handleClickOpen = () => {
+  //   if (isDragging === false) {
+  //     setOpen(true)
+  //   }
+  // }
 
   const handleClose = () => {
     setOpen(false)
@@ -39,11 +38,11 @@ const TawktoPageOverlay = ({children}) => {
         <>
           <Draggable
             onDrag={() => {
-              setIsDragging(true)
+              // setIsDragging(true)
             }}
             onStop={() => {
-              setIsDragging(false)
-              handleClickOpen()
+              // setIsDragging(false)
+              // handleClickOpen()
             }}
           >
             <Fab

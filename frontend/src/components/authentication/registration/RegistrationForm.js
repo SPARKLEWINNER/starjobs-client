@@ -173,6 +173,7 @@ export default function StoreOnboardForm() {
           <Stack spacing={3}>
             <Stack direction={{xs: 'column', sm: 'row'}} spacing={2}>
               <TextField
+                id="firstName"
                 autoFocus
                 fullWidth
                 autoComplete="name"
@@ -184,6 +185,7 @@ export default function StoreOnboardForm() {
               />
 
               <TextField
+                id="lastName"
                 fullWidth
                 autoComplete="name"
                 label="Last name"
@@ -195,6 +197,7 @@ export default function StoreOnboardForm() {
             </Stack>
 
             <TextField
+              id="phoneNumber"
               fullWidth
               type="tel"
               inputProps={{maxLength: 11, minLength: 11}}
@@ -206,6 +209,7 @@ export default function StoreOnboardForm() {
             />
 
             <TextField
+              id="email"
               fullWidth
               autoComplete="email"
               type="email"
@@ -217,6 +221,7 @@ export default function StoreOnboardForm() {
             />
 
             <TextField
+              id="password"
               fullWidth
               autoComplete="current-password"
               type={showPassword ? 'text' : 'password'}
@@ -241,6 +246,7 @@ export default function StoreOnboardForm() {
             />
 
             <TextField
+              id="confirmPassword"
               fullWidth
               autoComplete="current-password"
               type={showPassword ? 'text' : 'password'}
@@ -270,6 +276,7 @@ export default function StoreOnboardForm() {
                 sx={{display: 'flex', justifyContent: 'center', width: '100%'}}
               >
                 <FormControlLabel
+                  id="jobster"
                   value="0"
                   control={<Radio className="radio-btn" />}
                   label="I am a Jobster"
@@ -287,6 +294,7 @@ export default function StoreOnboardForm() {
                   className={`radio-control-group ${values.accountType === '0' ? 'active-button' : ''}`}
                 />
                 <FormControlLabel
+                  id="client"
                   value="1"
                   control={<Radio className="radio-btn" />}
                   label="I am a Client"
@@ -306,7 +314,7 @@ export default function StoreOnboardForm() {
             </FormControl>
 
             <FormControlLabel
-              control={<Checkbox color="primary" />}
+              control={<Checkbox id="sendEmail" color="primary" />}
               sx={CheckboxWhiteStyle}
               label={
                 <>
@@ -323,7 +331,7 @@ export default function StoreOnboardForm() {
             />
 
             <FormControlLabel
-              control={<Checkbox color="primary" onChange={handleTerms} defaultValue={false} />}
+              control={<Checkbox id="agreeTerms" color="primary" onChange={handleTerms} defaultValue={false} />}
               sx={CheckboxWhiteStyle}
               label={
                 <>
@@ -369,6 +377,7 @@ export default function StoreOnboardForm() {
               }
             />
             <LoadingButton
+              id="createAccount"
               fullWidth
               size="large"
               type="submit"

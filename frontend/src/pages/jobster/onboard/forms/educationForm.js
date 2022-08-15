@@ -117,6 +117,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
           <Box>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
+                id="highSchool"
                 fullWidth
                 label="High school"
                 {...getFieldProps('highSchoolName')}
@@ -124,6 +125,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
                 helperText={touched.highSchoolName && errors.highSchoolName}
               />
               <TextField
+                id="highSchoolYear"
                 fullWidth
                 label="Year graduated"
                 {...getFieldProps('highSchoolYear')}
@@ -134,6 +136,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
 
             <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
+                id="highSchoolAwards"
                 fullWidth
                 label="Awards Received"
                 {...getFieldProps('highSchoolAwards')}
@@ -146,6 +149,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
           <Box>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
+                id="collegeName"
                 fullWidth
                 label="College"
                 {...getFieldProps('collegeName')}
@@ -153,6 +157,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
                 helperText={touched.collegeName && errors.collegeName}
               />
               <TextField
+                id="collegeYear"
                 fullWidth
                 label="Year graduated"
                 {...getFieldProps('collegeYear')}
@@ -163,6 +168,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
 
             <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
+                id="collegeAwards"
                 fullWidth
                 label="Awards Received"
                 {...getFieldProps('collegeAwards')}
@@ -175,6 +181,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
           <Box>
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
+                id="vocationalProgram"
                 fullWidth
                 label="Vocational Program"
                 {...getFieldProps('vocationalProgram')}
@@ -182,6 +189,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
                 helperText={touched.vocationalProgram && errors.vocationalProgram}
               />
               <TextField
+                id="vocationalYear"
                 fullWidth
                 label="Year graduated"
                 {...getFieldProps('vocationalYear')}
@@ -192,6 +200,7 @@ export default function EducationForm({stored, onNext, onStoreData}) {
 
             <Stack sx={{mt: 3}} direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
+                id="vocationalAwards"
                 fullWidth
                 label="Awards Received"
                 {...getFieldProps('vocationalAwards')}
@@ -202,7 +211,12 @@ export default function EducationForm({stored, onNext, onStoreData}) {
               <Typography variant="body2" sx={{fontWeight: 'bold'}}>
                 Program / Course
               </Typography>
-              <Select native {...getFieldProps('vocationalProgramCourse')} value={values.civilStatus}>
+              <Select
+                id="vocationalProgramSelect"
+                native
+                {...getFieldProps('vocationalProgramCourse')}
+                value={values.civilStatus}
+              >
                 <option selected value="" key="initialProgramCourse" disabled>
                   Select Program / Course
                 </option>
@@ -217,7 +231,14 @@ export default function EducationForm({stored, onNext, onStoreData}) {
             </Stack>
           </Box>
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueEducationForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

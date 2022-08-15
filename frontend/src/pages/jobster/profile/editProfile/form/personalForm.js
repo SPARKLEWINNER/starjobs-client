@@ -161,6 +161,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
         <Stack spacing={3}>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
+              id="firstName"
               autoFocus
               fullWidth
               autoComplete="name"
@@ -173,6 +174,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
 
           <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
             <TextField
+              id="lastName"
               fullWidth
               autoComplete="name"
               label="Last name"
@@ -181,6 +183,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               helperText={touched.lastName && errors.lastName}
             />
             <TextField
+              id="middleInitial"
               fullWidth
               label="Middle Initial (If not applicable put N/A or n/a)"
               {...getFieldProps('middleInitial')}
@@ -203,7 +206,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             helperText={touched.email && errors.email}
           />
 
-          <Select native {...getFieldProps('gender')} value={values.gender}>
+          <Select id="genderSelect" native {...getFieldProps('gender')} value={values.gender}>
             <option value="" key="initial">
               Select Gender
             </option>
@@ -219,6 +222,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
           </Select>
 
           <TextField
+            id="religion"
             fullWidth
             label="Religion"
             {...getFieldProps('religion')}
@@ -226,7 +230,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             helperText={touched.religion && errors.religion}
           />
 
-          <Select native {...getFieldProps('civilStatus')} value={values.civilStatus}>
+          <Select id="civilStatus" native {...getFieldProps('civilStatus')} value={values.civilStatus}>
             <option value="" key="initialStatus">
               Select Civil status
             </option>
@@ -239,6 +243,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
           </Select>
 
           <TextField
+            id="citizenship"
             fullWidth
             label="Citizenship"
             {...getFieldProps('citizenship')}
@@ -262,6 +267,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
 
             <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
               <TextField
+                id="blk"
                 fullWidth
                 label="Blk. No."
                 {...getFieldProps('presentBlkNo')}
@@ -269,6 +275,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 helperText={touched.presentBlkNo && errors.presentBlkNo}
               />
               <TextField
+                id="zipCode"
                 fullWidth
                 label="Zip code"
                 {...getFieldProps('presentZipCode')}
@@ -279,6 +286,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
           </Box>
 
           <TextField
+            id="street"
             fullWidth
             label="Street Name"
             {...getFieldProps('presentStreetName')}
@@ -287,6 +295,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
           />
 
           <TextField
+            id="city"
             fullWidth
             label="City"
             {...getFieldProps('presentCity')}
@@ -301,6 +310,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 </Typography>
                 <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
                   <TextField
+                    id="permanentBlk"
                     fullWidth
                     label="Blk. No."
                     {...getFieldProps('permanentBlkNo')}
@@ -308,6 +318,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                     helperText={touched.permanentBlkNo && errors.permanentBlkNo}
                   />
                   <TextField
+                    id="permanentZip"
                     fullWidth
                     label="Zip code"
                     {...getFieldProps('permanentZipCode')}
@@ -318,6 +329,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               </Box>
 
               <TextField
+                id="permanentStreetName"
                 fullWidth
                 label="Street Name"
                 {...getFieldProps('permanentStreetName')}
@@ -326,6 +338,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
               />
 
               <TextField
+                id="permanentCity"
                 fullWidth
                 label="City"
                 {...getFieldProps('permanentCity')}
@@ -343,6 +356,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             </Typography>
             <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
+                id="emergencyName"
                 fullWidth
                 label="Name (ex. Juan Dela Cruz)"
                 {...getFieldProps('emergencyName')}
@@ -350,6 +364,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 helperText={touched.emergencyName && errors.emergencyName}
               />
               <TextField
+                id="emergencyContact"
                 fullWidth
                 label="Contact No. (ex. 09123456789 / 2601234)"
                 {...getFieldProps('emergencyContact')}
@@ -357,6 +372,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 helperText={touched.emergencyContact && errors.emergencyContact}
               />
               <TextField
+                id="emergencyRelation"
                 fullWidth
                 label="Relation (ex. Father)"
                 {...getFieldProps('emergencyRelation')}
@@ -366,7 +382,14 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             </Stack>
           </Box>
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continuePersonalForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

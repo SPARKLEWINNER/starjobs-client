@@ -56,6 +56,7 @@ export default function Login() {
               >
                 Don't have an account?
                 <Link
+                  id="createAcc"
                   to={`/sign-up`}
                   component={RouterLink}
                   color="starjobs.main"

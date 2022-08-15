@@ -1,4 +1,6 @@
 import {useEffect, useState} from 'react'
+import ReactPwa from 'react-pwa-app'
+import {Box} from '@mui/material'
 
 // firebase
 import {onMessageListener} from './firebase'
@@ -9,7 +11,6 @@ import AppRoute from 'src/routes'
 import ThemeConfig from './theme'
 // components
 import {GenericNotification} from './components/notifications'
-import FirebaseToken from './components/fcm'
 import NotistackProvider from './components/NotistackProvider'
 import ThemePrimaryColor from './components/ThemePrimaryColor'
 
@@ -20,13 +21,12 @@ import {SessionProvider} from 'src/contexts/SessionContext'
 import {NotificationsProvider} from 'src/contexts/NotificationContext'
 import {RatingsProvider} from 'src/contexts/rating'
 
-import {useServiceWorker} from './pwa/pwa-context'
+import LoadingScreen from 'src/components/LoadingScreen'
+import InstallPWA from 'src/components/pwa/install'
 
 export default function App() {
-  const {isUpdateAvailable, updateAssets} = useServiceWorker()
   const [open, setOpen] = useState(false)
   const [payload, setPayload] = useState([])
-
   const handleClose = () => {
     setOpen(false)
   }
@@ -46,32 +46,36 @@ export default function App() {
     load()
   }, [])
   return (
-    <ThemeConfig>
-      <ThemePrimaryColor>
-        <AuthProvider>
-          <SessionProvider>
-            <NotificationsProvider>
-              <NotistackProvider>
-                <RatingsProvider>
-                  <TawktoPageOverlay>
-                    <AppRoute />
-                    <FirebaseToken />
-                    <GenericNotification open={open ?? false} details={payload} handleClose={handleClose} />
-                  </TawktoPageOverlay>
-                </RatingsProvider>
-              </NotistackProvider>
-            </NotificationsProvider>
-          </SessionProvider>
-        </AuthProvider>
-        {isUpdateAvailable && (
-          <div>
-            A new version of this app is available!
-            <button type="button" onClick={updateAssets}>
-              Update now
-            </button>
-          </div>
-        )}
-      </ThemePrimaryColor>
-    </ThemeConfig>
+    <ReactPwa
+      test //is to install in localhost, not required
+      suspense={
+        <Box sx={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <LoadingScreen />
+        </Box>
+      }
+      config={{
+        swUrl: '/service-worker.js' // sw file in public default is service-worker.js
+      }}
+    >
+      <ThemeConfig>
+        <ThemePrimaryColor>
+          <AuthProvider>
+            <SessionProvider>
+              <NotificationsProvider>
+                <NotistackProvider>
+                  <RatingsProvider>
+                    <TawktoPageOverlay>
+                      <AppRoute />
+                      <GenericNotification open={open ?? false} details={payload} handleClose={handleClose} />
+                      <InstallPWA />
+                    </TawktoPageOverlay>
+                  </RatingsProvider>
+                </NotistackProvider>
+              </NotificationsProvider>
+            </SessionProvider>
+          </AuthProvider>
+        </ThemePrimaryColor>
+      </ThemeConfig>
+    </ReactPwa>
   )
 }

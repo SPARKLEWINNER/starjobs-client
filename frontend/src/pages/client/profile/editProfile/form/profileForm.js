@@ -66,7 +66,7 @@ export default function Upload({stored, onNext, onStoreData}) {
         <Typography variant="body1" sx={{mt: 0, fontWeight: 'bold'}}>
           Company Logo
         </Typography>
-        <Box sx={{textAlign: 'center', marginTop: '1rem !important', mb: 10}}>
+        <Box id="uploadProfileContainer" sx={{textAlign: 'center', marginTop: '1rem !important', mb: 10}}>
           {!stored.photo || isUpload ? (
             <UploadAvatar
               accept="image/*"

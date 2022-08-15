@@ -113,7 +113,6 @@ export default function LinearAlternativeLabel() {
       },
       photo: form.photo
     }
-
     const result = await onboard_api.post_freelancer_onboard(form_data, user._id)
 
     if (!result.ok) {
@@ -124,7 +123,7 @@ export default function LinearAlternativeLabel() {
     Object.keys(form).forEach((val) => {
       localStorage.removeItem(val)
     })
-
+    console.log(form)
     enqueueSnackbar('Onboarding process success', {variant: 'success'})
     setLoading(false)
     navigate('/freelancer/onboard/success', {replace: true})
@@ -357,7 +356,7 @@ export default function LinearAlternativeLabel() {
             </Box>
           </Paper>
 
-          <Box sx={{marginBottom: '120px', display: 'block', mt: 1}}>
+          <Box id="saveng" sx={{marginBottom: '120px', display: 'block', mt: 1}}>
             <LoadingButton
               loading={isLoading}
               size="large"

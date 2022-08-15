@@ -126,6 +126,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
         <Stack spacing={3}>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
+              id="currentCompany"
               autoFocus
               fullWidth
               label="Company name"
@@ -137,6 +138,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
 
           <TextField
             fullWidth
+            id="currentPosition"
             label="Position"
             {...getFieldProps('currentPosition')}
             error={Boolean(touched.currentPosition && errors.currentPosition)}
@@ -145,6 +147,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
               fullWidth
+              id="currentStartDate"
               label="Start Date"
               {...getFieldProps('currentStartDate')}
               error={Boolean(touched.currentStartDate && errors.currentStartDate)}
@@ -153,6 +156,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
 
             {!values.isCurrentWork ? (
               <TextField
+                id="currentEndDate"
                 fullWidth
                 label="End date"
                 {...getFieldProps('currentEndDate')}
@@ -165,6 +169,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
           </Stack>
 
           <TextField
+            id="currentPlaceOfWork"
             fullWidth
             label="Place of work"
             {...getFieldProps('currentPlaceOfWork')}
@@ -174,7 +179,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
 
           <FormControlLabel
             sx={{mb: 3}}
-            control={<Checkbox color="primary" {...getFieldProps('isCurrentWork')} />}
+            control={<Checkbox id="currentWork" color="primary" {...getFieldProps('isCurrentWork')} />}
             label={
               <Typography variant="body2" align="left" sx={{color: 'text.secondary'}}>
                 I currently work here
@@ -188,7 +193,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
 
           <FormControlLabel
             sx={{mb: 3}}
-            control={<Checkbox color="primary" {...getFieldProps('isFreshGraduate')} />}
+            control={<Checkbox id="isFreshGraduateCheckbox" color="primary" {...getFieldProps('isFreshGraduate')} />}
             label={
               <Typography variant="body2" align="left" sx={{color: 'text.secondary'}}>
                 Fresh Graduate
@@ -200,6 +205,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
             <>
               <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
                 <TextField
+                  id="pastCompany"
                   fullWidth
                   label="Past Company name"
                   {...getFieldProps('pastCompany')}
@@ -209,6 +215,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
               </Stack>
 
               <TextField
+                id="pastPosition"
                 fullWidth
                 label="Position"
                 {...getFieldProps('pastPosition')}
@@ -217,6 +224,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
               />
               <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
                 <TextField
+                  id="pastStartDate"
                   fullWidth
                   label="Start Date"
                   {...getFieldProps('pastStartDate')}
@@ -226,6 +234,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
 
                 {!values.currentWork ? (
                   <TextField
+                    id="pastEndDate"
                     fullWidth
                     label="Past End date"
                     {...getFieldProps('pastEndDate')}
@@ -237,6 +246,7 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
                 )}
 
                 <TextField
+                  id="pastPlaceOfWork"
                   fullWidth
                   label="Past Place of work"
                   {...getFieldProps('pastPlaceOfWork')}
@@ -249,7 +259,14 @@ export default function EmploymentForm({stored, onNext, onStoreData}) {
             ''
           )}
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continueEmploymentForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

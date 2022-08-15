@@ -127,7 +127,7 @@ const Dashboard = () => {
     load()
 
     // eslint-disable-next-line
-  }, [currentUser])
+  }, [])
 
   const checkNotice = (data) => {
     const arrived = data.filter((obj) => obj['status'].includes('Arrived'))
@@ -194,7 +194,7 @@ const Dashboard = () => {
             Hello
           </Typography>
           <Typography variant="body1" sx={{fontWeight: 'bold', color: 'common.black', letterSpacing: 'initial'}}>
-            {currentUser.name}
+            <div id="jobsterName">{currentUser.name}</div>
           </Typography>
           <Box component="div" sx={{mb: 8}} />
         </Box>

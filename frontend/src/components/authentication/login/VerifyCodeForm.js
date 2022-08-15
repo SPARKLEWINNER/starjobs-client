@@ -174,13 +174,15 @@ export default function VerifyCodeForm({account}) {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack direction="row" spacing={2} sx={{mt: 2}} justifyContent="center" className={'phone-form-container'}>
-          <ReactCodeInput onComplete={(e) => setCode(e)} autoFocus={true} className={classes.inpt} />
-        </Stack>
-
+        <div id="code">
+          <Stack direction="row" spacing={2} sx={{mt: 2}} justifyContent="center" className={'phone-form-container'}>
+            <ReactCodeInput native onComplete={(e) => setCode(e)} autoFocus={true} className={classes.inpt} />
+          </Stack>
+        </div>
         <br />
 
         <LoadingButton
+          id="verifyBtn"
           fullWidth
           size="large"
           type="submit"

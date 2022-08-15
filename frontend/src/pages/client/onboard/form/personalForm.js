@@ -89,6 +89,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
         <Stack spacing={3}>
           <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
             <TextField
+              id="firstName"
               autoFocus
               fullWidth
               autoComplete="name"
@@ -101,6 +102,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
 
           <Stack direction={{xs: 'row', sm: 'row'}} spacing={2}>
             <TextField
+              id="lastName"
               fullWidth
               autoComplete="name"
               label="Last name"
@@ -110,6 +112,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             />
 
             <TextField
+              id="middleIni"
               fullWidth
               label="Middle Initial"
               {...getFieldProps('middleInitial')}
@@ -136,6 +139,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
 
             <Stack direction={{xs: 'column', sm: 'column'}} spacing={2}>
               <TextField
+                id="companyName"
                 fullWidth
                 label="Company name"
                 value=""
@@ -144,6 +148,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 helperText={touched.companyName && errors.companyName}
               />
               <TextField
+                id="brandName"
                 fullWidth
                 label="Brand name"
                 value=""
@@ -152,6 +157,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 helperText={touched.brandName && errors.brandName}
               />
               <TextField
+                id="location"
                 fullWidth
                 label="Location"
                 value=""
@@ -160,6 +166,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 helperText={touched.location && errors.location}
               />
               <TextField
+                id="website"
                 fullWidth
                 label="Website"
                 value=""
@@ -168,6 +175,7 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
                 helperText={touched.website && errors.website}
               />
               <TextField
+                id="companyPosition"
                 fullWidth
                 label="Position in the company"
                 value=""
@@ -192,7 +200,14 @@ export default function PersonalForm({user, stored, onNext, onStoreData}) {
             </Stack>
           </Box>
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+          <LoadingButton
+            id="continuePersonalForm"
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={isLoading}
+          >
             Continue
           </LoadingButton>
         </Stack>

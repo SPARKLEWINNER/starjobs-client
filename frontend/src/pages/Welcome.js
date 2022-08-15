@@ -77,7 +77,7 @@ export default function Welcome() {
               <Paper sx={{p: 1, backgroundColor: 'starjobs.main'}}>
                 {activeStep === 0 && <Verified />}
                 {activeStep === 1 && <Notification />}
-                {activeStep === 2 && <Complete user={currentUser} />}
+                {activeStep === 2 && <Complete id="completeBtn" user={currentUser} />}
                 {activeStep === 3 && <Start />}
               </Paper>
             </>
@@ -101,17 +101,17 @@ export default function Welcome() {
               <Box sx={{display: 'flex'}}>
                 <Box sx={{flexGrow: 1}} />
                 {isStepOptional(activeStep) ? (
-                  <Button color="inherit" sx={{...LoadingButtonStyle, mr: 1}} onClick={handleSkip}>
+                  <Button id="skipBtn" color="inherit" sx={{...LoadingButtonStyle, mr: 1}} onClick={handleSkip}>
                     Skip
                   </Button>
                 ) : activeStep === steps.length - 1 ? (
                   <Link component={RouterLink} to={`/dashboard`} sx={{textDecoration: 'none'}}>
-                    <Button variant="contained" sx={LoadingButtonStyle} onClick={handleNext}>
+                    <Button id="goBtn" variant="contained" sx={LoadingButtonStyle} onClick={handleNext}>
                       Let's Go!
                     </Button>
                   </Link>
                 ) : (
-                  <Button variant="contained" sx={LoadingButtonStyle} onClick={handleNext}>
+                  <Button id="next" variant="contained" sx={LoadingButtonStyle} onClick={handleNext}>
                     Next
                   </Button>
                 )}

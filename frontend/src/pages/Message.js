@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {styled} from '@mui/material/styles'
-import {Stack, Container, Typography, Box} from '@mui/material'
+import {Stack, Button, Container, Typography, Box} from '@mui/material'
 import {slice} from 'lodash'
+import PropTypes from 'prop-types'
 
 import Page from 'src/components/Page'
 import LoadingScreen from 'src/components/LoadingScreen'
@@ -31,6 +32,15 @@ const Message = () => {
   const [notif, setNotifications] = useState([])
   const [render, setRender] = useState([])
   const [user, setUser] = useState([])
+  const handleReadAll = () => {
+    notif.map((v) => {
+      const readAll = async () => {
+        await user_api.put_user_notification_read(user._id, v._id)
+      }
+      readAll()
+      load()
+    })
+  }
 
   const load = async () => {
     setLoading(true)
@@ -113,6 +123,20 @@ const Message = () => {
 
           {!isLoading && render.length > 0 && (
             <>
+              <Button
+                onClick={handleReadAll}
+                variant="outlined"
+                sx={{
+                  fontWeight: '400',
+                  width: '40%',
+                  fontSize: '0.85rem',
+                  bottom: 20,
+                  ml: 'auto',
+                  opacity: 1
+                }}
+              >
+                READ ALL
+              </Button>
               <Stack sx={{mb: 5, px: 1}}>
                 {notif.length > 0 &&
                   notif.map((v, k) => {
@@ -125,6 +149,18 @@ const Message = () => {
       </Container>
     </RootStyle>
   )
+}
+
+Message.propTypes = {
+  id: PropTypes.string,
+  uid: PropTypes.string,
+  userType: PropTypes.number,
+  title: PropTypes.string,
+  body: PropTypes.string,
+  type: PropTypes.string,
+  notifData: PropTypes.string,
+  isRead: PropTypes.bool,
+  onCardClick: PropTypes.func
 }
 
 export default Message

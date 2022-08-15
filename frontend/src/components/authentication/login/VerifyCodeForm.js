@@ -83,7 +83,7 @@ export default function VerifyCodeForm({account}) {
       let {data} = result
       data.token = account.token
 
-      await storage.storeUser(data)
+      await storage.storeUser({...data, verificationCode: null, isVerified: true})
 
       setLoading(false)
       enqueueSnackbar('Verify success', {variant: 'success'})

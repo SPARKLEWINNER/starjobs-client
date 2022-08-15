@@ -247,6 +247,7 @@ var controllers = {
                             hours: 1,
                             nation: 1,
                             from: 1,
+                            late: 1,
                             time: 1,
                             late: 1,
                             status: 1,

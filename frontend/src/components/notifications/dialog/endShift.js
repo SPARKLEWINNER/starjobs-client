@@ -8,9 +8,17 @@ import {Icon} from '@iconify/react'
 import closeIcon from '@iconify/icons-eva/close-circle-outline'
 
 const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
-  const [workTime, setWorkTime] = useState(undefined)
+  const [workTime, setWorkTime] = useState(gig?.hours || '')
   const [rate, setRate] = useState(undefined)
   const handleCommit = (value) => {
+    if (workTime === null || workTime === undefined) {
+      return alert('Kindly set the number of worked hours')
+    }
+
+    if (Math.sign(workTime) < 0) {
+      return alert('Cannot set negative work hours')
+    }
+
     try {
       let data = {
         new_status: 'End-Shift',
@@ -56,6 +64,7 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
             label="No. of hours "
             fullWidth
             type="number"
+            value={gig.hours || ''}
             sx={{width: '100%'}}
             onChange={(e) => formatDecimal(e.target.value, 'hours')}
           />

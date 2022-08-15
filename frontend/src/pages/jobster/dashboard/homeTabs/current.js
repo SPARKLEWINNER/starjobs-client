@@ -11,6 +11,7 @@ import CurrentModalPopup from './modal'
 
 // api
 import gigs_api from 'src/lib/gigs'
+import useSendNotif from 'src/utils/hooks/useSendNotif'
 
 // theme
 import color from 'src/theme/palette'
@@ -26,6 +27,8 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
   const [isLoading, setLoading] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [SELECTED_GIG, setSelectedGig] = useState([])
+  const {sendGigNotification} = useSendNotif()
+
   const handleAction = async (value) => {
     setLoading(true)
     if (!user) return
@@ -33,11 +36,19 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
       status: value.new_status,
       uid: user._id
     }
-
     const result = await gigs_api.patch_gigs_apply(value._id, form_data)
     if (!result.ok) {
       enqueueSnackbar('Something went wrong with the actions request', {variant: 'error'})
       return setLoading(false)
+    }
+
+    if (value.new_status === 'Confirm-Arrived') {
+      await sendGigNotification({
+        title: 'The jobster has arrived.',
+        body: 'Check gig in progress',
+        targetUsers: [SELECTED_GIG.uid],
+        additionalData: SELECTED_GIG
+      })
     }
 
     enqueueSnackbar('Success informing the client', {variant: 'success'})
@@ -105,7 +116,7 @@ const CurrentTab = ({gigs, user, onEndShift}) => {
             gig={v}
             onClick={handleAction}
             isLoading={isLoading}
-            onView={() => handleView(v)}
+            onView={handleView}
             onEndShift={handleEndShift}
           />
         ))}

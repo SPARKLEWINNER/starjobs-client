@@ -82,7 +82,7 @@ export default function BillingCard({gig}) {
                   <Stack sx={{my: 1}}>
                     <Typography variant="body2">Total Service Cost</Typography>
                     <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                      {serviceCost.toFixed(2)}
+                      {serviceCost?.toFixed(2)}
                     </Typography>
                   </Stack>
                 </CardContent>

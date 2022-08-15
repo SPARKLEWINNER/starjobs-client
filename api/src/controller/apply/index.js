@@ -12,8 +12,8 @@ const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
 
 const { FCM_SERVER_KEY } = process.env;
-const client = ['Applying', 'Confirm-Gig', 'On-the-way', 'Arrived', 'On-going', 'End-Shift', 'Cancelled'];
-const freelancer = ['Accepted', 'Confirm-End-Shift', 'Confirm-Arrived'];
+const client = ['Applying', 'Confirm-Gig', 'Confirm-Arrived', 'On-going', 'End-Shift', 'Cancelled'];
+const freelancer = ['Accepted', 'Confirm-End-Shift'];
 
 const calculations = require('../../services/gigComputations');
 const { Types } = mongoose;
@@ -25,16 +25,10 @@ async function sendNotification(request, gigs, status) {
             { status: 'Applying', type: '2', description: `Applicant has sent a gig request` },
             { status: 'Accepted', type: '1', description: `Congratulations, your gig has been accepted.` },
             { status: 'Confirm-Gig', type: '0', description: `Jobster has confirmed pushing thru the gig.` },
-            { status: 'Arrived', type: '0', description: `The jobster has arrived.` },
-            { status: 'Confirm-Arrived', type: '0', description: `The client have confirmed your arrival.` },
-            { status: 'End-Shift', type: '0', description: `The jobster have Ended the shift` },
+            { status: 'Confirm-Arrived', type: '1', description: `The jobster has arrived.` },
+            { status: 'End-Shift', type: '1', description: `The jobster have Ended the shift` },
             {
                 status: 'Confirm-End-Shift',
-                type: '0',
-                description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
-            },
-            {
-                status: 'Cancelled',
                 type: '0',
                 description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
             }

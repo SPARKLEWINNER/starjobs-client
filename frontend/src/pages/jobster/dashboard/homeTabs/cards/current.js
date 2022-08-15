@@ -35,7 +35,7 @@ const CurrentCard = ({gig, onView}) => {
         borderRadius: 1,
         cursor: 'pointer'
       }}
-      onClick={() => onView()}
+      onClick={() => onView(gig)}
     >
       <Box sx={{display: 'flex', flexDirection: 'column', width: '100%', p: 2, mx: 2}}>
         <CardContent sx={{flex: '1 0 auto', px: 0, py: 1, alignItems: 'flex-start'}}>

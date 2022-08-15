@@ -37,6 +37,15 @@ const IncomingTab = ({gigs, user}) => {
       })
     }
 
+    if (new_status === 'Confirm-Arrived') {
+      await sendGigNotification({
+        title: 'The Jobster has arrived.',
+        body: 'Check gig in progress',
+        targetUsers: [client_id],
+        additionalData: value
+      })
+    }
+
     let form_data = {
       status: value.new_status,
       uid: user._id

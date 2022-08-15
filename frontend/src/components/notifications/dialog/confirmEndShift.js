@@ -22,9 +22,10 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
   const [isLate, setLate] = useState(false)
 
   const handleCommit = (value) => {
+    if (Math.sign(hoursLate) < 0) return alert('Unable to set negative numbers in late hours')
     try {
       let data = {
-        timeLate: hoursLate ? JSON.parse(hoursLate) : null,
+        timeLate: hoursLate ? parseFloat(hoursLate) : null,
         ...value
       }
       onCommit(data)

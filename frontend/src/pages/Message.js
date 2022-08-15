@@ -128,10 +128,10 @@ const Message = () => {
                 variant="outlined"
                 sx={{
                   fontWeight: '400',
-                  width: '60%',
+                  width: '40%',
                   fontSize: '0.85rem',
                   bottom: 20,
-                  mx: 'auto',
+                  ml: 'auto',
                   opacity: 1
                 }}
               >

@@ -13,8 +13,6 @@
     "author": "Miguel Quintos",
     "license": "ISC",
     "dependencies": {
-        "@sendgrid/mail": "^7.4.7",
-        "aws-sdk": "^2.639.0",
         "axios": "^0.21.1",
         "bcrypt": "^5.0.1",
         "body-parser": "1.19.0",
@@ -50,7 +48,6 @@
     },
     "devDependencies": {
         "concurrently": "^6.2.0",
-        "nodemon": "^2.0.12",
-        "serverless-plugin-warmup": "^6.0.0"
+        "nodemon": "^2.0.12"
     }
 }

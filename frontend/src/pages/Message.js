@@ -10,6 +10,7 @@ import LoadingScreen from 'src/components/LoadingScreen'
 import storage from 'src/utils/storage'
 import user_api from 'src/lib/users'
 import NotificationCardV2 from 'src/components/notifications/card_v2'
+import {useNotifications} from 'src/contexts/NotificationContext'
 
 const RootStyle = styled(Page)(({theme}) => ({
   [theme.breakpoints.up('md')]: {
@@ -32,6 +33,7 @@ const Message = () => {
   const [notif, setNotifications] = useState([])
   const [render, setRender] = useState([])
   const [user, setUser] = useState([])
+  const {channel} = useNotifications()
   const handleReadAll = () => {
     notif.map((v) => {
       const readAll = async () => {
@@ -97,6 +99,9 @@ const Message = () => {
 
   useEffect(() => {
     load()
+    channel.bind('notify_gig', () => {
+      load()
+    })
     // eslint-disable-next-line
   }, [])
 

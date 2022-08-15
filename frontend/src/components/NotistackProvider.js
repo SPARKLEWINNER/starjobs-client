@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => {
       width: '280px',
       padding: theme.spacing(1.5),
       margin: theme.spacing(0.25, 0),
-      boxShadow: theme.customShadows.z8,
+      // boxShadow: theme.customShadows.z8,
       borderRadius: theme.shape.borderRadius,
       color: theme.palette.grey[isLight ? 0 : 800],
       backgroundColor: theme.palette.grey[isLight ? 900 : 0]

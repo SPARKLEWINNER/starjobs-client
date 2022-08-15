@@ -127,7 +127,7 @@ const Dashboard = () => {
     load()
 
     // eslint-disable-next-line
-  }, [currentUser])
+  }, [])
 
   const checkNotice = (data) => {
     const arrived = data.filter((obj) => obj['status'].includes('Arrived'))

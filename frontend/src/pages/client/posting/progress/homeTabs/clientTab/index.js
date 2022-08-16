@@ -67,6 +67,7 @@ export default function TabsComponent() {
       if (params?.search) {
         setValue(params?.search?.split('?tab=')[1])
       }
+      // const resultHistory = await gigs_api.get_gigs_history()
       const result = await gigs_api.get_gigs_client()
       if (!result.ok) {
         enqueueSnackbar('Unable to load your Gig History', {variant: 'error'})

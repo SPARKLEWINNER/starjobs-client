@@ -14,7 +14,7 @@ export default function BillingCard({gig, user}) {
   let {position, hours, breakHr, locationRate, fee, late, _id, location} = gig
   fee = parseFloat(fee)
   let {jobsterTotal} = calculations(hours, fee, locationRate)
-
+  console.log(gig)
   return (
     <Card sx={{p: 0, my: 2}}>
       <Accordion sx={{p: 0}} key={_id}>

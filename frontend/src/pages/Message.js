@@ -75,6 +75,7 @@ const Message = () => {
   }
 
   const renderCard = (v, index) => {
+    console.log(v)
     if (!v) return ''
 
     return (
@@ -88,6 +89,7 @@ const Message = () => {
         type={v.type}
         notifData={v.additionalData}
         isRead={v.isRead}
+        notifTime={v.createdAt}
         onCardClick={() => {
           notif[index].isRead = true
           let newArr = [...notif]

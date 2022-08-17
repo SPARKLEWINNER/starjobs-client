@@ -14,11 +14,11 @@ BillingCard.propTypes = {
 const default_url = process.env.REACT_APP_IMAGE_URL
 
 export default function BillingCard({gig}) {
-  let {position, hours, fee, time, from, _id, account, locationRate} = gig
+  console.log(gig)
+  let {position, hours, fee, time, from, _id, account, late, locationRate} = gig
   fee = parseFloat(fee)
   const {firstName, middleInitial, lastName, photo} = account[0]
   let {serviceCost} = calculations(hours, fee, locationRate)
-
   const name = `${firstName} ${middleInitial} ${lastName};`
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
 
@@ -70,6 +70,12 @@ export default function BillingCard({gig}) {
                     </Typography>
                     <Typography variant="body1" color="default" sx={{fontWeight: 'bold'}}>
                       End: {moment(time).format('MMM-DD hh:mm A')}
+                    </Typography>
+                  </Stack>
+                  <Stack sx={{my: 1}}>
+                    <Typography variant="body2">Late</Typography>
+                    <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                      {late}
                     </Typography>
                   </Stack>
                   <Stack sx={{my: 1}}>

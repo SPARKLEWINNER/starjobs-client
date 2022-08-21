@@ -85,22 +85,18 @@ const accountSchema = new Schema(
             },
             currentCompany: {
                 type: String,
-                required: true
             },
             currentPosition: {
                 type: String,
-                required: true
             },
             currentStartDate: {
                 type: String,
-                required: true
             },
             currentEndDate: {
                 type: String
             },
             currentPlaceOfWork: {
                 type: String,
-                required: true
             },
             pastCompany: {
                 type: String,
@@ -121,11 +117,9 @@ const accountSchema = new Schema(
         expertise: {
             skillQualification: {
                 type: String,
-                required: true
             },
             skillOffer: {
                 type: String,
-                required: true
             },
             workType: {
                 type: String
@@ -187,7 +181,6 @@ const accountSchema = new Schema(
         },
         photo: {
             type: String,
-            required: true
         }
     },
     {

@@ -14,7 +14,6 @@ BillingCard.propTypes = {
 const default_url = process.env.REACT_APP_IMAGE_URL
 
 export default function BillingCard({gig}) {
-  console.log(gig)
   let {position, hours, fee, time, from, _id, account, late, locationRate} = gig
   fee = parseFloat(fee)
   const {firstName, middleInitial, lastName, photo} = account[0]

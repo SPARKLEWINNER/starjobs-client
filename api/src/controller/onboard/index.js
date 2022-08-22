@@ -294,7 +294,9 @@ async function photo_information(id, data) {
     const oldDetails = await Account.find({ _id: id }).lean().exec();
 
     try {
-        account = await Account.findOneAndUpdate({ uuid: id }, details);
+        account = await Account.findOneAndUpdate({ uuid: id }, details, {
+            new: true
+        });
         user = await User.find({ _id: mongoose.Types.ObjectId(account.uuid) })
             .lean()
             .exec();

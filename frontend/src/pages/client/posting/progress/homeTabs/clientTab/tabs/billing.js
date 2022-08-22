@@ -24,7 +24,6 @@ const current_status = [
 ]
 
 const CurrentTab = ({gigs}) => {
-  console.log(gigs)
   const [FILTERED_DATA, setData] = useState([])
   useEffect(() => {
     const processFilter = () => {

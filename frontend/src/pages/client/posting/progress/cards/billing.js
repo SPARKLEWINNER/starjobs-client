@@ -21,7 +21,6 @@ export default function BillingCard({gig}) {
 
   const name = `${firstName} ${middleInitial} ${lastName};`
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
-  console.log(gig)
   return (
     <Card sx={{p: 0, my: 2}}>
       <Accordion sx={{p: 0}} key={_id}>

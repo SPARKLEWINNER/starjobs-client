@@ -80,7 +80,6 @@ const Dashboard = () => {
       }
 
       const result = await gigs_api.get_gigs_history()
-      console.log(result)
       if (!result.ok) {
         enqueueSnackbar('Unable to load your Gig History', {variant: 'error'})
         return

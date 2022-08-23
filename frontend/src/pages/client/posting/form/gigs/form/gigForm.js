@@ -38,6 +38,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
   const [date, setDate] = useState(new Date())
   const [from, setFrom] = useState()
   const [to, setTo] = useState()
+  const [repeatDays, setRepeatDays] = useState(0)
   const [areas, setAreas] = useState([])
   const current_date = new Date()
   // const [weekdaySelected, setWeekdaySelected] = useState([])
@@ -174,6 +175,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
 
   const handleCalculate = (newValue) => {
     setTo(newValue)
+    setRepeatDays(moment(values.to).diff(moment(values.from), 'days') + 1)
 
     if (!from) {
       setFieldValue('hours', 0.0)
@@ -191,8 +193,14 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       return enqueueSnackbar('Cannot set time behind from the start time', {variant: 'warning'})
     }
 
-    let duration = moment.duration(to_hours.diff(from_hours)).asHours()
-    if (duration < 0) return
+    let postingDays = moment(values.to).diff(moment(values.from), 'days') + 1
+    // former work hours counter
+    // let duration = moment.duration(to_hours.diff(from_hours)).asHours()
+    let duration = postingDays * 9
+    if (duration < 0) {
+      duration = 9
+      return
+    }
 
     setFieldValue('hours', duration.toFixed(2))
   }
@@ -211,8 +219,14 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       return enqueueSnackbar('Cannot set  time ahead of end time', {variant: 'warning'})
     }
 
-    let duration = moment.duration(to_hours.diff(from_hours)).asHours()
-    if (duration < 0) return
+    let postingDays = moment(values.to).diff(moment(values.from), 'days') + 1
+    // former work hours counter
+    // let duration = moment.duration(to_hours.diff(from_hours)).asHours()
+    let duration = postingDays * 9
+    if (duration < 0) {
+      duration = 9
+      return
+    }
     window.scrollTo(0, 0)
 
     setFieldValue('hours', duration.toFixed(2))
@@ -223,13 +237,16 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
   }
 
   const handleBreakTimeReduceHours = (value) => {
-    let from_hours = moment(from, 'HH:mm a')
-    let to_hours = moment(to, 'HH:mm a')
-
-    let totalHours = moment.duration(to_hours.diff(from_hours)).asHours()
+    // former total hours formula
+    // let from_hours = moment(from, 'HH:mm a')
+    // let to_hours = moment(to, 'HH:mm a')
+    // let totalHours = moment.duration(to_hours.diff(from_hours)).asHours()
+    let postingDays = moment(values.to).diff(moment(values.from), 'days') + 1
+    let totalHours = postingDays * 9
+    let totalBreak = postingDays * value
     if (totalHours < 0 || !totalHours) return
 
-    setFieldValue('hours', parseFloat(totalHours - value).toFixed(2))
+    setFieldValue('hours', parseFloat(totalHours - totalBreak).toFixed(2))
     setFieldValue('break', parseInt(value).toFixed(2))
   }
 
@@ -354,7 +371,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               label={
                 <>
                   <Typography variant="body1" component="p">
-                    Repeat Posting ({moment(values.to).diff(moment(values.from), 'days')} days to be posted)
+                    Repeat Posting ({repeatDays} days to be posted)
                   </Typography>
 
                   <Typography variant="body2" component="span" sx={{opacity: 0.5}}>
@@ -369,7 +386,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             <>
               <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
                 Repeat every
-              </Typography>
+              </Typography> 
               <SelectMultiple
                 onChange={(e) => setWeekdaySelected(e)}
                 value={weekdaySelected}
@@ -475,9 +492,9 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
           <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
             Gig Fee per hour
             <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
-              (ex. P 537 / 8 ={' '}
+              (ex. P 570 / 8 ={' '}
               <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'red'}}>
-                67.125
+                71.25
               </Typography>
               )
             </Typography>

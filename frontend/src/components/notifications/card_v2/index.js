@@ -2,7 +2,7 @@ import {Box, Card, CardContent, Stack, Typography} from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import {useNavigate} from 'react-router-dom'
 import user_api from 'src/lib/users'
-
+import moment from 'moment'
 import PropTypes from 'prop-types'
 
 const NotificationCardV2 = ({
@@ -13,9 +13,11 @@ const NotificationCardV2 = ({
   type = 'Notification',
   notifData = '{"name":"John", "age":30, "car":null}',
   isRead = false,
+  notifTime,
   onCardClick = () => {}
 }) => {
   const navigate = useNavigate()
+  const notifTimeAgo = moment(notifTime).startOf('day').fromNow()
 
   const notifClickHandler = () => {
     if (notifData) {
@@ -78,7 +80,12 @@ const NotificationCardV2 = ({
               {title}
             </Typography>
           </Stack>
-          <Typography variant="caption">{body}</Typography>
+          <Stack direction="row" spacing={2} sx={{justifyContent: 'space-between', alignItems: 'center', p: 0, mt: 1}}>
+            <Typography variant="caption">{body}</Typography>
+            <Typography sx={{}} variant="caption">
+              {notifTimeAgo}
+            </Typography>
+          </Stack>
         </CardContent>
       </Box>
     </Card>
@@ -94,6 +101,7 @@ NotificationCardV2.propTypes = {
   type: PropTypes.string,
   notifData: PropTypes.string,
   isRead: PropTypes.bool,
+  notifTime: PropTypes.string,
   onCardClick: PropTypes.func
 }
 

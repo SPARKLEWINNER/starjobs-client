@@ -20,7 +20,6 @@ export default function BillingCard({gig}) {
   let {serviceCost} = calculations(hours, fee, locationRate)
   const name = `${firstName} ${middleInitial} ${lastName};`
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
-
   return (
     <Card sx={{p: 0, my: 2}}>
       <Accordion sx={{p: 0}} key={_id}>

@@ -38,7 +38,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
   const [date, setDate] = useState(new Date())
   const [from, setFrom] = useState()
   const [to, setTo] = useState()
-  const [repeatDays, setRepeatDays] = useState(0)
   const [areas, setAreas] = useState([])
   const current_date = new Date()
   // const [weekdaySelected, setWeekdaySelected] = useState([])
@@ -175,9 +174,10 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
 
   const handleCalculate = (newValue) => {
     setTo(newValue)
-    setRepeatDays(moment(values.to).diff(moment(values.from), 'days') + 1)
+    setFieldValue('repeatTimes', moment(values.to).diff(moment(values.from), 'days') + 1)
 
     if (!from) {
+      setFieldValue('repeatTimes', 0)
       setFieldValue('hours', 0.0)
       return enqueueSnackbar('Select start time', {variant: 'warning'})
     }
@@ -193,7 +193,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       return enqueueSnackbar('Cannot set time behind from the start time', {variant: 'warning'})
     }
 
-    let postingDays = moment(values.to).diff(moment(values.from), 'days') + 1
+    let postingDays = 1 + moment(values.to).diff(moment(values.from), 'days')
     // former work hours counter
     // let duration = moment.duration(to_hours.diff(from_hours)).asHours()
     let duration = postingDays * 9
@@ -207,10 +207,15 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
 
   const handleFrom = (newValue) => {
     setFrom(newValue)
+    setFieldValue('repeatTimes', moment(values.to).diff(moment(values.from), 'days') + 1)
+
     let from_hours = moment(newValue, 'HH:mm a')
     setFieldValue('from', from_hours)
 
-    if (!to) return
+    if (!to) {
+      setFieldValue('repeatTimes', 0)
+      return
+    }
 
     let to_hours = moment(to, 'HH:mm a')
 
@@ -363,6 +368,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
                     // if (!event.target.checked) {
                     //   setWeekdaySelected([])
                     // }
+                    setFieldValue('repeatTimes', moment(values.to).diff(moment(values.from), 'days') + 1)
                     setFieldValue('isRepeatable', event.target.checked)
                   }}
                   defaultValue="false"
@@ -371,7 +377,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
               label={
                 <>
                   <Typography variant="body1" component="p">
-                    Repeat Posting ({repeatDays} days to be posted)
+                    Repeat Posting ({values.repeatTimes} days to be posted)
                   </Typography>
 
                   <Typography variant="body2" component="span" sx={{opacity: 0.5}}>

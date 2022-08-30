@@ -40,7 +40,7 @@ const Message = () => {
         await user_api.put_user_notification_read(user._id, v._id)
       }
       readAll()
-      load()
+      window.location.reload()
     })
   }
 

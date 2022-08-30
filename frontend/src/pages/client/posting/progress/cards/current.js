@@ -31,6 +31,9 @@ const CurrentCard = ({gig, onView}) => {
               {position}
             </Typography>
           </Box>
+          <Typography variant="body1">
+            {gig?.account[0].firstName} {gig?.account[0].lastName}
+          </Typography>
           <Stack direction="column" sx={{my: 0}}>
             <Typography variant="overline" color="default" sx={{fontSize: 10}}>
               Start: {moment(from).format('MMM-DD hh:mm A')}

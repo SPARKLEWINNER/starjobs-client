@@ -34,7 +34,7 @@ export default function IncomingCard({gig, onView}) {
               </Typography>
             </Stack>
           </Stack>
-          <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+          <Typography variant="body1">
             {gig?.account[0].firstName} {gig?.account[0].lastName}
           </Typography>
           <Stack direction="row" sx={{my: 1}}>

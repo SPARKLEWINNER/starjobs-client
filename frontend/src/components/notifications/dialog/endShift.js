@@ -64,7 +64,7 @@ const EndShiftNotification = ({open, gig, onCommit, handleClose, loading}) => {
             label="No. of hours "
             fullWidth
             type="number"
-            value={gig.hours || ''}
+            defaultValue={gig.hours || ''}
             sx={{width: '100%'}}
             onChange={(e) => formatDecimal(e.target.value, 'hours')}
           />

@@ -17,7 +17,8 @@ export default function IncomingCard({gig, onView}) {
   const {position, _id, hours, fee, from, date, status, time, locationRate} = gig
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
   let {serviceCost} = calculations(hours, fee, locationRate)
-
+  console.log(gig?.account[0].firstName)
+  console.log(gig)
   return (
     <Card sx={{p: 1, display: 'flex', mb: 2}} onClick={() => onView()}>
       <Box sx={{display: 'flex', flexDirection: 'column', width: {sm: '100%', xs: '100%'}, p: 1}}>
@@ -33,6 +34,9 @@ export default function IncomingCard({gig, onView}) {
               </Typography>
             </Stack>
           </Stack>
+          <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+            {gig?.account[0].firstName} {gig?.account[0].lastName}
+          </Typography>
           <Stack direction="row" sx={{my: 1}}>
             <Typography variant="overline" color="default" sx={{fontSize: 10}}>
               Start: {moment(from).format('MMM-DD hh:mm A')}
@@ -54,7 +58,6 @@ export default function IncomingCard({gig, onView}) {
               Posted: {moment(date).format('MMM-DD-YYYY')}
             </Label>
           </Box>
-
           <Stack direction="row" sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
             <Box sx={{mr: 2}}>
               <Typography variant="overline" sx={{fontSize: 10, textTransform: 'uppercase'}} color="default">

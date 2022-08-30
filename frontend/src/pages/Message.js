@@ -75,7 +75,6 @@ const Message = () => {
   }
 
   const renderCard = (v, index) => {
-    console.log(v)
     if (!v) return ''
 
     return (
@@ -133,6 +132,7 @@ const Message = () => {
               <Button
                 onClick={handleReadAll}
                 variant="outlined"
+                loading={isLoading}
                 sx={{
                   fontWeight: '400',
                   width: '40%',

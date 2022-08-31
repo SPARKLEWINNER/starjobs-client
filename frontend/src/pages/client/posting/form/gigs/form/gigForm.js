@@ -500,7 +500,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             Gig Fee per hour
             <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
               (ex. P 570 / 8 ={' '}
-              <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'red'}}>
+              <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
                 71.25
               </Typography>
               )

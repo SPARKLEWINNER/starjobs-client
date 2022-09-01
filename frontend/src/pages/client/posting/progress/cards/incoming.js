@@ -17,8 +17,7 @@ export default function IncomingCard({gig, onView}) {
   const {position, _id, hours, fee, from, date, status, time, locationRate} = gig
   const hrShift = parseInt(hours) > 1 ? hours + ' hrs' : hours + ' hr'
   let {serviceCost} = calculations(hours, fee, locationRate)
-  console.log(gig?.account[0].firstName)
-  console.log(gig)
+
   return (
     <Card sx={{p: 1, display: 'flex', mb: 2}} onClick={() => onView()}>
       <Box sx={{display: 'flex', flexDirection: 'column', width: {sm: '100%', xs: '100%'}, p: 1}}>

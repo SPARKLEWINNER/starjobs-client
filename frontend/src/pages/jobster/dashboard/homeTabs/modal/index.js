@@ -1,12 +1,22 @@
 import PropTypes from 'prop-types'
 
-import React from 'react'
+import React, {useState} from 'react'
 import {Global} from '@emotion/react'
 import {styled} from '@mui/styles'
 import {grey} from '@mui/material/colors'
 import moment from 'moment'
-import {Box, Typography, SwipeableDrawer, Stack, Button, CardContent, CardMedia} from '@mui/material'
-
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Box,
+  Typography,
+  SwipeableDrawer,
+  Stack,
+  Button,
+  CardContent,
+  CardMedia
+} from '@mui/material'
 import {Icon} from '@iconify/react'
 import closeIcon from '@iconify/icons-eva/close-circle-outline'
 import {LoadingButton} from '@mui/lab'
@@ -28,6 +38,7 @@ const Puller = styled(Box)(({theme}) => ({
 }))
 
 const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) => {
+  const [isFinal, setIsFinal] = useState(false)
   let {user, shift, position, hours, fee, time, from, status, category} = gig
 
   fee = parseFloat(fee)
@@ -59,6 +70,23 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
         return 'No Appearance'
       case 'Cancelled':
         return 'Cancel'
+      default:
+        return ''
+    }
+  }
+
+  const _dialogLabel = (_status) => {
+    switch (_status) {
+      case 'Accepted':
+        return {
+          title: 'Do you wish to confirm this gig?',
+          buttonText: 'Yes, Confirm Gig'
+        }
+      case 'Confirm-Gig':
+        return {
+          title: 'Are you sure you have arrived at the location?',
+          buttonText: 'Yes, I have arrived'
+        }
       default:
         return ''
     }
@@ -237,7 +265,7 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                         <LoadingButton
                           size="large"
                           variant="contained"
-                          onClick={() => handleClick(gig)}
+                          onClick={() => setIsFinal(true)}
                           loading={loading}
                         >
                           {_label(status)}
@@ -250,7 +278,7 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                       <LoadingButton
                         size="large"
                         variant="contained"
-                        onClick={() => handleClick(gig)}
+                        onClick={() => setIsFinal(true)}
                         loading={loading}
                       >
                         {_label(status)}
@@ -284,6 +312,46 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
           </StyledBox>
         </SwipeableDrawer>
       </Box>
+
+      {/* Final confirm dialog */}
+      <Dialog open={isFinal} onClose={() => setIsFinal(false)}>
+        <Button sx={{ml: 'auto', pt: 2}} onClick={() => setIsFinal(false)}>
+          <Icon icon={closeIcon} width={32} height={32} color="#b2b2b2" />
+        </Button>
+        <DialogTitle sx={{textAlign: 'center'}}>
+          <Typography variant="h4" sx={{maxWidth: '75%', mx: 'auto'}}>
+            {_dialogLabel(status).title}
+          </Typography>
+        </DialogTitle>
+        <DialogActions sx={{display: 'block', pb: 5, px: 3}}>
+          <Typography variant="h6" sx={{mb: 6, fontWeight: 400, textAlign: 'center', mx: 'auto'}}>
+            Please be aware once you processed this you won't be able to undo your changes.
+          </Typography>
+
+          <Stack sx={{my: 2}}>
+            <LoadingButton
+              color="primary"
+              size="large"
+              variant="contained"
+              onClick={() => handleClick(gig)}
+              loading={loading}
+              disabled={loading}
+              sx={{textTransform: 'initial !important'}}
+            >
+              {_dialogLabel(status).buttonText}
+            </LoadingButton>
+            <LoadingButton
+              onClick={() => setIsFinal(false)}
+              size="large"
+              variant="outlined"
+              color="inherit"
+              sx={{mt: 2}}
+            >
+              Cancel
+            </LoadingButton>
+          </Stack>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

@@ -25,7 +25,6 @@ const current_status = [
 
 const CurrentTab = ({gigs}) => {
   const [FILTERED_DATA, setData] = useState([])
-
   useEffect(() => {
     const processFilter = () => {
       const filtered_gig = gigs.filter((obj) => current_status.includes(obj.status))

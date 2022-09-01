@@ -174,7 +174,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
 
   const handleCalculate = (newValue) => {
     setTo(newValue)
-    setFieldValue('repeatTimes', moment(values.to).diff(moment(values.from), 'days') + 1)
 
     if (!from) {
       setFieldValue('repeatTimes', 0)
@@ -193,21 +192,22 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       return enqueueSnackbar('Cannot set time behind from the start time', {variant: 'warning'})
     }
 
-    let postingDays = 1 + moment(values.to).diff(moment(values.from), 'days')
+    // let postingDays = 1 + moment(values.to).diff(moment(values.from), 'days')
     // former work hours counter
     // let duration = moment.duration(to_hours.diff(from_hours)).asHours()
-    let duration = postingDays * 9
+    let totalHours = moment.duration(to_hours.diff(from_hours)).asHours()
+    let postDays = Math.trunc(totalHours / 24) + 1
+    let duration = postDays * 9
     if (duration < 0) {
       duration = 9
       return
     }
-
+    setFieldValue('repeatTimes', postDays)
     setFieldValue('hours', duration.toFixed(2))
   }
 
   const handleFrom = (newValue) => {
     setFrom(newValue)
-    setFieldValue('repeatTimes', moment(values.to).diff(moment(values.from), 'days') + 1)
 
     let from_hours = moment(newValue, 'HH:mm a')
     setFieldValue('from', from_hours)
@@ -224,16 +224,18 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       return enqueueSnackbar('Cannot set  time ahead of end time', {variant: 'warning'})
     }
 
-    let postingDays = moment(values.to).diff(moment(values.from), 'days') + 1
     // former work hours counter
     // let duration = moment.duration(to_hours.diff(from_hours)).asHours()
-    let duration = postingDays * 9
+    let totalHours = moment.duration(to_hours.diff(from_hours)).asHours()
+    let postDays = Math.trunc(totalHours / 24) + 1
+    let duration = postDays * 9
     if (duration < 0) {
       duration = 9
       return
     }
     window.scrollTo(0, 0)
 
+    setFieldValue('repeatTimes', postDays)
     setFieldValue('hours', duration.toFixed(2))
   }
 
@@ -368,7 +370,6 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
                     // if (!event.target.checked) {
                     //   setWeekdaySelected([])
                     // }
-                    setFieldValue('repeatTimes', moment(values.to).diff(moment(values.from), 'days') + 1)
                     setFieldValue('isRepeatable', event.target.checked)
                   }}
                   defaultValue="false"
@@ -499,7 +500,7 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             Gig Fee per hour
             <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
               (ex. P 570 / 8 ={' '}
-              <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'red'}}>
+              <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
                 71.25
               </Typography>
               )

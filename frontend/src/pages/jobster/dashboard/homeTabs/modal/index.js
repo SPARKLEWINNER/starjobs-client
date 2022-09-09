@@ -145,10 +145,12 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                   <Icon icon={closeIcon} width={32} height={32} color="#b2b2b2" />
                 </Button>
               </Stack>
-              <Typography variant="h3" sx={{mb: 3, textAlign: 'center'}}>
-                <br></br>Are you sure that you have arrived in the store location ? Kindly ensure your arrival before
-                clicking "Confirm Arrived".
-              </Typography>
+              {status === 'Confirm-Gig' && (
+                <Typography variant="h3" sx={{mb: 3, textAlign: 'center'}}>
+                  <br></br>Are you sure that you have arrived in the store location ? Kindly ensure your arrival before
+                  clicking "Confirm Arrived".
+                </Typography>
+              )}
               <Box sx={{p: 3, textAlign: 'center'}}>
                 {Object.keys(user).length !== 0 && (
                   <CardMedia

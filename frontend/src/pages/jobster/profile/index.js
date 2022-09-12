@@ -18,6 +18,7 @@ import envelope from '@iconify/icons-eva/email-outline'
 import Page from 'src/components/Page'
 import {AboutTab, ReviewTab, CredentialsTab, MyActivitiesTab} from './tabs'
 import MAvatar from 'src/components/@material-extend/MAvatar'
+import ProgressCircle from 'src/components/progressCircle'
 
 // api
 import user_api from 'src/lib/users'
@@ -163,129 +164,139 @@ const Profile = () => {
               <Box sx={{sm: {height: '50vh'}, xs: {height: '300px'}}} />
             ) : (
               <>
-                <Stack
-                  direction={{xs: 'column', sm: 'column', md: 'row'}}
-                  sx={{
-                    zIndex: 999,
-                    mb: {sm: 3, xs: 3},
-                    mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
-                    width: '100%',
-                    alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-                    px: '0 !important'
-                  }}
-                >
-                  <Box
-                    sx={{
-                      mr: 1,
-                      display: 'flex',
-                      alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
-                      px: {sm: 0, xs: 0},
-                      mb: 1
-                    }}
-                  >
-                    <MAvatar
-                      key={'Profile Picture'}
-                      alt="Picture"
-                      src={`${image_bucket}${user.photo}`}
-                      sx={{margin: '0 auto', width: 150, height: 150}}
-                    />
-                  </Box>
-
-                  <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
-                    <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
-                      <Typography
-                        variant="h3"
-                        sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '240px'}}
-                      >
-                        {capitalCase(`${user.firstName} ${nameInitials(user.middleInitial)} ${user.lastName}`)}
-                        <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
-                          <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
-                        </Box>
-                      </Typography>
-                    </Grid>
-                  </Box>
-                  {location.pathname === '/freelancer/profile' && (
-                    <Box sx={{textAlign: 'justify', mb: 2}}>
-                      <Typography variant="body2">
-                        "Results-driven professional with repeated success in guiding it projects from start to finish,
-                        managing technical support operations and introducing new technologies to promote operational
-                        efficiency."
-                      </Typography>
-                    </Box>
-                  )}
-                  <Divider sx={{mb: 3}} />
-                  <Stack direction="row" sx={{my: 1, width: '100%', textAlign: 'center'}}>
-                    <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                      <Icon icon={map} width={24} height={24} color={`${color.starjobs.main}`} />
-                      <Typography
-                        variant="body2"
-                        sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
-                      >
-                        {!user.permanentCity ? (
-                          <Typography variant="body2" sx={{mb: 3}} component="span">
-                            {user.presentCity}
-                          </Typography>
-                        ) : (
-                          <Typography variant="body2" sx={{ml: 1}} component="span">
-                            {user.permanentCity}
-                          </Typography>
-                        )}
-                      </Typography>
-                    </Box>
-                    <Box item sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                      <Icon icon={envelope} width={24} height={24} color={`${color.starjobs.main}`} />
-                      <Typography
-                        variant="body2"
-                        sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
-                      >
-                        {user.email}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </Stack>
-
-                <Stack direction={{xs: 'column', md: 'column'}} sx={{width: '100%'}}>
-                  <TabContext value={value}>
-                    <TabList
-                      onChange={handleChange}
-                      variant="scrollable"
-                      scrollButtons="auto"
-                      aria-label="scrollable auto tabs example"
-                      TabIndicatorProps={{
-                        style: {
-                          display: 'none'
-                        }
-                      }}
-                    >
-                      {SIMPLE_TAB.map((tab, index) => (
-                        <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
-                      ))}
-                    </TabList>
-                    <Box
+                {isLoading && <ProgressCircle />}
+                {!isLoading && (
+                  <>
+                    <Stack
+                      direction={{xs: 'column', sm: 'column', md: 'row'}}
                       sx={{
-                        mt: 2,
+                        zIndex: 999,
+                        mb: {sm: 3, xs: 3},
+                        mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
                         width: '100%',
-                        borderRadius: 1
+                        alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
+                        px: '0 !important'
                       }}
                     >
-                      <Card
+                      <Box
                         sx={{
-                          p: 2,
-                          mt: 1,
-                          mb: 20,
-                          width: '100%',
-                          borderRadius: 1
+                          mr: 1,
+                          display: 'flex',
+                          alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
+                          px: {sm: 0, xs: 0},
+                          mb: 1
                         }}
                       >
-                        {SIMPLE_TAB.map((panel, index) => (
-                          <TabPanel key={panel.value} value={String(index + 1)} sx={{p: 0}}>
-                            {renderTab(panel.value, user)}
-                          </TabPanel>
-                        ))}
-                      </Card>
-                    </Box>
-                  </TabContext>
-                </Stack>
+                        <MAvatar
+                          key={'Profile Picture'}
+                          alt="Picture"
+                          src={`${image_bucket}${user.photo}`}
+                          sx={{margin: '0 auto', width: 150, height: 150}}
+                        />
+                      </Box>
+
+                      <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
+                        <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
+                          <Typography
+                            variant="h3"
+                            sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '240px'}}
+                          >
+                            {capitalCase(`${user.firstName} ${nameInitials(user.middleInitial)} ${user.lastName}`)}
+                            <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
+                              <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
+                            </Box>
+                          </Typography>
+                        </Grid>
+                      </Box>
+                      {location.pathname === '/freelancer/profile' && (
+                        <Box sx={{textAlign: 'justify', mb: 2}}>
+                          <Typography variant="body2">
+                            "Results-driven professional with repeated success in guiding it projects from start to
+                            finish, managing technical support operations and introducing new technologies to promote
+                            operational efficiency."
+                          </Typography>
+                        </Box>
+                      )}
+                      <Divider sx={{mb: 3}} />
+                      <Stack direction="row" sx={{my: 1, width: '100%', textAlign: 'center'}}>
+                        <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
+                          <Icon icon={map} width={24} height={24} color={`${color.starjobs.main}`} />
+                          <Typography
+                            variant="body2"
+                            sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
+                          >
+                            {!user.permanentCity ? (
+                              <Typography variant="body2" sx={{mb: 3}} component="span">
+                                {user.presentCity}
+                              </Typography>
+                            ) : (
+                              <Typography variant="body2" sx={{ml: 1}} component="span">
+                                {user.permanentCity}
+                              </Typography>
+                            )}
+                          </Typography>
+                        </Box>
+                        <Box item sx={{textAlign: 'center', mb: 1, width: '100%'}}>
+                          <Icon icon={envelope} width={24} height={24} color={`${color.starjobs.main}`} />
+                          <Typography
+                            variant="body2"
+                            sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
+                          >
+                            {user.email}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    </Stack>
+
+                    <Stack direction={{xs: 'column', md: 'column'}} sx={{width: '100%'}}>
+                      <TabContext value={value}>
+                        <TabList
+                          onChange={handleChange}
+                          variant="scrollable"
+                          scrollButtons="auto"
+                          aria-label="scrollable auto tabs example"
+                          TabIndicatorProps={{
+                            style: {
+                              display: 'none'
+                            }
+                          }}
+                        >
+                          {SIMPLE_TAB.map((tab, index) => (
+                            <Tab
+                              className={classes.nav_item}
+                              key={tab.value}
+                              label={tab.label}
+                              value={String(index + 1)}
+                            />
+                          ))}
+                        </TabList>
+                        <Box
+                          sx={{
+                            mt: 2,
+                            width: '100%',
+                            borderRadius: 1
+                          }}
+                        >
+                          <Card
+                            sx={{
+                              p: 2,
+                              mt: 1,
+                              mb: 20,
+                              width: '100%',
+                              borderRadius: 1
+                            }}
+                          >
+                            {SIMPLE_TAB.map((panel, index) => (
+                              <TabPanel key={panel.value} value={String(index + 1)} sx={{p: 0}}>
+                                {renderTab(panel.value, user)}
+                              </TabPanel>
+                            ))}
+                          </Card>
+                        </Box>
+                      </TabContext>
+                    </Stack>
+                  </>
+                )}
               </>
             )}
           </>

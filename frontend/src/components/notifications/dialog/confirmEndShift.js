@@ -20,6 +20,7 @@ import PropTypes from 'prop-types'
 export default function ConfirmEndShiftNotification({open, gig, onCommit, handleClose, loading}) {
   const [hoursLate, setHoursLate] = useState(undefined)
   const [isLate, setLate] = useState(false)
+  const [isFinal, setIsFinal] = useState(false)
 
   const handleCommit = (value) => {
     if (Math.sign(hoursLate) < 0) return alert('Unable to set negative numbers in late hours')
@@ -36,6 +37,22 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
 
   const handleChangeValue = (event) => {
     setHoursLate(event.target.value)
+  }
+
+  const checkProposedTime = (gig) => {
+    if (gig?.fees?.proposedWorkTime?.length !== 0) {
+      return parseFloat(gig?.fees?.proposedWorkTime).toFixed(2)
+    }
+
+    return gig?.hours
+  }
+
+  const checkProposedRate = (gig) => {
+    if (gig?.fees?.proposedRate?.length !== 0) {
+      return parseFloat(gig?.fees?.proposedRate).toFixed(2)
+    }
+
+    return gig?.fee
   }
 
   return (
@@ -58,14 +75,12 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
         </DialogContent>
         <DialogActions sx={{display: 'block', pb: 5, px: 5}}>
           <Typography variant="body1" sx={{mb: 3}}>
-            The jobster has indicated a successful gig engagement with a rate of{' '}
-            <b>P{gig.fees && gig.fees.proposedRate && parseFloat(gig.fees.proposedRate).toFixed(2)}</b>/ hour and an
-            actual number of hours/ minutes of{' '}
-            <b>{gig.fees && gig.fees.proposedWorkTime && parseFloat(gig.fees.proposedWorkTime).toFixed(2)} hr/s.</b>{' '}
-            Kindly ensure all tasks has been completely, accurately and efficiently done. Also, take note of your
-            inventories, equipment and machines for the reporting of damages before confirmation a successful gig.
-            Remember, confirming today’s gig as successful means that no untoward incidents or issues occurred during
-            the gig-engagement.” If successful, please confirm.
+            The jobster has indicated a successful gig engagement with a rate of <b>P {checkProposedRate(gig)}</b>/ hour
+            and an actual number of hours/ minutes of <b>{checkProposedTime(gig)} hr/s.</b> Kindly ensure all tasks has
+            been completely, accurately and efficiently done. Also, take note of your inventories, equipment and
+            machines for the reporting of damages before confirmation a successful gig. Remember, confirming today’s gig
+            as successful means that no untoward incidents or issues occurred during the gig-engagement.” If successful,
+            please confirm.
           </Typography>
 
           {!isLate && (
@@ -102,7 +117,7 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
               color="primary"
               variant="contained"
               size="large"
-              onClick={() => handleCommit(gig)}
+              onClick={() => setIsFinal(true)}
               disabled={loading}
               loading={loading}
             >
@@ -126,6 +141,47 @@ export default function ConfirmEndShiftNotification({open, gig, onCommit, handle
                 Cancel
               </Button>
             )}
+          </Stack>
+        </DialogActions>
+      </Dialog>
+
+      {/* Final confirm dialog */}
+      <Dialog open={isFinal} onClick={() => setIsFinal(false)}>
+        <Button sx={{ml: 'auto', pt: 2}} onClick={() => setIsFinal(false)}>
+          <Icon icon={closeIcon} width={32} height={32} color="#b2b2b2" />
+        </Button>
+        <DialogTitle sx={{textAlign: 'center'}}>
+          <Typography variant="h4" sx={{maxWidth: '75%', mx: 'auto'}}>
+            Do you confirm to end this shift?
+          </Typography>
+        </DialogTitle>
+        <DialogActions sx={{display: 'block', pb: 5, px: 3}}>
+          <Typography variant="h6" sx={{mb: 6, fontWeight: 400, textAlign: 'center', mx: 'auto'}}>
+            The jobster indicated P {checkProposedRate(gig)}/ hour for {checkProposedTime(gig)}. Once you processed this
+            you won't be able to undo your changes.
+          </Typography>
+
+          <Stack sx={{my: 2}}>
+            <LoadingButton
+              color="primary"
+              size="large"
+              variant="contained"
+              onClick={() => handleCommit(gig)}
+              loading={loading}
+              disabled={loading}
+              sx={{textTransform: 'initial !important'}}
+            >
+              Yes, I approved of the gig rate and work hours
+            </LoadingButton>
+            <LoadingButton
+              onClick={() => setIsFinal(false)}
+              size="large"
+              variant="outlined"
+              color="inherit"
+              sx={{mt: 2}}
+            >
+              Cancel
+            </LoadingButton>
           </Stack>
         </DialogActions>
       </Dialog>

@@ -33,6 +33,9 @@ export default function IncomingCard({gig, onView}) {
               </Typography>
             </Stack>
           </Stack>
+          <Typography variant="body1">
+            {gig?.account[0].firstName} {gig?.account[0].lastName}
+          </Typography>
           <Stack direction="row" sx={{my: 1}}>
             <Typography variant="overline" color="default" sx={{fontSize: 10}}>
               Start: {moment(from).format('MMM-DD hh:mm A')}
@@ -54,7 +57,6 @@ export default function IncomingCard({gig, onView}) {
               Posted: {moment(date).format('MMM-DD-YYYY')}
             </Label>
           </Box>
-
           <Stack direction="row" sx={{justifyContent: 'flex-end', alignItems: 'center'}}>
             <Box sx={{mr: 2}}>
               <Typography variant="overline" sx={{fontSize: 10, textTransform: 'uppercase'}} color="default">

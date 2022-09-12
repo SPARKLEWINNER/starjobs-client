@@ -32,6 +32,7 @@ import useSendNotif from 'src/utils/hooks/useSendNotif'
 // theme
 import color from 'src/theme/palette'
 import {useAuth} from 'src/contexts/AuthContext'
+import ProgressCircle from 'src/components/progressCircle'
 
 // variables
 const image_bucket = process.env.REACT_APP_IMAGE_URL
@@ -97,6 +98,7 @@ const STATIC_TAB = [
 
 const Details = () => {
   const params = useParams()
+  const [loading, setLoading] = useState(false)
   const {currentUser} = useAuth()
   const location = useLocation()
   const classes = useStyles()
@@ -111,9 +113,9 @@ const Details = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
-
-  useEffect(() => {
-    const load = async () => {
+  const load = async () => {
+    setLoading(true)
+    try {
       if (!currentUser.isActive) {
         setProfile(currentUser)
       }
@@ -131,9 +133,15 @@ const Details = () => {
 
       setProfile(details)
       setGigs(gigs)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-    load()
+  }
 
+  useEffect(() => {
+    load()
     // eslint-disable-next-line
   }, [currentUser])
 
@@ -207,170 +215,175 @@ const Details = () => {
         <ProfileStyle>
           {/* profile */}
           <Box sx={{mb: 20}} />
-
-          <Stack
-            direction={{xs: 'column', sm: 'column', md: 'row'}}
-            sx={{
-              zIndex: 999,
-              mb: {sm: 3, xs: 3},
-              mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
-              width: '100%',
-              alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
-              px: 0
-            }}
-          >
-            {/* image */}
-            <Box
-              sx={{
-                mr: 1,
-                display: 'flex',
-                alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
-                px: {sm: 0, xs: 0},
-                mb: 1
-              }}
-            >
-              <MAvatar
-                key={'Profile Picture'}
-                alt="Picture"
-                src={`${image_bucket}${user?.photo}`}
-                sx={{margin: '0 auto', width: 150, height: 150}}
-              />
-            </Box>
-
-            {/* details */}
-            <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
-              <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
-                <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '200px'}}>
-                  {capitalCase(`${user && user.firstName} ${user && user.middleInitial} ${user && user.lastName}`)}
-
-                  <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
-                    <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
-                  </Box>
-                </Typography>
-              </Grid>
-            </Box>
-
-            {/* introduction */}
-            <Box sx={{textAlign: 'justify', mb: 2}}>
-              <Typography variant="body2">
-                "Results-driven professional with repeated success in guiding it projects from start to finish, managing
-                technical support operations and introducing new technologies to promote operational efficiency."
-              </Typography>
-            </Box>
-
-            {/* links */}
-            <Stack direction="row" sx={{my: 1, width: '100%', textAlign: 'center'}}>
-              <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                <Icon icon={map} width={24} height={24} color={`${color.starjobs.main}`} />
-                <Typography
-                  variant="body2"
-                  sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
-                >
-                  {user && user.location && capitalCase(user.location)}
-                </Typography>
-              </Box>
-              <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                <Icon icon={globe} width={24} height={24} color={`${color.starjobs.main}`} />
-                <Typography
-                  variant="body2"
-                  sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
-                >
-                  {user && user.website}
-                </Typography>
-              </Box>
-              <Box item sx={{textAlign: 'center', mb: 1, width: '100%'}}>
-                <Icon icon={envelope} width={24} height={24} color={`${color.starjobs.main}`} />
-                <Typography
-                  variant="body2"
-                  sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
-                >
-                  {user && user.email}
-                </Typography>
-              </Box>
-            </Stack>
-          </Stack>
-
-          <Stack direction={{xs: 'column', md: 'column'}}>
-            <TabContext value={value}>
-              <TabList
-                onChange={handleChange}
-                TabIndicatorProps={{
-                  style: {
-                    display: 'none'
-                  }
-                }}
-              >
-                {SIMPLE_TAB.map((tab, index) => (
-                  <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
-                ))}
-              </TabList>
-              <Box sx={{my: 2}} />
-              <Card
-                sx={{
-                  p: 2,
-                  mt: 1,
-                  width: '100%',
-                  borderRadius: 1,
-                  ...(location.pathname !== '/client/profile' ? {} : {mb: 20})
-                }}
-              >
-                {SIMPLE_TAB.map((panel, index) => (
-                  <TabPanel key={panel.value} value={String(index + 1)} sx={{p: 0}}>
-                    {renderTab(panel.value)}
-                  </TabPanel>
-                ))}
-              </Card>
-            </TabContext>
-          </Stack>
-
-          {location.pathname !== '/client/profile' && (
+          {loading && <ProgressCircle />}
+          {!loading && (
             <>
-              <Divider sx={{mb: 3}} />
-              {/* gigs list */}
-              <Box sx={{mb: 10, padding: {xs: 0}}}>
-                {gigs &&
-                  gigs.map((v, k) => {
-                    if (params.category === 'all') {
-                      if (v.status === 'Waiting' || v.status === 'Applying') {
-                        if (moment(v.time).isBefore(moment(), 'day')) return ''
-                        if (!moment(v.from).isValid()) return ''
-                        return (
-                          <ApplyCard
-                            path={location.pathname}
-                            key={k}
-                            gig={v}
-                            accountType={currentUser.accountType}
-                            isActive={currentUser.isActive}
-                            onClick={handleClick}
-                            currentUser={currentUser}
-                          />
-                        )
-                      } else {
-                        return ''
+              <Stack
+                direction={{xs: 'column', sm: 'column', md: 'row'}}
+                sx={{
+                  zIndex: 999,
+                  mb: {sm: 3, xs: 3},
+                  mt: {xs: '-140px !important', sm: '0 !important', md: '0 !important'},
+                  width: '100%',
+                  alignItems: {md: 'flex-start', sm: 'center', xs: 'center'},
+                  px: 0
+                }}
+              >
+                {/* image */}
+                <Box
+                  sx={{
+                    mr: 1,
+                    display: 'flex',
+                    alignItems: {md: 'flex-start', sm: 'flex-start', xs: 'center'},
+                    px: {sm: 0, xs: 0},
+                    mb: 1
+                  }}
+                >
+                  <MAvatar
+                    key={'Profile Picture'}
+                    alt="Picture"
+                    src={`${image_bucket}${user?.photo}`}
+                    sx={{margin: '0 auto', width: 150, height: 150}}
+                  />
+                </Box>
+
+                {/* details */}
+                <Box sx={{my: 1, width: '100%', textAlign: 'center'}}>
+                  <Grid container sx={{alignItems: 'center', mb: 1, width: '100%', justifyContent: 'center'}}>
+                    <Typography variant="h3" sx={{mr: 1, wordBreak: 'break-all', position: 'relative', width: '200px'}}>
+                      {capitalCase(`${user && user.firstName} ${user && user.middleInitial} ${user && user.lastName}`)}
+
+                      <Box component="span" sx={{position: 'absolute', right: -40, top: 4}}>
+                        <Icon icon={checkmark} width={24} height={24} color={`${color.starjobs.main}`} />
+                      </Box>
+                    </Typography>
+                  </Grid>
+                </Box>
+
+                {/* introduction */}
+                <Box sx={{textAlign: 'justify', mb: 2}}>
+                  <Typography variant="body2">
+                    "Results-driven professional with repeated success in guiding it projects from start to finish,
+                    managing technical support operations and introducing new technologies to promote operational
+                    efficiency."
+                  </Typography>
+                </Box>
+
+                {/* links */}
+                <Stack direction="row" sx={{my: 1, width: '100%', textAlign: 'center'}}>
+                  <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
+                    <Icon icon={map} width={24} height={24} color={`${color.starjobs.main}`} />
+                    <Typography
+                      variant="body2"
+                      sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
+                    >
+                      {user && user.location && capitalCase(user.location)}
+                    </Typography>
+                  </Box>
+                  <Box sx={{textAlign: 'center', mb: 1, width: '100%'}}>
+                    <Icon icon={globe} width={24} height={24} color={`${color.starjobs.main}`} />
+                    <Typography
+                      variant="body2"
+                      sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
+                    >
+                      {user && user.website}
+                    </Typography>
+                  </Box>
+                  <Box item sx={{textAlign: 'center', mb: 1, width: '100%'}}>
+                    <Icon icon={envelope} width={24} height={24} color={`${color.starjobs.main}`} />
+                    <Typography
+                      variant="body2"
+                      sx={{wordBreak: 'break-all', width: '100px', margin: '0 auto', fontWeight: '600'}}
+                    >
+                      {user && user.email}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Stack>
+
+              <Stack direction={{xs: 'column', md: 'column'}}>
+                <TabContext value={value}>
+                  <TabList
+                    onChange={handleChange}
+                    TabIndicatorProps={{
+                      style: {
+                        display: 'none'
                       }
-                    } else {
-                      if ((v.status === 'Waiting' || v.status === 'Applying') && v.category === params.category) {
-                        if (moment(v.time).isBefore(moment(), 'day')) return ''
-                        if (!moment(v.from).isValid()) return ''
-                        return (
-                          <ApplyCard
-                            path={location.pathname}
-                            key={k}
-                            gig={v}
-                            onClick={handleClick}
-                            currentUser={currentUser}
-                          />
-                        )
-                      } else {
-                        return ''
-                      }
-                    }
-                  })}
-              </Box>
+                    }}
+                  >
+                    {SIMPLE_TAB.map((tab, index) => (
+                      <Tab className={classes.nav_item} key={tab.value} label={tab.label} value={String(index + 1)} />
+                    ))}
+                  </TabList>
+                  <Box sx={{my: 2}} />
+                  <Card
+                    sx={{
+                      p: 2,
+                      mt: 1,
+                      width: '100%',
+                      borderRadius: 1,
+                      ...(location.pathname !== '/client/profile' ? {} : {mb: 20})
+                    }}
+                  >
+                    {SIMPLE_TAB.map((panel, index) => (
+                      <TabPanel key={panel.value} value={String(index + 1)} sx={{p: 0}}>
+                        {renderTab(panel.value)}
+                      </TabPanel>
+                    ))}
+                  </Card>
+                </TabContext>
+              </Stack>
+
+              {location.pathname !== '/client/profile' && (
+                <>
+                  <Divider sx={{mb: 3}} />
+                  {/* gigs list */}
+                  <Box sx={{mb: 10, padding: {xs: 0}}}>
+                    {gigs &&
+                      gigs.map((v, k) => {
+                        if (params.category === 'all') {
+                          if (v.status === 'Waiting' || v.status === 'Applying') {
+                            if (moment(v.time).isBefore(moment(), 'day')) return ''
+                            if (!moment(v.from).isValid()) return ''
+                            return (
+                              <ApplyCard
+                                path={location.pathname}
+                                key={k}
+                                gig={v}
+                                accountType={currentUser.accountType}
+                                isActive={currentUser.isActive}
+                                onClick={handleClick}
+                                currentUser={currentUser}
+                              />
+                            )
+                          } else {
+                            return ''
+                          }
+                        } else {
+                          if ((v.status === 'Waiting' || v.status === 'Applying') && v.category === params.category) {
+                            if (moment(v.time).isBefore(moment(), 'day')) return ''
+                            if (!moment(v.from).isValid()) return ''
+                            return (
+                              <ApplyCard
+                                path={location.pathname}
+                                key={k}
+                                gig={v}
+                                onClick={handleClick}
+                                currentUser={currentUser}
+                              />
+                            )
+                          } else {
+                            return ''
+                          }
+                        }
+                      })}
+                  </Box>
+                </>
+              )}
+
+              <ConfirmGig open={open} onConfirm={handleApply} handleClose={handleClose} />
             </>
           )}
-
-          <ConfirmGig open={open} onConfirm={handleApply} handleClose={handleClose} />
         </ProfileStyle>
       </MainStyle>
     </Page>

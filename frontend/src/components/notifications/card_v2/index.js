@@ -17,7 +17,7 @@ const NotificationCardV2 = ({
   onCardClick = () => {}
 }) => {
   const navigate = useNavigate()
-  const notifTimeAgo = moment(notifTime).startOf('day').fromNow()
+  const notifTimeAgo = moment(notifTime).startOf('second').fromNow()
 
   const notifClickHandler = () => {
     if (notifData) {

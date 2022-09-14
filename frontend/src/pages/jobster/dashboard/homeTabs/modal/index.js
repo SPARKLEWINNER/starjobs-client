@@ -174,9 +174,9 @@ const CurrentModalPopup = ({gig, open, onClick, onClose, onEndShift, loading}) =
                 </Button>
               </Stack>
               {status === 'Confirm-Gig' && (
-                <Typography variant="h3" sx={{mb: 3, textAlign: 'center'}}>
-                  <br></br>Are you sure that you have arrived in the store location ? Kindly ensure your arrival before
-                  clicking "Confirm Arrived".
+                <Typography variant="h3" sx={{mb: 3, pt: 3, textAlign: 'center'}}>
+                  Are you sure that you have arrived in the store location ? Kindly ensure your arrival before clicking
+                  "Confirm Arrived".
                 </Typography>
               )}
               <Box sx={{p: 3, textAlign: 'center'}}>

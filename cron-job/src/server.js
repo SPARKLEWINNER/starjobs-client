@@ -51,7 +51,7 @@ async function checkPosting() {
   if(!jobs) return
 
   await jobs.map(job => {
-    // console.log(job)
+    console.log(job)
   })
   // let job = await queueJob.add();
   // console.log(job)

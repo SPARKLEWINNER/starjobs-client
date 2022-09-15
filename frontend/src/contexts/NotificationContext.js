@@ -106,6 +106,7 @@ export function NotificationsProvider({children}) {
 
   useEffect(() => {
     load()
+    checkPushNotification()
     // eslint-disable-next-line
   }, [router.pathname])
 

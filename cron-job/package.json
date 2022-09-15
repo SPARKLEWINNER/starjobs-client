@@ -4,9 +4,9 @@
     "description": "Cron Job",
     "main": "src/server.js",
     "scripts": {
-        "start": "npx nodemon src/app.module.js",
-        "start:dev": "set PORT=7004 && npx nodemon src/app.module.js",
-        "server": "nodemon src/app.module.js",
+        "start": "npx nodemon src/server.js",
+        "start:dev": "set PORT=7004 && npx nodemon src/server.js",
+        "server": "nodemon src/server.js",
         "watch": "concurrently \"js --watch\" \"nodemon  server.js\"",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

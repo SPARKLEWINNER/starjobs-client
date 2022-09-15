@@ -1,10 +1,12 @@
 name: Cron Job Deploy 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
     - 'cron-job/**'
+  
     
 jobs:
   build:

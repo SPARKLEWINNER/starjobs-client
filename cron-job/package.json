@@ -4,11 +4,8 @@
     "description": "Cron Job",
     "main": "src/server.js",
     "scripts": {
-        "start": "npx nodemon src/server.js",
-        "start:dev": "set PORT=7004 && npx nodemon src/server.js",
-        "server": "nodemon src/server.js",
-        "watch": "concurrently \"js --watch\" \"nodemon  server.js\"",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "nf start",
+        "start:dev": "set PORT=7004 && npx nodemon src/server.js"
     },
     "author": "Miguel Quintos",
     "license": "ISC",
@@ -30,6 +27,7 @@
         "express-session": "^1.17.3",
         "express-useragent": "^1.0.15",
         "formidable": "^1.2.2",
+        "foreman": "^3.0.1",
         "http-errors": "^1.8.0",
         "jsonwebtoken": "^8.5.1",
         "jwt-decode": "^3.1.2",
@@ -46,7 +44,8 @@
         "node-cron": "^3.0.1",
         "node-fetch": "^2.6.6",
         "string-capitalize-name": "1.0.3",
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "throng": "^4.0.0"
     },
     "devDependencies": {
         "concurrently": "^6.2.0",

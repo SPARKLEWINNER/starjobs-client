@@ -2,6 +2,3 @@
 /api-chat/.env
 /api/.env
 /frontend/.env
-/cron-job
-/cron-job/.env
-/cron-job/node_modules

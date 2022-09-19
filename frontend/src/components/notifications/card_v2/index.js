@@ -17,8 +17,7 @@ const NotificationCardV2 = ({
   onCardClick = () => {}
 }) => {
   const navigate = useNavigate()
-  const notifTimeAgo = moment.tz(notifTime, 'Asia/Manila').startOf('second').fromNow()
-
+  const notifTimeAgo = moment(notifTime).startOf('second').fromNow()
   const notifClickHandler = () => {
     if (notifData) {
       let json = JSON.parse(notifData)

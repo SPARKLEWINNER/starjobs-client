@@ -2,7 +2,6 @@ import {Box, Card, CardContent, Stack, Typography} from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import {useNavigate} from 'react-router-dom'
 import user_api from 'src/lib/users'
-import moment from 'moment'
 import PropTypes from 'prop-types'
 
 const NotificationCardV2 = ({
@@ -17,8 +16,8 @@ const NotificationCardV2 = ({
   onCardClick = () => {}
 }) => {
   const navigate = useNavigate()
-  const notifTimeAgo = moment.tz(notifTime, 'Asia/Manila').startOf('second').fromNow()
-
+  const moment = require('moment-timezone')
+  const notifTimeAgo = moment(notifTime).tz('Asia/Manila').startOf('second').fromNow()
   const notifClickHandler = () => {
     if (notifData) {
       let json = JSON.parse(notifData)

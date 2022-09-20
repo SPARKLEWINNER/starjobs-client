@@ -83,6 +83,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "moment-range": "^4.0.2",
+    "moment-timezone": "^0.5.37",
     "notistack": "^2.0.4",
     "nprogress": "^0.2.0",
     "nuka-carousel": "^4.8.4",

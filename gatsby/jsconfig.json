@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "include": ["src/**/*"],
+    "target": "es6",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "lib": ["dom", "es2015", "es2017"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "baseUrl": "src",
+    "paths": {
+      "@api": ["api"],
+      "@assets": ["assets"],
+      "@components": ["components"],
+      "@contexts": ["contexts"],
+      "@layouts": ["layouts"],
+      "@pages": ["pages"],
+      "@themes": ["components"],
+      "@utils": ["utils"]
+    }
+  }
+}

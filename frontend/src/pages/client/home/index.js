@@ -181,6 +181,16 @@ const Dashboard = () => {
 
   useEffect(() => {}, [isEnable])
 
+  const successCallback = (position) => {
+    console.log(position)
+  }
+
+  const errorCallback = (error) => {
+    console.error(error)
+  }
+
+  navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
+
   const checkNotice = (data) => {
     const arrived = data.filter((obj) => obj['status'].includes('Arrived'))
     if (!arrived) return

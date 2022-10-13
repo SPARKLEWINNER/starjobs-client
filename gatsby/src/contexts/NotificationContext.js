@@ -3,11 +3,13 @@ import Pusher from 'pusher-js'
 
 import {last} from 'lodash'
 import PropTypes from 'prop-types'
-import {useEffect, useState, createContext, useContext} from 'react'
+import React, {useEffect, useState, createContext, useContext} from 'react'
 
-import user_api from '../api/endpoints/users'
+import user_api from 'api/endpoints/users'
 import {useAuth} from './AuthContext'
 import {unauthenticatedPages} from './SessionContext'
+
+import config from 'utils/config'
 
 NotificationsProvider.propTypes = {
   children: PropTypes.node
@@ -18,8 +20,8 @@ const NotificationsContext = createContext({})
 export function NotificationsProvider({children}) {
   const {currentUser, sessionUser} = useAuth()
   const [notification, setNotifications] = useState(0)
-  const pusher = new Pusher(process.env.REACT_APP_PUSHER_APP_KEY, {
-    cluster: process.env.REACT_APP_PUSHER_APP_CLUSTER,
+  const pusher = new Pusher(config.pusher.key, {
+    cluster: config.pusher.cluster,
     encrypted: true
   })
   const channel = pusher.subscribe('notifications')

@@ -1,7 +1,8 @@
 import request from 'utils/header'
-const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY} = process.env
+import config from 'utils/config'
+const {discord} = config
 
-const send_message = (params) => request.post(`${REACT_APP_DISCORD_URL}/${REACT_APP_DISCORD_KEY}`, params)
+const send_message = (params) => request.post(`${discord.url}/${discord.key}`, params)
 
 const _expObject = {
   send_message

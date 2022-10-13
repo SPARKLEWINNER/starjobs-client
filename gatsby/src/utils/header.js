@@ -1,9 +1,10 @@
 import {create} from 'apisauce'
 import storage from './storage'
+import config from 'utils/config'
 // import cache from './cache'
 
 // const base_url = 'https://sparkle-time-in.herokuapp.com/api'
-const base_url = process.env.REACT_APP_API_URL
+const base_url = config.apiUrl
 // const base_url = 'http://192.168.0.110:7003/api/internal/v1'
 const apiClient = create({
   baseURL: base_url

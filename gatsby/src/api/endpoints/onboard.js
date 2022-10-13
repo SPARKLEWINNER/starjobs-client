@@ -1,7 +1,8 @@
 import request from 'utils/header'
 import storage from 'utils/storage'
-
-const base_url = process.env.REACT_APP_API_URL
+import config from 'utils/config'
+const {apiUrl} = config
+const base_url = apiUrl
 
 const request_upload_url = async (_file) => {
   if (!_file) return false

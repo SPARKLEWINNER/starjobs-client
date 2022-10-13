@@ -1,7 +1,7 @@
 const path = require('path')
 
 require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV}`
+  path: `.env.development`
 })
 
 module.exports = {
@@ -32,9 +32,22 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#0d7bc9`,
         display: `standalone`,
-        icon: `src/assets/images/gatsby-icon.png` // This path is relative to the root of the site.
+        icon: `src/assets/static/favicon/icon-48x48.png` // This path is relative to the root of the site.
       }
     },
-    `gatsby-plugin-offline`
+    `gatsby-plugin-offline`,
+    {
+      resolve: `gatsby-omni-font-loader`,
+      options: {
+        enableListener: true,
+        preconnect: [`https://fonts.googleapis.com`, `https://fonts.gstatic.com`],
+        web: [
+          {
+            name: `Public Sans`,
+            file: `https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap`
+          }
+        ]
+      }
+    }
   ]
 }

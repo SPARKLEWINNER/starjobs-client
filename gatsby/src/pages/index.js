@@ -1,25 +1,9 @@
 import React, {useEffect, useState} from 'react'
+import {Box} from '@mui/material'
+import {Router, Location} from '@reach/router'
 
-// highlight
 import 'utils/highlight'
-
-// // scroll bar
-// import 'simplebar/src/simplebar.css'
-
-// // lightbox
-// import 'react-image-lightbox/style.css'
-
-// import 'react-quill/dist/quill.snow.css'
-
-// import 'slick-carousel/slick/slick.css'
-// import 'slick-carousel/slick/slick-theme.css'
-
-// // alice carousel
-// import 'react-alice-carousel/lib/alice-carousel.css'
-
-// import 'style.css'
-
-// import 'react-datepicker/dist/react-datepicker.css'
+import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 import {SettingsProvider} from 'contexts/SettingsContext'
 import {CollapseDrawerProvider} from 'contexts/DrawerContext'
@@ -30,8 +14,8 @@ import {CollapseDrawerProvider} from 'contexts/DrawerContext'
 // theme
 import ThemeConfig from 'theme/themeConfig'
 // components
-import {GenericNotification} from 'components/notifications'
 import Logo from 'components/Logo'
+import {GenericNotification} from 'components/notifications'
 import NotistackProvider from 'components/NotistackProvider'
 import ThemePrimaryColor from 'components/ThemePrimaryColor'
 
@@ -40,8 +24,21 @@ import {SessionProvider} from 'contexts/SessionContext'
 import {NotificationsProvider} from 'contexts/NotificationContext'
 import {RatingsProvider} from 'contexts/RatingContext'
 
+// layouts
+import DashboardLayout from 'layouts/dashboard'
+
+// screens
+import LoginPage from 'screens/Login'
+import DashboardPage from 'screens/Dashboard'
+
+import JobsterHome from 'screens/jobster/home'
+
 const SplashScreen = () => {
-  return <Logo />
+  return (
+    <Box sx={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <Logo />
+    </Box>
+  )
 }
 
 const Application = () => {
@@ -50,18 +47,31 @@ const Application = () => {
       <CollapseDrawerProvider>
         <ThemeConfig>
           <ThemePrimaryColor>
-            <AuthProvider>
-              <SessionProvider>
-                <NotificationsProvider>
-                  <NotistackProvider>
-                    <RatingsProvider>
-                      {/* <AppRoute /> */}
-                      <GenericNotification />
-                    </RatingsProvider>
-                  </NotistackProvider>
-                </NotificationsProvider>
-              </SessionProvider>
-            </AuthProvider>
+            <Location>
+              {({location}) => (
+                <TransitionGroup className="transition-group">
+                  <CSSTransition key={location.key} classNames="fade" timeout={300}>
+                    <AuthProvider>
+                      <SessionProvider>
+                        <NotificationsProvider>
+                          <NotistackProvider>
+                            <RatingsProvider>
+                              <Router>
+                                {/* add page routes here */}
+                                <LoginPage path="/" />
+                                <DashboardPage path="/dashboard" />
+                                <JobsterHome path="/freelancer/app" />
+                              </Router>
+                              <GenericNotification />
+                            </RatingsProvider>
+                          </NotistackProvider>
+                        </NotificationsProvider>
+                      </SessionProvider>
+                    </AuthProvider>
+                  </CSSTransition>
+                </TransitionGroup>
+              )}
+            </Location>
           </ThemePrimaryColor>
         </ThemeConfig>
       </CollapseDrawerProvider>

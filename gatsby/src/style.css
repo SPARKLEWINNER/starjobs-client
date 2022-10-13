@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans');
+
 body {
   margin: 0 !important;
   overflow-x: hidden;
@@ -156,7 +158,6 @@ input[type='tel'] {
   z-index: 99;
 }
 
-
 #react-select-1-listbox,
 #react-select-2-listbox,
 #react-select-3-listbox,
@@ -168,8 +169,8 @@ input[type='tel'] {
 #react-select-10-listbox,
 #react-select-11-listbox,
 #react-select-12-listbox,
-#react-select-6-listbox{
-  background-color: #FFFFFF;
+#react-select-6-listbox {
+  background-color: #ffffff;
   z-index: 99;
 }
 

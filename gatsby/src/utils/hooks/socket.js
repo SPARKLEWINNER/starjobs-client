@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
-
+import {socketUrl} from 'utils/config'
 const socket = () => {
-  return io.connect(process.env.REACT_APP_SOCKET_URL)
+  return io.connect(socketUrl)
 }
 
 export default socket

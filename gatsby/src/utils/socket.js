@@ -1,9 +1,9 @@
 import io from 'socket.io-client'
 import storage from './storage'
-
-const {REACT_APP_SOCKET_URL} = process.env
+import config from 'utils/config'
+const {socketUrl} = config
 const _socket = () => {
-  return io.connect(REACT_APP_SOCKET_URL, {
+  return io.connect(socketUrl, {
     secure: true,
     rejectUnauthorized: false
   })

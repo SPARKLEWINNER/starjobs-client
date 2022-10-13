@@ -5,9 +5,9 @@ let pronvicialRate = {
 };
 
 let ncrRate = {
-    sss: 6.274033846, // prev 5.7692308,
-    pagibig: 1.34682692, // prev 1.0096154
-    philhealth: 0.4807692 // prev 0.4807692
+    sss: 6.27375, // prev 6.274033846,
+    pagibig: 1.43, // prev 1.34682692
+    philhealth: 0.48 // prev 0.4807692
 };
 
 var controller = {

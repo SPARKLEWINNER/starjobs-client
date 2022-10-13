@@ -29,9 +29,14 @@ import {useSnackbar} from 'notistack'
 import useUser from 'api/endpoints/users'
 import storage from 'utils/storage'
 
+import PropTypes from 'prop-types'
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
+UserMoreMenu.propTypes = {
+  id: PropTypes.any
+}
 
 export default function UserMoreMenu({id}) {
   const ref = useRef(null)

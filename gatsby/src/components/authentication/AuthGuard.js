@@ -13,9 +13,9 @@ export default function AuthGuard() {
   const params = pathname.split('/').filter(function (e) {
     return e
   })
-  const page = new Promise(async (resolve, reject) => {
+  const page = new Promise((resolve, reject) => {
     try {
-      const result = await load(params[0])
+      const result = load(params[0])
       if (!result) reject(result)
 
       resolve(result)

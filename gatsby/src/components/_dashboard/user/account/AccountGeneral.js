@@ -3,9 +3,9 @@ import {useCallback, useState} from 'react'
 import {Form, FormikProvider, useFormik} from 'formik'
 import {Box, Grid, Card, Stack, Switch, TextField, FormControlLabel, Typography, FormHelperText} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
-import {UploadAvatar} from '../../../upload'
-import {fData} from '../../../../utils/formatNumber'
-
+import {UploadAvatar} from 'components/upload'
+import {fData} from 'utils/formatNumber'
+import PropTypes from 'prop-types'
 const AccountGeneral = ({_data}) => {
   const [isEdit, setIsEdit] = useState(false)
   const UpdateUserSchema = Yup.object().shape({
@@ -165,6 +165,10 @@ const AccountGeneral = ({_data}) => {
       </Form>
     </FormikProvider>
   )
+}
+
+AccountGeneral.propTypes = {
+  _data: PropTypes.any
 }
 
 export default AccountGeneral

@@ -5,9 +5,12 @@ import {Link as RouterLink} from '@reach/router'
 import trash2Outline from '@iconify/icons-eva/trash-2-outline'
 import eyeOutline from '@iconify/icons-eva/eye-outline'
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill'
+import PropTypes from 'prop-types'
 // material
 import {Menu, MenuItem, IconButton, ListItemIcon, ListItemText} from '@mui/material'
-
+UserMoreMenu.propTypes = {
+  user: PropTypes.any
+}
 export default function UserMoreMenu({user}) {
   const ref = useRef(null)
   const [isOpen, setIsOpen] = useState(false)

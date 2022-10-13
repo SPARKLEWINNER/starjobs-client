@@ -6,3 +6,7 @@ build/*
 !build/index.js
 
 public/*
+
+servicer-worker.js
+notificationServiceWorkerRegistration.js
+serviceWorkerRegistration.js

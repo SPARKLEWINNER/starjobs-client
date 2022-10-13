@@ -77,7 +77,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar, account
     // eslint-disable-next-line
   }, [pathname, account])
 
-  const handleHelpCenterClick = async (e) => {
+  const handleHelpCenterClick = async () => {
     var message = ''
     message = prompt(
       'How can we help you? - <name/phone#/email - branch - [issue/feedback]>',

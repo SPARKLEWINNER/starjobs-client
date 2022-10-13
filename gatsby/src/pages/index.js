@@ -24,9 +24,6 @@ import {SessionProvider} from 'contexts/SessionContext'
 import {NotificationsProvider} from 'contexts/NotificationContext'
 import {RatingsProvider} from 'contexts/RatingContext'
 
-// layouts
-import DashboardLayout from 'layouts/dashboard'
-
 // screens
 import LoginPage from 'screens/Login'
 import DashboardPage from 'screens/Dashboard'

@@ -1,6 +1,6 @@
 import {Grid, Card, Stack} from '@mui/material'
 
-export default function AccountReport({_data}) {
+export default function AccountReport() {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={12}>

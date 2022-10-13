@@ -1,7 +1,7 @@
 import {Link} from '@mui/material'
 import QRCode from 'react-qr-code'
 import {Grid, Card, Stack} from '@mui/material'
-
+import PropTypes from 'prop-types'
 const {REACT_APP_CLIENT_URL} = process.env
 const AccountQRCode = ({_data}) => {
   return (
@@ -17,5 +17,7 @@ const AccountQRCode = ({_data}) => {
     </Grid>
   )
 }
-
+AccountQRCode.propTypes = {
+  _data: PropTypes.any
+}
 export default AccountQRCode

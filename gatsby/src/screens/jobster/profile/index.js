@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react'
-import {useParams} from '@reach/router'
+import React, {useState, useEffect} from 'react'
+import {useParams, useLocation} from '@reach/router'
 import {capitalCase} from 'capital-case'
 
 // material
@@ -26,9 +26,10 @@ import storage from 'utils/storage'
 import {nameInitials} from 'utils/formatCase'
 // theme
 import color from 'theme/palette'
+import config from 'utils/config'
 
 // variables
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+const image_bucket = config.aws.s3UploadUrl
 const DRAWER_WIDTH = 280
 const APPBAR_DESKTOP = 200
 
@@ -89,7 +90,7 @@ const STATIC_TAB = [
 
 const Profile = () => {
   const classes = useStyles()
-  const location = window.location
+  const location = useLocation()
   const params = useParams()
   const [value, setValue] = useState('1')
   const [user, setUser] = useState([])

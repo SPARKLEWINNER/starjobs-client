@@ -19,9 +19,11 @@ import ProfileForm from './forms/profileForm'
 import storage from 'utils/storage'
 import onboard_api from 'libs/endpoints/onboard'
 import {navigate} from '@reach/router'
+import config from 'utils/config'
 
 // variables
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+const image_bucket = config.aws.s3UploadUrl
+
 const steps = [
   'Personal Information',
   'Work Experience',

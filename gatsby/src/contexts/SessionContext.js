@@ -15,7 +15,7 @@ SessionProvider.propTypes = {
 
 const SessionContext = createContext({})
 
-export const unauthenticatedPages = [' ', 'login', 'sign-up', 'forgot-password', 'reset-password']
+export const unauthenticatedPages = ['login', 'sign-up', 'forgot-password', 'reset-password']
 
 export function SessionProvider({children}) {
   const router = window.location

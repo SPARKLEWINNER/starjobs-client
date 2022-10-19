@@ -5,6 +5,10 @@ body {
   overflow-x: hidden;
 }
 
+#bottom-nav {
+  background-color: white;
+}
+
 .transition-group {
   height: 100vh;
   flex: 1;

@@ -20,11 +20,11 @@ const NotificationsContext = createContext({})
 export function NotificationsProvider({children}) {
   const {currentUser, sessionUser} = useAuth()
   const [notification, setNotifications] = useState(0)
-  const pusher = new Pusher(config.pusher.key, {
-    cluster: config.pusher.cluster,
-    encrypted: true
-  })
-  const channel = pusher.subscribe('notifications')
+  // const pusher = new Pusher(config.pusher.key, {
+  //   cluster: config.pusher.cluster,
+  //   encrypted: true
+  // })
+  // const channel = pusher.subscribe('notifications')
 
   const load = async () => {
     const current_page = last(window.location.pathname.replace('/', '').split('/'))
@@ -90,28 +90,26 @@ export function NotificationsProvider({children}) {
   }
 
   const loadSocketConnection = () => {
-    channel.bind('new_notification', () => {
-      load()
-    })
-    channel.bind('notify_gig', () => {
-      load()
-    })
+    // channel.bind('new_notification', () => {
+    //   load()
+    // })
+    // channel.bind('notify_gig', () => {
+    //   load()
+    // })
   }
 
-  useEffect(() => {
-    loadSocketConnection()
-    checkPushNotification()
-  }, [])
+  // useEffect(() => {
+  //   loadSocketConnection()
+  //   checkPushNotification()
+  // }, [])
 
-  useEffect(() => {
-    load()
-    checkPushNotification()
-    // eslint-disable-next-line
-  }, [window.location.pathname])
+  // useEffect(() => {
+  //   load()
+  //   checkPushNotification()
+  //   // eslint-disable-next-line
+  // }, [window.location.pathname])
 
-  return (
-    <NotificationsContext.Provider value={{notification, pusher, channel}}>{children}</NotificationsContext.Provider>
-  )
+  return <NotificationsContext.Provider value={{notification}}>{children}</NotificationsContext.Provider>
 }
 
 export const useNotifications = () => {

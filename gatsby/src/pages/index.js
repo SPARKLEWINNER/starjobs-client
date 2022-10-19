@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
-import 'utils/highlight'
+// import 'utils/highlight'
 import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 import {SettingsProvider} from 'contexts/SettingsContext'
@@ -24,12 +24,15 @@ import {SessionProvider} from 'contexts/SessionContext'
 import {NotificationsProvider} from 'contexts/NotificationContext'
 import {RatingsProvider} from 'contexts/RatingContext'
 
+// components
+import PrivateRoute from 'components/PrivateRoute'
+
 // screens
 import LoginPage from 'screens/Login'
 import DashboardPage from 'screens/Dashboard'
 
 import JobsterHome from 'screens/jobster/home'
-
+import JobsterProfile from 'screens/jobster/profile'
 const SplashScreen = () => {
   return (
     <Box sx={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -46,27 +49,31 @@ const Application = () => {
           <ThemePrimaryColor>
             <Location>
               {({location}) => (
-                <TransitionGroup className="transition-group">
-                  <CSSTransition key={location.key} classNames="fade" timeout={300}>
-                    <AuthProvider>
-                      <SessionProvider>
-                        <NotificationsProvider>
-                          <NotistackProvider>
-                            <RatingsProvider>
-                              <Router>
-                                {/* add page routes here */}
-                                <LoginPage path="/" />
-                                <DashboardPage path="/dashboard" />
-                                <JobsterHome path="/freelancer/app" />
-                              </Router>
-                              <GenericNotification />
-                            </RatingsProvider>
-                          </NotistackProvider>
-                        </NotificationsProvider>
-                      </SessionProvider>
-                    </AuthProvider>
-                  </CSSTransition>
-                </TransitionGroup>
+                <AuthProvider>
+                  {/* // <TransitionGroup className="transition-group"> */}
+                  {/* <CSSTransition key={location.key} classNames="fade" timeout={300}> */}
+                  <SessionProvider>
+                    <NotificationsProvider>
+                      <NotistackProvider>
+                        <RatingsProvider>
+                          <Router>
+                            {/* add page routes here */}
+                            <LoginPage path="/login" />
+                            <LoginPage path="/" />
+
+                            <DashboardPage path="/dashboard" />
+
+                            <JobsterHome path="/freelancer/app" />
+                            <JobsterProfile path="/freelancer/profile" />
+                          </Router>
+                        </RatingsProvider>
+                        <GenericNotification />
+                      </NotistackProvider>
+                    </NotificationsProvider>
+                  </SessionProvider>
+                  {/* // </CSSTransition> */}
+                  {/* // </TransitionGroup> */}
+                </AuthProvider>
               )}
             </Location>
           </ThemePrimaryColor>
@@ -93,6 +100,7 @@ const App = () => {
   }, [])
 
   return <>{loaded ? <Application /> : <SplashScreen />}</>
+  // return <Application />
 }
 
 export default App

@@ -24,7 +24,7 @@ import {fData} from 'utils/formatNumber'
 //
 import {MIconButton} from 'components/@material-extend'
 import {varFadeInRight} from 'components/animate'
-import {UploadIllustration} from 'assets'
+import {UploadIllustration} from 'assets/images/index'
 
 const DropZoneStyle = styled('div')(({theme}) => ({
   outline: 'none',

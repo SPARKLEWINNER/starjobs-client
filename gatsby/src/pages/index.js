@@ -33,6 +33,8 @@ import DashboardPage from 'screens/Dashboard'
 
 import JobsterHome from 'screens/jobster/home'
 import JobsterProfile from 'screens/jobster/profile'
+import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+
 const SplashScreen = () => {
   return (
     <Box sx={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -65,6 +67,7 @@ const Application = () => {
 
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />
+                            <JobsterEditProfile path="/freelancer/edit" />
                           </Router>
                         </RatingsProvider>
                         <GenericNotification />

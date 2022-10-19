@@ -29,6 +29,8 @@ import PrivateRoute from 'components/PrivateRoute'
 
 // screens
 import LoginPage from 'screens/Login'
+import ForgotPassword from 'screens/ForgotPassword'
+import ResetPassword from 'screens/ResetPassword'
 import DashboardPage from 'screens/Dashboard'
 
 import JobsterHome from 'screens/jobster/home'
@@ -62,6 +64,8 @@ const Application = () => {
                             {/* add page routes here */}
                             <LoginPage path="/login" />
                             <LoginPage path="/" />
+                            <ForgotPassword path="/forgot-password" />
+                            <ResetPassword path="/reset-password" />
 
                             <DashboardPage path="/dashboard" />
 

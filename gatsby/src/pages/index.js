@@ -29,6 +29,8 @@ import LoginPage from 'screens/Login'
 import DashboardPage from 'screens/Dashboard'
 
 import JobsterHome from 'screens/jobster/home'
+import ForgotPassword from 'screens/ForgotPassword'
+import ResetPassword from 'screens/ResetPassword'
 
 const SplashScreen = () => {
   return (
@@ -56,6 +58,8 @@ const Application = () => {
                               <Router>
                                 {/* add page routes here */}
                                 <LoginPage path="/" />
+                                <ForgotPassword path="/forgot-password" />
+                                <ResetPassword path="/reset-password" />
                                 <DashboardPage path="/dashboard" />
                                 <JobsterHome path="/freelancer/app" />
                               </Router>

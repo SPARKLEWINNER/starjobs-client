@@ -21,7 +21,7 @@ import MAvatar from 'components/@material-extend/MAvatar'
 import ProgressCircle from 'components/progressCircle'
 
 // api
-import user_api from 'api/endpoints/users'
+import user_api from 'libs/endpoints/users'
 import storage from 'utils/storage'
 import {nameInitials} from 'utils/formatCase'
 // theme

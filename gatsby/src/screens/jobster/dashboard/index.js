@@ -18,7 +18,7 @@ import ReceiveTab from './homeTabs/receive'
 import {EndShiftNotification} from 'components/notifications'
 
 // api
-import gigs_api from 'api/endpoints/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 import {useAuth} from 'contexts/AuthContext'
 import useSendNotif from 'utils/hooks/useSendNotif'
 

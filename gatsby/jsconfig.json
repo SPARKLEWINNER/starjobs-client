@@ -15,7 +15,7 @@
     "noUnusedParameters": true,
     "baseUrl": "src",
     "paths": {
-      "@api": ["api"],
+      "@libs": ["libs"],
       "@assets": ["assets"],
       "@components": ["components"],
       "@contexts": ["contexts"],

@@ -15,7 +15,7 @@ import {
 import {useFormik, Form, FormikProvider} from 'formik'
 import {LoadingButton} from '@mui/lab'
 
-import auth_api from 'api/endpoints/auth'
+import auth_api from 'libs/endpoints/auth'
 
 const SMSDialog = ({account, open, onClose}) => {
   const [isLoading, setLoading] = useState(false)

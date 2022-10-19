@@ -1,7 +1,7 @@
 import {Box, Card, CardContent, Stack, Typography} from '@mui/material'
 import CircleIcon from '@mui/icons-material/Circle'
 import {navigate} from 'gatsby'
-import user_api from 'api/endpoints/users'
+import user_api from 'libs/endpoints/users'
 import PropTypes from 'prop-types'
 
 const NotificationCardV2 = ({

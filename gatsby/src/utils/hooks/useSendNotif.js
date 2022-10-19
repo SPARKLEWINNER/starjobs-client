@@ -1,4 +1,4 @@
-import notif from 'api/endpoints/notif'
+import notif from 'libs/endpoints/notif'
 
 export default function useSendNotif() {
   const sendInterestNotification = async ({clientId, clientName, targetUsers = []}) => {

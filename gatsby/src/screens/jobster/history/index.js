@@ -7,7 +7,7 @@ import Page from 'components/Page'
 import ActivityCard from 'components/activity/card'
 
 import storage from 'utils/storage'
-import user_api from 'api/endpoints/users'
+import user_api from 'libs/endpoints/users'
 
 const RootStyle = styled(Page)(({theme}) => ({
   [theme.breakpoints.up('md')]: {

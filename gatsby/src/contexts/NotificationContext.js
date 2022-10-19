@@ -5,7 +5,7 @@ import {last} from 'lodash'
 import PropTypes from 'prop-types'
 import React, {useEffect, useState, createContext, useContext} from 'react'
 
-import user_api from 'api/endpoints/users'
+import user_api from 'libs/endpoints/users'
 import {useAuth} from './AuthContext'
 import {unauthenticatedPages} from './SessionContext'
 

@@ -2,7 +2,7 @@ import React, {useState, useContext, createContext} from 'react'
 import PropTypes from 'prop-types'
 import storage from 'utils/storage'
 
-import auth_api from 'api/endpoints/auth'
+import auth_api from 'libs/endpoints/auth'
 
 AuthProvider.propTypes = {
   children: PropTypes.node

@@ -11,7 +11,7 @@ import SidebarConfigStore from './SidebarConfigStore'
 import SidebarConfigEmployee from './SidebarConfigEmployee'
 import useCollapseDrawer from 'utils/hooks/drawer'
 import {DocIllustration} from 'assets'
-import discord_api from 'api/endpoints/discord'
+import discord_api from 'libs/endpoints/discord'
 const DRAWER_WIDTH = 280
 const COLLAPSE_WIDTH = 102
 

@@ -1,6 +1,6 @@
 import Login from 'src/pages/Login'
 
-import useUser from 'api/endpoints/users'
+import useUser from 'libs/endpoints/users'
 
 const load = async (_url) => {
   if (!_url) return false

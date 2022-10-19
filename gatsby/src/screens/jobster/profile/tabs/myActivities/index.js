@@ -4,7 +4,7 @@ import {slice} from 'lodash'
 
 import ActivityCard from 'components/activity/card'
 
-import user_api from 'api/endpoints/users'
+import user_api from 'libs/endpoints/users'
 import {useAuth} from 'contexts/AuthContext'
 
 const LIMIT = 3

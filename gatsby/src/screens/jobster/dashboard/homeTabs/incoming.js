@@ -11,7 +11,7 @@ import CurrentModalPopup from './modal'
 // theme
 import color from 'theme/palette'
 
-import gigs_api from 'api/endpoints/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
 const IncomingTab = ({gigs, user}) => {

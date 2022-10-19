@@ -10,7 +10,7 @@ import {CurrentCard} from './cards'
 import CurrentModalPopup from './modal'
 
 // api
-import gigs_api from 'api/endpoints/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
 // theme

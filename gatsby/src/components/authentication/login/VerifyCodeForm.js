@@ -11,7 +11,7 @@ import {LoadingButton} from '@mui/lab'
 import ReactCodeInput from 'react-verification-code-input'
 import {makeStyles} from '@mui/styles'
 
-import auth_api from 'api/endpoints/auth'
+import auth_api from 'libs/endpoints/auth'
 import storage from 'utils/storage'
 
 import SMSForm from './SMSForm'

@@ -16,8 +16,8 @@ import ProfileForm from './form/profileForm'
 
 // hooks
 import storage from 'utils/storage'
-import onboard_api from 'api/endpoints/onboard'
-import user_api from 'api/endpoints/users'
+import onboard_api from 'libs/endpoints/onboard'
+import user_api from 'libs/endpoints/users'
 import {navigate} from '@reach/router'
 
 // variables

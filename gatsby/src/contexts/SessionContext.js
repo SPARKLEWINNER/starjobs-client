@@ -8,7 +8,7 @@ import {useAuth} from './AuthContext'
 import storage from 'utils/storage'
 
 import jwt_decode from 'jwt-decode'
-import settings_api from 'api/endpoints/settings'
+import settings_api from 'libs/endpoints/settings'
 SessionProvider.propTypes = {
   children: PropTypes.node
 }

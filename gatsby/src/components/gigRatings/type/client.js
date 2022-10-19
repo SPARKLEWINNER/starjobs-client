@@ -7,7 +7,7 @@ import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
 
 // api
-import gigs_api from 'api/endpoints/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 
 import {fCamelCase} from 'utils/formatCase'
 

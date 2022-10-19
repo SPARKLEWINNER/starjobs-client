@@ -9,7 +9,7 @@ import {useSnackbar} from 'notistack'
 import {fData} from 'utils/formatNumber'
 // components
 import {UploadAvatar} from 'components/upload'
-import onboard_api from 'api/endpoints/onboard'
+import onboard_api from 'libs/endpoints/onboard'
 
 Upload.propTypes = {
   onNext: PropTypes.func,

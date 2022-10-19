@@ -16,8 +16,8 @@ import PromotionsBanner from 'components/promotions'
 import {IncomingNotification, ConfirmArrivedNotification} from 'components/notifications'
 
 // api
-import gigs_api from 'api/endpoints/gigs'
-import category_api from 'api/endpoints/category'
+import gigs_api from 'libs/endpoints/gigs'
+import category_api from 'libs/endpoints/category'
 
 // theme
 import color from 'theme/palette'

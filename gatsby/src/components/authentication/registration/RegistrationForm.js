@@ -24,7 +24,7 @@ import {DialogAnimate} from 'components/animate'
 import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
 
-import auth_api from 'api/endpoints/auth'
+import auth_api from 'libs/endpoints/auth'
 
 import {LoadingButtonStyle, InputOutlineStyle, CheckboxWhiteStyle} from 'theme/style'
 

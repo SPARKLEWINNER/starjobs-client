@@ -27,7 +27,7 @@ import {useSnackbar} from 'notistack'
 
 //api
 
-import useUser from 'api/endpoints/users'
+import useUser from 'libs/endpoints/users'
 import storage from 'utils/storage'
 
 UserMoreMenu.propTypes = {

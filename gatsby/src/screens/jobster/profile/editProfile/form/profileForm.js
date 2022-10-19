@@ -15,7 +15,7 @@ Upload.propTypes = {
   onStoreData: PropTypes.func
 }
 
-import onboard_api from 'api/endpoints/onboard'
+import onboard_api from 'libs/endpoints/onboard'
 export default function Upload({stored, onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [avatarUrl, setAvatarUrl] = useState('')

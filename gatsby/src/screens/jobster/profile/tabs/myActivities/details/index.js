@@ -8,7 +8,7 @@ import {styled} from '@mui/material/styles'
 import Page from 'components/Page'
 import ActivityDetailsCard from 'components/activity/details'
 
-import user_api from 'api/endpoints/users'
+import user_api from 'libs/endpoints/users'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

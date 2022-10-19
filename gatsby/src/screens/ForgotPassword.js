@@ -10,7 +10,7 @@ import {Stack, TextField, Typography, Container, Box, Link} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
 
-import auth_api from 'api/endpoints/auth'
+import auth_api from 'libs/endpoints/auth'
 import Page from 'components/Page'
 import {LoadingButtonStyle, InputOutlineStyle} from 'theme/style'
 

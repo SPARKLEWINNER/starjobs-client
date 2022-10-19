@@ -15,7 +15,7 @@ import {Stack, TextField, Typography, Container, Box, InputAdornment, IconButton
 import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
 
-import auth_api from 'api/endpoints/auth'
+import auth_api from 'libs/endpoints/auth'
 import Page from 'components/Page'
 import {LoadingButtonStyle, InputOutlineStyle} from 'theme/style'
 

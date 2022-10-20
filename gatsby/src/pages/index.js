@@ -37,6 +37,8 @@ import JobsterHome from 'screens/jobster/home'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
 
+import ChangePassword from 'screens/ChangePassword'
+
 const SplashScreen = () => {
   return (
     <Box sx={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -69,9 +71,13 @@ const Application = () => {
 
                             <DashboardPage path="/dashboard" />
 
+                            {/* jobsters */}
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />
                             <JobsterEditProfile path="/freelancer/edit" />
+
+                            {/* accounts */}
+                            <ChangePassword path="/account/change-password" />
                           </Router>
                         </RatingsProvider>
                         <GenericNotification />

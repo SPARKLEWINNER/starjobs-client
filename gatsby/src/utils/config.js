@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: 'http://192.168.254.124:7003/api/internal/v1',
+  apiUrl: 'http://192.168.0.112:7003/api/internal/v1',
   socketUrl: 'http://localhost:7003',
   clientUrl: 'https://www.staging.starjobs.com.ph/',
   discord: {

@@ -36,6 +36,7 @@ import DashboardPage from 'screens/Dashboard'
 import JobsterHome from 'screens/jobster/home'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+import BrowseCategory from 'screens/BrowseCategory'
 
 const SplashScreen = () => {
   return (
@@ -68,6 +69,7 @@ const Application = () => {
                             <ResetPassword path="/reset-password" />
 
                             <DashboardPage path="/dashboard" />
+                            <BrowseCategory path="/search" />
 
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />

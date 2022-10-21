@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
 // import 'utils/highlight'
-import {TransitionGroup, CSSTransition} from 'react-transition-group'
+// import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 import {SettingsProvider} from 'contexts/SettingsContext'
 import {CollapseDrawerProvider} from 'contexts/DrawerContext'
@@ -25,7 +25,7 @@ import {NotificationsProvider} from 'contexts/NotificationContext'
 import {RatingsProvider} from 'contexts/RatingContext'
 
 // components
-import PrivateRoute from 'components/PrivateRoute'
+// import PrivateRoute from 'components/PrivateRoute'
 
 // screens
 import LoginPage from 'screens/Login'
@@ -36,6 +36,12 @@ import DashboardPage from 'screens/Dashboard'
 import JobsterHome from 'screens/jobster/home'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+
+import ClientHome from 'screens/client/home'
+import ClientProfile from 'screens/client/profile'
+import ClientEditProfile from 'screens/client/profile/editProfile'
+
+import Gigs from 'screens/gigs'
 
 const SplashScreen = () => {
   return (
@@ -52,7 +58,7 @@ const Application = () => {
         <ThemeConfig>
           <ThemePrimaryColor>
             <Location>
-              {({location}) => (
+              {() => (
                 <AuthProvider>
                   {/* // <TransitionGroup className="transition-group"> */}
                   {/* <CSSTransition key={location.key} classNames="fade" timeout={300}> */}
@@ -67,11 +73,16 @@ const Application = () => {
                             <ForgotPassword path="/forgot-password" />
                             <ResetPassword path="/reset-password" />
 
+                            <Gigs path="gigs" />
                             <DashboardPage path="/dashboard" />
 
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />
                             <JobsterEditProfile path="/freelancer/edit" />
+
+                            <ClientHome path="/client/app" />
+                            <ClientProfile path="/client/profile" />
+                            <ClientEditProfile path="/client/edit" />
                           </Router>
                         </RatingsProvider>
                         <GenericNotification />

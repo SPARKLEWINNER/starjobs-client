@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
 // import 'utils/highlight'
-import {TransitionGroup, CSSTransition} from 'react-transition-group'
+//import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 import {SettingsProvider} from 'contexts/SettingsContext'
 import {CollapseDrawerProvider} from 'contexts/DrawerContext'
@@ -25,10 +25,12 @@ import {NotificationsProvider} from 'contexts/NotificationContext'
 import {RatingsProvider} from 'contexts/RatingContext'
 
 // components
-import PrivateRoute from 'components/PrivateRoute'
+//import PrivateRoute from 'components/PrivateRoute'
 
 // screens
 import LoginPage from 'screens/Login'
+import VerificationPage from 'screens/Verification'
+import Registration from 'screens/Registration'
 import ForgotPassword from 'screens/ForgotPassword'
 import ResetPassword from 'screens/ResetPassword'
 import DashboardPage from 'screens/Dashboard'
@@ -64,6 +66,8 @@ const Application = () => {
                             {/* add page routes here */}
                             <LoginPage path="/login" />
                             <LoginPage path="/" />
+                            <VerificationPage path="/verification" />
+                            <Registration path="/sign-up" />
                             <ForgotPassword path="/forgot-password" />
                             <ResetPassword path="/reset-password" />
 

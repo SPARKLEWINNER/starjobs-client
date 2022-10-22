@@ -1,15 +1,15 @@
-import Pusher from 'pusher-js'
+//import Pusher from 'pusher-js'
 // import * as PusherPushNotifications from '@pusher/push-notifications-web'
 
 import {last} from 'lodash'
 import PropTypes from 'prop-types'
-import React, {useEffect, useState, createContext, useContext} from 'react'
+import React, {useState, createContext, useContext} from 'react'
 
 import user_api from 'libs/endpoints/users'
 import {useAuth} from './AuthContext'
 import {unauthenticatedPages} from './SessionContext'
 
-import config from 'utils/config'
+//import config from 'utils/config'
 
 NotificationsProvider.propTypes = {
   children: PropTypes.node

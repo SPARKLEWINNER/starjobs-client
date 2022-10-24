@@ -1,3 +1,4 @@
+import React from 'react'
 import moment from 'moment'
 // material
 import {
@@ -16,7 +17,7 @@ import {
 import {styled} from '@mui/material/styles'
 import CheckIcon from '@mui/icons-material/CheckCircle'
 import ChevronIconRight from '@mui/icons-material/ChevronRight'
-import Label from 'Label'
+import Label from 'components/Label'
 
 // utils
 import {calculations} from 'utils/gigComputation'

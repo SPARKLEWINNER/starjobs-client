@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
 // import 'utils/highlight'
-import {TransitionGroup, CSSTransition} from 'react-transition-group'
+// import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 import {SettingsProvider} from 'contexts/SettingsContext'
 import {CollapseDrawerProvider} from 'contexts/DrawerContext'
@@ -25,7 +25,7 @@ import {NotificationsProvider} from 'contexts/NotificationContext'
 import {RatingsProvider} from 'contexts/RatingContext'
 
 // components
-import PrivateRoute from 'components/PrivateRoute'
+// import PrivateRoute from 'components/PrivateRoute'
 
 // screens
 import LoginPage from 'screens/Login'
@@ -36,6 +36,7 @@ import DashboardPage from 'screens/Dashboard'
 import JobsterHome from 'screens/jobster/home'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+import BrowseCategory from 'screens/BrowseCategory'
 
 const SplashScreen = () => {
   return (
@@ -52,7 +53,7 @@ const Application = () => {
         <ThemeConfig>
           <ThemePrimaryColor>
             <Location>
-              {({location}) => (
+              {() => (
                 <AuthProvider>
                   {/* // <TransitionGroup className="transition-group"> */}
                   {/* <CSSTransition key={location.key} classNames="fade" timeout={300}> */}
@@ -68,10 +69,14 @@ const Application = () => {
                             <ResetPassword path="/reset-password" />
 
                             <DashboardPage path="/dashboard" />
+                            <BrowseCategory path="/search" />
 
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />
                             <JobsterEditProfile path="/freelancer/edit" />
+                            <BrowseCategory path="freelancer/search" />
+
+                            <BrowseCategory path="client/search" />
                           </Router>
                         </RatingsProvider>
                         <GenericNotification />

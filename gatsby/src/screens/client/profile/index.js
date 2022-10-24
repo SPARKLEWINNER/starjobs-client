@@ -19,7 +19,7 @@ import {makeStyles} from '@mui/styles'
 
 // components
 import Page from 'components/Page'
-import {CredentialsTab, ActivityTab} from 'screens/client/profile/tabs'
+import {CredentialsTab, ActivityTab} from './tabs'
 import MAvatar from 'components/@material-extend/MAvatar'
 
 // api

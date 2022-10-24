@@ -1,4 +1,3 @@
-import React from 'react'
 import {Box, Stack, Grid, Typography} from '@mui/material'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'

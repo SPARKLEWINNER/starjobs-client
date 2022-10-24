@@ -29,6 +29,8 @@ import {RatingsProvider} from 'contexts/RatingContext'
 
 // screens
 import LoginPage from 'screens/Login'
+import VerificationPage from 'screens/Verification'
+import Registration from 'screens/Registration'
 import ForgotPassword from 'screens/ForgotPassword'
 import ResetPassword from 'screens/ResetPassword'
 import DashboardPage from 'screens/Dashboard'
@@ -76,6 +78,8 @@ const Application = () => {
                             {/* add page routes here */}
                             <LoginPage path="/login" />
                             <LoginPage path="/" />
+                            <VerificationPage path="/verification" />
+                            <Registration path="/sign-up" />
                             <ForgotPassword path="/forgot-password" />
                             <ResetPassword path="/reset-password" />
 

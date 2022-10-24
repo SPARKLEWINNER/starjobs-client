@@ -3,10 +3,10 @@ import {Stack} from '@mui/material'
 import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'src/components/Page'
+import Page from 'components/Page'
 import DocumentsForm from './form'
 // context
-import {useAuth} from 'src/contexts/AuthContext'
+import {useAuth} from 'contexts/AuthContext'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

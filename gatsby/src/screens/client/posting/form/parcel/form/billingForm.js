@@ -1,5 +1,5 @@
 import {Stack, Grid, Typography, Divider} from '@mui/material'
-import {parcel_calculations} from 'src/utils/gigComputation'
+import {parcel_calculations} from 'utils/gigComputation'
 
 import PropTypes from 'prop-types'
 

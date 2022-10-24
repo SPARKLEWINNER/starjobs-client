@@ -1,18 +1,20 @@
-import {useState, useCallback, useEffect} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React, {useState, useCallback, useEffect} from 'react'
+import {useNavigate} from '@reach/router'
 
 // material
 import {Box, Stack, Typography, Link} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
 // components
-import {UploadMultiFile} from 'src/components/upload'
+import {UploadMultiFile} from 'components/upload'
 
-import users_api from 'src/lib/users'
-import onboard_api from 'src/lib/onboard'
-import {useAuth} from 'src/contexts/AuthContext'
+import users_api from 'libs/endpoints/users'
+import onboard_api from 'libs/endpoints/onboard'
+import {useAuth} from 'contexts/AuthContext'
+import config from 'utils/config'
 
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+// variables
+const image_bucket = config.aws.s3UploadUrl
 export default function EditDocument() {
   const navigate = useNavigate()
   const {enqueueSnackbar} = useSnackbar()

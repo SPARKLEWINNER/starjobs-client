@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import {Link as RouterLink} from 'react-router-dom'
+import {Link as RouterLink} from '@reach/router'
 import {capitalCase} from 'change-case'
 
 import {Icon} from '@iconify/react'
@@ -7,11 +7,13 @@ import map from '@iconify/icons-eva/map-outline'
 // material
 import {Box, Stack, Card, Avatar, Typography, Link} from '@mui/material'
 // component
-import Label from 'src/components/Label'
-// import {getUser} from 'src/utils/hooks/auth'
-// import useSendNotif from 'src/utils/hooks/useSendNotif'
+import Label from 'components/Label'
+// import {getUser} from 'utils/hooks/auth'
+// import useSendNotif from 'utils/hooks/useSendNotif'
+import config from 'utils/config'
 
-const image_url = process.env.REACT_APP_IMAGE_URL
+// variables
+const image_url = config.aws.s3UploadUrl
 export default function FreelancerCard({data}) {
   // const [isSendingInterest, setIsSendingInterest] = useState(false)
   // const {sendInterestNotification} = useSendNotif()

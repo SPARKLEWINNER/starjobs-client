@@ -4,7 +4,7 @@ import {styled} from '@mui/material/styles'
 
 // components
 import Page from 'components/Page'
-import FreelancerProfileTab from 'pages/client/applicants/profile'
+import FreelancerProfileTab from 'screens/client/applicants/profile'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

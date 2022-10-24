@@ -4,13 +4,17 @@ import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'
 import map from '@iconify/icons-eva/map-outline'
 import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
+import PropTypes from 'prop-types'
 
 import MAvatar from 'components/@material-extend/MAvatar'
 
 // theme
 import color from 'theme/palette'
 
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+import config from 'utils/config'
+
+// variables
+const image_bucket = config.aws.s3UploadUrl
 const ProfileHeader = ({user}) => {
   return (
     <Stack
@@ -70,6 +74,10 @@ const ProfileHeader = ({user}) => {
       </Box>
     </Stack>
   )
+}
+
+ProfileHeader.propTypes = {
+  user: PropTypes.any
 }
 
 export default ProfileHeader

@@ -1,14 +1,14 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
 import {IncomingCard} from '../../../cards'
 import CurrentModalPopup from '../modal'
 
 // theme
-import color from 'src/theme/palette'
+import color from 'theme/palette'
 import PropTypes from 'prop-types'
 import {useSnackbar} from 'notistack'
-import gigs_api from 'src/lib/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 
 IncomingTab.propTypes = {
   gigs: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),

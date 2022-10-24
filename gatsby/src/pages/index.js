@@ -9,7 +9,7 @@ import {SettingsProvider} from 'contexts/SettingsContext'
 import {CollapseDrawerProvider} from 'contexts/DrawerContext'
 
 // routes
-// import AppRoute from 'src/routes'
+// import AppRoute from 'routes'
 
 // theme
 import ThemeConfig from 'theme/themeConfig'
@@ -45,12 +45,16 @@ import ClientHome from 'screens/client/home'
 import ClientProfile from 'screens/client/profile'
 import ClientEditProfile from 'screens/client/profile/editProfile'
 
-
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
 import MessageDetails from 'screens/MessageDetails'
 
 import Gigs from 'screens/gigs'
+import GigDetails from 'screens/gigs/details'
+import GigsFullDetails from 'screens/gigs/fullDetails'
+import GigApplySuccess from 'screens/gigs/success'
+import GigEdit from 'screens/gigs/edit'
+
 const SplashScreen = () => {
   return (
     <Box sx={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -106,6 +110,11 @@ const Application = () => {
                             {/* gigs */}
                             <Gigs path="/gigs" />
                             <Gigs path="/gigs/:category" />
+                            <GigsFullDetails path="/gigs/det/:id" />
+                            <GigDetails path="/gigs/details/:id/:category" />
+                            <GigEdit path="/gigs/edit/:id" />
+                            <GigApplySuccess path="/gigs/apply/success" />
+
                             <BrowseCategory path="freelancer/search" />
                             <BrowseCategory path="client/search" />
                           </Router>

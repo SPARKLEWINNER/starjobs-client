@@ -30,11 +30,14 @@ import storage from 'utils/storage'
 import color from 'theme/palette'
 
 import useSendNotif from 'utils/hooks/useSendNotif'
+import config from 'utils/config'
 
 // variables
 const DRAWER_WIDTH = 280
 const APPBAR_DESKTOP = 200
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+
+// variables
+const image_bucket = config.aws.s3UploadUrl
 
 const MainStyle = styled(Stack)(({theme}) => ({
   marginLeft: 'auto',

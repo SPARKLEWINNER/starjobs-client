@@ -1,10 +1,10 @@
-import {Link as RouterLink} from 'react-router-dom'
+import {Link as RouterLink} from '@reach/router'
 import moment from 'moment'
 import {Box, Card, CardContent, Link, Typography, Stack} from '@mui/material'
 import {Icon} from '@iconify/react'
 import arrowRight from '@iconify/icons-eva/arrow-circle-right-outline'
-import Label from 'src/components/Label'
-import {calculations} from 'src/utils/gigComputation'
+import Label from 'components/Label'
+import {calculations} from 'utils/gigComputation'
 
 import PropTypes from 'prop-types'
 

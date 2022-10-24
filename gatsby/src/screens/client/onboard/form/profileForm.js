@@ -1,12 +1,12 @@
-import {useState, useCallback} from 'react'
+import React, {useState, useCallback} from 'react'
 // material
 import {Box, Stack, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
 // utils
-import {fData} from 'src/utils/formatNumber'
+import {fData} from 'utils/formatNumber'
 // components
-import {UploadAvatar, UploadMultiFile} from 'src/components/upload'
+import {UploadAvatar, UploadMultiFile} from 'components/upload'
 import PropTypes from 'prop-types'
 
 Upload.propTypes = {
@@ -14,7 +14,7 @@ Upload.propTypes = {
   onStoreData: PropTypes.func
 }
 
-import onboard_api from 'src/lib/onboard'
+import onboard_api from 'libs/endpoints/onboard'
 export default function Upload({onNext, onStoreData}) {
   const {enqueueSnackbar} = useSnackbar()
   const [avatarUrl, setAvatarUrl] = useState('')

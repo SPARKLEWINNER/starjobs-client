@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import moment from 'moment'
 import {capitalCase} from 'change-case'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate} from '@reach/router'
 // material
 import {Box, Button, Typography} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
@@ -12,7 +12,7 @@ import {GigForm, BillingForm} from './form'
 import {CreateGigDialog, OnboardDialog} from './dialog'
 
 // hooks
-import gigs_api from 'src/lib/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 import PropTypes from 'prop-types'
 
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env

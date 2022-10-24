@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import {useNavigate} from '@reach/router'
 
 // material
 import {Box, Paper, Stack, Button, Avatar, Typography} from '@mui/material'
@@ -8,7 +8,7 @@ import {useSnackbar} from 'notistack'
 import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'src/components/Page'
+import Page from 'components/Page'
 import PersonalForm from './form/personalForm'
 import ContactForm from './form/contactForm'
 import IndustryForm from './form/industryForm'
@@ -16,11 +16,12 @@ import RateForm from './form/rateForm'
 import ProfileForm from './form/profileForm'
 
 // hooks
-import storage from 'src/utils/storage'
-import onboard_api from 'src/lib/onboard'
+import storage from 'utils/storage'
+import onboard_api from 'libs/endpoints/onboard'
+import config from 'utils/config'
 
 // variables
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+const image_bucket = config.aws.s3UploadUrl
 const steps = ['Personal Information', 'Company Contacts', 'Industry', 'Rate & Payment', 'Company Logo & Permits']
 const DRAWER_WIDTH = 280
 

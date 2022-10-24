@@ -2,7 +2,7 @@ import {Box, Card, CardContent, Typography, Accordion, AccordionSummary, CardMed
 import {Icon} from '@iconify/react'
 import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill'
 import moment from 'moment'
-import {calculations} from 'src/utils/gigComputation'
+import {calculations} from 'utils/gigComputation'
 
 import PropTypes from 'prop-types'
 
@@ -11,7 +11,10 @@ BillingCard.propTypes = {
   _type: PropTypes.string
 }
 
-const default_url = process.env.REACT_APP_IMAGE_URL
+import config from 'utils/config'
+
+// variables
+const default_url = config.aws.s3UploadUrl
 
 export default function BillingCard({gig}) {
   let {position, hours, fee, time, from, _id, account, late, locationRate} = gig

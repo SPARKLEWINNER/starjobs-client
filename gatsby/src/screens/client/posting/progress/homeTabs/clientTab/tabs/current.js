@@ -1,20 +1,20 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
-import {Link as RouterLink, useNavigate} from 'react-router-dom'
+import {Link as RouterLink, useNavigate} from '@reach/router'
 import {Box, Stack, Typography, Grid, Link, Card} from '@mui/material'
 import {useSnackbar} from 'notistack'
-import {ConfirmLateNotification} from 'src/components/notifications'
+import {ConfirmLateNotification} from 'components/notifications'
 
 // components
 import {CurrentCard} from '../../../cards'
 import CurrentModalPopup from '../modal'
 
 // api
-import gigs_api from 'src/lib/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 
 // theme
-import color from 'src/theme/palette'
-import useSendNotif from 'src/utils/hooks/useSendNotif'
+import color from 'theme/palette'
+import useSendNotif from 'utils/hooks/useSendNotif'
 
 const Moment = require('moment')
 const MomentRange = require('moment-range')

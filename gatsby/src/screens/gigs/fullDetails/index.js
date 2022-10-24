@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react'
-import {useParams} from 'react-router'
+import React, {useEffect, useState} from 'react'
+import {useParams} from '@reach/router'
 import moment from 'moment'
 
 // material

@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Box, Stack, Typography, Grid, Card} from '@mui/material'
 
 // components
 import {BillingCard} from '../../../cards'
 
 // theme
-import color from 'src/theme/palette'
+import color from 'theme/palette'
 import PropTypes from 'prop-types'
 
 const Moment = require('moment')

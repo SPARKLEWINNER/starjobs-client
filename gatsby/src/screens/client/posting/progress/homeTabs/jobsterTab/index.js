@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
   Stack,
   Button,
@@ -18,7 +18,7 @@ import {
 import {styled} from '@mui/material/styles'
 
 // api
-import user_api from 'src/lib/users'
+import user_api from 'libs/endpoints/users'
 
 // component
 import FreelancerCard from '../../cards/interest'

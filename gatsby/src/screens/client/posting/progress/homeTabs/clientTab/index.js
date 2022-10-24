@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
@@ -8,18 +8,18 @@ import {makeStyles} from '@mui/styles'
 import {TabContext, TabList, TabPanel} from '@mui/lab'
 
 // context
-import {RatingsContext} from 'src/contexts/rating'
+import {RatingsContext} from 'contexts/rating'
 
 // component
 import {PendingTab, IncomingTab, CurrentTab, BillingTab} from './tabs'
-import {ConfirmEndShiftNotification} from 'src/components/notifications'
+import {ConfirmEndShiftNotification} from 'components/notifications'
 
 // api
-import gigs_api from 'src/lib/gigs'
-import {useAuth} from 'src/contexts/AuthContext'
+import gigs_api from 'libs/endpoints/gigs'
+import {useAuth} from 'contexts/AuthContext'
 
-import {useLocation} from 'react-router-dom'
-import useSendNotif from 'src/utils/hooks/useSendNotif'
+import {useLocation} from '@reach/router'
+import useSendNotif from 'utils/hooks/useSendNotif'
 
 const useStyles = makeStyles({
   nav_item: {

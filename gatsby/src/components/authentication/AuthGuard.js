@@ -1,4 +1,4 @@
-import Login from 'pages/Login'
+import Login from 'screens/Login'
 
 import useUser from 'libs/endpoints/users'
 

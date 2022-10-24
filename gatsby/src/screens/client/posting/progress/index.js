@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import moment from 'moment'
 import {useSnackbar} from 'notistack'
@@ -9,15 +9,15 @@ import {Stack} from '@mui/material'
 import {styled} from '@mui/material/styles'
 
 // components
-// import Page from 'src/components/Page'
+// import Page from 'components/Page'
 import {
   // JobsterTab,
   ClientTab
 } from './homeTabs'
 
 // api
-import gigs_api from 'src/lib/gigs'
-import {useAuth} from 'src/contexts/AuthContext'
+import gigs_api from 'libs/endpoints/gigs'
+import {useAuth} from 'contexts/AuthContext'
 
 // variables
 const DRAWER_WIDTH = 280

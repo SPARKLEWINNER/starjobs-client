@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 // material
 import {Stack, Tab} from '@mui/material'
 import {styled} from '@mui/material/styles'
@@ -6,13 +6,13 @@ import {makeStyles} from '@mui/styles'
 import {TabContext, TabList, TabPanel} from '@mui/lab'
 
 // components
-import Page from 'src/components/Page'
-import LoadingScreen from 'src/components/LoadingScreen'
+import Page from 'components/Page'
+import LoadingScreen from 'components/LoadingScreen'
 import GigForm from './form'
 import GigProgress from './progress'
 
-import {useAuth} from 'src/contexts/AuthContext'
-import {useLocation} from 'react-router'
+import {useAuth} from 'contexts/AuthContext'
+import {useLocation} from '@reach/router'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

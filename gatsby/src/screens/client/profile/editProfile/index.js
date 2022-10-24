@@ -20,10 +20,13 @@ import storage from 'utils/storage'
 import onboard_api from 'libs/endpoints/onboard'
 import user_api from 'libs/endpoints/users'
 import {useAuth} from 'contexts/AuthContext'
+import config from 'utils/config'
 
 // variables
 const DRAWER_WIDTH = 280
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+
+// variables
+const image_bucket = config.aws.s3UploadUrl
 const steps = ['Personal Information', 'Company Contacts', 'Industry', 'Rate & Payment', 'Company Logo & Permits']
 
 // styles

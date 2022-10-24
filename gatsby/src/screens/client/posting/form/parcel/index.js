@@ -9,7 +9,7 @@ import {ParcelForm, BillingForm} from './form'
 import {CreateParcelDialog} from './dialog'
 
 // hooks
-import gigs_api from 'src/lib/gigs'
+import gigs_api from 'libs/endpoints/gigs'
 import PropTypes from 'prop-types'
 
 CreateParcelForm.propTypes = {

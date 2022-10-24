@@ -4,7 +4,7 @@ import moment from 'moment'
 import {Box, Card, CardContent, Typography, Stack} from '@mui/material'
 
 // component
-import Label from 'src/components/Label'
+import Label from 'components/Label'
 import PropTypes from 'prop-types'
 
 function change_label_by_status(status) {

@@ -29,8 +29,10 @@ import user_api from 'libs/endpoints/users'
 import color from 'theme/palette'
 import {useAuth} from 'contexts/AuthContext'
 
+import config from 'utils/config'
+
 // variables
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+const image_bucket = config.aws.s3UploadUrl
 const DRAWER_WIDTH = 280
 
 const MainStyle = styled(Stack)(({theme}) => ({

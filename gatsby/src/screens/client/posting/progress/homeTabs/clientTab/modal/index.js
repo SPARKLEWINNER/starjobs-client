@@ -28,8 +28,9 @@ import closeIcon from '@iconify/icons-eva/close-circle-outline'
 import {LoadingButton} from '@mui/lab'
 
 // utils
-import {calculations} from 'src/utils/gigComputation'
+import {calculations} from 'utils/gigComputation'
 import PropTypes from 'prop-types'
+import config from 'utils/config'
 
 CurrentModalPopup.propTypes = {
   gig: PropTypes.object,
@@ -41,8 +42,9 @@ CurrentModalPopup.propTypes = {
 
 // variable
 const drawerBleeding = 56
-const default_url = process.env.REACT_APP_IMAGE_URL
 
+// variables
+const default_url = config.aws.s3UploadUrl
 const ListWrapperStyle = styled(Paper)(({theme}) => ({
   width: '100%',
   border: `solid 1px ${theme.palette.divider}`

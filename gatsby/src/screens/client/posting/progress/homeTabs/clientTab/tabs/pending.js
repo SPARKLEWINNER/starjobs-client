@@ -1,11 +1,11 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Box, Stack, Typography} from '@mui/material'
 import {PendingCard} from '../../../cards'
 
-import ProgressCircle from 'src/components/progressCircle'
+import ProgressCircle from 'components/progressCircle'
 
 // theme
-import color from 'src/theme/palette'
+import color from 'theme/palette'
 import PropTypes from 'prop-types'
 
 const Moment = require('moment')

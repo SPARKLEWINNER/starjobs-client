@@ -15,8 +15,10 @@ import Label from 'components/Label'
 import {getUser} from 'utils/hooks/auth'
 import useSendNotif from 'utils/hooks/useSendNotif'
 
+import config from 'utils/config'
+
 // variables
-const image_url = process.env.REACT_APP_IMAGE_URL
+const image_url = config.aws.s3UploadUrl
 
 const FreelancerCard = ({data}) => {
   const [isSendingInterest, setIsSendingInterest] = useState(false)

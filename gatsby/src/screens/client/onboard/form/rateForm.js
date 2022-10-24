@@ -5,7 +5,7 @@ import {useFormik, Form, FormikProvider} from 'formik'
 import {Stack, TextField, Box, Typography, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
-import {fCamelCase} from 'src/utils/formatCase'
+import {fCamelCase} from 'utils/formatCase'
 
 import PropTypes from 'prop-types'
 

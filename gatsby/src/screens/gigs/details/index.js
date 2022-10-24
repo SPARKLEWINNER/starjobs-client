@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useParams, useLocation} from '@reach/router'
 
 import {capitalCase} from 'change-case'
@@ -20,8 +20,8 @@ import {makeStyles} from '@mui/styles'
 
 // components
 import Page from 'components/Page'
-import {CredentialsTab, ActivityTab} from 'pages/client/profile/tabs'
-import {ApplyCard, ConfirmGig} from 'pages/gigs/cards'
+import {CredentialsTab, ActivityTab} from 'screens/client/profile/tabs'
+import {ApplyCard, ConfirmGig} from 'screens/gigs/cards'
 import MAvatar from 'components/@material-extend/MAvatar'
 
 // api
@@ -34,8 +34,10 @@ import color from 'theme/palette'
 import {useAuth} from 'contexts/AuthContext'
 import ProgressCircle from 'components/progressCircle'
 
+import config from 'utils/config'
+
 // variables
-const image_bucket = process.env.REACT_APP_IMAGE_URL
+const image_bucket = config.aws.s3UploadUrl
 const DRAWER_WIDTH = 280
 
 const MainStyle = styled(Stack)(({theme}) => ({

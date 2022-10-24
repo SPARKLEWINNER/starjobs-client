@@ -1,5 +1,5 @@
 import {Stack, Grid, Typography, Divider} from '@mui/material'
-import {calculations} from 'src/utils/gigComputation'
+import {calculations} from 'utils/gigComputation'
 import PropTypes from 'prop-types'
 
 BillingForm.propTypes = {

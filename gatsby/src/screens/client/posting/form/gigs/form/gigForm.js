@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 import {capitalCase} from 'change-case'
@@ -20,7 +20,7 @@ import {LoadingButton, MobileDatePicker, LocalizationProvider} from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {useSnackbar} from 'notistack'
 import DatePicker from 'react-datepicker'
-import {calculations} from 'src/utils/gigComputation'
+import {calculations} from 'utils/gigComputation'
 
 import PropTypes from 'prop-types'
 

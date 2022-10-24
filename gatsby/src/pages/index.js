@@ -37,6 +37,7 @@ import JobsterHome from 'screens/jobster/home'
 import JobsterDashboard from 'screens/jobster/dashboard'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+import BrowseCategory from 'screens/BrowseCategory'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -74,6 +75,7 @@ const Application = () => {
                             <ResetPassword path="/reset-password" />
 
                             <DashboardPage path="/dashboard" />
+                            <BrowseCategory path="/search" />
 
                             {/* jobsters */}
                             <JobsterDashboard path="/freelancer/dashboard" />
@@ -91,6 +93,8 @@ const Application = () => {
                             {/* gigs */}
                             <Gigs path="/gigs" />
                             <Gigs path="/gigs/:category" />
+                            <BrowseCategory path="freelancer/search" />
+                            <BrowseCategory path="client/search" />
                           </Router>
                         </RatingsProvider>
                         <GenericNotification />

@@ -15,7 +15,7 @@ const Page = forwardRef(({children, title = '', ...other}, ref) => {
       </Helmet>
       {location.pathname.split('/').filter(function (e) {
         return e
-      }).length >= 1 &&
+      }).length > 1 &&
       !unauthenticatedPages.includes(
         location.pathname.split('/').filter(function (e) {
           return e

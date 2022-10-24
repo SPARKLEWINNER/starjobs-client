@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 import React, {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
+import PropTypes from 'prop-types'
 // material
 import {Stack, TextField, Divider, Box, Typography, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
@@ -28,7 +29,13 @@ const fields = [
   'vocationalProgramCourse'
 ]
 
-export default function PersonalForm({user, onNext, onStoreData}) {
+EducationForm.propTypes = {
+  user: PropTypes.any,
+  onNext: PropTypes.any,
+  onStoreData: PropTypes.any
+}
+
+export default function EducationForm({user, onNext, onStoreData}) {
   const [isLoading, setLoading] = useState(false)
   const {enqueueSnackbar} = useSnackbar()
 

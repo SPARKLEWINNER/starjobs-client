@@ -1,6 +1,8 @@
 import * as Yup from 'yup'
 import {useState} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
+import PropTypes from 'prop-types'
+
 // material
 import {Stack, TextField, Divider, Box, Typography, Select} from '@mui/material'
 import {LoadingButton} from '@mui/lab'
@@ -27,6 +29,12 @@ const fields = [
   'vocationalAwards',
   'vocationalProgramCourse'
 ]
+
+PersonalForm.propTypes = {
+  user: PropTypes.any,
+  onNext: PropTypes.any,
+  onStoreData: PropTypes.any
+}
 
 export default function PersonalForm({user, onNext, onStoreData}) {
   const [isLoading, setLoading] = useState(false)

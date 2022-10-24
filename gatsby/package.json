@@ -19,7 +19,12 @@
   "eslintConfig": {
     "extends": [
       "eslint:recommended"
-    ]
+    ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   },
   "husky": {
     "hooks": {

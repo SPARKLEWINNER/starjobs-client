@@ -39,6 +39,11 @@ import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
 import BrowseCategory from 'screens/BrowseCategory'
 
+import ClientHome from 'screens/client/home'
+import ClientProfile from 'screens/client/profile'
+import ClientEditProfile from 'screens/client/profile/editProfile'
+
+
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
 import MessageDetails from 'screens/MessageDetails'
@@ -74,6 +79,7 @@ const Application = () => {
                             <ForgotPassword path="/forgot-password" />
                             <ResetPassword path="/reset-password" />
 
+                            <Gigs path="gigs" />
                             <DashboardPage path="/dashboard" />
                             <BrowseCategory path="/search" />
 
@@ -83,6 +89,9 @@ const Application = () => {
                             <JobsterProfile path="/freelancer/profile" />
                             <JobsterEditProfile path="/freelancer/edit" />
 
+                            <ClientHome path="/client/app" />
+                            <ClientProfile path="/client/profile" />
+                            <ClientEditProfile path="/client/edit" />
                             <JobsterEditProfile path="/freelancer/edit" />
 
                             {/* accounts */}

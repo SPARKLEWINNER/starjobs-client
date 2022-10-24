@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {
   Stack,
   Button,
@@ -16,13 +16,12 @@ import {
   Radio
 } from '@mui/material'
 import {styled} from '@mui/material/styles'
-import Sort from '@mui/icons-material/Sort'
 
 // api
-import user_api from 'libs/endpoints/users'
+import user_api from 'src/lib/users'
 
 // component
-import {FreelancerCard} from '../cards'
+import FreelancerCard from '../../cards/interest'
 
 // variable
 const DRAWER_WIDTH = 280
@@ -34,7 +33,7 @@ const MainStyle = styled(Stack)(({theme}) => ({
   }
 }))
 
-export default function FreelancerTab() {
+export default function FreelancerTabComponent() {
   const [data, setData] = useState([])
   const [renderData, setRenderData] = useState([])
   const [renderLength, setRenderLength] = useState(3)
@@ -49,6 +48,15 @@ export default function FreelancerTab() {
 
   const handleFilterDialogClose = () => {
     setOpenFilterDialog(false)
+  }
+
+  const load = async () => {
+    const result = await user_api.get_user_list()
+    if (!result.ok) return
+
+    let {data} = result
+    setData(data)
+    setRenderData(data.slice(0, 5))
   }
 
   const loadMore = () => {
@@ -118,71 +126,31 @@ export default function FreelancerTab() {
 
   useEffect(
     () => {
-      let componentMounted = true
-
-      const load = async () => {
-        const result = await user_api.get_user_list()
-        if (!result.ok) return
-
-        let {data} = result
-        if (componentMounted) {
-          setData(data)
-          setRenderData(data.slice(0, 5))
-        }
-      }
       load()
-      return () => {
-        componentMounted = false
-      }
     },
     // eslint-disable-next-line
     []
   )
 
   useEffect(() => {
-    let componentMounted = true
-    if (componentMounted) {
-      data && setRenderData(data.slice(0, 5))
-    }
-    return () => {
-      componentMounted = false
-    }
+    data && setRenderData(data.slice(0, 5))
   }, [data])
 
   return (
     <MainStyle>
       <Stack direction={{xs: 'column', md: 'column'}}>
-        {data.length > 0 && (
-          <Stack>
-            <Button
-              variant="outlined"
-              sx={{mb: 2}}
-              startIcon={<Sort />}
-              onClick={() => {
-                setOpenFilterDialog(true)
-              }}
-            >
-              Filter/Sort
-            </Button>
-            {renderData.length > 0 &&
-              renderData.map((v, index) => {
-                if (v.details.length !== 0)
-                  return (
-                    <div key={index}>
-                      <FreelancerCard data={v.details[0]} />
-                    </div>
-                  )
-                return ''
-              })}
-          </Stack>
-        )}
-        {renderData.length !== data.length && (
+        {renderData &&
+          renderData.map((v, key) => {
+            if (v.details.length === 0) return ''
+            return <FreelancerCard key={key} data={v.details[0]} />
+          })}
+
+        {data.length > 5 && data.length !== renderLength && (
           <Button variant="text" onClick={() => loadMore()} sx={{mt: 5}}>
             Load more
           </Button>
         )}
       </Stack>
-
       <Dialog open={openFilterDialog} onClose={handleFilterDialogClose} fullWidth>
         <DialogTitle>Filter</DialogTitle>
         <DialogContent>
@@ -209,6 +177,10 @@ export default function FreelancerTab() {
               }
               label="Active only"
             />
+            {/* <FormControlLabel 
+              control={<Switch checked={isAvailable} onChange={() => {setIsAvailable(!isAvailable)}}/>}
+              label="Available only"
+          /> */}
             <Typography>Rate type</Typography>
             <Select
               labelId="demo-simple-select-label"
@@ -218,7 +190,7 @@ export default function FreelancerTab() {
             >
               {RATE_TYPE.map((rate, key) => {
                 return (
-                  <MenuItem value={rate.value} key={key}>
+                  <MenuItem key={key} value={rate.value}>
                     {rate.label}
                   </MenuItem>
                 )

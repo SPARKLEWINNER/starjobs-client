@@ -5,10 +5,10 @@ import map from '@iconify/icons-eva/map-outline'
 import envelope from '@iconify/icons-eva/email-outline'
 import globe from '@iconify/icons-eva/globe-outline'
 
-import MAvatar from 'src/components/@material-extend/MAvatar'
+import MAvatar from 'components/@material-extend/MAvatar'
 
 // theme
-import color from 'src/theme/palette'
+import color from 'theme/palette'
 
 const image_bucket = process.env.REACT_APP_IMAGE_URL
 const ProfileHeader = ({user}) => {

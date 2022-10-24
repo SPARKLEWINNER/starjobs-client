@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
 // import 'utils/highlight'
-import {TransitionGroup, CSSTransition} from 'react-transition-group'
+// import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 import {SettingsProvider} from 'contexts/SettingsContext'
 import {CollapseDrawerProvider} from 'contexts/DrawerContext'
@@ -25,7 +25,7 @@ import {NotificationsProvider} from 'contexts/NotificationContext'
 import {RatingsProvider} from 'contexts/RatingContext'
 
 // components
-import PrivateRoute from 'components/PrivateRoute'
+// import PrivateRoute from 'components/PrivateRoute'
 
 // screens
 import LoginPage from 'screens/Login'
@@ -53,7 +53,7 @@ const Application = () => {
         <ThemeConfig>
           <ThemePrimaryColor>
             <Location>
-              {({location}) => (
+              {() => (
                 <AuthProvider>
                   {/* // <TransitionGroup className="transition-group"> */}
                   {/* <CSSTransition key={location.key} classNames="fade" timeout={300}> */}
@@ -74,6 +74,9 @@ const Application = () => {
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />
                             <JobsterEditProfile path="/freelancer/edit" />
+                            <BrowseCategory path="freelancer/search" />
+
+                            <BrowseCategory path="client/search" />
                           </Router>
                         </RatingsProvider>
                         <GenericNotification />

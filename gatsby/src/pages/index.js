@@ -34,15 +34,21 @@ import ResetPassword from 'screens/ResetPassword'
 import DashboardPage from 'screens/Dashboard'
 
 import JobsterHome from 'screens/jobster/home'
+import JobsterDashboard from 'screens/jobster/dashboard'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+import BrowseCategory from 'screens/BrowseCategory'
 
 import ClientHome from 'screens/client/home'
 import ClientProfile from 'screens/client/profile'
 import ClientEditProfile from 'screens/client/profile/editProfile'
 
-import Gigs from 'screens/gigs'
 
+import ChangePassword from 'screens/ChangePassword'
+import Message from 'screens/Message'
+import MessageDetails from 'screens/MessageDetails'
+
+import Gigs from 'screens/gigs'
 const SplashScreen = () => {
   return (
     <Box sx={{minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -75,7 +81,10 @@ const Application = () => {
 
                             <Gigs path="gigs" />
                             <DashboardPage path="/dashboard" />
+                            <BrowseCategory path="/search" />
 
+                            {/* jobsters */}
+                            <JobsterDashboard path="/freelancer/dashboard" />
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />
                             <JobsterEditProfile path="/freelancer/edit" />
@@ -83,6 +92,18 @@ const Application = () => {
                             <ClientHome path="/client/app" />
                             <ClientProfile path="/client/profile" />
                             <ClientEditProfile path="/client/edit" />
+                            <JobsterEditProfile path="/freelancer/edit" />
+
+                            {/* accounts */}
+                            <Message path="/freelancer/message" />
+                            <MessageDetails path="/notification/details/:id/:hid" />
+                            <ChangePassword path="/account/change-password" />
+
+                            {/* gigs */}
+                            <Gigs path="/gigs" />
+                            <Gigs path="/gigs/:category" />
+                            <BrowseCategory path="freelancer/search" />
+                            <BrowseCategory path="client/search" />
                           </Router>
                         </RatingsProvider>
                         <GenericNotification />

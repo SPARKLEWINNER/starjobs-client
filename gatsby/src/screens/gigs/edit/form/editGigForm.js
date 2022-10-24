@@ -13,7 +13,7 @@ import {useSnackbar} from 'notistack'
 import DatePicker from 'react-datepicker'
 
 // api
-import category_api from 'src/lib/category'
+import category_api from 'libs/endpoints/category'
 
 const EditGigForm = ({data, onNext, onStoreData}) => {
   const {enqueueSnackbar} = useSnackbar()

@@ -8,13 +8,13 @@ import {styled} from '@mui/material/styles'
 import {CalendarTodayOutlined, LocationOnOutlined, AccessTime, AccessAlarm, Timelapse, Paid} from '@mui/icons-material'
 
 // components
-import Page from 'src/components/Page'
-import LoadingScreen from 'src/components/LoadingScreen'
+import Page from 'components/Page'
+import LoadingScreen from 'components/LoadingScreen'
 import {capitalCase} from 'change-case'
 
 // api
-import gigs_api from 'src/lib/gigs'
-import {calculations} from 'src/utils/gigComputation'
+import gigs_api from 'libs/endpoints/gigs'
+import {calculations} from 'utils/gigComputation'
 
 // variables
 const DRAWER_WIDTH = 280

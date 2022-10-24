@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams} from '@reach/router'
 
 // material
 import {Box, Button, Stack} from '@mui/material'
@@ -8,13 +8,13 @@ import {useSnackbar} from 'notistack'
 import {styled} from '@mui/material/styles'
 
 // components
-import Page from 'src/components/Page'
+import Page from 'components/Page'
 import {EditGigForm, EditBillingForm} from './form'
 import EditDialog from './dialog'
 
 // hooks
-import storage from 'src/utils/storage'
-import gigs_api from 'src/lib/gigs'
+import storage from 'utils/storage'
+import gigs_api from 'libs/endpoints/gigs'
 
 const DRAWER_WIDTH = 280
 const MainStyle = styled(Stack)(({theme}) => ({

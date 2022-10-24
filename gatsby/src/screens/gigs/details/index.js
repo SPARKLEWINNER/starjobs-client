@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {useParams, useLocation} from 'react-router-dom'
+import {useParams, useLocation} from '@reach/router'
 
 import {capitalCase} from 'change-case'
 import {useSnackbar} from 'notistack'
@@ -19,20 +19,20 @@ import {styled} from '@mui/material/styles'
 import {makeStyles} from '@mui/styles'
 
 // components
-import Page from 'src/components/Page'
-import {CredentialsTab, ActivityTab} from 'src/pages/client/profile/tabs'
-import {ApplyCard, ConfirmGig} from 'src/pages/gigs/cards'
-import MAvatar from 'src/components/@material-extend/MAvatar'
+import Page from 'components/Page'
+import {CredentialsTab, ActivityTab} from 'pages/client/profile/tabs'
+import {ApplyCard, ConfirmGig} from 'pages/gigs/cards'
+import MAvatar from 'components/@material-extend/MAvatar'
 
 // api
-import user_api from 'src/lib/users'
-import gigs_api from 'src/lib/gigs'
-import useSendNotif from 'src/utils/hooks/useSendNotif'
+import user_api from 'libs/endpoints/users'
+import gigs_api from 'libs/endpoints/gigs'
+import useSendNotif from 'utils/hooks/useSendNotif'
 
 // theme
-import color from 'src/theme/palette'
-import {useAuth} from 'src/contexts/AuthContext'
-import ProgressCircle from 'src/components/progressCircle'
+import color from 'theme/palette'
+import {useAuth} from 'contexts/AuthContext'
+import ProgressCircle from 'components/progressCircle'
 
 // variables
 const image_bucket = process.env.REACT_APP_IMAGE_URL

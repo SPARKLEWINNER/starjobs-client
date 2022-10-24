@@ -16,7 +16,6 @@ const Jobs = require('./../../models/Jobs');
 
 const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
-
 const { timeCal } = require('../../services/timeCalculator');
 const { BUCKET_URL } = process.env;
 
@@ -27,6 +26,7 @@ var controllers = {
     get_gigs: async function (req, res) {
         let gigs = [];
         try {
+
             let initial_find = await Gigs.find({
                 status: ['Waiting', 'Applying']
             })
@@ -551,7 +551,7 @@ var controllers = {
             await logger.logError(error, 'GIGS.patch_archived_gig', null, null, 'GET');
             return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
-    }
+    },
 };
 
 module.exports = controllers;

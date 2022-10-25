@@ -28,22 +28,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!-- <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script> -->
     <script type="text/javascript">
-      // const beamsClient = new PusherPushNotifications.Client({
-      //   instanceId: 'db50def2-7957-4a3d-80f2-6d78d1d4c322'
-      // })
-      // beamsClient
-      //   .start()
-      //   .then((beamsClient) => beamsClient.getDeviceId())
-      //   .then(() => beamsClient.addDeviceInterest('hello'))
-      //   .then(() => beamsClient.getDeviceInterests())
-      //   .catch(console.error)
-
-      // PusherPushNotifications.onNotificationReceived = ({payload, pushEvent, handleNotification}) => {
-      //   payload.notification.title = 'A new title!'
-      //   pushEvent.waitUntil(handleNotification(payload))
-      // }
 
       window.onUsersnapCXLoad = function (api) {
         api.init()

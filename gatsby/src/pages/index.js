@@ -104,6 +104,7 @@ const Application = () => {
 
                             {/* accounts */}
                             <Message path="/freelancer/message" />
+                            <Message path="/client/message" />
                             <MessageDetails path="/notification/details/:id/:hid" />
                             <ChangePassword path="/account/change-password" />
 

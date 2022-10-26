@@ -77,7 +77,6 @@ const data = {
     },
     photo: {
         type: String,
-        required: true
     },
     documents: {
         type: String

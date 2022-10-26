@@ -116,7 +116,7 @@ const Message = () => {
             <Stack sx={{mb: 5}}>
               <Box>
                 <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                  <Box component="img" src="/static/illustrations/message.png" sx={{objectFit: 'contain'}} />
+                  <Box component="img" src="/illustrations/message.png" sx={{objectFit: 'contain'}} />
                 </Box>
                 <Box sx={{textAlign: 'center'}}>
                   <Typography variant="h4" sx={{color: 'text.secondary'}}>

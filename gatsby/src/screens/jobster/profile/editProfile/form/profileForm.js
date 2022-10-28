@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react'
+import {useState, useCallback} from 'react'
 import PropTypes from 'prop-types'
 // material
 import {Box, Stack, Typography, Button, Avatar} from '@mui/material'

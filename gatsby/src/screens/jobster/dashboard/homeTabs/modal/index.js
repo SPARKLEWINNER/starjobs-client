@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import React, {useState} from 'react'
+import {useState} from 'react'
 import {Global} from '@emotion/react'
 import {styled} from '@mui/styles'
 import {grey} from '@mui/material/colors'

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import {Link as RouterLink, useNavigate} from '@reach/router'
 import {Box, Stack, Typography, Grid, Link, Card} from '@mui/material'

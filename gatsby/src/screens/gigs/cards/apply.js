@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useRef} from 'react'
+import {useLayoutEffect, useRef} from 'react'
 import {Link as RouterLink, useLocation} from '@reach/router'
 import moment from 'moment'
 import {capitalCase} from 'change-case'

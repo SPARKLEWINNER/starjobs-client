@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import {useRef, useState} from 'react'
 import faker from 'faker'
 import PropTypes from 'prop-types'
 import {noCase} from 'change-case'

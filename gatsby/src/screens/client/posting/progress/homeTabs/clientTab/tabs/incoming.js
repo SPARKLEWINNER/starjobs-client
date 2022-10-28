@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {Box, Stack, Typography, Card} from '@mui/material'
 import moment from 'moment'
 import {IncomingCard} from '../../../cards'

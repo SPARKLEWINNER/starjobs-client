@@ -1,5 +1,5 @@
 import {Paper, Divider, Box, Stack, Typography} from '@mui/material'
-import React from 'react'
+// import React from 'react'
 import PropTypes from 'prop-types'
 // theme
 import color from 'theme/palette'

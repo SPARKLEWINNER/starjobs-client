@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
@@ -117,6 +117,7 @@ const Application = () => {
                             <ClientOnboard path="/client/onboard" />
                             <ClientOnboardSuccess path="/client/onboard/success" />
                             
+                            <JobsterEditProfile path="/freelancer/edit" />
                             <ClientCreateGig path="/client/gig/create" />
                             <ClientApplicants path="/client/gigs/applicants/:id" />
                             <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />

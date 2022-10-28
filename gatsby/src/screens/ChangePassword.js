@@ -1,4 +1,3 @@
-import React from 'react'
 // material
 import {Stack} from '@mui/material'
 import {styled} from '@mui/material/styles'

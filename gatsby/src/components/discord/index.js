@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import {Button} from '@mui/material'
 import {Icon} from '@iconify/react'
 import helpIcon from '@iconify/icons-eva/question-mark-circle-outline'

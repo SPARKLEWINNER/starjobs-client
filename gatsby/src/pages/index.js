@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
@@ -44,6 +44,9 @@ import BrowseCategory from 'screens/BrowseCategory'
 import ClientHome from 'screens/client/home'
 import ClientProfile from 'screens/client/profile'
 import ClientEditProfile from 'screens/client/profile/editProfile'
+import ClientCreateGig from 'screens/client/posting'
+import ClientApplicants from 'screens/client/applicants'
+import ClientApplicantProfile from 'screens/client/applicantProfile'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -54,6 +57,7 @@ import GigDetails from 'screens/gigs/details'
 import GigsFullDetails from 'screens/gigs/fullDetails'
 import GigApplySuccess from 'screens/gigs/success'
 import GigEdit from 'screens/gigs/edit'
+import '../style.css'
 
 const SplashScreen = () => {
   return (
@@ -101,6 +105,9 @@ const Application = () => {
                             <ClientProfile path="/client/profile" />
                             <ClientEditProfile path="/client/edit" />
                             <JobsterEditProfile path="/freelancer/edit" />
+                            <ClientCreateGig path="/client/gig/create" />
+                            <ClientApplicants path="/client/gigs/applicants/:id" />
+                            <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />
 
                             {/* accounts */}
                             <Message path="/freelancer/message" />

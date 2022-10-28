@@ -1,4 +1,4 @@
-import React, {useState, forwardRef} from 'react'
+import {useState, forwardRef} from 'react'
 import Carousel from 'nuka-carousel'
 import {HighlightOff as HighlightOffIcon} from '@mui/icons-material'
 import {Box, Dialog, DialogActions, DialogContent, Button, Slide} from '@mui/material'

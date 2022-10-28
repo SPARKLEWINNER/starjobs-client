@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: 'http://localhost:7003/api/internal/v1',
+  apiUrl: 'https://sj-staging-environment.herokuapp.com/api/internal/v1',
   socketUrl: 'http://localhost:7003',
   clientUrl: 'https://www.staging.starjobs.com.ph/',
   discord: {
@@ -20,6 +20,9 @@ const config = {
   userSnap: {
     apiKey: '5db6ed72-2881-4310-ac50-712e39193b7e',
     globalKey: '5db6ed72-2881-4310-ac50-712e39193b7e'
+  },
+  fallback: {
+    querystring: require.resolve('querystring-es3')
   }
 }
 

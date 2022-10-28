@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {Link as RouterLink, useParams} from '@reach/router'
 // material
 import {Divider, Typography, Box, Card, Link} from '@mui/material'
 import {styled} from '@mui/material/styles'
 
 // components
-import Page from ' components/Page'
+import Page from 'components/Page'
 import ListApplicants from './lists'
 import ClientProfile from './details'
 

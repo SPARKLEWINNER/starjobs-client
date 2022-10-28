@@ -1,4 +1,4 @@
-import * as React from 'react'
+// import * as React from 'react'
 import PropTypes from 'prop-types'
 
 const Seo = ({title = 'Starjobs', children}) => {

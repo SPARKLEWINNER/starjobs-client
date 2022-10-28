@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import React, {useState} from 'react'
+import {useState} from 'react'
 import {navigate, Link as RouterLink} from '@reach/router'
 import {useFormik, Form, FormikProvider} from 'formik'
 import {useSnackbar} from 'notistack'

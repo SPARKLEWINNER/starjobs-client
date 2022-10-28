@@ -3,7 +3,7 @@
 
 // import {last} from 'lodash'
 import PropTypes from 'prop-types'
-import React, {createContext, useContext} from 'react'
+import {createContext, useContext} from 'react'
 
 // import user_api from 'libs/endpoints/users'
 // import {useAuth} from './AuthContext'

@@ -1,5 +1,5 @@
 import {last} from 'lodash'
-import React, {useEffect, useState, createContext, useContext} from 'react'
+import {useEffect, useState, createContext, useContext} from 'react'
 import PropTypes from 'prop-types'
 
 import {navigate} from 'gatsby'

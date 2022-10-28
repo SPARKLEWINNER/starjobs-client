@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import {useSnackbar} from 'notistack'
 import moment from 'moment'
 
@@ -8,7 +8,7 @@ import {makeStyles} from '@mui/styles'
 import {TabContext, TabList, TabPanel} from '@mui/lab'
 
 // context
-import {RatingsContext} from 'contexts/rating'
+import {RatingsContext} from 'contexts/RatingContext'
 
 // component
 import {PendingTab, IncomingTab, CurrentTab, BillingTab} from './tabs'

@@ -1,5 +1,5 @@
 import {Dialog, DialogContent, DialogTitle, DialogActions, Button, Typography, Stack} from '@mui/material'
-import React, {useState} from 'react'
+import {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Icon} from '@iconify/react'
 import closeIcon from '@iconify/icons-eva/close-circle-outline'

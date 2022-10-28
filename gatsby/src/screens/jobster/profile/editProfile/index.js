@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 // material
 import {Box, Divider, Paper, Button, Avatar, Stack, Typography} from '@mui/material'
 import {styled} from '@mui/material/styles'

@@ -1,5 +1,5 @@
 import {navigate} from '@reach/router'
-import React, {useRef, useState} from 'react'
+import {useRef, useState} from 'react'
 import {Icon} from '@iconify/react'
 import menu2Fill from '@iconify/icons-eva/menu-2-fill'
 import List from '@mui/material/List'

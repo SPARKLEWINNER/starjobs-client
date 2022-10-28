@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {useNavigate, useParams, useLocation, Link as RouterLink} from '@reach/router'
 import {capitalCase} from 'change-case'
 import {useSnackbar} from 'notistack'

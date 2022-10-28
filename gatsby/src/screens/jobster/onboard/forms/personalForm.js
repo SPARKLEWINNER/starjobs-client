@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import React, {useState} from 'react'
+import {useState} from 'react'
 import PropTypes from 'prop-types'
 import {useFormik, Form, FormikProvider} from 'formik'
 

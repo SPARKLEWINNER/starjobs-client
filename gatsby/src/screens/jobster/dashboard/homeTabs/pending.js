@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import {navigate} from '@reach/router'
 import {useSnackbar} from 'notistack'
 import PropTypes from 'prop-types'

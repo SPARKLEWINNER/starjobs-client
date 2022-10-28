@@ -34,6 +34,7 @@ import Registration from 'screens/Registration'
 import ForgotPassword from 'screens/ForgotPassword'
 import ResetPassword from 'screens/ResetPassword'
 import DashboardPage from 'screens/Dashboard'
+import Welcome from 'screens/Welcome'
 
 import JobsterHome from 'screens/jobster/home'
 import JobsterDashboard from 'screens/jobster/dashboard'
@@ -91,6 +92,7 @@ const Application = () => {
                             <ForgotPassword path="/forgot-password" />
                             <ResetPassword path="/reset-password" />
 
+                            <Welcome path="/setup/welcome" />
                             <Gigs path="gigs" />
                             <DashboardPage path="/dashboard" />
                             <BrowseCategory path="/search" />

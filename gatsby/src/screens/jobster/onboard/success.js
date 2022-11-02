@@ -1,4 +1,4 @@
-// import from 'react'
+import React from 'react'
 import {motion} from 'framer-motion'
 import {Link as RouterLink} from '@reach/router'
 // material

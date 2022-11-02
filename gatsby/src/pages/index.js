@@ -44,6 +44,7 @@ import BrowseCategory from 'screens/BrowseCategory'
 import ClientHome from 'screens/client/home'
 import ClientProfile from 'screens/client/profile'
 import ClientEditProfile from 'screens/client/profile/editProfile'
+import ClientEditDocument from 'screens/ClientEditDocument'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -100,6 +101,7 @@ const Application = () => {
                             <ClientHome path="/client/app" />
                             <ClientProfile path="/client/profile" />
                             <ClientEditProfile path="/client/edit" />
+                            <ClientEditDocument path="/client/edit/document" />
                             <JobsterEditProfile path="/freelancer/edit" />
 
                             {/* accounts */}

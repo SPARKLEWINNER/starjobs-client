@@ -5,7 +5,7 @@ import {Divider, Typography, Box, Card, Link} from '@mui/material'
 import {styled} from '@mui/material/styles'
 
 // components
-import Page from ' components/Page'
+import Page from 'components/Page'
 import ListApplicants from './lists'
 import ClientProfile from './details'
 

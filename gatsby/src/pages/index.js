@@ -34,6 +34,7 @@ import Registration from 'screens/Registration'
 import ForgotPassword from 'screens/ForgotPassword'
 import ResetPassword from 'screens/ResetPassword'
 import DashboardPage from 'screens/Dashboard'
+import Welcome from 'screens/Welcome'
 
 import JobsterHome from 'screens/jobster/home'
 import JobsterDashboard from 'screens/jobster/dashboard'
@@ -44,6 +45,9 @@ import BrowseCategory from 'screens/BrowseCategory'
 import ClientHome from 'screens/client/home'
 import ClientProfile from 'screens/client/profile'
 import ClientEditProfile from 'screens/client/profile/editProfile'
+import ClientCreateGig from 'screens/client/posting'
+import ClientApplicants from 'screens/client/applicants'
+import ClientApplicantProfile from 'screens/client/applicantProfile'
 import ClientEditDocument from 'screens/ClientEditDocument'
 
 import ChangePassword from 'screens/ChangePassword'
@@ -55,6 +59,7 @@ import GigDetails from 'screens/gigs/details'
 import GigsFullDetails from 'screens/gigs/fullDetails'
 import GigApplySuccess from 'screens/gigs/success'
 import GigEdit from 'screens/gigs/edit'
+import '../style.css'
 
 const SplashScreen = () => {
   return (
@@ -88,6 +93,7 @@ const Application = () => {
                             <ForgotPassword path="/forgot-password" />
                             <ResetPassword path="/reset-password" />
 
+                            <Welcome path="/setup/welcome" />
                             <Gigs path="gigs" />
                             <DashboardPage path="/dashboard" />
                             <BrowseCategory path="/search" />
@@ -103,6 +109,9 @@ const Application = () => {
                             <ClientEditProfile path="/client/edit" />
                             <ClientEditDocument path="/client/edit/document" />
                             <JobsterEditProfile path="/freelancer/edit" />
+                            <ClientCreateGig path="/client/gig/create" />
+                            <ClientApplicants path="/client/gigs/applicants/:id" />
+                            <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />
 
                             {/* accounts */}
                             <Message path="/freelancer/message" />

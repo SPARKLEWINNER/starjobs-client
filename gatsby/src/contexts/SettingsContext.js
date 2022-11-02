@@ -1,6 +1,5 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import {createContext} from 'react'
+import React, {createContext} from 'react'
 // hooks
 import useLocalStorage from 'utils/hooks/storage'
 // theme

@@ -1,5 +1,5 @@
 // material
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useParams} from '@reach/router'
 import {Stack, Typography} from '@mui/material'
 import {styled} from '@mui/material/styles'

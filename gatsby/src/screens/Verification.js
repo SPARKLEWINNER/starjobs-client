@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {useNavigate, Link as RouterLink} from '@reach/router'
 import {styled} from '@mui/material/styles'
 import {Stack, Container, Typography, Button, Box} from '@mui/material'

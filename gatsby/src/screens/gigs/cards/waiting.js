@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react'
 import {Link as RouterLink} from '@reach/router'
 import PropTypes from 'prop-types'
 

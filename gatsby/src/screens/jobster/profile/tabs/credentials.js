@@ -1,5 +1,5 @@
 import {Box, Stack, Typography} from '@mui/material'
-// import React from 'react'
+import React from 'react'
 
 // theme
 import color from 'theme/palette'

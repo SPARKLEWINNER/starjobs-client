@@ -2,7 +2,7 @@ import {Box, Grid, Stack, Typography, Avatar} from '@mui/material'
 import {Icon} from '@iconify/react'
 import checkmark from '@iconify/icons-eva/checkmark-circle-2-fill'
 import starIcon from '@iconify/icons-eva/star-fill'
-// import React from 'react'
+import React from 'react'
 
 // theme
 import color from 'theme/palette'

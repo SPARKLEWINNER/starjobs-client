@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react'
 import {last} from 'lodash'
 import PropTypes from 'prop-types'
 // material

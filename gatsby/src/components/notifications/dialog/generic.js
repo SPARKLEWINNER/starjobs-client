@@ -12,7 +12,7 @@ import {
   Box
 } from '@mui/material'
 import {navigate} from 'gatsby'
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {useAuth} from 'contexts/AuthContext'
 
 const GenericNotification = ({open = false, details = {}, handleClose = () => {}}) => {

@@ -1,6 +1,6 @@
 import NProgress from 'nprogress'
 import {motion} from 'framer-motion'
-import {useEffect, useMemo} from 'react'
+import React, {useEffect, useMemo} from 'react'
 // material
 import {makeStyles, createStyles} from '@mui/styles'
 import {alpha, styled} from '@mui/material/styles'

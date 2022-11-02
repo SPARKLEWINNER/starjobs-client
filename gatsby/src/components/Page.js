@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import {Helmet} from 'react-helmet'
 import {useLocation} from '@reach/router'
-import {forwardRef} from 'react'
+import React, {forwardRef} from 'react'
 import {Box} from '@mui/material'
 import DashboardLayout from 'layouts/dashboard'
 

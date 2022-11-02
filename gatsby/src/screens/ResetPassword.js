@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 import {styled} from '@mui/material/styles'
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {last} from 'lodash'
 import jwt_decode from 'jwt-decode'
 

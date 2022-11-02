@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 // material
 import {Stack, Tab} from '@mui/material'
 import {styled} from '@mui/material/styles'

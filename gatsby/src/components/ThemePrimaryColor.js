@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import {useMemo} from 'react'
+import React, {useMemo} from 'react'
 // material
 import {alpha, ThemeProvider, createTheme, useTheme} from '@mui/material/styles'
 // hooks

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Stack, Typography, Box} from '@mui/material'
 import {slice} from 'lodash'
 

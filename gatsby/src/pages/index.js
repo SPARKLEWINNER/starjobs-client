@@ -49,6 +49,7 @@ import ClientCreateGig from 'screens/client/posting'
 import ClientApplicants from 'screens/client/applicants'
 import ClientApplicantProfile from 'screens/client/applicantProfile'
 import ClientEditDocument from 'screens/ClientEditDocument'
+import ClientOnboard from 'screens/client/onboard'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -108,7 +109,8 @@ const Application = () => {
                             <ClientProfile path="/client/profile" />
                             <ClientEditProfile path="/client/edit" />
                             <ClientEditDocument path="/client/edit/document" />
-                            <JobsterEditProfile path="/freelancer/edit" />
+                            <ClientOnboard path="/client/onboard" />
+                            
                             <ClientCreateGig path="/client/gig/create" />
                             <ClientApplicants path="/client/gigs/applicants/:id" />
                             <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />

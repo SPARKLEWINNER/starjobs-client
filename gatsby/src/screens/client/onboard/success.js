@@ -29,7 +29,7 @@ export default function OnboardSuccess() {
             <Typography sx={{color: 'text.secondary'}}>Thank you for completing your details.</Typography>
 
             <motion.div variants={varBounceIn} sx={{mb: 3}}>
-              <Box component="img" src="/static/illustrations/check.png" sx={{mx: 'auto', my: {xs: 2, sm: 2}}} />
+              <Box component="img" src="../../assets/images/check.png" sx={{mx: 'auto', my: {xs: 2, sm: 2}}} />
 
               <Typography variant="body1" sx={{color: 'text.secondary', mb: 3}}>
                 Start posting jobs now.

@@ -50,6 +50,7 @@ import ClientApplicants from 'screens/client/applicants'
 import ClientApplicantProfile from 'screens/client/applicantProfile'
 import ClientEditDocument from 'screens/ClientEditDocument'
 import ClientOnboard from 'screens/client/onboard'
+import ClientOnboardSuccess from 'screens/client/onboard/success'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -110,6 +111,7 @@ const Application = () => {
                             <ClientEditProfile path="/client/edit" />
                             <ClientEditDocument path="/client/edit/document" />
                             <ClientOnboard path="/client/onboard" />
+                            <ClientOnboardSuccess path="/client/onboard/success" />
                             
                             <ClientCreateGig path="/client/gig/create" />
                             <ClientApplicants path="/client/gigs/applicants/:id" />

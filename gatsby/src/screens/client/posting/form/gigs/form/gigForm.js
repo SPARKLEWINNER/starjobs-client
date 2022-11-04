@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 import moment from 'moment'
 import {capitalCase} from 'change-case'
@@ -82,7 +82,9 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
     notifyArea: Yup.array(),
     isRepeatable: Yup.bool(),
     repeatTimes: Yup.number(),
-    repeatEvery: Yup.array()
+    repeatEvery: Yup.array(),
+    gigFee: Yup.string().required('Select Gig Fee'),
+    commission: Yup.string()
   })
 
   const formik = useFormik({
@@ -99,7 +101,9 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
       locationRate: formData?.locationRate ?? '',
       notifyArea: formData.notifyArea ?? [],
       repeatTimes: formData?.repeatTimes ?? 0,
-      repeatEvery: formData.repeatEvery ?? []
+      repeatEvery: formData.repeatEvery ?? [],
+      gigFee: formData.gigFee ?? '',
+      commission: formData.commission ?? ''
     },
     enableReinitialize: true,
     validationSchema: GigSchema,
@@ -143,6 +147,8 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
         breakHr: values.break,
         notes: values.notes ?? '',
         locationRate: values.locationRate,
+        // gigFee: values.gigFee,
+        // commission: values.commission,
         fees: {
           computedFeeByHr: computedFeeByHr,
           voluntaryFee: voluntaryFee,
@@ -243,6 +249,10 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
 
   const handleFeeFormat = (value) => {
     setFieldValue('fee', parseFloat(value).toFixed(2))
+  }
+
+  const handleCommissionFormat = (value) => {
+    setFieldValue('commission', parseFloat(value).toFixed(2))
   }
 
   const handleBreakTimeReduceHours = (value) => {
@@ -498,50 +508,84 @@ export default function GigForm({formData, onNext, onStoreData, areasAvailable})
             </Select>
           )}
           <Divider />
-          <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
-            Gig Fee per hour
-            <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
-              (ex. P 570 / 8 ={' '}
-              <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
-                71.25
-              </Typography>
-              )
-            </Typography>
-          </Typography>
-          <TextField
-            id="inputGigFee"
-            fullWidth
-            label="0.00"
-            type="number"
-            onChange={(value) => handleFeeFormat(value.target.value)}
-            error={Boolean(touched.fee && errors.fee)}
-            helperText={touched.fee && errors.fee}
-            sx={{mt: '0.5rem !important'}}
-          />
-          <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
-            Location's Rate
-          </Typography>
-          <Typography variant="body2" component="span" sx={{opacity: 0.5, mt: '0 !important'}}>
-            Note: Gig fee will computed by state
-          </Typography>
-          <Select
-            native
-            onChange={(e) => setFieldValue('locationRate', e.target.value)}
-            defaultValue={''}
-            sx={{mt: '0.5rem !important'}}
-            id="locationRateSelect"
-          >
+          <Select native onChange={(e) => setFieldValue('gigFee', e.target.value)} defaultValue={''}>
             <option value="" disabled key="initial">
-              Select Gig Location Rate
+              Select Gig Fee
             </option>
-
-            <option key="ncr-key" value="NCR">
-              NCR/Manila Rate
+            <option key="daily-key" value="Daily">
+              Daily
             </option>
-            <option key="provincial-key" value="Provincial">
-              Provincial Rate
+            <option key="commission-key" value="Commission">
+              Commission
+            </option>
+            <option key="daily-commission-key" value="Daily/Commission">
+              Daily/Commission
             </option>
           </Select>
+          {(values.gigFee === 'Daily' || values.gigFee === 'Daily/Commission') && (
+            <>
+              <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+                Gig Fee per hour
+                <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
+                  (ex. P 570 / 8 ={' '}
+                  <Typography variant="span" sx={{ml: 1, fontSize: '0.75rem', color: 'grey[300]'}}>
+                    71.25
+                  </Typography>
+                  )
+                </Typography>
+              </Typography>
+              <TextField
+                id="inputGigFee"
+                fullWidth
+                label="0.00"
+                type="number"
+                onChange={(value) => handleFeeFormat(value.target.value)}
+                error={Boolean(touched.fee && errors.fee)}
+                helperText={touched.fee && errors.fee}
+                sx={{mt: '0.5rem !important'}}
+              />
+              <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+                Location's Rate
+              </Typography>
+              <Typography variant="body2" component="span" sx={{opacity: 0.5, mt: '0 !important'}}>
+                Note: Gig fee will computed by state
+              </Typography>
+              <Select
+                native
+                onChange={(e) => setFieldValue('locationRate', e.target.value)}
+                defaultValue={''}
+                sx={{mt: '0.5rem !important'}}
+                id="locationRateSelect"
+              >
+                <option value="" disabled key="initial">
+                  Select Gig Location Rate
+                </option>
+                <option key="ncr-key" value="NCR">
+                  NCR/Manila Rate
+                </option>
+                <option key="provincial-key" value="Provincial">
+                  Provincial Rate
+                </option>
+              </Select>
+            </>
+          )}
+          {(values.gigFee === 'Commission' || values.gigFee === 'Daily/Commission') && (
+            <>
+              <Typography variant="body1" sx={{mt: 1, fontWeight: 600, mb: '0 !important'}}>
+                Commision Rate
+              </Typography>
+              <TextField
+                id="commission"
+                fullWidth
+                label="0.00"
+                type="number"
+                onChange={(value) => handleCommissionFormat(value.target.value)}
+                error={Boolean(touched.commission && errors.commission)}
+                helperText={touched.commission && errors.commission}
+                sx={{mt: '0.5rem !important'}}
+              />
+            </>
+          )}
           <TextField
             id="instruction"
             label="Special Instruction"

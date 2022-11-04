@@ -40,6 +40,8 @@ import JobsterHome from 'screens/jobster/home'
 import JobsterDashboard from 'screens/jobster/dashboard'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+import JobsterOnboard from 'screens/jobster/onboard'
+import JobsterOnboardSuccess from 'screens/jobster/onboard/success'
 import BrowseCategory from 'screens/BrowseCategory'
 
 import ClientHome from 'screens/client/home'
@@ -105,7 +107,9 @@ const Application = () => {
                             <JobsterHome path="/freelancer/app" />
                             <JobsterProfile path="/freelancer/profile" />
                             <JobsterEditProfile path="/freelancer/edit" />
-
+                            <JobsterOnboard path="/freelancer/onboard" />
+                            <JobsterOnboardSuccess path="/freelancer/onboard/success" />
+                            
                             <ClientHome path="/client/app" />
                             <ClientProfile path="/client/profile" />
                             <ClientEditProfile path="/client/edit" />

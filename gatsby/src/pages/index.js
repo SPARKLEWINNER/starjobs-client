@@ -3,7 +3,7 @@ import {Box} from '@mui/material'
 import {Router, Location} from '@reach/router'
 
 // import 'utils/highlight'
-// import {TransitionGroup, CSSTransition} from 'react-transition-group'
+import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 import {SettingsProvider} from 'contexts/SettingsContext'
 import {CollapseDrawerProvider} from 'contexts/DrawerContext'
@@ -49,6 +49,7 @@ import ClientCreateGig from 'screens/client/posting'
 import ClientApplicants from 'screens/client/applicants'
 import ClientApplicantProfile from 'screens/client/applicantProfile'
 import ClientEditDocument from 'screens/ClientEditDocument'
+import ClientJobsterProfile from 'screens/jobster/profile'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -78,65 +79,63 @@ const Application = () => {
             <Location>
               {() => (
                 <AuthProvider>
-                  {/* // <TransitionGroup className="transition-group"> */}
-                  {/* <CSSTransition key={location.key} classNames="fade" timeout={300}> */}
-                  <SessionProvider>
-                    <NotificationsProvider>
-                      <NotistackProvider>
-                        <RatingsProvider>
-                          <Router>
-                            {/* add page routes here */}
-                            <LoginPage path="/login" />
-                            <LoginPage path="/" />
-                            <VerificationPage path="/verification" />
-                            <Registration path="/sign-up" />
-                            <ForgotPassword path="/forgot-password" />
-                            <ResetPassword path="/reset-password" />
+                  <TransitionGroup className="transition-group">
+                    <CSSTransition key={location.key} classNames="fade" timeout={300}>
+                      <SessionProvider>
+                        <NotificationsProvider>
+                          <NotistackProvider>
+                            <RatingsProvider>
+                              <Router>
+                                {/* add page routes here */}
+                                <LoginPage path="/login" />
+                                <LoginPage path="/" />
+                                <VerificationPage path="/verification" />
+                                <Registration path="/sign-up" />
+                                <ForgotPassword path="/forgot-password" />
+                                <ResetPassword path="/reset-password" />
 
-                            <Welcome path="/setup/welcome" />
-                            <Gigs path="gigs" />
-                            <DashboardPage path="/dashboard" />
-                            <BrowseCategory path="/search" />
+                                <Welcome path="/setup/welcome" />
+                                <DashboardPage path="/dashboard" />
+                                <BrowseCategory path="/search" />
 
-                            {/* jobsters */}
-                            <JobsterDashboard path="/freelancer/dashboard" />
-                            <JobsterHome path="/freelancer/app" />
-                            <JobsterProfile path="/freelancer/profile" />
-                            <JobsterEditProfile path="/freelancer/edit" />
+                                {/* jobsters */}
+                                <JobsterDashboard path="/freelancer/dashboard" />
+                                <JobsterHome path="/freelancer/app" />
+                                <JobsterProfile path="/freelancer/profile" />
+                                <JobsterEditProfile path="/freelancer/edit" />
 
-                            <ClientHome path="/client/app" />
-                            <ClientProfile path="/client/profile" />
-                            <ClientEditProfile path="/client/edit" />
-                            <ClientEditDocument path="/client/edit/document" />
-                            <JobsterEditProfile path="/freelancer/edit" />
-                            <ClientCreateGig path="/client/gig/create" />
-                            <ClientApplicants path="/client/gigs/applicants/:id" />
-                            <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />
+                                <ClientHome path="/client/app" />
+                                <ClientProfile path="/client/profile" />
+                                <ClientEditProfile path="/client/edit" />
+                                <ClientEditDocument path="/client/edit/document" />
+                                <ClientCreateGig path="/client/gig/create" />
+                                <ClientApplicants path="/client/gigs/applicants/:id" />
+                                <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />
+                                <ClientJobsterProfile path="/client/jobster/:id" />
+                                {/* accounts */}
+                                <Message path="/freelancer/message" />
+                                <Message path="/client/message" />
+                                <MessageDetails path="/notification/details/:id/:hid" />
+                                <ChangePassword path="/account/change-password" />
 
-                            {/* accounts */}
-                            <Message path="/freelancer/message" />
-                            <Message path="/client/message" />
-                            <MessageDetails path="/notification/details/:id/:hid" />
-                            <ChangePassword path="/account/change-password" />
+                                {/* gigs */}
+                                <Gigs path="/gigs" />
+                                <Gigs path="/gigs/:category" />
+                                <GigsFullDetails path="/gigs/det/:id" />
+                                <GigDetails path="/gigs/details/:id/:category" />
+                                <GigEdit path="/gigs/edit/:id" />
+                                <GigApplySuccess path="/gigs/apply/success" />
 
-                            {/* gigs */}
-                            <Gigs path="/gigs" />
-                            <Gigs path="/gigs/:category" />
-                            <GigsFullDetails path="/gigs/det/:id" />
-                            <GigDetails path="/gigs/details/:id/:category" />
-                            <GigEdit path="/gigs/edit/:id" />
-                            <GigApplySuccess path="/gigs/apply/success" />
-
-                            <BrowseCategory path="freelancer/search" />
-                            <BrowseCategory path="client/search" />
-                          </Router>
-                        </RatingsProvider>
-                        <GenericNotification />
-                      </NotistackProvider>
-                    </NotificationsProvider>
-                  </SessionProvider>
-                  {/* // </CSSTransition> */}
-                  {/* // </TransitionGroup> */}
+                                <BrowseCategory path="freelancer/search" />
+                                <BrowseCategory path="client/search" />
+                              </Router>
+                            </RatingsProvider>
+                            <GenericNotification />
+                          </NotistackProvider>
+                        </NotificationsProvider>
+                      </SessionProvider>
+                    </CSSTransition>
+                  </TransitionGroup>
                 </AuthProvider>
               )}
             </Location>

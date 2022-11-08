@@ -8,6 +8,7 @@ import DashboardLayout from 'layouts/dashboard'
 const unauthenticatedPages = ['login', 'sign-up', 'forgot-password', 'reset-password']
 const Page = forwardRef(({children, title = '', ...other}, ref) => {
   const location = useLocation()
+
   return (
     <Box ref={ref} {...other}>
       <Helmet>
@@ -15,7 +16,7 @@ const Page = forwardRef(({children, title = '', ...other}, ref) => {
       </Helmet>
       {location.pathname.split('/').filter(function (e) {
         return e
-      }).length > 1 &&
+      }).length >= 1 &&
       !unauthenticatedPages.includes(
         location.pathname.split('/').filter(function (e) {
           return e

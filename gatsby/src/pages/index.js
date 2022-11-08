@@ -40,6 +40,8 @@ import JobsterHome from 'screens/jobster/home'
 import JobsterDashboard from 'screens/jobster/dashboard'
 import JobsterProfile from 'screens/jobster/profile'
 import JobsterEditProfile from 'screens/jobster/profile/editProfile'
+import JobsterOnboard from 'screens/jobster/onboard'
+import JobsterOnboardSuccess from 'screens/jobster/onboard/success'
 import BrowseCategory from 'screens/BrowseCategory'
 
 import ClientHome from 'screens/client/home'
@@ -50,6 +52,8 @@ import ClientApplicants from 'screens/client/applicants'
 import ClientApplicantProfile from 'screens/client/applicantProfile'
 import ClientEditDocument from 'screens/ClientEditDocument'
 import ClientJobsterProfile from 'screens/jobster/profile'
+import ClientOnboard from 'screens/client/onboard'
+import ClientOnboardSuccess from 'screens/client/onboard/success'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -103,11 +107,16 @@ const Application = () => {
                                 <JobsterHome path="/freelancer/app" />
                                 <JobsterProfile path="/freelancer/profile" />
                                 <JobsterEditProfile path="/freelancer/edit" />
-
+                                <JobsterOnboard path="/freelancer/onboard" />
+                                <JobsterOnboardSuccess path="/freelancer/onboard/success" />
+                                
                                 <ClientHome path="/client/app" />
                                 <ClientProfile path="/client/profile" />
                                 <ClientEditProfile path="/client/edit" />
                                 <ClientEditDocument path="/client/edit/document" />
+                                <ClientOnboard path="/client/onboard" />
+                                <ClientOnboardSuccess path="/client/onboard/success" />
+                            
                                 <ClientCreateGig path="/client/gig/create" />
                                 <ClientApplicants path="/client/gigs/applicants/:id" />
                                 <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />

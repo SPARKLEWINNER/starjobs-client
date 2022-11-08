@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: starjobs-gatsby
+          repository: starjobs-products/starjobs-gatsby
           ref: 'main'
           token:  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
       - name: setup git config

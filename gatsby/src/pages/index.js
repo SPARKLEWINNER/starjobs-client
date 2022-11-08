@@ -54,6 +54,7 @@ import ClientEditDocument from 'screens/ClientEditDocument'
 import ClientJobsterProfile from 'screens/jobster/profile'
 import ClientOnboard from 'screens/client/onboard'
 import ClientOnboardSuccess from 'screens/client/onboard/success'
+import ClientPublicProfile from 'screens/client/publicProfile'
 
 import ChangePassword from 'screens/ChangePassword'
 import Message from 'screens/Message'
@@ -112,6 +113,7 @@ const Application = () => {
                                 
                                 <ClientHome path="/client/app" />
                                 <ClientProfile path="/client/profile" />
+                                <ClientPublicProfile path="/client/jobster/:id" />
                                 <ClientEditProfile path="/client/edit" />
                                 <ClientEditDocument path="/client/edit/document" />
                                 <ClientOnboard path="/client/onboard" />
@@ -121,6 +123,7 @@ const Application = () => {
                                 <ClientApplicants path="/client/gigs/applicants/:id" />
                                 <ClientApplicantProfile path="/client/gigs/applicant/profile/:id/:gig_id" />
                                 <ClientJobsterProfile path="/client/jobster/:id" />
+                                
                                 {/* accounts */}
                                 <Message path="/freelancer/message" />
                                 <Message path="/client/message" />

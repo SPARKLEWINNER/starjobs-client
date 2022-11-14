@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 // material
 import {Stack, Tab} from '@mui/material'
 import {styled} from '@mui/material/styles'
@@ -9,6 +9,7 @@ import {TabContext, TabList, TabPanel} from '@mui/lab'
 import Page from 'components/Page'
 import LoadingScreen from 'components/LoadingScreen'
 import GigForm from './form'
+import SalesForm from './form'
 import GigProgress from './progress'
 
 import {useAuth} from 'contexts/AuthContext'
@@ -53,6 +54,7 @@ const GigPosting = () => {
   const params = useLocation()
   const classes = useStyles()
   const [value, setValue] = useState('1')
+  const [selectedCategory, setSelectedCategory] = useState('default')
   const {currentUser} = useAuth()
 
   const [isLoading, setLoading] = useState(true)
@@ -79,7 +81,9 @@ const GigPosting = () => {
   }, [params.search, currentUser])
 
   const renderGigForm = () => {
-    return <GigForm />
+    if (selectedCategory !== 'default')
+      return <SalesForm handleSelectCategory={(value) => setSelectedCategory(value)} />
+    return <GigForm handleSelectCategory={(value) => setSelectedCategory(value)} />
   }
 
   const renderTab = (type) => {

@@ -8,7 +8,7 @@ import {LoadingButton} from '@mui/lab'
 import {useSnackbar} from 'notistack'
 
 // component form
-import {GigForm, BillingForm} from './form'
+import {SalesForm, BillingForm} from './form'
 import {CreateGigDialog, OnboardDialog} from './dialog'
 
 // hooks
@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 const {REACT_APP_DISCORD_URL, REACT_APP_DISCORD_KEY_STARJOBS} = process.env
 const webhook = require('webhook-discord')
 
-export default function CreatGigForm({user, category, notificationArea}) {
+export default function CreateSalesGig({user, category, notificationArea}) {
   const {enqueueSnackbar} = useSnackbar()
   const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0)
@@ -110,7 +110,7 @@ export default function CreatGigForm({user, category, notificationArea}) {
         </Typography>
       </Box>
       {activeStep === 0 && (
-        <GigForm onNext={handleNext} formData={form} onStoreData={handleFormData} areasAvailable={notificationArea} />
+        <SalesForm onNext={handleNext} formData={form} onStoreData={handleFormData} areasAvailable={notificationArea} />
       )}
       {activeStep === 1 && <BillingForm onNext={handleNext} storeData={form} />}
 
@@ -145,7 +145,7 @@ export default function CreatGigForm({user, category, notificationArea}) {
   )
 }
 
-CreatGigForm.propTypes = {
+CreateSalesGig.propTypes = {
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   category: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string]),
   notificationArea: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.string])

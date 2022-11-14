@@ -1,15 +1,17 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
+import PropTypes from 'prop-types'
 // material
 import {Stack, Select, Typography} from '@mui/material'
 
 // components
-import CreatGigForm from './gigs'
+import CreatGigForm from './gigs/'
 import CreateParcelForm from './parcel'
+import CreateSalesGig from './gigs/createSalesGig'
 
 // api
 import category_api from 'libs/endpoints/category'
 import {useAuth} from 'contexts/AuthContext'
-const GigsForm = () => {
+const GigsForm = ({handleSelectCategory}) => {
   const {currentUser} = useAuth()
   const [category, setCategory] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
@@ -17,6 +19,12 @@ const GigsForm = () => {
 
   const handleSelectedCategory = (value) => {
     setSelectedCategory(value)
+
+    if (value == 'sales-marketing') {
+      handleSelectCategory(value)
+    } else {
+      handleSelectCategory('default')
+    }
   }
 
   useEffect(() => {
@@ -46,6 +54,8 @@ const GigsForm = () => {
     switch (type) {
       case 'parcels':
         return <CreateParcelForm user={currentUser} category={selectedCategory} />
+      case 'sales-marketing':
+        return <CreateSalesGig user={currentUser} category={selectedCategory} notificationArea={areaNotification} />
       default:
         return <CreatGigForm user={currentUser} category={selectedCategory} notificationArea={areaNotification} />
     }
@@ -68,6 +78,7 @@ const GigsForm = () => {
               return (
                 <option key={v.slug} value={v.slug}>
                   {v.name}
+                  {console.log(v.name)}
                 </option>
               )
             })}
@@ -78,4 +89,7 @@ const GigsForm = () => {
   )
 }
 
+GigsForm.propTypes = {
+  handleSelectCategory: PropTypes.func
+}
 export default GigsForm

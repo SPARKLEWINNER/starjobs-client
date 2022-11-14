@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import * as Yup from 'yup'
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {useFormik, Form, FormikProvider} from 'formik'
 // material
 import {Stack, TextField, FormControlLabel, Typography, Checkbox, Box} from '@mui/material'

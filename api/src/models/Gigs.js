@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
+const timezone = moment.tz(Date.now(), "Asia/Manila");
+
+
 const { Schema, Types } = mongoose;
 const collectionName = 'gigs';
 const userSchema = new Schema(
@@ -36,7 +40,10 @@ const gigsData = {
         default: false
     },
     notes: String,
-    dateCreated: Date,
+    dateCreated: {
+        type: Date,
+        timezone: timezone,
+    },
     user: [userSchema],
     status: {
         type: String,

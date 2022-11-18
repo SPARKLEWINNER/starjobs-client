@@ -87,6 +87,7 @@ var controllers = {
     },
     sign_in: async function (req, res) {
         const { email, password } = req.body;
+
         if (!email || !password) {
             res.status(400).json({ success: false, msg: `Missing email or password field!` });
             return;
@@ -141,6 +142,81 @@ var controllers = {
             res.status(400).json({ success: false, msg: err });
         }
     },
+    social_sign_in: async function (req, res, next) {
+        const { email, name, social_id, social_type } = req.body;
+
+        if (!email || !social_type) {
+            res.status(400).json({ success: false, msg: `Missing email!` });
+            return;
+        }
+
+        const checkAccountExists = await User.find({
+            email: email
+        })
+            .lean()
+            .exec();
+
+            // register the account
+        if (checkAccountExists.length == 0) {
+            let user_data = {
+                email,
+                name,
+                verificationCode: null,
+                dateCreated: new Date()
+            };
+
+            if (social_type == 'google') {
+                user_data['googleId'] = social_id;
+                user_data['googleSignIn'] = true;
+            }
+
+            if (social_type == 'facebook') {
+                user_data['facebookId'] = social_id;
+                user_data['facebookSignIn'] = true;
+            }
+
+            const new_user = new User(user_data);
+            let result = await User.create(new_user);
+            if (!result) {
+                res.status(400).json({
+                    success: false,
+                    msg: 'Unable to sign up'
+                });
+            }
+
+            let { accessToken: token, refreshToken } = requestToken.create_token(result._doc._id);
+
+            return res.json({ ...result._doc, token, refreshToken, newAccount: true });
+        }
+
+        try {
+            let { accessToken: token, refreshToken } = requestToken.create_token(checkAccountExists[0]._id);
+
+            res.cookie('jwt', token, { expire: new Date() + 9999 });
+
+            if(checkAccountExists[0].isActive) {
+                return res.json({
+                    token,
+                    refreshToken,
+                    onboardAccount: true,
+                    ...checkAccountExists[0]
+                });
+            }
+            return res.json({
+                token,
+                refreshToken,
+                ...checkAccountExists[0]
+            });
+        } catch (err) {
+            console.log(err);
+            await logger.logError(err, 'Auth.social_sign_in', null, null, 'POST');
+
+            res.status(400).json({ success: false, msg: err });
+        } finally {
+            next();
+        }
+    },
+
     sign_up: async function (req, res) {
         const { email, password, accountType, name, phone } = req.body;
 

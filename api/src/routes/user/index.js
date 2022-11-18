@@ -12,4 +12,7 @@ module.exports = function (app) {
     app.route(`${default_uri}/search`).get(auth.require_admin_access, user.get_search_users);
     app.route(`${default_uri}/export`).get(auth.require_admin_access, user.get_user_exports);
     app.route(`${default_uri}/:id/:type`).get(auth.require_admin_access, user.get_users_specific);
+
+    app.route(`${default_uri}/update/account`).patch(auth.require_sign_in, user.patch_user);
+
 };

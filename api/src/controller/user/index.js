@@ -261,9 +261,49 @@ var controllers = {
             console.error(error);
             await logger.logError(error, 'USER.patch_user_token', null, id, 'GET');
             return res.status(502).json({ success: false, msg: 'Unable to patch new device token' });
-        } 
+        }
 
         return res.status(200).json(update_user);
+    },
+
+    patch_user: async function (req, res, next) {
+        let token = req.headers['authorization'];
+        if (!token || typeof token === undefined)
+            return res.status(401).json({ success: false, is_authorized: false, msg: 'Not authorized' });
+
+        const id = jwt_decode(token)['id'];
+        let user = await User.find({ _id: mongoose.Types.ObjectId(id) })
+            .lean()
+            .exec();
+
+        if (!user) {
+            return res.status(502).json({ success: false, msg: 'Unable to update device token' });
+        }
+        try {
+            update_user = await User.findByIdAndUpdate(
+                { _id: mongoose.Types.ObjectId(id) },
+                {
+                    accountType: req.body.accountType,
+                    phone: req.body.phone,
+                    isVerified: true
+                }
+            )
+                .lean()
+                .exec();
+
+            if (update_user) {
+                user = await User.find({ _id: mongoose.Types.ObjectId(id) })
+                    .lean()
+                    .exec();
+            }
+            res.status(200).json({ ...user });
+        } catch (error) {
+            console.error(error);
+            await logger.logError(error, 'USER.patch_user', null, id, 'GET');
+            res.status(502).json({ success: false, msg: 'Unable to patch new device token' });
+        } finally {
+            next();
+        }
     }
 };
 

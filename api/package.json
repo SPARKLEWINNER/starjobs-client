@@ -74,7 +74,6 @@
     },
     "devDependencies": {
         "concurrently": "^6.2.0",
-        "nodemon": "^2.0.12",
-        "serverless-plugin-warmup": "^6.0.0"
+        "nodemon": "^2.0.12"
     }
 }

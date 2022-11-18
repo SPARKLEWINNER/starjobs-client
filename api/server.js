@@ -5,17 +5,13 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const Pusher = require('pusher');
-const PushNotifications = require('@pusher/push-notifications-server');
 const routes = require('./src/routes');
 
 const swaggerUi = require('swagger-ui-express');
-const passport = require('passport');
 const port = process.env.PORT || 3001;
 const app = express();
 const useragent = require('express-useragent');
 const fixieRequest = request.defaults({ proxy: process.env.FIXIE_URL });
-
-const fetch = require('axios');
 
 swaggerDocument = require('./swagger.json');
 require('dotenv').config();
@@ -59,32 +55,6 @@ const pusher = new Pusher({
 
 global.pusher = pusher;
 
-const beamsClient = new PushNotifications({
-    instanceId: 'db50def2-7957-4a3d-80f2-6d78d1d4c322',
-    secretKey: '3C8C322BACC994268BCE083BD81B30C0EFBB46CC8AA8FD32DAE5CFD09A8E2669'
-});
-
-global.beamsClient = beamsClient;
-
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
-
-// setInterval(() => {
-//     beamsClient
-//         .publishToInterests(['hello'], {
-//             web: {
-//                 notification: {
-//                     title: 'Hello',
-//                     body: 'Hello, world!',
-//                     deep_link: 'https://www.pusher.com'
-//                 }
-//             }
-//         })
-//         .then((publishResponse) => {
-//             console.log('Just published:', publishResponse.publishId);
-//         })
-//         .catch((error) => {
-//             console.log('Error:', error);
-//         });
-// }, 8000);

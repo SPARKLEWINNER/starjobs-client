@@ -4,11 +4,7 @@ const collectionName = 'users';
 const crypto = require('crypto');
 const uuid = require('uuid').v1;
 const data = {
-    googleId: {
-        type: String,
-        trim: true,
-        default: null
-    },
+
     name: {
         type: String,
         trim: true,
@@ -61,7 +57,25 @@ const data = {
         required: true,
         default: false
     },
-    dateCreated: Date
+    dateCreated: Date,
+    googleSignIn: {
+        type: Boolean,
+        default: false,
+    },
+    facebookSignIn: {
+        type: Boolean,
+        default: false,
+    },
+    googleId: {
+        type: String,
+        trim: true,
+        default: null
+    },
+    facebookId: {
+        type: String,
+        trim: true,
+        default: null
+    },
 };
 
 const userSchema = new Schema(data, {timestamps: true});

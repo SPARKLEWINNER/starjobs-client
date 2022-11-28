@@ -384,7 +384,6 @@ var controllers = {
 
         let withTodayRecord = false;
         await isContractExists[0]?.records?.filter((record) => {
-            console.log(new Date(record.date).getDate() === now.getFullYear());
             if (
                 new Date(record.date).getFullYear() === now.getFullYear() &&
                 new Date(record.date).getMonth() === now.getMonth() &&

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken'); // to generate signed token
 const User = require('./../../models/User');
 const Client = require('./../../models/Client');
 const Account = require('./../../models/Account');
+const Guests = require('./../../models/Guests');
 const mongoose = require('mongoose');
 
 const mailer = require('../../services/mailer');
@@ -156,7 +157,7 @@ var controllers = {
             .lean()
             .exec();
 
-            // register the account
+        // register the account
         if (checkAccountExists.length == 0) {
             let user_data = {
                 email,
@@ -194,7 +195,7 @@ var controllers = {
 
             res.cookie('jwt', token, { expire: new Date() + 9999 });
 
-            if(checkAccountExists[0].isActive) {
+            if (checkAccountExists[0].isActive) {
                 return res.json({
                     token,
                     refreshToken,
@@ -422,6 +423,35 @@ var controllers = {
             return res.json({ success: true, msg: 'Change password success.' });
         } catch (err) {
             console.log(err);
+        }
+    },
+    survey_guest: async function (req, res) {
+        const { name, phone } = req.body;
+
+        if (!phone) {
+            res.status(400).json({ success: false, msg: `Missing phone number!` });
+            return;
+        }
+
+        try {
+            const new_guest = new Guests({
+                name: name ?? 'anonymous',
+                phone
+            });
+
+            let result = await Guests.create(new_guest);
+            if (!result) {
+                res.status(400).json({
+                    success: false,
+                    msg: 'Unable to record guest accessed'
+                });
+            }
+
+            res.status(200).json({ ...result._doc });
+        } catch (err) {
+            console.log(err);
+            await logger.logError(err, 'Auth.survey_guest', null, null, 'POST');
+            res.status(400).json({ success: false, msg: err });
         }
     }
 };

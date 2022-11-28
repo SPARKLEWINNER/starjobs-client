@@ -11,4 +11,5 @@ module.exports = function (app) {
     app.route(`${default_uri}/forgot-password`).post(auth.forgot_password);
     app.route(`${default_uri}/set-password`).post(auth.reset_password);
     app.route(`${default_uri}/social`).post(auth.social_sign_in);
+    app.route(`${default_uri}/guest/record`).post(auth.survey_guest);
 };

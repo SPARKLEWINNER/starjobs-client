@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const moment = require('moment');
 
 const Gigs = require('./../../models/Gigs');
@@ -5,7 +7,7 @@ const Client = require('./../../models/Client');
 const Account = require('./../../models/Account');
 const History = require('./../../models/History');
 const User = require('./../../models/User');
-const mongoose = require('mongoose');
+const Contracts = require('../../models/Contracts')
 
 const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
@@ -211,6 +213,46 @@ var controllers = {
                 .exec();
 
             if (user) {
+
+                const contracts = await Contracts.aggregate([
+                    {
+                        $lookup: {
+                            from: 'gigs',
+                            localField: 'gid',
+                            foreignField: '_id',
+                            as: 'gigs'
+                        }
+                    },
+                    { "$unwind": "$gigs" },
+                    {
+                        $project: {
+                            _id: "$gigs._id",
+                            records: true,
+                            category: true,
+                            commissionRate: true,
+                            gigFeeType: true,
+                            from: "$gigs.from",
+                            time: "$gigs.time",
+                            shift: "$gigs.shift",
+                            hours: "$gigs.hours",
+                            breakHr: "$gigs.breakHr",
+                            dateCreated: "$gigs.dateCreated",
+                            position: "$gigs.position",
+                            notes: "$gigs.notes",
+                            contactNumber: "$gigs.contactNumber",
+                            location: "$gigs.location",
+                            isApprove: "$gigs.isApprove",
+                            status: "$gigs.status",
+                            date: "$gigs.date",
+                            applicants: "$gigs.applicants",
+                            updatedAt: true,
+                            createdAt: true,
+                            user: "$gigs.user",
+                        }
+                    }
+                ]).exec();
+
+
                 gigs = await Gigs.aggregate([
                     {
                         $lookup: {
@@ -263,6 +305,9 @@ var controllers = {
                             dateCreated: 1,
                             auid: 1,
                             history: 1,
+                            commissionRate: 1,
+                            gigFeeType: 1,
+                            applicants: 1,
                             maximumApplicants: '$extended.maximumApplicants',
                             numberofApplicants: {
                                 $filter: {
@@ -288,7 +333,7 @@ var controllers = {
                 gigs = await Promise.all(
                     gigs &&
                         gigs
-                            .filter((obj) => !moment(new Date(obj.time)).isBefore(moment(), 'day'))
+                            .filter((obj) => !moment(new Date(obj.time)).isBefore(moment(), 'day') && obj.status !== 'Contracts')
                             .map(async (obj) => {
                                 if (!obj.isExtended) {
                                     const account = await Account.find({ uuid: mongoose.Types.ObjectId(obj.auid) })
@@ -323,11 +368,15 @@ var controllers = {
                                 }
                             })
                 );
-
+                        
+                let gigData = gigs
+                if (contracts.length > 0) {
+                    gigData = [contracts[0], ...gigs]
+                }
                 client = {
                     details: user ? user[0] : {},
-                    gigs: gigs,
-                    gigCategory: [...new Set(gigs.map((item) => item.category))]
+                    gigs: gigData,
+                    gigCategory: [...new Set(gigData.map((item) => item.category))]
                 };
             }
         } catch (error) {

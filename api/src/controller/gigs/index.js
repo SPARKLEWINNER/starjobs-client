@@ -1,6 +1,8 @@
+const { BUCKET_URL } = process.env;
+const uuid = require('uuid').v1;
+
 const Moment = require('moment');
 const MomentRange = require('moment-range');
-
 const moment = MomentRange.extendMoment(Moment);
 
 const mongoose = require('mongoose');
@@ -10,25 +12,19 @@ const User = require('./../../models/User');
 const Account = require('./../../models/Account');
 const History = require('./../../models/History');
 const Gigs = require('./../../models/Gigs');
-const Client = require('./../../models/Client');
-const Extends = require('./../../models/Extends');
-const Jobs = require('./../../models/Jobs');
+const Contracts = require('../../models/Contracts');
 
 const { getSpecificData } = require('../../services/validateExisting');
 const logger = require('../../services/logger');
-const { timeCal } = require('../../services/timeCalculator');
-const { BUCKET_URL } = process.env;
-
-const notification = require('../../services/notification');
+const services = require('./services');
 
 var controllers = {
     // list of gigs
     get_gigs: async function (req, res) {
         let gigs = [];
         try {
-
             let initial_find = await Gigs.find({
-                status: ['Waiting', 'Applying']
+                status: ['Waiting', 'Applying', 'Contracts']
             })
                 .lean()
                 .exec();
@@ -86,6 +82,62 @@ var controllers = {
 
         return res.status(200).json(gigs.pop());
     },
+    // specific contract
+    get_contract: async function (req, res) {
+        const { id } = req.params;
+        let gigs;
+
+        try {
+            gigs = await Contracts.aggregate([
+                {
+                    $match: {
+                        _id: mongoose.Types.ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'gigs',
+                        localField: 'gid',
+                        foreignField: '_id',
+                        as: 'gigs'
+                    }
+                },
+                { $unwind: '$gigs' },
+                {
+                    $project: {
+                        _id: true,
+                        records: true,
+                        category: true,
+                        commissionRate: true,
+                        gigFeeType: true,
+                        from: '$gigs.from',
+                        time: '$gigs.time',
+                        shift: '$gigs.shift',
+                        hours: '$gigs.hours',
+                        breakHr: '$gigs.breakHr',
+                        dateCreated: '$gigs.dateCreated',
+                        position: '$gigs.position',
+                        notes: '$gigs.notes',
+                        contactNumber: '$gigs.contactNumber',
+                        location: '$gigs.location',
+                        isApprove: '$gigs.isApprove',
+                        status: '$gigs.status',
+                        date: '$gigs.date',
+                        applicants: '$gigs.applicants',
+                        updatedAt: true,
+                        createdAt: true,
+                        user: '$gigs.user'
+                    }
+                }
+            ]).exec();
+        } catch (error) {
+            console.error(error);
+
+            await logger.logError(error, 'Gigs.get_contract', null, id, 'GET');
+            return res.status(502).json({ success: false, msg: 'User not found' });
+        }
+        return res.status(200).json(gigs.pop());
+    },
     // list of gigs by category
     get_gigs_categorized: async function (req, res) {
         const { category } = req.params;
@@ -93,7 +145,7 @@ var controllers = {
         try {
             let initial_find = await Gigs.find({
                 category: category,
-                status: ['Waiting', 'Applying']
+                status: ['Waiting', 'Applying', 'Contracts']
             })
                 .lean()
                 .exec();
@@ -150,6 +202,51 @@ var controllers = {
                     })
                     .exec();
 
+                const contracts = await Contracts.aggregate([
+                    {
+                        $match: {
+                            uid: mongoose.Types.ObjectId(id)
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'gigs',
+                            localField: 'gid',
+                            foreignField: '_id',
+                            as: 'gigs'
+                        }
+                    },
+                    { $unwind: '$gigs' },
+                    {
+                        $project: {
+                            _id: true,
+                            records: true,
+                            category: true,
+                            commissionRate: true,
+                            gigFeeType: true,
+                            from: '$gigs.from',
+                            time: '$gigs.time',
+                            shift: '$gigs.shift',
+                            hours: '$gigs.hours',
+                            breakHr: '$gigs.breakHr',
+                            dateCreated: '$gigs.dateCreated',
+                            position: '$gigs.position',
+                            notes: '$gigs.notes',
+                            contactNumber: '$gigs.contactNumber',
+                            location: '$gigs.location',
+                            isApprove: '$gigs.isApprove',
+                            status: '$gigs.status',
+                            date: '$gigs.date',
+                            applicants: '$gigs.applicants',
+                            updatedAt: true,
+                            createdAt: true,
+                            user: '$gigs.user'
+                        }
+                    }
+                ])
+                    .sort({ createdAt: -1 })
+                    .exec();
+
                 const reports = await Gigs.aggregate([
                     {
                         $lookup: {
@@ -166,25 +263,31 @@ var controllers = {
                     .sort({ createdAt: -1 })
                     .exec();
 
+                let gigsData = reports.filter((obj) => {
+                    const diff = moment(obj.from).diff(now);
+
+                    //express as a duration
+                    const diffDuration = moment.duration(diff);
+
+                    const previousDays = moment().subtract(3, 'days');
+                    const aheadDays = moment().add(3, 'days');
+                    const range = moment().range(previousDays, aheadDays);
+
+                    // between 0 days and 2 days before current day
+                    if (range.contains(moment(obj.date))) {
+                        return obj;
+                    }
+                    return;
+                });
+
+                if (contracts.length > 0) {
+                    gigsData = [...gigsData, ...contracts];
+                }
+
                 details = {
                     ...user,
                     account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
-                    gigs: reports.filter((obj) => {
-                        const diff = moment(obj.from).diff(now);
-
-                        //express as a duration
-                        const diffDuration = moment.duration(diff);
-
-                        const previousDays = moment().subtract(3, 'days');
-                        const aheadDays = moment().add(3, 'days');
-                        const range = moment().range(previousDays, aheadDays);
-
-                        // between 0 days and 2 days before current day
-                        if (range.contains(moment(obj.date))) {
-                            return obj;
-                        }
-                        return;
-                    }),
+                    gigs: gigsData,
                     reports: {
                         numberOfApplied: reports.filter((obj) => obj.status === 'Applying').length,
                         numberOfCompleted: reports.filter((obj) => obj.status === 'Confirm-End-Shift').length
@@ -201,114 +304,8 @@ var controllers = {
         return res.status(200).json(details);
     },
     // create gigs
-    post_gig: async function (req, res) {
-        const { id } = req.params;
-        const {
-            time,
-            shift,
-            hours,
-            fee,
-            date,
-            category,
-            position,
-            breakHr,
-            from,
-            fees,
-            locationRate,
-            location,
-            contactNumber,
-            notes,
-            areas,
-            isRepeatable,
-            repeatTimes,
-            repeatEvery
-        } = req.body;
-        const now = new Date();
-
-        const isUserExists = await User.find({ _id: mongoose.Types.ObjectId(id), accountType: 1 })
-            .lean()
-            .exec();
-
-        if (!isUserExists || isUserExists.length === 0) {
-            return res.status(502).json({ success: false, msg: 'User not found' });
-        }
-
-        const client = await Client.find({ uid: mongoose.Types.ObjectId(id) })
-            .lean()
-            .exec();
-
-        if (!client) {
-            return res.status(502).json({ success: false, msg: 'User not found' });
-        }
-
-        const gigsObj = new Gigs({
-            user: [
-                {
-                    _id: mongoose.Types.ObjectId(client[0]._id),
-                    location: client[0].location,
-                    companyName: client[0].companyName,
-                    website: client[0].website,
-                    thumbnail: BUCKET_URL + client[0].photo
-                }
-            ],
-            time,
-            from,
-            shift,
-            hours,
-            fee,
-            date,
-            category,
-            position,
-            breakHr,
-            fees: {
-                ...fees,
-                proposedWorkTime: 0,
-                proposedRate: 0
-            },
-            location,
-            contactNumber,
-            notes,
-            locationRate: locationRate,
-            uid: mongoose.Types.ObjectId(id),
-            dateCreated: now.toISOString()
-        });
-
-        try {
-            const postedGig = await Gigs.create(gigsObj);
-
-
-            global.pusher.trigger('notifications', 'new_notification', postedGig)
-
-
-            if (areas && areas.length > 0) {
-                if (areas.length > 1) {
-                    await areas.map(async (item) => {
-                        await notification.globalNotification(postedGig, item);
-                    });
-                } else {
-                    await notification.globalNotification(postedGig, areas[0]);
-                }
-            }
-
-            if (isRepeatable) {
-                const jobsObj = new Jobs({
-                    repeatTimes: repeatTimes,
-                    repeatEvery: repeatEvery, 
-                    gid: mongoose.Types.ObjectId(postedGig._id),
-                    uid: mongoose.Types.ObjectId(id),
-                    dateCreated: now.toISOString()
-                });
-
-                await Jobs.create(jobsObj);
-            }
-
-        } catch (error) {
-            console.error(error);
-            await logger.logError(error, 'Gigs.post_gig', gigsObj, client[0]._id, 'POST');
-            return res.status(502).json({ success: false, msg: 'User not found' });
-        }
-
-        return res.status(201).json(gigsObj);
+    post_gig: async function (req, res, next) {
+        return await services.default(req, res, next);
     },
     // edit gigs
     patch_gig_details: async function (req, res) {
@@ -342,6 +339,7 @@ var controllers = {
             return res.status(502).json({ success: false, msg: 'Unable to edit gig details' });
         }
     },
+
     patch_remove_gig: async function (req, res) {
         const { id, uid: owner_id } = req.params;
         const { status } = req.body;
@@ -366,6 +364,89 @@ var controllers = {
             return res.status(502).json({ success: false, msg: 'Unable to remove gig' });
         }
     },
+
+    patch_record_sale: async function (req, res) {
+        const { id } = req.params;
+        const { uid: jobster_id, saleCount, isConfirmed } = req.body;
+        const now = new Date();
+
+        await getSpecificData({ uuid: mongoose.Types.ObjectId(id) }, Account, 'Account', id);
+
+        const isContractExists = await Contracts.find({
+            _id: mongoose.Types.ObjectId(id),
+            uid: mongoose.Types.ObjectId(jobster_id)
+        })
+            .lean()
+            .exec();
+        if (!isContractExists || isContractExists.length <= 0) {
+            return res.status(502).json({ success: false, msg: 'Not Contractor' });
+        }
+
+        let withTodayRecord = false;
+        await isContractExists[0]?.records?.filter((record) => {
+            console.log(new Date(record.date).getDate() === now.getFullYear());
+            if (
+                new Date(record.date).getFullYear() === now.getFullYear() &&
+                new Date(record.date).getMonth() === now.getMonth() &&
+                new Date(record.date).getDate() === now.getDate()
+            ) {
+                return (withTodayRecord = true);
+            }
+        });
+
+        if (withTodayRecord) {
+            return res.status(500).json({ success: false, msg: 'You already have an existing today record' });
+        }
+
+        try {
+            let newRecord = {
+                _id: uuid(),
+                date: now,
+                sale: saleCount,
+                isConfirmed: isConfirmed
+            };
+
+            await Contracts.findOneAndUpdate(
+                { _id: mongoose.Types.ObjectId(id) },
+                {
+                    $push: { records: newRecord }
+                }
+            );
+            return res.status(200).json(newRecord);
+        } catch (error) {
+            console.error(error);
+            await logger.logError(error, 'GIGS.patch_remove_gig', null, null, 'PATCH');
+            return res.status(502).json({ success: false, msg: 'Unable to remove gig' });
+        }
+    },
+
+    patch_record_confirm_sale: async function (req, res) {
+        const { id } = req.params;
+        const { saleCount, isConfirmed, recordId } = req.body;
+
+
+        try {
+            const newRecord = await Contracts.findOneAndUpdate(
+                {
+                    _id: mongoose.Types.ObjectId(id),
+                    'records._id': recordId
+                },
+                {
+                    $set: {
+                        'records.$.sale': saleCount,
+                        'records.$.isConfirmed': isConfirmed
+                    }
+                }
+            );
+
+            return res.status(200).json(newRecord[0]);
+        } catch (error) {
+            console.error(error);
+            await logger.logError(error, 'GIGS.patch_remove_gig', null, null, 'PATCH');
+            return res.status(502).json({ success: false, msg: 'Unable to remove gig' });
+        }
+    },
+
     // ======================== ADMIN ======================
     get_admin_gigs: async function (req, res) {
         let query = Gigs.find({}, null, { sort: { dateCreated: -1 } });
@@ -551,7 +632,7 @@ var controllers = {
             await logger.logError(error, 'GIGS.patch_archived_gig', null, null, 'GET');
             return res.status(502).json({ success: false, msg: 'Unable to get lists' });
         }
-    },
+    }
 };
 
 module.exports = controllers;

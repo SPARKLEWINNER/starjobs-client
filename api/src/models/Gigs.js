@@ -63,7 +63,8 @@ const gigsData = {
             'Complete',
             'No-Appearance',
             'Cancelled',
-            'Archived'
+            'Archived',
+            'Contracts'
         ]
     },
     statusMessage: {
@@ -72,7 +73,7 @@ const gigsData = {
     locationRate: {
         default: 'NCR',
         type: String,
-        enum: ['NCR', 'Provincial']
+        enum: ['NCR', 'Provincial','Not applicable']
     },
     late: {
         type: String,
@@ -90,7 +91,10 @@ const gigsData = {
         jobsterTotal: String,
         proposedRate: String,
         proposedWorkTime: String,
-    }
+    },
+    gigFeeType: String,
+    commissionRate: String,
+    applicants: [],
 };
 
 const gigsSchema = new Schema(gigsData, { timestamps: true });

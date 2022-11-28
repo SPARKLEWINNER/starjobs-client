@@ -20,18 +20,19 @@ async function individual_gig(id, details) {
 
     if (details) {
         gig = await Promise.all(
-            history && history.map(async (h) => {
-                let users = await Account.find({ uuid: mongoose.Types.ObjectId(h.uid) })
-                    .lean()
-                    .exec();
-                if (users.length > 0) {
-                    users[0].photo = BUCKET_URL + users[0].photo;
-                    return {
-                        ...h,
-                        ...users[0]
-                    };
-                }
-            })
+            history &&
+                history.map(async (h) => {
+                    let users = await Account.find({ uuid: mongoose.Types.ObjectId(h.uid) })
+                        .lean()
+                        .exec();
+                    if (users.length > 0) {
+                        users[0].photo = BUCKET_URL + users[0].photo;
+                        return {
+                            ...h,
+                            ...users[0]
+                        };
+                    }
+                })
         );
     }
 
@@ -98,7 +99,7 @@ var controllers = {
 
             details = {
                 ...gigs,
-                applicants: details.gig
+                applicants: gigs.status != 'Contracts' ? details.gig : gigs.applicants
             };
         } catch (error) {
             console.error(error);

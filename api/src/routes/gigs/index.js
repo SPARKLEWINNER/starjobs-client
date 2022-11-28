@@ -16,6 +16,7 @@ const createAccountLimiter = rateLimit({
 module.exports = function (app) {
     app.route(`${default_uri}`).get(auth.require_sign_in, gigs.get_gigs);
     app.route(`${default_uri}/:id`).get(auth.require_sign_in, gigs.get_gig);
+    app.route(`${default_uri}/contract/:id`).get(auth.require_sign_in, gigs.get_contract);
     app.route(`${default_uri}/list/:category`).get(auth.require_sign_in, gigs.get_gigs_categorized);
     app.route(`${default_uri}/history/:id`).get(auth.require_sign_in, gigs.get_gigs_history);
     app.route(`${default_uri}/:id`).post(auth.require_sign_in, gigs.post_gig);
@@ -23,6 +24,8 @@ module.exports = function (app) {
     app.route(`${default_uri}/apply/:id`).patch(createAccountLimiter, auth.require_sign_in, apply.gig_apply);
     app.route(`${default_uri}/edit/:id/:uid`).patch(auth.require_sign_in, gigs.patch_gig_details);
     app.route(`${default_uri}/remove/:id/:uid`).patch(auth.require_sign_in, gigs.patch_remove_gig);
+    app.route(`${default_uri}/sales/record/:id`).patch(auth.require_sign_in, gigs.patch_record_sale);
+    app.route(`${default_uri}/sales/record/confirm/:id`).patch(auth.require_sign_in, gigs.patch_record_confirm_sale);
 
     // admin
     app.route(`${default_uri}/admin/list`).get(auth.require_admin_access, gigs.get_admin_gigs);

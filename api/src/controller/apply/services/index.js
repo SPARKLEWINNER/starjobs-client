@@ -244,7 +244,6 @@ var services = {
         const { id } = req.params;
 
         const applicant = await getSpecificData({ uuid: Types.ObjectId(uid) }, Account, 'Account', uid);
-        console.log('logs sales', applicant);
 
         const now = new Date();
         let updatedGig;

@@ -100,7 +100,7 @@ var controllers = {
         await Users.aggregate([
           {
             $lookup: {
-              from: 'clients',
+              from: 'users-clients',
               localField: '_id',
               foreignField: 'uid',
               as: 'profile'
@@ -117,7 +117,7 @@ var controllers = {
         Users.aggregate([
           {
             $lookup: {
-              from: 'account',
+              from: 'users-freelancers',
               localField: '_id',
               foreignField: 'uuid',
               as: 'profile'

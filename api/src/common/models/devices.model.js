@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 
-const collectionName = 'devices'
+const collectionName = 'app-devices'
 
-const reportsSchema = new Schema(
+const appDevicesSchema = new Schema(
   {
     browser: String,
     source: String,
@@ -15,4 +15,4 @@ const reportsSchema = new Schema(
   },
   {timestamps: true}
 )
-module.exports = mongoose.model('Devices', reportsSchema, collectionName)
+module.exports = mongoose.model('AppDevices', appDevicesSchema, collectionName)

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
-const collectionName = 'gig-extends'
+const collectionName = 'gigs-extends'
 
 const schema = new Schema(
   {

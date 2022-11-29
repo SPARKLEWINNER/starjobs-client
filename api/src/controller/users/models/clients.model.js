@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
-const collectionName = 'clients'
+const collectionName = 'users-clients'
 const clientSchema = new Schema(
   {
     uid: {type: Types.ObjectId, ref: 'Users'},

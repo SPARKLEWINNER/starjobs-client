@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const collectionName = 'user-guests'
+const collectionName = 'users-guests'
 
 const guestSchema = new Schema(
   {

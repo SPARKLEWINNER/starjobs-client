@@ -11,7 +11,7 @@ var controllers = {
       result = await Gigs.aggregate([
         {
           $lookup: {
-            from: 'history',
+            from: 'gigs-histories',
             localField: '_id',
             foreignField: 'gid',
             as: 'details'

@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
-const accountHistorySchema = new Schema(
+
+const collectionName = 'users-history'
+
+const usersHistorySchema = new Schema(
   {
     uid: {type: Types.ObjectId, ref: 'User'},
     details: Object,
@@ -13,4 +16,4 @@ const accountHistorySchema = new Schema(
   }
 )
 
-module.exports = mongoose.model('AccountHistory', accountHistorySchema)
+module.exports = mongoose.model('UserHistory', usersHistorySchema, collectionName)

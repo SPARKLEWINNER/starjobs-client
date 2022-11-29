@@ -9,7 +9,7 @@ var controller = {
       {
         $lookup: {
           localField: '_id',
-          from: 'account',
+          from: 'users-freelancers',
           foreignField: 'uuid',
           as: 'account'
         }

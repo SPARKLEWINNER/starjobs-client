@@ -50,7 +50,7 @@ var controllers = {
       gigs = await Gigs.aggregate([
         {
           $lookup: {
-            from: 'account',
+            from: 'users-freelancers',
             localField: 'auid',
             foreignField: 'uuid',
             as: 'account'
@@ -58,7 +58,7 @@ var controllers = {
         },
         {
           $lookup: {
-            from: 'history',
+            from: 'gigs-histories',
             localField: '_id',
             foreignField: 'gid',
             as: 'history'
@@ -186,7 +186,7 @@ var controllers = {
         const user = await Users.aggregate([
           {
             $lookup: {
-              from: 'account',
+              from: 'users-freelancers',
               localField: '_id',
               foreignField: 'uuid',
               as: 'account'
@@ -246,7 +246,7 @@ var controllers = {
         const reports = await Gigs.aggregate([
           {
             $lookup: {
-              from: 'history',
+              from: 'gigs-histories',
               localField: '_id',
               foreignField: 'gid',
               as: 'history'

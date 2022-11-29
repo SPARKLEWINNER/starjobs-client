@@ -173,7 +173,7 @@ var controllers = {
       user = await Users.find({_id: mongoose.Types.ObjectId(Freelancers.uuid)})
         .lean()
         .exec()
-      await logger.logAccountHistory(user[0].accountType, details, id, oldDetails[0])
+      await logger.logAccountHistory(user[0]?.accountType, details, id, oldDetails[0])
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Freelancers.patch_account_details', null, id, 'PATCH')

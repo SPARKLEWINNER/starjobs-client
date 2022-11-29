@@ -36,7 +36,7 @@ const services = {
     } = req.body
     const now = new Date()
 
-    let locationRate = req.body.locatationRate ?? 'Not applicable'
+    let locationRate = req.body.locationRate || 'Not applicable'
 
     const isUserExists = await Users.find({_id: mongoose.Types.ObjectId(id), accountType: 1})
       .lean()
@@ -88,7 +88,11 @@ const services = {
       commissionRate: commissionFee
     }
 
-    if (gigFeeType !== 'Daily') {
+    if (!gigFeeType || gigFeeType == 'undefined') {
+      gigData['gigFeeType'] = 'Daily'
+    }
+
+    if (gigFeeType && gigFeeType !== 'Daily') {
       gigData['status'] = 'Contracts'
     }
 
@@ -129,7 +133,7 @@ const services = {
   },
   contract: async function (req, res) {
     const {id} = req.params
-    const {
+    let {
       time,
       shift,
       hours,
@@ -140,7 +144,6 @@ const services = {
       breakHr,
       from,
       fees,
-      locationRate,
       location,
       contactNumber,
       notes,
@@ -152,6 +155,7 @@ const services = {
       commissionFee
     } = req.body
     const now = new Date()
+    let locationRate = req.body.locationRate || 'Not applicable'
 
     const isUserExists = await Users.find({_id: mongoose.Types.ObjectId(id), accountType: 1})
       .lean()

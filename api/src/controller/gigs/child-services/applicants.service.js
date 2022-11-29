@@ -143,7 +143,7 @@ var controllers = {
       freelancers = await Users.aggregate([
         {
           $lookup: {
-            from: 'account',
+            from: 'users-freelancers',
             localField: '_id',
             foreignField: 'uuid',
             as: 'details'

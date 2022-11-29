@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
-const collectionName = 'account'
+const collectionName = 'users-freelancers'
 
-const accountSchema = new Schema(
+const freelancerSchema = new Schema(
   {
     uuid: {type: Types.ObjectId, ref: 'User'},
     firstName: {
@@ -189,4 +189,4 @@ const accountSchema = new Schema(
   }
 )
 
-module.exports = mongoose.model('Account', accountSchema, collectionName)
+module.exports = mongoose.model('Freelancers', freelancerSchema, collectionName)

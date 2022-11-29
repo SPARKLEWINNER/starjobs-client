@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
-const collectionName = 'gig-fee-history'
+const collectionName = 'gigs-fee-history'
 const userSchema = new Schema(
   {
     _id: {type: Types.ObjectId, ref: 'Client'},

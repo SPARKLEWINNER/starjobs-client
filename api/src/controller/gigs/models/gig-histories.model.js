@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
 
-const collectionName = 'gig-histories'
+const collectionName = 'gigs-histories'
 
 const historySchema = new Schema(
   {

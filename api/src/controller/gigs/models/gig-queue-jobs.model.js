@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
-const collectionName = 'gig-queue-jobs'
+const collectionName = 'gigs-queue-jobs'
 
 const jobsSchema = new Schema(
   {

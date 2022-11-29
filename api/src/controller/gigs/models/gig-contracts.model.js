@@ -3,7 +3,7 @@ const moment = require('moment-timezone')
 const timezone = moment.tz(Date.now(), 'Asia/Manila')
 
 const {Schema, Types} = mongoose
-const collectionName = 'contracts'
+const collectionName = 'gigs-contracts'
 
 const userSchema = new Schema(
   {

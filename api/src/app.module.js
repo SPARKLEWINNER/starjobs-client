@@ -12,7 +12,10 @@ const port = process.env.PORT || 3001
 const app = express()
 const useragent = require('express-useragent')
 
-const MONGO_DATABASE_URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+const MONGO_DATABASE_URL =
+  process.env.ENV != 'production'
+    ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+    : process.env.MONGODB_URI
 
 mongoose
   .connect(MONGO_DATABASE_URL, {

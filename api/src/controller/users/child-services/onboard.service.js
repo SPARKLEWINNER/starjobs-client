@@ -521,6 +521,36 @@ async function photo_client_information(id, data) {
   }
 }
 
+async function documents_client_information(id, data) {
+  let user
+  await getSpecificData({uid: id}, Clients, 'User', id) // validate if data exists
+
+  const details = {
+    documents: data?.documents
+  }
+
+  const oldDetails = await Clients.find({_id: id}).lean().exec()
+
+  try {
+    await Clients.findOneAndUpdate({uid: id}, details, {
+      new: true
+    })
+    user = await Users.find({_id: mongoose.Types.ObjectId(Clients.uid)})
+      .lean()
+      .exec()
+    await logger.logAccountHistory(user[0].accountType, details, id, oldDetails[0])
+  } catch (error) {
+    console.error(error)
+    await logger.logError(error, 'Clients.documents_client_information', null, id, 'PATCH')
+    return false
+  }
+
+  return {
+    ...user[0],
+    photo: Clients.photo
+  }
+}
+
 var controllers = {
   update_jobster_profile: async function (req, res) {
     const {id} = req.params
@@ -596,6 +626,9 @@ var controllers = {
           break
         case 'photo':
           result = await photo_client_information(mongoose.Types.ObjectId(id), req.body)
+          break
+        case 'documents':
+          result = await documents_client_information(mongoose.Types.ObjectId(id), req.body)
           break
         default:
           break

@@ -306,6 +306,39 @@ var controllers = {
     } finally {
       next()
     }
+  },
+
+  patch_read_all_notification: async function (req, res, next) {
+    let token = req.headers['authorization']
+    if (!token || typeof token === 'undefined')
+      return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
+    const id = jwt_decode(token)['id']
+
+    let result
+    try {
+      const userType = await Users.find({_id: mongoose.Types.ObjectId(id)})
+        .lean()
+        .exec()
+      if (userType[0].accountType === 1) {
+        // client
+        result = await History.findByIdAndUpdate({uid: mongoose.Types.ObjectId(id)}, {readAuthor: true}).exec()
+      } else {
+        // jobster
+        result = await History.findByIdAndUpdate({uid: mongoose.Types.ObjectId(id)}, {readUser: true}).exec()
+      }
+
+      if (!result) {
+        return res.status(400).json({success: false, msg: 'Empty notifications'})
+      }
+
+      return res.status(200).json({success: false, data: result})
+    } catch (error) {
+      console.error('error', error)
+      await logger.logError(error, 'Users.patch_read_all_notification', null, id, 'GET')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    } finally {
+      next()
+    }
   }
 }
 

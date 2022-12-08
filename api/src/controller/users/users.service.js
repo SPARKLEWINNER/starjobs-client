@@ -6,6 +6,7 @@ const Users = require('./models/users.model')
 const Freelancers = require('./models/freelancers.model')
 const Clients = require('./models/clients.model')
 const History = require('../gigs/models/gig-histories.model')
+const Notification = require('../notifications/models/notifications.model')
 
 const logger = require('../../common/loggers')
 
@@ -347,6 +348,25 @@ var controllers = {
       if (!result) {
         return res.status(400).json({success: false, msg: 'Empty notifications'})
       }
+
+      await Notification.updateMany({
+        targetUsers: {
+          $in: [mongoose.Types.ObjectId(id)]
+        }
+      }, {
+        $addToSet: {
+          viewedBy: id
+        }
+      }, {
+        multi: true,
+        upsert: true
+      }).exec((err) => {
+        if (err) {
+          return res.status(400).json({
+            error: `Error on updating notification: ${err}`
+          })
+        }
+      })
 
       return res.status(200).json({success: false, data: result})
     } catch (error) {

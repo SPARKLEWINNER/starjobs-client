@@ -321,10 +321,26 @@ var controllers = {
         .exec()
       if (userType[0].accountType === 1) {
         // client
-        result = await History.findByIdAndUpdate({uid: mongoose.Types.ObjectId(id)}, {readAuthor: true}).exec()
+        result = await History.updateMany(
+          {uid: mongoose.Types.ObjectId(id)},
+          {
+            $set: {
+              readAuthor: true
+            }
+          },
+          {multi: true, upsert: true}
+        ).exec()
       } else {
         // jobster
-        result = await History.findByIdAndUpdate({uid: mongoose.Types.ObjectId(id)}, {readUser: true}).exec()
+        result = await History.updateMany(
+          {uid: mongoose.Types.ObjectId(id)},
+          {
+            $set: {
+              readUser: true
+            }
+          },
+          {multi: true, upsert: true}
+        ).exec()
       }
 
       if (!result) {

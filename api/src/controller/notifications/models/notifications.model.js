@@ -1,12 +1,18 @@
 const mongoose = require('mongoose')
+const moment = require('moment-timezone')
+const timezone = moment.tz(Date.now(), 'Asia/Manila')
+
 const {Schema} = mongoose
 const collectionName = 'notifications'
-const data = new Schema({
+
+const notificationSchema = new Schema({
   title: String,
   body: String,
-  dateCreated: Date,
-  //This field contains the list of users who will be able to see the notif
-  targetUsers: {
+  dateCreated: {
+    type: Date,
+    timezone: timezone
+  },
+  targetUsers: {   //This field contains the list of users who will be able to see the notif
     type: [
       {
         type: Schema.Types.ObjectId,
@@ -15,8 +21,7 @@ const data = new Schema({
     ],
     default: []
   },
-  //This contains the users that viewed the notification
-  viewedBy: {
+  viewedBy: { //This contains the users that viewed the notification
     type: [
       {
         type: Schema.Types.ObjectId,
@@ -42,12 +47,10 @@ const data = new Schema({
     default: 'General',
     enum: ['General', 'Selected']
   },
-  //This will contain the stringify JSON data that can be parse on the client side
-  additionalData: {
+  additionalData: { //This will contain the stringify JSON data that can be parse on the client side
     type: String,
     default: ''
   }
-})
+}, {timestamps: true})
 
-const notificationSchema = new Schema(data, {timestamps: true})
 module.exports = mongoose.model('Notification', notificationSchema, collectionName)

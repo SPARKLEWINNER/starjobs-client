@@ -4,6 +4,7 @@ const FreelancersController = require('./child-services/freelancers.service')
 const FCMController = require('./child-services/fcm.service')
 const OnboardController = require('./child-services/onboard.service')
 const UsersController = require('./users.service')
+const UserDevicesController = require('./child-services/users-device.service')
 const UploadController = require('./child-services/upload.service')
 
 const apiVersion = process.env.API_VERSION
@@ -13,6 +14,9 @@ module.exports = function (app) {
   // ==== Users controller ====
   app.route(`${apiPath}${apiVersion}/user`).get(jwt.require_sign_in, UsersController.get_user)
   app.route(`${apiPath}${apiVersion}/user/change/:id`).patch(jwt.require_sign_in, UsersController.patch_change_password)
+
+  app.route(`${apiPath}${apiVersion}/user/devices`).get(jwt.require_sign_in, UserDevicesController.get_user_device)
+  app.route(`${apiPath}${apiVersion}/user/devices`).patch(jwt.require_sign_in, UserDevicesController.patch_device_id)
 
   app.route(`${apiPath}${apiVersion}/user/account`).patch(jwt.require_sign_in, UsersController.patch_user_token)
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const Gigs = require('../models/gigs.model')
+const History = require('../models/gig-histories.model')
 
 const logger = require('../../../common/loggers')
 

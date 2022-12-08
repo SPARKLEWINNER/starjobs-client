@@ -5,6 +5,7 @@ const crypto = require('crypto')
 const Users = require('./models/users.model')
 const Freelancers = require('./models/freelancers.model')
 const Clients = require('./models/clients.model')
+const History = require('../gigs/models/gig-histories.model')
 
 const logger = require('../../common/loggers')
 
@@ -350,7 +351,7 @@ var controllers = {
       return res.status(200).json({success: false, data: result})
     } catch (error) {
       console.error('error', error)
-      await logger.logError(error, 'Users.patch_read_all_notification', null, id, 'GET')
+      await logger.logError(error, 'Users.patch_read_all_notification', null, id, 'PATCH')
       return res.status(502).json({success: false, msg: 'User not found'})
     } finally {
       next()

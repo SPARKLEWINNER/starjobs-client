@@ -5,6 +5,8 @@ const crypto = require('crypto')
 const Users = require('./models/users.model')
 const Freelancers = require('./models/freelancers.model')
 const Clients = require('./models/clients.model')
+const History = require('../gigs/models/gig-histories.model')
+const Notification = require('../notifications/models/notifications.model')
 
 const logger = require('../../common/loggers')
 
@@ -303,6 +305,74 @@ var controllers = {
       console.error(error)
       await logger.logError(error, 'Users.patch_user', null, id, 'GET')
       res.status(502).json({success: false, msg: 'Unable to patch new device token'})
+    } finally {
+      next()
+    }
+  },
+
+  patch_read_all_notification: async function (req, res, next) {
+    let token = req.headers['authorization']
+    if (!token || typeof token === 'undefined')
+      return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
+    const id = jwt_decode(token)['id']
+
+    let result
+    try {
+      const userType = await Users.find({_id: mongoose.Types.ObjectId(id)})
+        .lean()
+        .exec()
+      if (userType[0].accountType === 1) {
+        // client
+        result = await History.updateMany(
+          {uid: mongoose.Types.ObjectId(id)},
+          {
+            $set: {
+              readAuthor: true
+            }
+          },
+          {multi: true, upsert: true}
+        ).exec()
+      } else {
+        // jobster
+        result = await History.updateMany(
+          {uid: mongoose.Types.ObjectId(id)},
+          {
+            $set: {
+              readUser: true
+            }
+          },
+          {multi: true, upsert: true}
+        ).exec()
+      }
+
+      if (!result) {
+        return res.status(400).json({success: false, msg: 'Empty notifications'})
+      }
+
+      await Notification.updateMany({
+        targetUsers: {
+          $in: [mongoose.Types.ObjectId(id)]
+        }
+      }, {
+        $addToSet: {
+          viewedBy: id
+        }
+      }, {
+        multi: true,
+        upsert: true
+      }).exec((err) => {
+        if (err) {
+          return res.status(400).json({
+            error: `Error on updating notification: ${err}`
+          })
+        }
+      })
+
+      return res.status(200).json({success: false, data: result})
+    } catch (error) {
+      console.error('error', error)
+      await logger.logError(error, 'Users.patch_read_all_notification', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
     } finally {
       next()
     }

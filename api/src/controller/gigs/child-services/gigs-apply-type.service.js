@@ -23,14 +23,14 @@ async function sendNotification(request, gigs, status) {
   let user
   try {
     let messageList = [
-      {status: 'Applying', type: '2', description: `Applicant has sent a gig request`},
-      {status: 'Accepted', type: '1', description: `Congratulations, your gig has been accepted.`},
-      {status: 'Confirm-Gig', type: '0', description: `Jobster has confirmed pushing thru the gig.`},
-      {status: 'Confirm-Arrived', type: '1', description: `The jobster has arrived.`},
-      {status: 'End-Shift', type: '1', description: `The jobster have Ended the shift`},
+      {status: 'Applying', type: 'pending', description: `Applicant has sent a gig request`},
+      {status: 'Accepted', type: 'incoming', description: `Congratulations, your gig has been accepted.`},
+      {status: 'Confirm-Gig', type: 'current', description: `Jobster has confirmed pushing thru the gig.`},
+      {status: 'Confirm-Arrived', type: 'current', description: `The jobster has arrived.`},
+      {status: 'End-Shift', type: 'current', description: `The jobster have Ended the shift`},
       {
         status: 'Confirm-End-Shift',
-        type: '0',
+        type: 'billing',
         description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
       }
     ]
@@ -59,8 +59,6 @@ async function sendNotification(request, gigs, status) {
       if (!message) return true
       if (!user || !user[0].deviceId) return true
 
-      message = message.pop()
-
       await fetch('https://fcm.googleapis.com/fcm/send', {
         method: 'post',
         headers: {
@@ -68,10 +66,18 @@ async function sendNotification(request, gigs, status) {
           Authorization: 'key=' + FCM_SERVER_KEY
         },
         data: {
+          data: {
+            status:  message[0].status,
+            gig_status: message[0].type
+          },
           notification: {
-            title: message.description,
-            icon: 'https://app.starjobs.com.ph/images/72x72.png',
-            click_action: message.type
+            title: 'Starjobs',
+            body: message[0].description,
+            icon: 'https://www.starjobs.com.ph/app-logo.png',
+            sound: 1,
+            vibrate: 1,
+            content_available: true,
+            show_in_foreground: true,
           },
           to: user[0].deviceId
         }

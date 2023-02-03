@@ -267,20 +267,20 @@ var controllers = {
               preserveNullAndEmptyArrays: true
             }
           },
-          // {
-          //   $lookup: {
-          //     localField: 'gigs._id',
-          //     from: 'gigs-histories',
-          //     foreignField: 'gid',
-          //     as: 'history'
-          //   }
-          // },
-          // {
-          //   $unwind: {
-          //     path: '$history',
-          //     preserveNullAndEmptyArrays: true
-          //   }
-          // },
+          {
+            $lookup: {
+              localField: 'gigs._id',
+              from: 'gigs-histories',
+              foreignField: 'gid',
+              as: 'history'
+            }
+          },
+          {
+            $unwind: {
+              path: '$history',
+              preserveNullAndEmptyArrays: true
+            }
+          },
           {
             $project: {
               _id: 1,

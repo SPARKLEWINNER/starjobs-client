@@ -310,11 +310,12 @@ var controllers = {
         msg: `` // Email doesn't exists
       })
 
-    let token = requestToken.reset_token(email)
+    let token = await requestToken.reset_token(email)
 
-    await Users.findOneAndUpdate({email: email}, {hashed_password: null, salt: null, resetToken: token.resetToken})
-      .lean()
-      .exec()
+    await Users.findByIdAndUpdate(
+      {_id: mongoose.Types.ObjectId(isExisting[0]._id)},
+      {hashed_password: null, salt: null, resetToken: token.resetToken}
+    ).exec()
 
     try {
       await mailer.send_mail({email, token, type: 'forgot_password'})
@@ -336,9 +337,9 @@ var controllers = {
     if (current_user.length === 0)
       return res.status(400).json({
         success: false,
-        msg: `` // Email doesn't exists
+        msg: `Email doesn't exists` //
       })
-
+    console.log(newPassword)
     const user_salt = uuid()
     const encrypt_password = crypto.createHmac('sha1', user_salt).update(newPassword).digest('hex')
 

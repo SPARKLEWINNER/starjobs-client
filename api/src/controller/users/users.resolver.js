@@ -6,6 +6,7 @@ const OnboardController = require('./child-services/onboard.service')
 const UsersController = require('./users.service')
 const UserDevicesController = require('./child-services/users-device.service')
 const UploadController = require('./child-services/upload.service')
+const FcmRegistrationController = require('./child-services/fcm-registration.service')
 
 const apiVersion = process.env.API_VERSION
 const apiPath = process.env.API_PATH
@@ -15,10 +16,20 @@ module.exports = function (app) {
   app.route(`${apiPath}${apiVersion}/user`).get(jwt.require_sign_in, UsersController.get_user)
   app.route(`${apiPath}${apiVersion}/user/change/:id`).patch(jwt.require_sign_in, UsersController.patch_change_password)
 
-  app.route(`${apiPath}${apiVersion}/user/notifications/read/all`).patch(jwt.require_sign_in, UsersController.patch_read_all_notification)
+  app
+    .route(`${apiPath}${apiVersion}/user/notifications/read/all`)
+    .patch(jwt.require_sign_in, UsersController.patch_read_all_notification)
 
   app.route(`${apiPath}${apiVersion}/user/devices`).get(jwt.require_sign_in, UserDevicesController.get_user_device)
   app.route(`${apiPath}${apiVersion}/user/devices`).patch(jwt.require_sign_in, UserDevicesController.patch_device_id)
+
+  app
+    .route(`${apiPath}${apiVersion}/users/fcm/register/:id`)
+    .post(jwt.require_sign_in, FcmRegistrationController.register_fcm_token)
+
+  app
+    .route(`${apiPath}${apiVersion}/users/fcm/unregister/:id`)
+    .delete(jwt.require_sign_in, FcmRegistrationController.unregister_fcm_token)
 
   app.route(`${apiPath}${apiVersion}/user/account`).patch(jwt.require_sign_in, UsersController.patch_user_token)
 

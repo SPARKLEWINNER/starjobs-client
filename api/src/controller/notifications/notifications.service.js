@@ -234,7 +234,7 @@ var controllers = {
         areas &&
         areas.length > 0 &&
         areas.map(function (item) {
-          return typeof item === 'string' ? item.toString().toLowerCase() : item
+          return typeof item === 'string' ? item.toString().toLowerCase().trim() : item
         })
       result = [...new Set(result)]
       return res.status(200).json({success: true, data: result})

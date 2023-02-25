@@ -15,7 +15,9 @@ module.exports = function (app) {
   app.route(`${apiPath}${apiVersion}/user`).get(jwt.require_sign_in, UsersController.get_user)
   app.route(`${apiPath}${apiVersion}/user/change/:id`).patch(jwt.require_sign_in, UsersController.patch_change_password)
 
-  app.route(`${apiPath}${apiVersion}/user/notifications/read/all`).patch(jwt.require_sign_in, UsersController.patch_read_all_notification)
+  app
+    .route(`${apiPath}${apiVersion}/user/notifications/read/all`)
+    .patch(jwt.require_sign_in, UsersController.patch_read_all_notification)
 
   app.route(`${apiPath}${apiVersion}/user/devices`).get(jwt.require_sign_in, UserDevicesController.get_user_device)
   app.route(`${apiPath}${apiVersion}/user/devices`).patch(jwt.require_sign_in, UserDevicesController.patch_device_id)
@@ -37,6 +39,9 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/accounts/:id`)
     .patch(jwt.require_sign_in, FreelancersController.patch_account_details)
+  app
+    .route(`${apiPath}${apiVersion}/accounts/:id`)
+    .patch(jwt.require_sign_in, FreelancersController.patch_account_specific)
 
   // ==== Clients controller ====
   app.route(`${apiPath}${apiVersion}/clients/:id`).post(jwt.require_sign_in, ClientsController.post_client_details)

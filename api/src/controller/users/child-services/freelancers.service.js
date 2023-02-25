@@ -191,6 +191,26 @@ var controllers = {
     return res.status(200).json(result)
   },
 
+  patch_account_specific: async function (req, res) {
+    // const updates = req.body
+    const {id} = req.params
+    const presentCity = req.body
+    console.log(presentCity)
+    console.log(id)
+
+    try {
+      await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, presentCity)
+        .lean()
+        .exec()
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Freelancers.patch_account_details', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+    console.log(presentCity)
+    console.log(id)
+  },
+
   get_account_details: async function (req, res) {
     const {id} = req.params
     let result
@@ -253,3 +273,15 @@ var controllers = {
 }
 
 module.exports = controllers
+// if(ObjectId.isValid(req.params.id)) {
+//   db.collections('book')
+//     .updateOne({_id: ObjectId(req.params.id)}, {$set: updates})
+//     .then(result => {
+//       res.status(200).json(result)
+//     })
+//     .catch(err => {
+//       res.status(500).json({error: 'could not update document'})
+//     })
+// } else {
+//   res.status(500).json({error: ' not a valid doc'})
+// }

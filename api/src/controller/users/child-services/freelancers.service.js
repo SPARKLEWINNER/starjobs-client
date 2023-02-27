@@ -194,21 +194,38 @@ var controllers = {
   patch_account_specific: async function (req, res) {
     // const updates = req.body
     const {id} = req.params
-    const presentCity = req.body
-    console.log(presentCity)
+    const newCity = req.body
+
+    const isExisting = await Freelancers.find({uuid: id}).exec()
+    if (isExisting.length === 0)
+      return res.status(400).json({
+        success: false,
+        msg: `` // Email doesn't exists
+      })
+
+    console.log(isExisting)
+    console.log(newCity.presentCity)
     console.log(id)
 
     try {
-      await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, presentCity)
-        .lean()
-        .exec()
+      // await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, presentCity)
+      let result = await Freelancers.findByIdAndUpdate(
+        {_id: mongoose.Types.ObjectId(isExisting[0]._id)},
+        newCity
+      ).exec()
+      if (result) {
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isCityUpdated: true})
+      }
     } catch (error) {
       console.error(error)
-      await logger.logError(error, 'Freelancers.patch_account_details', null, id, 'PATCH')
+      await logger.logError(error, 'Freelancers.patch_account_specific', null, id, 'PATCH')
       return res.status(502).json({success: false, msg: 'User not found'})
     }
-    console.log(presentCity)
+    const updated_user = await Users.find({_id: mongoose.Types.ObjectId(id)})
+
+    console.log(newCity)
     console.log(id)
+    return res.status(200).json(updated_user[0])
   },
 
   get_account_details: async function (req, res) {
@@ -273,15 +290,3 @@ var controllers = {
 }
 
 module.exports = controllers
-// if(ObjectId.isValid(req.params.id)) {
-//   db.collections('book')
-//     .updateOne({_id: ObjectId(req.params.id)}, {$set: updates})
-//     .then(result => {
-//       res.status(200).json(result)
-//     })
-//     .catch(err => {
-//       res.status(500).json({error: 'could not update document'})
-//     })
-// } else {
-//   res.status(500).json({error: ' not a valid doc'})
-// }

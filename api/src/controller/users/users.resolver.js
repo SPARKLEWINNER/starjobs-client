@@ -40,7 +40,7 @@ module.exports = function (app) {
     .route(`${apiPath}${apiVersion}/accounts/:id`)
     .patch(jwt.require_sign_in, FreelancersController.patch_account_details)
   app
-    .route(`${apiPath}${apiVersion}/accounts/:id`)
+    .route(`${apiPath}${apiVersion}/accounts/edit/:id`)
     .patch(jwt.require_sign_in, FreelancersController.patch_account_specific)
 
   // ==== Clients controller ====

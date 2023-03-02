@@ -192,7 +192,6 @@ var controllers = {
   },
 
   patch_account_specific: async function (req, res) {
-    // const updates = req.body
     const {id} = req.params
     const newCity = req.body
 
@@ -203,12 +202,7 @@ var controllers = {
         msg: `` // Email doesn't exists
       })
 
-    console.log(isExisting)
-    console.log(newCity.presentCity)
-    console.log(id)
-
     try {
-      // await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, presentCity)
       let result = await Freelancers.findByIdAndUpdate(
         {_id: mongoose.Types.ObjectId(isExisting[0]._id)},
         newCity
@@ -223,8 +217,6 @@ var controllers = {
     }
     const updated_user = await Users.find({_id: mongoose.Types.ObjectId(id)})
 
-    console.log(newCity)
-    console.log(id)
     return res.status(200).json(updated_user[0])
   },
 

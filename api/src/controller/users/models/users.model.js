@@ -63,7 +63,7 @@ const userSchema = new Schema(
     isCityUpdated: {
       type: Boolean,
       required: true,
-      default: false
+      default: true
     },
     dateCreated: Date,
     googleSignIn: {

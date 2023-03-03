@@ -1,14 +1,14 @@
 const mongoose = require('mongoose')
 
 const Gigs = require('../models/gigs.model')
-const Ratings = require('../models/gig-ratings.model')
+const Ratings = require('../models/gig-user-ratings.model')
 
 const logger = require('../../../common/loggers')
 
 var controllers = {
   post_rating_gig: async function (req, res) {
     const {id} = req.params
-    const {efficiency, onTime, completeness, showRate, comments, accountType} = req.body
+    const {efficiency, recommendable, completeness, showRate, comments} = req.body
     const now = new Date()
 
     const isGigExist = await Gigs.find({_id: mongoose.Types.ObjectId(id), status: 'Confirm-End-Shift'})
@@ -23,12 +23,10 @@ var controllers = {
       gid: mongoose.Types.ObjectId(id),
       rates: {
         efficiency: efficiency,
-        onTime: onTime,
+        recommendable: recommendable,
         completeness: completeness,
         showRate: showRate
       },
-      isJobster: accountType === 0 ? true : false,
-      isClient: accountType === 1 ? true : false,
       comments: comments || null,
       skipped: false,
       dateCreated: now.toISOString()

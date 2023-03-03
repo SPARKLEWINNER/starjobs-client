@@ -3,11 +3,12 @@ const mongoose = require('mongoose')
 const Freelancers = require('../models/freelancers.model')
 const Users = require('../models/users.model')
 
-const Ratings = require('../../gigs/models/gig-ratings.model')
+const Ratings = require('../../gigs/models/gig-user-ratings.model')
 
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
 const requestToken = require('../../../common/jwt')
+
 
 var controllers = {
   post_account_details: async function (req, res) {
@@ -200,40 +201,88 @@ var controllers = {
         .exec()
 
       const ratings = await Ratings.find({uid: mongoose.Types.ObjectId(id)})
+        .populate('gid', 'uid user.thumbnail')
         .lean()
         .exec()
-
+      const rateComments = await Ratings.aggregate([
+        {
+          $match: {
+            uid: mongoose.Types.ObjectId(id)
+          }
+        },
+        {
+          $lookup: {
+            from: "gigs",
+            localField: "gid",
+            foreignField: "_id",
+            as: "gig"
+          }
+        },
+        {
+          $unwind: "$gig"
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "gig.uid",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        {
+          $unwind: "$user"
+        },
+        {
+          $project: {
+            _id: 0,
+            comments: 1,
+            "user.name": 1,
+            "user.profile_photo": 1,
+            "gig.user.thumbnail": 1
+          }
+        }
+      ]).exec()
+      console.log("dfasdsd: " + JSON.stringify(rateComments))
+      const transformedResult = rateComments.map((item) => ({
+        comment: item.comment,
+        userName: item.user.name,
+        profilePhoto: item.user.profile_photo
+      }));
+      
+      console.log(transformedResult);
       if (!ratings) {
         result = account
       } else {
-        let efficiency = 0,
-          onTime = 0,
-          completeness = 0,
-          showRate = 0
+          const comments = ratings.map(({gid, comments, uid}) => ([gid, comments, uid])) 
 
-        ratings &&
-          ratings.length > 0 &&
-          ratings.map((value) => {
-            let rates = value.rates
+          const ratesArray = ratings.map(({rates}) => rates)
+          const countTotalValues = (...objects) => {
+            const counts = {};
+            for (const obj of objects) {
+              for (const key in obj) {
+                const value = obj[key];
+                const color = value === '1' ? 'gold' : 'black';
+                counts[key] = counts[key] || { 'black': 0, 'gold': 0 };
+                counts[key][color] = counts[key][color] + 1;
+              }
+            }
+            return counts;
+          };
+        const valueCounts = countTotalValues(...ratesArray);
+        console.log("valueCounts: " + JSON.stringify(valueCounts))
 
-            efficiency = rates.efficiency + efficiency
-            onTime = rates.onTime + onTime
-            completeness = rates.completeness + completeness
-            showRate = rates.showRate + showRate
-          })
-
-        let totalEfficiency = parseFloat(ratings.length * efficiency) / 100
-        let totalOnTime = parseFloat(ratings.length * onTime) / 100
-        let totalCompleteness = parseFloat(ratings.length * completeness) / 100
-        let totalShowRate = parseFloat(ratings.length * showRate) / 100
+        // let totalEfficiency = parseFloat(ratings.length * efficiency) / 100
+        // let totalOnTime = parseFloat(ratings.length * onTime) / 100
+        // let totalCompleteness = parseFloat(ratings.length * completeness) / 100
+        // let totalShowRate = parseFloat(ratings.length * showRate) / 100
 
         result = {
           ...account,
           ratings: {
-            efficiency: totalEfficiency,
-            onTime: totalOnTime,
-            completeness: totalCompleteness,
-            showRate: totalShowRate
+            ...valueCounts
+          },
+          comments: {
+            ...rateComments
           }
         }
       }

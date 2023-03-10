@@ -192,6 +192,35 @@ var controllers = {
     return res.status(200).json(result)
   },
 
+  patch_account_specific: async function (req, res) {
+    const {id} = req.params
+    const newCity = req.body
+
+    const isExisting = await Freelancers.find({uuid: id}).exec()
+    if (isExisting.length === 0)
+      return res.status(400).json({
+        success: false,
+        msg: `` // Email doesn't exists
+      })
+
+    try {
+      let result = await Freelancers.findByIdAndUpdate(
+        {_id: mongoose.Types.ObjectId(isExisting[0]._id)},
+        newCity
+      ).exec()
+      if (result) {
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isCityUpdated: true})
+      }
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Freelancers.patch_account_specific', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+    const updated_user = await Users.find({_id: mongoose.Types.ObjectId(id)})
+
+    return res.status(200).json(updated_user[0])
+  },
+
   get_account_details: async function (req, res) {
     const {id} = req.params
     let result

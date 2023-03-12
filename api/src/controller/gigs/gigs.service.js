@@ -166,8 +166,6 @@ var controllers = {
     const token = req.headers.authorization.split(' ')[1]
     const {id} = jwt_decode(token)
 
-    await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Freelancers, 'Account', id)
-
     let details
     try {
       const check_user = await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
@@ -183,22 +181,7 @@ var controllers = {
           }
         }
       } else {
-        const user = await Users.aggregate([
-          {
-            $lookup: {
-              from: 'users-freelancers',
-              localField: '_id',
-              foreignField: 'uuid',
-              as: 'account'
-            }
-          }
-        ])
-          .match({
-            'account.uuid': mongoose.Types.ObjectId(id)
-          })
-          .exec()
-
-        const contracts = await Contracts.aggregate([
+        let contracts = await Contracts.aggregate([
           {
             $match: {
               uid: mongoose.Types.ObjectId(id)
@@ -243,7 +226,7 @@ var controllers = {
           .sort({createdAt: -1})
           .exec()
 
-        const reports = await Gigs.aggregate([
+        let reports = await Gigs.aggregate([
           {
             $lookup: {
               from: 'gigs-histories',
@@ -277,8 +260,6 @@ var controllers = {
         }
 
         details = {
-          ...user,
-          account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
           gigs: gigsData,
           reports: {
             numberOfApplied: reports.filter((obj) => obj.status === 'Applying').length,
@@ -292,7 +273,6 @@ var controllers = {
 
       return res.status(502).json({success: false, msg: 'Unable to get history details'})
     }
-
     return res.status(200).json(details)
   },
 

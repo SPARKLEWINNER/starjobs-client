@@ -10,8 +10,8 @@ const signUp = require('./templates/signup.template.js')
 const {SG_EMAIL} = process.env
 
 const ses = new AWS.SES({
-  accessKeyId: 'AKIA3GMN5RL2MXPORLXK',
-  secretAccessKey: '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',
+  accessKeyId: 'AKIA3GMN5RL2J5OTV7VM',
+  secretAccessKey: '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',
   region: 'us-east-1'
 })
 

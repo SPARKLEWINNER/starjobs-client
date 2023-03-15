@@ -181,7 +181,22 @@ var controllers = {
           }
         }
       } else {
-        let contracts = await Contracts.aggregate([
+        // const user = await Users.aggregate([
+        //   {
+        //     $lookup: {
+        //       from: 'users-freelancers',
+        //       localField: '_id',
+        //       foreignField: 'uuid',
+        //       as: 'account'
+        //     }
+        //   }
+        // ])
+        //   .match({
+        //     'account.uuid': mongoose.Types.ObjectId(id)
+        //   })
+        //   .exec()
+
+        const contracts = await Contracts.aggregate([
           {
             $match: {
               uid: mongoose.Types.ObjectId(id)
@@ -226,7 +241,7 @@ var controllers = {
           .sort({createdAt: -1})
           .exec()
 
-        let reports = await Gigs.aggregate([
+        const reports = await Gigs.aggregate([
           {
             $lookup: {
               from: 'gigs-histories',
@@ -237,7 +252,7 @@ var controllers = {
           }
         ])
           .match({
-            'history.uid': mongoose.Types.ObjectId(id)
+            auid: mongoose.Types.ObjectId(id)
           })
           .sort({createdAt: -1})
           .exec()
@@ -260,6 +275,7 @@ var controllers = {
         }
 
         details = {
+          // account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
           gigs: gigsData,
           reports: {
             numberOfApplied: reports.filter((obj) => obj.status === 'Applying').length,

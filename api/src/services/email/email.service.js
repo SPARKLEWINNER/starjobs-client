@@ -8,11 +8,14 @@ const forgotPassword = require('./templates/forgot.template.js')
 const signUp = require('./templates/signup.template.js')
 
 const {SG_EMAIL} = process.env
+const region = process.env.AWS_BUCKET_REGION
+const accessKeyId = process.env.AWS_ACCESS_KEY
+const secretAccessKey = process.env.AWS_SECRET_KEY
 
 const ses = new AWS.SES({
-  accessKeyId: 'AKIA3GMN5RL2MXPORLXK',
-  secretAccessKey: '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',
-  region: 'us-east-1'
+  accessKeyId,
+  secretAccessKey,
+  region
 })
 
 var controller = {

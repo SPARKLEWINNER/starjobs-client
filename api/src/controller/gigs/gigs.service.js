@@ -166,6 +166,8 @@ var controllers = {
     const token = req.headers.authorization.split(' ')[1]
     const {id} = jwt_decode(token)
 
+    // await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Freelancers, 'Account', id)
+
     let details
     try {
       const check_user = await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
@@ -181,6 +183,8 @@ var controllers = {
           }
         }
       } else {
+        // const result = await History.find({uid: id}).lean().exec()
+        // console.log(result)
         // const user = await Users.aggregate([
         //   {
         //     $lookup: {
@@ -252,7 +256,7 @@ var controllers = {
           }
         ])
           .match({
-            auid: mongoose.Types.ObjectId(id)
+            'records.auid': mongoose.Types.ObjectId(id)
           })
           .sort({createdAt: -1})
           .exec()
@@ -275,6 +279,7 @@ var controllers = {
         }
 
         details = {
+          // ...user,
           // account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
           gigs: gigsData,
           reports: {
@@ -289,6 +294,7 @@ var controllers = {
 
       return res.status(502).json({success: false, msg: 'Unable to get history details'})
     }
+
     return res.status(200).json(details)
   },
 

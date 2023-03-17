@@ -93,7 +93,8 @@ const gigsData = {
   },
   gigFeeType: String,
   commissionRate: String,
-  applicants: []
+  applicants: [],
+  records: []
 }
 
 const gigsSchema = new Schema(gigsData, {timestamps: true})

@@ -6,8 +6,7 @@ const mongoose = require('mongoose')
 const {Types} = mongoose
 
 const logger = require('./loggers')
-
-const {FCM_SERVER_KEY} = process.env
+const {ENV} = process.env
 var controller = {
   globalNotification: async function (additionalData, location) {
     const jobster = await Users.aggregate([
@@ -51,6 +50,8 @@ var controller = {
     .exec()
     const fcmTokenArray = users_fcm.map(user => user.fcmToken);
     console.log("user tokens: " + fcmTokenArray)
+    const url = ENV == 'staging' ? 'http://192.168.1.3:8000/freelancer/message' : "https://app.starjobs.com.ph/freelancer/message"
+    console.log(url)
     if(fcmTokenArray.length != 0 ){
       try {
         console.log("--------TRY--------")
@@ -72,7 +73,7 @@ var controller = {
               priority: "high",
             },
             data: {
-              url: 'http://192.168.1.3:8000/freelancer/message',
+              url: url,
               type: "route"
             },
             registration_ids : fcmTokenArray

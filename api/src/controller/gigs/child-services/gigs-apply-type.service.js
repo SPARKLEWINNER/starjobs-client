@@ -9,22 +9,26 @@ const FeeHistory = require('../../gigs/models/gigs-fee-history.model')
 const Gigs = require('../../gigs/models/gigs.model')
 const History = require('../../gigs/models/gig-histories.model')
 const Users = require('../../users/models/users.model')
+const FcmTokens = require('../../users/models/fcm-tokens')
+
 
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
 const calculations = require('../../../common/computations')
 
-const {FCM_SERVER_KEY} = process.env
+const {ENV} = process.env
+
 
 const client = ['Applying', 'Confirm-Gig', 'Confirm-Arrived', 'On-going', 'End-Shift', 'Cancelled']
 const freelancer = ['Accepted', 'Confirm-End-Shift']
 
 async function sendNotification(request, gigs, status) {
-  let user
+  let user, url
+  let urlLink = ENV == 'staging' ? 'http://192.168.1.3:8000/' : 'https://app.starjobs.com.ph/' 
   try {
     let messageList = [
       {status: 'Applying', type: 'pending', description: `Applicant has sent a gig request`},
-      {status: 'Accepted', type: 'incoming', description: `Congratulations, your gig has been accepted.`},
+      {status: 'Accepted', type: 'incoming', description: `Congratulations, your gig application has been accepted.`},
       {status: 'Confirm-Gig', type: 'current', description: `Jobster has confirmed pushing thru the gig.`},
       {status: 'Confirm-Arrived', type: 'current', description: `The jobster has arrived.`},
       {status: 'End-Shift', type: 'current', description: `The jobster have Ended the shift`},
@@ -36,12 +40,21 @@ async function sendNotification(request, gigs, status) {
     ]
 
     if (client.includes(status)) {
+      console.log("client.includes(status)")
+      console.log("status: " + status)
       user = await Users.find({_id: Types.ObjectId(gigs.uid)})
         .lean()
         .exec()
-    } else if (freelancer.includes(status)) {
-      let jobster_id = {_id: Types.ObjectId(request.uid)} // client
+      url = urlLink + "client/message"
+      console.log("URL: " + url)
 
+    } else if (freelancer.includes(status)) {
+      console.log("freelancer.includes(status)")
+      console.log("status: " + status)
+      let jobster_id = {_id: Types.ObjectId(request.uid)} // client
+      url = urlLink + "freelancer/message"
+
+      console.log("URL: " + url)
       // individual gig postings
       if (status === 'Confirm-Arrived') {
         jobster_id = {_id: Types.ObjectId(gigs.auid)} // jobster
@@ -51,37 +64,53 @@ async function sendNotification(request, gigs, status) {
     }
 
     if (user && user.length > 0) {
+      console.log("User Lenght")
+      console.log(JSON.stringify(user))
+      const users_fcm = await FcmTokens.find({userId: Types.ObjectId(user[0]._id)})
+      .lean()
+      .exec()
+      console.log("User FCM: " + JSON.stringify(users_fcm))
+      const fcmTokenArray = users_fcm.map(userToken => userToken.fcmToken);
+      console.log(fcmTokenArray) 
+      
       let message = messageList.filter((obj) => {
         if (obj.status === status) return obj
       })
-
+      console.log(message)
       // return still to process top level request.
       if (!message) return true
-      if (!user || !user[0].deviceId) return true
-
-      await fetch('https://fcm.googleapis.com/fcm/send', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'key=' + FCM_SERVER_KEY
-        },
-        data: {
+      // if (!user || !user[0].deviceId) return true
+      
+      if(fcmTokenArray.length != 0 ){
+        console.log("------------Sending Notif----------")
+        await fetch('https://fcm.googleapis.com/fcm/send', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'key=' + process.env.FCM_SERVER_KEY
+          },
           data: {
-            status:  message[0].status,
-            gig_status: message[0].type
-          },
-          notification: {
-            title: 'Starjobs',
-            body: message[0].description,
-            icon: 'https://www.starjobs.com.ph/app-logo.png',
-            sound: 1,
-            vibrate: 1,
-            content_available: true,
-            show_in_foreground: true,
-          },
-          to: user[0].deviceId
-        }
-      })
+            notification: {
+              title: 'Starjobs',
+              body: message[0].description,
+              icon: 'https://www.starjobs.com.ph/app-logo.png',
+              sound: 1,
+              vibrate: 1,
+              content_available: true,
+              show_in_foreground: true,
+              priority: "high",
+            },
+            data: {
+              // status:  message[0].status,
+              // gig_status: message[0].type,
+              url: url,
+              type: "route"
+            },
+            registration_ids: fcmTokenArray
+          }
+        })
+      }
+     
       return true
     } else {
       return false

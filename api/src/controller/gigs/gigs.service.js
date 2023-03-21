@@ -166,7 +166,7 @@ var controllers = {
     const token = req.headers.authorization.split(' ')[1]
     const {id} = jwt_decode(token)
 
-    await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Freelancers, 'Account', id)
+    // await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Freelancers, 'Account', id)
 
     let details
     try {
@@ -183,20 +183,22 @@ var controllers = {
           }
         }
       } else {
-        const user = await Users.aggregate([
-          {
-            $lookup: {
-              from: 'users-freelancers',
-              localField: '_id',
-              foreignField: 'uuid',
-              as: 'account'
-            }
-          }
-        ])
-          .match({
-            'account.uuid': mongoose.Types.ObjectId(id)
-          })
-          .exec()
+        // const result = await History.find({uid: id}).lean().exec()
+        // console.log(result)
+        // const user = await Users.aggregate([
+        //   {
+        //     $lookup: {
+        //       from: 'users-freelancers',
+        //       localField: '_id',
+        //       foreignField: 'uuid',
+        //       as: 'account'
+        //     }
+        //   }
+        // ])
+        //   .match({
+        //     'account.uuid': mongoose.Types.ObjectId(id)
+        //   })
+        //   .exec()
 
         const contracts = await Contracts.aggregate([
           {
@@ -254,7 +256,7 @@ var controllers = {
           }
         ])
           .match({
-            'history.uid': mongoose.Types.ObjectId(id)
+            'records.auid': mongoose.Types.ObjectId(id)
           })
           .sort({createdAt: -1})
           .exec()
@@ -277,8 +279,8 @@ var controllers = {
         }
 
         details = {
-          ...user,
-          account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
+          // ...user,
+          // account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
           gigs: gigsData,
           reports: {
             numberOfApplied: reports.filter((obj) => obj.status === 'Applying').length,

@@ -79,6 +79,7 @@ async function sendNotification(request, gigs, status) {
       console.log(message)
       // return still to process top level request.
       if (!message) return true
+
       // if (!user || !user[0].deviceId) return true
       
       if(fcmTokenArray.length != 0 ){
@@ -253,6 +254,18 @@ var services = {
         }
       }
 
+      await Gigs.findOneAndUpdate(
+        {_id: Types.ObjectId(id)},
+        {
+          $push: {
+            records: {
+              auid: Types.ObjectId(uid),
+              status: status,
+              date_created: now.toISOString()
+            }
+          }
+        }
+      )
       let history = new History(history_details)
       await History.create(history)
       global.pusher.trigger('notifications', 'notify_gig', gigs)

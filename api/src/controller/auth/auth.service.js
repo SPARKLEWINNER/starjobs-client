@@ -74,6 +74,7 @@ var controllers = {
 
   social_sign_in: async function (req, res, next) {
     const {email, name, social_id, social_type} = req.body
+    console.log(social_id)
 
     if (!email || !social_type) {
       res.status(400).json({success: false, msg: `Missing email!`})
@@ -103,6 +104,10 @@ var controllers = {
       if (social_type == 'facebook') {
         user_data['facebookId'] = social_id
         user_data['facebookSignIn'] = true
+      }
+      if (social_type == 'apple') {
+        user_data['appleId'] = social_id
+        user_data['appleSignIn'] = true
       }
 
       const new_user = new Users(user_data)

@@ -319,7 +319,8 @@ var controllers = {
 
     await Users.findByIdAndUpdate(
       {_id: mongoose.Types.ObjectId(isExisting[0]._id)},
-      {hashed_password: null, salt: null, resetToken: token.resetToken}
+      {resetToken: token.resetToken}
+      // {hashed_password: null, salt: null, resetToken: token.resetToken}
     ).exec()
 
     try {

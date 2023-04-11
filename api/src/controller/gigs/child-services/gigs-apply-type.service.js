@@ -19,7 +19,7 @@ const calculations = require('../../../common/computations')
 const {ENV} = process.env
 
 
-const client = ['Applying', 'Confirm-Gig', 'Confirm-Arrived', 'On-going', 'End-Shift', 'Cancelled']
+const client = ['Applying', 'Confirm-Gig', 'Confirm-Arrived', 'On-going', 'End-Shift', 'Cancelled', 'Gig-Success']
 const freelancer = ['Accepted', 'Confirm-End-Shift']
 
 async function sendNotification(request, gigs, status) {
@@ -32,6 +32,8 @@ async function sendNotification(request, gigs, status) {
       {status: 'Confirm-Gig', type: 'current', description: `Jobster has confirmed pushing thru the gig.`},
       {status: 'Confirm-Arrived', type: 'current', description: `The jobster has arrived.`},
       {status: 'End-Shift', type: 'current', description: `The jobster have Ended the shift`},
+      {status: 'Gig-Success', type: 'current', description: `To monitor gig fee View gig in progress`},
+
       {
         status: 'Confirm-End-Shift',
         type: 'billing',

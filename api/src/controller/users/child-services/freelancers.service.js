@@ -9,7 +9,6 @@ const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
 const requestToken = require('../../../common/jwt')
 
-
 var controllers = {
   post_account_details: async function (req, res) {
     const {id} = req.params
@@ -170,8 +169,8 @@ var controllers = {
       .exec()
 
     try {
-      await Freelancers.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, details)
-      user = await Users.find({_id: mongoose.Types.ObjectId(Freelancers.uuid)})
+      result = await Freelancers.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, details)
+      user = await Users.find({_id: mongoose.Types.ObjectId(result.uuid)})
         .lean()
         .exec()
       await logger.logAccountHistory(user[0]?.accountType, details, id, oldDetails[0])
@@ -184,7 +183,7 @@ var controllers = {
     let {accessToken: token, refreshToken} = requestToken.create_token(Freelancers.uuid)
     result = {
       ...user[0],
-      photo: Freelancers.photo,
+      photo: result.photo,
       token,
       refreshToken
     }
@@ -241,64 +240,64 @@ var controllers = {
         },
         {
           $lookup: {
-            from: "gigs",
-            localField: "gid",
-            foreignField: "_id",
-            as: "gig"
+            from: 'gigs',
+            localField: 'gid',
+            foreignField: '_id',
+            as: 'gig'
           }
         },
         {
-          $unwind: "$gig"
+          $unwind: '$gig'
         },
         {
           $lookup: {
-            from: "users",
-            localField: "gig.uid",
-            foreignField: "_id",
-            as: "user"
+            from: 'users',
+            localField: 'gig.uid',
+            foreignField: '_id',
+            as: 'user'
           }
         },
         {
-          $unwind: "$user"
+          $unwind: '$user'
         },
         {
           $project: {
             _id: 0,
             comments: 1,
-            "user.name": 1,
-            "user.profile_photo": 1,
-            "gig.user.thumbnail": 1
+            'user.name': 1,
+            'user.profile_photo': 1,
+            'gig.user.thumbnail': 1
           }
         }
       ]).exec()
-      console.log("dfasdsd: " + JSON.stringify(rateComments))
+      console.log('dfasdsd: ' + JSON.stringify(rateComments))
       const transformedResult = rateComments.map((item) => ({
         comment: item.comment,
         userName: item.user.name,
         profilePhoto: item.user.profile_photo
-      }));
-      
-      console.log(transformedResult);
+      }))
+
+      console.log(transformedResult)
       if (!ratings) {
         result = account
       } else {
-          const comments = ratings.map(({gid, comments, uid}) => ([gid, comments, uid])) 
+        const comments = ratings.map(({gid, comments, uid}) => [gid, comments, uid])
 
-          const ratesArray = ratings.map(({rates}) => rates)
-          const countTotalValues = (...objects) => {
-            const counts = {};
-            for (const obj of objects) {
-              for (const key in obj) {
-                const value = obj[key];
-                const color = value === '1' ? 'gold' : 'black';
-                counts[key] = counts[key] || { 'black': 0, 'gold': 0 };
-                counts[key][color] = counts[key][color] + 1;
-              }
+        const ratesArray = ratings.map(({rates}) => rates)
+        const countTotalValues = (...objects) => {
+          const counts = {}
+          for (const obj of objects) {
+            for (const key in obj) {
+              const value = obj[key]
+              const color = value === '1' ? 'gold' : 'black'
+              counts[key] = counts[key] || {black: 0, gold: 0}
+              counts[key][color] = counts[key][color] + 1
             }
-            return counts;
-          };
-        const valueCounts = countTotalValues(...ratesArray);
-        console.log("valueCounts: " + JSON.stringify(valueCounts))
+          }
+          return counts
+        }
+        const valueCounts = countTotalValues(...ratesArray)
+        console.log('valueCounts: ' + JSON.stringify(valueCounts))
 
         // let totalEfficiency = parseFloat(ratings.length * efficiency) / 100
         // let totalOnTime = parseFloat(ratings.length * onTime) / 100

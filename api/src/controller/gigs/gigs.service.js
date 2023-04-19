@@ -23,10 +23,11 @@ var controllers = {
     try {
       let initial_find = await Gigs.find({
         status: ['Waiting', 'Applying', 'Contracts']
-      })
+        
+      }, {position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
         .lean()
         .exec()
-
+        
       gigs = initial_find.filter((obj) => {
         return !moment(obj.time).isBefore(moment(), 'day')
       })
@@ -143,7 +144,7 @@ var controllers = {
       let initial_find = await Gigs.find({
         category: category,
         status: ['Waiting', 'Applying', 'Contracts']
-      })
+      },{position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
         .lean()
         .exec()
 

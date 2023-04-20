@@ -161,7 +161,7 @@ var controllers = {
 
           let finalData = []
 
-          for (let index = 0; index < 30; index++) {
+          for (let index = 0; index < data.length; index++) {
             finalData.push({...data[index]._doc, isRead: data[index].viewedBy.includes(id)})
           }
 

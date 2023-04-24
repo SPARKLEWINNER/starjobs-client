@@ -163,6 +163,7 @@ var controllers = {
 
           for (let index = 0; index < 30; index++) {
             finalData.push({...data[index]?._doc, isRead: data[index].viewedBy.includes(id)})
+
           }
 
           // return res.json(finalData);

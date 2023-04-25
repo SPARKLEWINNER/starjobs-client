@@ -146,6 +146,7 @@ var controllers = {
   get_notifications_v2: async function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
     const {id} = jwt_decode(token)
+
     try {
       await Notification.find({
         $or: [{targetUsers: id}, {target: 'General'}]
@@ -162,7 +163,7 @@ var controllers = {
           let finalData = []
 
           for (let index = 0; index < 30; index++) {
-            finalData.push({...data[index]?._doc, isRead: data[index].viewedBy.includes(id)})
+            finalData.push({...data[index]?._doc, isRead: data[index]?.viewedBy.includes(id)})
           }
 
           // return res.json(finalData);

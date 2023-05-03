@@ -32,8 +32,8 @@ var controllers = {
       gigs = initial_find.filter((obj) => {
         return !moment(obj.time).isBefore(moment(), 'day')
       })
-      // gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-      // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
+      gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+      filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
     } catch (error) {
@@ -41,7 +41,7 @@ var controllers = {
       await logger.logError(error, 'Gigs.get_gigs_categorized', gigs, null, 'GET')
       return res.status(502).json({success: false, msg: 'Gigs not found'})
     }
-    return res.status(200).json(gigs)
+    return res.status(200).json(filter_gig)
   },
 
   get_gig: async function (req, res) {
@@ -154,8 +154,8 @@ var controllers = {
       gigs = initial_find.filter((obj) => {
         return !moment(obj.time).isBefore(moment(), 'day')
       })
-      // gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-      // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
+      gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+      filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
     } catch (error) {
@@ -165,7 +165,7 @@ var controllers = {
       return res.status(502).json({success: false, msg: 'Gigs not found'})
     }
 
-    return res.status(200).json(gigs)
+    return res.status(200).json(filter_gig)
   },
 
   get_gigs_history: async function (req, res) {

@@ -32,9 +32,8 @@ var controllers = {
       gigs = initial_find.filter((obj) => {
         return !moment(obj.time).isBefore(moment(), 'day')
       })
-      gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-      filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-      console.log(filter_gig.length)
+      // gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+      // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
     } catch (error) {
@@ -42,7 +41,7 @@ var controllers = {
       await logger.logError(error, 'Gigs.get_gigs_categorized', gigs, null, 'GET')
       return res.status(502).json({success: false, msg: 'Gigs not found'})
     }
-    return res.status(200).json(filter_gig)
+    return res.status(200).json(gigs)
   },
 
   get_gig: async function (req, res) {
@@ -142,18 +141,21 @@ var controllers = {
 
   get_gigs_categorized: async function (req, res) {
     const {category} = req.params
+    console.log(category)
     let gigs = []
     try {
       let initial_find = await Gigs.find({
         category: category,
         status: ['Waiting', 'Applying', 'Contracts']
-      },{position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
+      },{category:1, position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
         .lean()
         .exec()
 
       gigs = initial_find.filter((obj) => {
         return !moment(obj.time).isBefore(moment(), 'day')
       })
+      // gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
+      // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
     } catch (error) {

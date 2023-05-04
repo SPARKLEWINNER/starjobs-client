@@ -150,7 +150,7 @@ var controllers = {
       await Notification.find({
         $or: [{targetUsers: id}, {target: 'General'}]
       })
-        .limit(30)
+        .populate('targetUsers')
         .sort({createdAt: -1})
         .exec((err, data) => {
           if (err) {

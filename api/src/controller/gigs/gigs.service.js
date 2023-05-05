@@ -60,7 +60,6 @@ var controllers = {
         return moment(obj.from).isValid();
       });
 
-       console.log(filter_gig.length);
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
     } catch (error) {

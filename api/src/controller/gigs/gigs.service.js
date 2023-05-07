@@ -21,14 +21,29 @@ var controllers = {
   get_gigs: async function (req, res) {
     let gigs = []
     let filter_gig = []
+    const daysAgo = new Date()
+    daysAgo.setDate(daysAgo.getDate() - 60)
+
     try {
-      let initial_find = await Gigs.find({
-        status: ['Waiting', 'Applying', 'Contracts']
-        
-      }, {position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
+      let initial_find = await Gigs.find(
+        {
+          status: ['Waiting', 'Applying', 'Contracts'],
+          createdAt: {$gte: daysAgo}
+        },
+        {
+          position: 1,
+          uid: 1,
+          hours: 1,
+          fee: 1,
+          user: 1,
+          from: 1,
+          time: 1,
+          locationRate: 1
+        }
+      )
         .lean()
         .exec()
-        
+
       gigs = initial_find.filter((obj) => {
         return !moment(obj.time).isBefore(moment(), 'day')
       })
@@ -144,10 +159,13 @@ var controllers = {
     console.log(category)
     let gigs = []
     try {
-      let initial_find = await Gigs.find({
-        category: category,
-        status: ['Waiting', 'Applying', 'Contracts']
-      },{category:1, position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
+      let initial_find = await Gigs.find(
+        {
+          category: category,
+          status: ['Waiting', 'Applying', 'Contracts']
+        },
+        {category: 1, position: 1, uid: 1, hours: 1, fee: 1, user: 1, from: 1, time: 1, locationRate: 1}
+      )
         .lean()
         .exec()
 

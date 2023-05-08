@@ -52,6 +52,7 @@ var controllers = {
         from: 1,
         time: 1,
         locationRate: 1,
+        category:1
       };
 
       const initial_find = await Gigs.find(filter, projection).lean().exec();

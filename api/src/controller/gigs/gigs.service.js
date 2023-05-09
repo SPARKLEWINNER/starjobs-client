@@ -37,10 +37,12 @@ var controllers = {
       // console.log(filter_gig.length)
 
       const today = moment.utc().startOf('day');
-
       const filter = {
         status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-        dateCreated: { $gte: today.toDate() }
+        $or: [
+          { time: { $gte: today.toISOString() } },
+          { time: { $gte: today } }
+        ]
       };
 
       const projection = {
@@ -56,7 +58,7 @@ var controllers = {
       };
 
       const initial_find = await Gigs.find(filter, projection).lean().exec();
-
+     
       filter_gig = initial_find.filter(obj => {
         return moment(obj.from).isValid();
       });
@@ -187,7 +189,10 @@ var controllers = {
 
       const filter = {
         status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-        dateCreated: { $gte: today.toDate() },
+        $or: [
+          { time: { $gte: today.toISOString() } },
+          { time: { $gte: today } }
+        ],
         category: category
       };
 
@@ -223,7 +228,6 @@ var controllers = {
   get_gigs_history: async function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
     const {id} = jwt_decode(token)
-
     // await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Freelancers, 'Account', id)
 
     let details

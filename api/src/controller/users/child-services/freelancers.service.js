@@ -83,7 +83,10 @@ var controllers = {
       result = await Freelancers.create(accountObj).catch((err) => console.log(err))
 
       if (result) {
-        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isActive: true})
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(id)},
+          {isActive: true, firstName: firstName, lastName: lastName}
+        )
       }
     } catch (error) {
       await logger.logError(error, 'Freelancers.post_account_details', accountObj, id, 'POST')
@@ -170,6 +173,13 @@ var controllers = {
 
     try {
       result = await Freelancers.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, details)
+      if (result) {
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(result.uuid)},
+          {firstName: firstName, lastName: lastName}
+        )
+      }
+
       user = await Users.find({_id: mongoose.Types.ObjectId(result.uuid)})
         .lean()
         .exec()

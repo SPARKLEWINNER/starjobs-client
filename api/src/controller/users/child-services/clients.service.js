@@ -64,7 +64,10 @@ var controllers = {
     try {
       result = await Clients.create(clientObj)
       if (result) {
-        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isActive: true})
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(id)},
+          {isActive: true, firstName: firstName, lastName: lastName}
+        )
       }
     } catch (error) {
       console.error(error)
@@ -97,7 +100,7 @@ var controllers = {
     const {id} = req.params
     let result, user
 
-    await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'Client', id) // validate if data exists
+    await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Clients, 'Client', id) // validate if data exists
 
     const {
       firstName,
@@ -139,6 +142,13 @@ var controllers = {
 
     try {
       result = await Clients.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, clientObj)
+      if (result) {
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(result.uid)},
+          {firstName: firstName, lastName: lastName}
+        )
+      }
+
       user = await Users.find({_id: mongoose.Types.ObjectId(result.uid)})
         .lean()
         .exec()

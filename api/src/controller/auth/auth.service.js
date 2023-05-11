@@ -153,9 +153,18 @@ var controllers = {
   },
 
   sign_up: async function (req, res) {
-    const {email, password, accountType, name, phone} = req.body
+    const {email, password, accountType, firstName, lastName, name, phone} = req.body
 
-    if (!email || !password || accountType === null || accountType === undefined || !name || !phone) {
+    if (
+      !email ||
+      !password ||
+      accountType === null ||
+      accountType === undefined ||
+      !firstName ||
+      !name ||
+      !lastName ||
+      !phone
+    ) {
       res.status(400).json({success: false, msg: `Missing email or password field!`})
       return
     }
@@ -179,6 +188,8 @@ var controllers = {
       const new_user = new Users({
         email,
         name,
+        firstName,
+        lastName,
         accountType,
         phone,
         verificationCode: code,

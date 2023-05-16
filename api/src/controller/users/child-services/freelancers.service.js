@@ -190,7 +190,7 @@ var controllers = {
       return res.status(502).json({success: false, msg: 'User not found'})
     }
 
-    let {accessToken: token, refreshToken} = requestToken.create_token(Freelancers.uuid)
+    let {accessToken: token, refreshToken} = requestToken.create_token(result.uuid)
     result = {
       ...user[0],
       photo: result.photo,
@@ -280,14 +280,12 @@ var controllers = {
           }
         }
       ]).exec()
-      console.log('dfasdsd: ' + JSON.stringify(rateComments))
       const transformedResult = rateComments.map((item) => ({
         comment: item.comment,
         userName: item.user.name,
         profilePhoto: item.user.profile_photo
       }))
 
-      console.log(transformedResult)
       if (!ratings) {
         result = account
       } else {

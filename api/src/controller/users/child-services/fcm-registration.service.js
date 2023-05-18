@@ -5,6 +5,8 @@ var controllers = {
   register_fcm_token: async function (req, res) {
     const {id} = req.params
     try {
+      console.log(req.body)
+
       const {fcmToken, device} = req.body
 
       if (!fcmToken || !device) {

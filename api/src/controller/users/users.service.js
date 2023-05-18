@@ -377,7 +377,7 @@ var controllers = {
       next()
     }
   },
-  patch_user_account: async function (req, res) {
+  delete_user_account: async function (req, res, next) {
     let token = req.headers['authorization']
     if (!token || typeof token === 'undefined')
       return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})

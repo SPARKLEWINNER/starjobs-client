@@ -40,7 +40,7 @@ module.exports = function (app) {
 
   app.route(`${apiPath}${apiVersion}/user/update/account`).patch(jwt.require_sign_in, UsersController.patch_user)
 
-  app.route(`${apiPath}${apiVersion}/user/deleteAccount`).patch(jwt.require_sign_in, UsersController.patch_user_account)
+  app.route(`${apiPath}${apiVersion}/user/deleteAccount/:id`).patch(jwt.require_sign_in, UsersController.delete_user_account)
 
   // ==== Freelancer controller ====
   app.route(`${apiPath}${apiVersion}/accounts/:id`).get(jwt.require_sign_in, FreelancersController.get_account_details)

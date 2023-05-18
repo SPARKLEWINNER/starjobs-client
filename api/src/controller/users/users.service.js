@@ -376,7 +376,41 @@ var controllers = {
     } finally {
       next()
     }
-  }
+  },
+  patch_user_account: async function (req, res) {
+    let token = req.headers['authorization']
+    if (!token || typeof token === 'undefined')
+      return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
+    let update_user
+    const id = jwt_decode(token)['id']
+    const user = await Users.find({_id: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    if (!user) {
+      return res.status(502).json({success: false, msg: 'Unable to update user account'})
+    }
+
+    try {
+      update_user = await Users.findByIdAndUpdate(
+        {_id: mongoose.Types.ObjectId(id)},
+        {
+          email: null,
+          name: null,
+          isActive: false
+        
+        }
+      )
+        .lean()
+        .exec()
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Users.patch_user_account', null, id, 'GET')
+      return res.status(502).json({success: false, msg: 'Unable to patch user account'})
+    }
+
+    return res.status(200).json(update_user)
+  },
 }
 
 module.exports = controllers

@@ -11,20 +11,18 @@ const History = require('../../gigs/models/gig-histories.model')
 const Users = require('../../users/models/users.model')
 const FcmTokens = require('../../users/models/fcm-tokens')
 
-
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
 const calculations = require('../../../common/computations')
 
 const {ENV} = process.env
 
-
 const client = ['Applying', 'Confirm-Gig', 'Confirm-Arrived', 'On-going', 'End-Shift', 'Cancelled', 'Gig-Success']
 const freelancer = ['Accepted', 'Confirm-End-Shift']
 
 async function sendNotification(request, gigs, status) {
   let user, url
-  let urlLink = ENV == 'staging' ? 'http://192.168.1.3:8000/' : 'https://app.starjobs.com.ph/' 
+  let urlLink = ENV == 'staging' ? 'http://192.168.1.3:8000/' : 'https://app.starjobs.com.ph/'
   try {
     let messageList = [
       {status: 'Applying', type: 'pending', description: `Applicant has sent a gig request`},
@@ -42,21 +40,16 @@ async function sendNotification(request, gigs, status) {
     ]
 
     if (client.includes(status)) {
-      console.log("client.includes(status)")
-      console.log("status: " + status)
       user = await Users.find({_id: Types.ObjectId(gigs.uid)})
         .lean()
         .exec()
-      url = urlLink + "client/message"
-      console.log("URL: " + url)
 
+      url = status === 'Gig Success' ? urlLink + 'client/gig/create?tab=4' : urlLink + 'freelancer/message'
     } else if (freelancer.includes(status)) {
-      console.log("freelancer.includes(status)")
-      console.log("status: " + status)
       let jobster_id = {_id: Types.ObjectId(request.uid)} // client
-      url = urlLink + "freelancer/message"
 
-      console.log("URL: " + url)
+      url = status === 'Confirm-End-Shift' ? urlLink + 'freelancer/dashboard?tab=4' : urlLink + 'freelancer/message'
+
       // individual gig postings
       if (status === 'Confirm-Arrived') {
         jobster_id = {_id: Types.ObjectId(gigs.auid)} // jobster
@@ -66,26 +59,25 @@ async function sendNotification(request, gigs, status) {
     }
 
     if (user && user.length > 0) {
-      console.log("User Lenght")
+      console.log('User Lenght')
       console.log(JSON.stringify(user))
       const users_fcm = await FcmTokens.find({userId: Types.ObjectId(user[0]._id)})
-      .lean()
-      .exec()
-      console.log("User FCM: " + JSON.stringify(users_fcm))
-      const fcmTokenArray = users_fcm.map(userToken => userToken.fcmToken);
-      console.log(fcmTokenArray) 
-      
+        .lean()
+        .exec()
+      console.log('User FCM: ' + JSON.stringify(users_fcm))
+      const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
+      console.log(fcmTokenArray)
+
       let message = messageList.filter((obj) => {
         if (obj.status === status) return obj
       })
-      console.log(message)
       // return still to process top level request.
       if (!message) return true
 
       // if (!user || !user[0].deviceId) return true
-      
-      if(fcmTokenArray.length != 0 ){
-        console.log("------------Sending Notif----------")
+
+      if (fcmTokenArray.length != 0) {
+        console.log('------------Sending Notif----------')
         await fetch('https://fcm.googleapis.com/fcm/send', {
           method: 'post',
           headers: {
@@ -101,19 +93,19 @@ async function sendNotification(request, gigs, status) {
               vibrate: 1,
               content_available: true,
               show_in_foreground: true,
-              priority: "high",
+              priority: 'high'
             },
             data: {
               // status:  message[0].status,
               // gig_status: message[0].type,
               url: url,
-              type: "route"
+              type: 'route'
             },
             registration_ids: fcmTokenArray
           }
         })
       }
-     
+
       return true
     } else {
       return false

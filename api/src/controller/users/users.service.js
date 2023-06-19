@@ -349,18 +349,22 @@ var controllers = {
         return res.status(400).json({success: false, msg: 'Empty notifications'})
       }
 
-      await Notification.updateMany({
-        targetUsers: {
-          $in: [mongoose.Types.ObjectId(id)]
+      await Notification.updateMany(
+        {
+          targetUsers: {
+            $in: [mongoose.Types.ObjectId(id)]
+          }
+        },
+        {
+          $addToSet: {
+            viewedBy: id
+          }
+        },
+        {
+          multi: true,
+          upsert: true
         }
-      }, {
-        $addToSet: {
-          viewedBy: id
-        }
-      }, {
-        multi: true,
-        upsert: true
-      }).exec((err) => {
+      ).exec((err) => {
         if (err) {
           return res.status(400).json({
             error: `Error on updating notification: ${err}`
@@ -398,7 +402,6 @@ var controllers = {
           email: null,
           name: null,
           isActive: false
-        
         }
       )
         .lean()
@@ -411,6 +414,59 @@ var controllers = {
 
     return res.status(200).json(update_user)
   },
+  patch_account_name: async function (req, res) {
+    console.log(req.body)
+    const {id} = req.params
+    console.log(id)
+    const {firstName, lastName, acctType} = req.body
+    let result, isExisting
+    if (acctType === 1) {
+      isExisting = await Clients.find({_id: id}).exec()
+    } else {
+      isExisting = await Freelancers.find({_id: id}).exec()
+    }
+
+    if (isExisting.length === 0)
+      return res.status(400).json({
+        success: false,
+        msg: `` // Email doesn't exists
+      })
+
+    try {
+      if (acctType === 1) {
+        // Update Client
+        result = await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(isExisting[0].uid)},
+          {firstName: firstName, lastName: lastName}
+        )
+        if (result) {
+          await Clients.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {firstName: firstName, lastName: lastName})
+        }
+      } else {
+        // Update Jobster
+        result = await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(isExisting[0].uuid)},
+          {firstName: firstName, lastName: lastName}
+        )
+        if (result) {
+          await Freelancers.findOneAndUpdate(
+            {_id: mongoose.Types.ObjectId(id)},
+            {firstName: firstName, lastName: lastName}
+          )
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Freelancers.patch_account_specific', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+    const updated_user = await Users.find({_id: mongoose.Types.ObjectId(result._id)})
+    console.log(updated_user)
+    result = {
+      ...updated_user[0]
+    }
+    return res.status(200).json(result)
+  }
 }
 
 module.exports = controllers

@@ -165,6 +165,50 @@ var controllers = {
     }
 
     return res.status(200).json(freelancers)
+  },
+
+  post_freelancer_category_list: async function (req, res) {
+    let freelancers
+    let {category} = req.body
+    let skills
+    if (category === 'Restaurant Services') {
+      skills = 'Food and Restaurant'
+    } else if (category === 'Sales & Marketing') {
+      skills = 'Sales and Marketing'
+    } else if (category === 'Parcels') {
+      skills = 'Parcels and Logistics'
+    }
+
+    let token = req.headers['authorization']
+    if (!token || typeof token === 'undefined')
+      return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
+    try {
+      freelancers = await Users.aggregate([
+        {
+          $lookup: {
+            from: 'users-freelancers',
+            localField: '_id',
+            foreignField: 'uuid',
+            as: 'details'
+          }
+        }
+      ])
+        .match({
+          accountType: 0,
+          isActive: true,
+          isVerified: true,
+          'details.expertise.skillOffer': skills
+        })
+        .sort({createdAt: -1})
+        .limit(50)
+        .exec()
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Applicant.get_freelancer_list', null, null, 'GET')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+
+    return res.status(200).json(freelancers)
   }
 }
 

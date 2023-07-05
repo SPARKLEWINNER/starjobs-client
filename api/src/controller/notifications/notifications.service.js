@@ -148,27 +148,38 @@ var controllers = {
     const {id} = jwt_decode(token)
 
     try {
-      await Notification.find({
+      // await Notification.find({
+      //   $or: [{targetUsers: id}, {target: 'General'}]
+      // })
+      //   .limit(30)
+      //   .sort({createdAt: -1})
+      //   .exec((err, data) => {
+      //     if (err) {
+      //       return res.status(400).json({
+      //         error: err
+      //       })
+      //     }
+      //     let finalData = []
+      //     for (let index = 0; index < 30; index++) {
+      //       finalData.push({...data[index]?._doc, isRead: data[index]?.viewedBy.includes(id)})
+      //     }
+      //     // return res.json(finalData);
+      //     return res.status(200).json({success: true, data: finalData})
+      //   })
+
+      const notifications = await Notification.find({
         $or: [{targetUsers: id}, {target: 'General'}]
       })
-        .limit(30)
         .sort({createdAt: -1})
-        .exec((err, data) => {
-          if (err) {
-            return res.status(400).json({
-              error: err
-            })
-          }
+        .limit(30)
+        .exec()
 
-          let finalData = []
+      const finalData = notifications.map((notification) => ({
+        ...notification._doc,
+        isRead: notification.viewedBy.includes(id)
+      }))
 
-          for (let index = 0; index < 30; index++) {
-            finalData.push({...data[index]?._doc, isRead: data[index]?.viewedBy.includes(id)})
-          }
-
-          // return res.json(finalData);
-          return res.status(200).json({success: true, data: finalData})
-        })
+      return res.status(200).json({success: true, data: finalData})
     } catch (error) {
       console.error('error', error)
       await logger.logError(error, 'Freelancers.get_notifications', null, id, 'GET')

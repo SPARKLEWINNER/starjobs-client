@@ -14,6 +14,7 @@ const FcmTokens = require('../../users/models/fcm-tokens')
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
 const calculations = require('../../../common/computations')
+const fcm = require('../../../services/fcm-notif.service')
 
 const {ENV} = process.env
 
@@ -31,6 +32,11 @@ async function sendNotification(request, gigs, status) {
       {status: 'Confirm-Arrived', type: 'current', description: `The jobster has arrived.`},
       {status: 'End-Shift', type: 'current', description: `The jobster have Ended the shift`},
       {status: 'Gig-Success', type: 'current', description: `To monitor gig fee View gig in progress`},
+      {
+        status: 'Gig-Taken',
+        type: 'incoming',
+        description: `This gig ${gigs.position} was already taken. Keep exploring other opportunities! `
+      },
 
       {
         status: 'Confirm-End-Shift',
@@ -56,15 +62,46 @@ async function sendNotification(request, gigs, status) {
       }
 
       user = await Users.find(jobster_id).lean().exec()
-    }
 
+      if (status === 'Accepted' && gigs.category === 'restaurant-services') {
+        console.log('------Getting data of applying')
+        console.log(gigs._id, 'Gig ID')
+        const getApplying = await History.find({gig: Types.ObjectId(gigs._id), status: 'Applying'})
+          .lean()
+          .exec()
+        console.log(getApplying, 'getapplying')
+
+        const userIds = getApplying.map((user) => user.uid)
+        console.log(userIds, 'userIds')
+
+        user = await Users.find({_id: {$in: userIds}})
+          .lean()
+          .exec()
+        console.log(user, 'applyin users')
+        let applyingUsers = []
+        if (user && user.length > 0) {
+          await user.forEach((data) => {
+            applyingUsers.push(data._id)
+          })
+          if (applyingUsers) {
+            console.log('-------Notification for rejected jobster-------')
+            const fcmTokenArray = await FcmTokens.find({userId: {$in: targetUsers}})
+              .lean()
+              .exec()
+              .then((users_fcm) => users_fcm.map((userToken) => userToken.fcmToken))
+            console.log(fcmTokenArray)
+          }
+          let message = messageList.filter((obj) => {
+            if (obj.status === 'Gig-Taken') return obj
+          })
+          fcm.send_notif(fcmTokenArray, message[0].description)
+        }
+      }
+    }
     if (user && user.length > 0) {
-      console.log('User Lenght')
-      console.log(JSON.stringify(user))
       const users_fcm = await FcmTokens.find({userId: Types.ObjectId(user[0]._id)})
         .lean()
         .exec()
-      console.log('User FCM: ' + JSON.stringify(users_fcm))
       const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
       console.log(fcmTokenArray)
 
@@ -105,6 +142,8 @@ async function sendNotification(request, gigs, status) {
           }
         })
       }
+      // Send SMS Notif
+      // sms.cast_sms(recipients, message[0].description)
 
       return true
     } else {

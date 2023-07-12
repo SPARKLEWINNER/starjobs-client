@@ -1,3 +1,4 @@
+const axios = require('axios')
 var controller = {
   send_sms: function (phone, message) {
     const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
@@ -9,6 +10,30 @@ var controller = {
       })
       .then((message) => console.log(message.sid))
       .catch((err) => console.log(err))
+  },
+  cast_sms: async function (recipients, message) {
+    console.log(recipients, 'recipients')
+    const url = 'https://svc.app.cast.ph/api/announcement/send'
+    const data = {
+      MessageFrom: process.env.SENDER_ID,
+      Message: message,
+      Recipients: recipients,
+      Tags: [],
+      SendDate: null,
+      Mask: process.env.SENDER_ID,
+      HasUnsubscribeLink: ''
+    }
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + process.env.CAST_AUTH_TOKEN
+    }
+
+    try {
+      const response = await axios.post(url, data, {headers})
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 

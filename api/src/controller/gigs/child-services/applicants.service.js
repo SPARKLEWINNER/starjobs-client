@@ -153,10 +153,11 @@ var controllers = {
         .match({
           accountType: 0,
           isActive: true,
-          isVerified: true
+          isVerified: true,
+          firstName: {$exists: true},
+          lastName: {$exists: true}
         })
         .sort({createdAt: -1})
-        .limit(50)
         .exec()
     } catch (error) {
       console.error(error)
@@ -174,9 +175,11 @@ var controllers = {
     if (category === 'Restaurant Services') {
       skills = 'Food and Restaurant'
     } else if (category === 'Sales & Marketing') {
-      skills = 'Sales and Marketing'
+      skills = 'Sales & Marketing'
     } else if (category === 'Parcels') {
       skills = 'Parcels and Logistics'
+    } else if (category === 'Construction') {
+      skills = 'Construction'
     }
 
     let token = req.headers['authorization']
@@ -197,14 +200,15 @@ var controllers = {
           accountType: 0,
           isActive: true,
           isVerified: true,
-          'details.expertise.skillOffer': skills
+          'details.expertise.skillQualification': skills,
+          firstName: {$exists: true},
+          lastName: {$exists: true}
         })
         .sort({createdAt: -1})
-        .limit(50)
         .exec()
     } catch (error) {
       console.error(error)
-      await logger.logError(error, 'Applicant.get_freelancer_list', null, null, 'GET')
+      await logger.logError(error, 'Applicant.get_freelancer_category_list', null, null, 'GET')
       return res.status(502).json({success: false, msg: 'User not found'})
     }
 

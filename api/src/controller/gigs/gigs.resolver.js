@@ -50,6 +50,9 @@ module.exports = function (app) {
     .route(`${apiPath}${apiVersion}/applicant/details/:id`)
     .get(jwt.require_sign_in, ApplicantsController.get_applicant_details)
   app.route(`${apiPath}${apiVersion}/applicant/list`).get(jwt.require_sign_in, ApplicantsController.get_freelancer_list)
+  app
+    .route(`${apiPath}${apiVersion}/applicant/list/category`)
+    .post(jwt.require_sign_in, ApplicantsController.post_freelancer_category_list)
 
   // ==== Activities controller ====
   app.route(`${apiPath}${apiVersion}/activity/:id`).get(jwt.require_sign_in, ActivitiesController.get_gigs_activity)

@@ -153,9 +153,7 @@ var controllers = {
         .match({
           accountType: 0,
           isActive: true,
-          isVerified: true,
-          firstName: {$exists: true},
-          lastName: {$exists: true}
+          isVerified: true
         })
         .sort({createdAt: -1})
         .exec()
@@ -168,9 +166,9 @@ var controllers = {
     return res.status(200).json(freelancers)
   },
 
-  post_freelancer_category_list: async function (req, res) {
+  post_freelancer_list_search: async function (req, res) {
     let freelancers
-    let {category} = req.body
+    let {searchTerm, category} = req.body
     let skills
     if (category === 'Restaurant Services') {
       skills = 'Food and Restaurant'
@@ -185,31 +183,58 @@ var controllers = {
     let token = req.headers['authorization']
     if (!token || typeof token === 'undefined')
       return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
-    try {
-      freelancers = await Users.aggregate([
-        {
-          $lookup: {
-            from: 'users-freelancers',
-            localField: '_id',
-            foreignField: 'uuid',
-            as: 'details'
+
+    if (category) {
+      try {
+        freelancers = await Users.aggregate([
+          {
+            $lookup: {
+              from: 'users-freelancers',
+              localField: '_id',
+              foreignField: 'uuid',
+              as: 'details'
+            }
           }
-        }
-      ])
-        .match({
-          accountType: 0,
-          isActive: true,
-          isVerified: true,
-          'details.expertise.skillQualification': skills,
-          firstName: {$exists: true},
-          lastName: {$exists: true}
-        })
-        .sort({createdAt: -1})
-        .exec()
-    } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Applicant.get_freelancer_category_list', null, null, 'GET')
-      return res.status(502).json({success: false, msg: 'User not found'})
+        ])
+          .match({
+            accountType: 0,
+            isActive: true,
+            isVerified: true,
+            'details.expertise.skillQualification': skills,
+            $or: [{firstName: {$regex: searchTerm, $options: 'i'}}, {lastName: {$regex: searchTerm, $options: 'i'}}]
+          })
+          .sort({createdAt: -1})
+          .exec()
+      } catch (error) {
+        console.error(error)
+        await logger.logError(error, 'Applicant.get_freelancer_category_list', null, null, 'GET')
+        return res.status(502).json({success: false, msg: 'User not found'})
+      }
+    } else {
+      try {
+        freelancers = await Users.aggregate([
+          {
+            $lookup: {
+              from: 'users-freelancers',
+              localField: '_id',
+              foreignField: 'uuid',
+              as: 'details'
+            }
+          }
+        ])
+          .match({
+            accountType: 0,
+            isActive: true,
+            isVerified: true,
+            $or: [{firstName: {$regex: searchTerm, $options: 'i'}}, {lastName: {$regex: searchTerm, $options: 'i'}}]
+          })
+          .sort({createdAt: -1})
+          .exec()
+      } catch (error) {
+        console.error(error)
+        await logger.logError(error, 'Applicant.get_freelancer_list', null, null, 'GET')
+        return res.status(502).json({success: false, msg: 'User not found'})
+      }
     }
 
     return res.status(200).json(freelancers)

@@ -10,6 +10,7 @@ const Gigs = require('../../gigs/models/gigs.model')
 const History = require('../../gigs/models/gig-histories.model')
 const Users = require('../../users/models/users.model')
 const FcmTokens = require('../../users/models/fcm-tokens')
+const Notifications = require('../../notifications/models/notifications.model')
 
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
@@ -66,35 +67,62 @@ async function sendNotification(request, gigs, status) {
       if (status === 'Accepted' && gigs.category === 'restaurant-services') {
         console.log('------Getting data of applying')
         console.log(gigs._id, 'Gig ID')
-        const getApplying = await History.find({gig: Types.ObjectId(gigs._id), status: 'Applying'})
+        const getApplying = await Gigs.findById(gigs._id).lean().exec()
+        const recordsArray = getApplying.records
+        // Extract the "auid" values from the recordsArray
+        const auidValues = recordsArray.map((record) => record.auid)
+        console.log(auidValues, 'auidValues')
+        const acceptedRecords = recordsArray.filter((record) => record.status === 'Accepted')
+        let acceptedAuid
+        if (acceptedRecords.length > 0) {
+          acceptedAuid = acceptedRecords[0].auid
+          console.log('The auid with accepted status:', acceptedAuid)
+        } else {
+          console.log('No record with accepted status found.')
+        }
+
+        user = await Users.find({_id: {$in: auidValues}})
           .lean()
           .exec()
-        console.log(getApplying, 'getapplying')
 
-        const userIds = getApplying.map((user) => user.uid)
-        console.log(userIds, 'userIds')
-
-        user = await Users.find({_id: {$in: userIds}})
-          .lean()
-          .exec()
-        console.log(user, 'applyin users')
+        console.log(user, 'users')
         let applyingUsers = []
+        const acceptedAuidString = acceptedAuid.toString()
         if (user && user.length > 0) {
-          await user.forEach((data) => {
-            applyingUsers.push(data._id)
+          user.forEach((data) => {
+            console.log(typeof acceptedAuidString)
+
+            console.log('data._id:', data._id)
+            console.log('acceptedAuid:', acceptedAuid)
+
+            if (!data._id.equals(acceptedAuid)) {
+              console.log('push condition')
+              applyingUsers.push(data._id)
+            }
+            console.log(applyingUsers, 'applyingUsers')
           })
           if (applyingUsers) {
             console.log('-------Notification for rejected jobster-------')
-            const fcmTokenArray = await FcmTokens.find({userId: {$in: targetUsers}})
+            const fcmTokenArray = await FcmTokens.find({userId: {$in: applyingUsers}})
               .lean()
               .exec()
               .then((users_fcm) => users_fcm.map((userToken) => userToken.fcmToken))
             console.log(fcmTokenArray)
+            let message = messageList.filter((obj) => {
+              if (obj.status === 'Gig-Taken') return obj
+            })
+            const notificationInput = new Notifications({
+              title: 'Gig is already taken',
+              body: message[0].description,
+              targetUsers: applyingUsers,
+              type: 'GigNotif',
+              target: 'Selected',
+              additionalData: JSON.stringify(gigs)
+            })
+            url = urlLink + 'freelancer/message'
+            await Notifications.create(notificationInput)
+            fcm.send_notif(fcmTokenArray, message[0].description, url)
           }
-          let message = messageList.filter((obj) => {
-            if (obj.status === 'Gig-Taken') return obj
-          })
-          fcm.send_notif(fcmTokenArray, message[0].description)
         }
       }
     }
@@ -115,32 +143,33 @@ async function sendNotification(request, gigs, status) {
 
       if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
-        await fetch('https://fcm.googleapis.com/fcm/send', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'key=' + process.env.FCM_SERVER_KEY
-          },
-          data: {
-            notification: {
-              title: 'Starjobs',
-              body: message[0].description,
-              icon: 'https://www.starjobs.com.ph/app-logo.png',
-              sound: 1,
-              vibrate: 1,
-              content_available: true,
-              show_in_foreground: true,
-              priority: 'high'
-            },
-            data: {
-              // status:  message[0].status,
-              // gig_status: message[0].type,
-              url: url,
-              type: 'route'
-            },
-            registration_ids: fcmTokenArray
-          }
-        })
+        fcm.send_notif(fcmTokenArray, message[0].description, url)
+        // await fetch('https://fcm.googleapis.com/fcm/send', {
+        //   method: 'post',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     Authorization: 'key=' + process.env.FCM_SERVER_KEY
+        //   },
+        //   data: {
+        //     notification: {
+        //       title: 'Starjobs',
+        //       body: message[0].description,
+        //       icon: 'https://www.starjobs.com.ph/app-logo.png',
+        //       sound: 1,
+        //       vibrate: 1,
+        //       content_available: true,
+        //       show_in_foreground: true,
+        //       priority: 'high'
+        //     },
+        //     data: {
+        //       // status:  message[0].status,
+        //       // gig_status: message[0].type,
+        //       url: url,
+        //       type: 'route'
+        //     },
+        //     registration_ids: fcmTokenArray
+        //   }
+        // })
       }
       // Send SMS Notif
       // sms.cast_sms(recipients, message[0].description)

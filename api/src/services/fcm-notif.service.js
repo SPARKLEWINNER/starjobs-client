@@ -1,6 +1,9 @@
-const axios = require('axios')
+const fetch = require('axios')
+const mongoose = require('mongoose')
+const {ENV} = process.env
+
 var controller = {
-  send_notif: async function (fcmTokenArray, message) {
+  send_notif: async function (fcmTokenArray, message, url) {
     await fetch('https://fcm.googleapis.com/fcm/send', {
       method: 'post',
       headers: {

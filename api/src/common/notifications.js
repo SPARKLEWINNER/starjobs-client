@@ -105,7 +105,7 @@ var controller = {
       }
     }
     // Send SMS Notif
-    sms.cast_sms(recipients, 'This is a testing sms. Please Ignore')
+    sms.cast_sms(recipients, 'A New Gig is Nearby, Login to your Starjobs App to apply')
 
     const notificationInput = new Notifications({
       title: 'A gig offer nearby is posted',

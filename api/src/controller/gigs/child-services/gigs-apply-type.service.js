@@ -65,49 +65,34 @@ async function sendNotification(request, gigs, status) {
       user = await Users.find(jobster_id).lean().exec()
 
       if (status === 'Accepted' && gigs.category === 'restaurant-services') {
-        console.log('------Getting data of applying')
-        console.log(gigs._id, 'Gig ID')
         const getApplying = await Gigs.findById(gigs._id).lean().exec()
         const recordsArray = getApplying.records
         // Extract the "auid" values from the recordsArray
         const auidValues = recordsArray.map((record) => record.auid)
-        console.log(auidValues, 'auidValues')
         const acceptedRecords = recordsArray.filter((record) => record.status === 'Accepted')
         let acceptedAuid
         if (acceptedRecords.length > 0) {
-          acceptedAuid = acceptedRecords[0].auid
-          console.log('The auid with accepted status:', acceptedAuid)
+          acceptedAuid = acceptedRecords[0].auidValues
         } else {
-          console.log('No record with accepted status found.')
         }
 
         user = await Users.find({_id: {$in: auidValues}})
           .lean()
           .exec()
 
-        console.log(user, 'users')
         let applyingUsers = []
         const acceptedAuidString = acceptedAuid.toString()
         if (user && user.length > 0) {
           user.forEach((data) => {
-            console.log(typeof acceptedAuidString)
-
-            console.log('data._id:', data._id)
-            console.log('acceptedAuid:', acceptedAuid)
-
             if (!data._id.equals(acceptedAuid)) {
-              console.log('push condition')
               applyingUsers.push(data._id)
             }
-            console.log(applyingUsers, 'applyingUsers')
           })
           if (applyingUsers) {
-            console.log('-------Notification for rejected jobster-------')
             const fcmTokenArray = await FcmTokens.find({userId: {$in: applyingUsers}})
               .lean()
               .exec()
               .then((users_fcm) => users_fcm.map((userToken) => userToken.fcmToken))
-            console.log(fcmTokenArray)
             let message = messageList.filter((obj) => {
               if (obj.status === 'Gig-Taken') return obj
             })
@@ -131,7 +116,6 @@ async function sendNotification(request, gigs, status) {
         .lean()
         .exec()
       const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
-      console.log(fcmTokenArray)
 
       let message = messageList.filter((obj) => {
         if (obj.status === status) return obj

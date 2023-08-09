@@ -46,7 +46,6 @@ var controller = {
     } else {
       return
     }
-    console.log(jobster, 'jobsters')
     const users_fcm = await FcmTokens.find({userId: {$in: targetUsers}})
       .lean()
       .exec()
@@ -66,11 +65,9 @@ var controller = {
       }
       return result
     }, [])
-
-    console.log(recipients, 'phone')
     const url =
       ENV == 'staging' ? 'http://192.168.1.3:8000/freelancer/message' : 'https://app.starjobs.com.ph/freelancer/message'
-    console.log(url)
+
     if (fcmTokenArray.length != 0) {
       if (ENV == 'production') {
         try {

@@ -262,11 +262,11 @@ var controllers = {
           }
         ]).exec()
 
-        gigs = await Gigs.aggregate([
+        const pipeline = [
           {
             $lookup: {
-              localField: 'gigs._id',
               from: 'extended',
+              localField: '_id',
               foreignField: 'gigId',
               as: 'extended'
             }
@@ -279,8 +279,8 @@ var controllers = {
           },
           {
             $lookup: {
-              localField: 'gigs._id',
               from: 'gigs-histories',
+              localField: '_id',
               foreignField: 'gid',
               as: 'history'
             }
@@ -289,6 +289,27 @@ var controllers = {
             $unwind: {
               path: '$history',
               preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $addFields: {
+              maximumApplicants: '$extended.maximumApplicants',
+              numberofApplicants: {
+                $filter: {
+                  input: '$extended.applicants',
+                  as: 's',
+                  cond: {
+                    $eq: ['$$s.status', 'Applying']
+                  }
+                }
+              }
+            }
+          },
+          {
+            $addFields: {
+              numberofApplicants: {
+                $ifNull: ['$numberofApplicants', []] // Handle potential null value
+              }
             }
           },
           {
@@ -316,74 +337,66 @@ var controllers = {
               commissionRate: 1,
               gigFeeType: 1,
               applicants: 1,
-              maximumApplicants: '$extended.maximumApplicants',
-              numberofApplicants: {
-                $filter: {
-                  input: '$extended.applicants',
-                  as: 's',
-                  cond: [
-                    {
-                      $eq: ['$$s.status', 'Applying']
-                    },
-                    '$s.auid',
-                    []
-                  ]
-                }
-              }
+              maximumApplicants: 1,
+              numberofApplicants: {$size: '$numberofApplicants'}
+            }
+          },
+          {
+            $match: {
+              uid: mongoose.Types.ObjectId(id)
+              // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
             }
           }
-        ])
-          .match({
-            uid: mongoose.Types.ObjectId(id)
-            // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
+        ]
+
+        let gigs = await Gigs.aggregate(pipeline).exec()
+
+        const filteredGigs = gigs.filter((obj) => {
+          const isBeforeToday = !moment(new Date(obj.time)).isBefore(moment(), 'day')
+          const hasContracts = contracts.length > 0
+
+          if (isBeforeToday && (!hasContracts || obj.status !== 'Contracts')) {
+            return true
+          }
+        })
+
+        const updatedGigs = await Promise.all(
+          filteredGigs.map(async (obj) => {
+            if (!obj.isExtended) {
+              const account = await Freelancers.findOne({uuid: obj.auid}).lean().exec()
+
+              if (obj.status === 'Applying' || obj.status === 'Waiting') {
+                const history = await History.find(
+                  {
+                    gid: obj._id,
+                    status: {$in: ['Waiting', 'Applying']}
+                  },
+                  {uid: 1, status: 1, _id: 1, createdAt: 1}
+                )
+                  .lean()
+                  .exec()
+
+                return {
+                  ...obj,
+                  applicants: history,
+                  account
+                }
+              }
+
+              return {
+                ...obj,
+                account
+              }
+            } else {
+              return obj
+            }
           })
-          .exec()
-
-        gigs = await Promise.all(
-          gigs &&
-            gigs
-              .filter((obj) => {
-                if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
-                  if (contracts.length > 0 && obj.status != 'Contracts') return obj
-                  if (contracts.length == 0) return obj
-                }
-              })
-              .map(async (obj) => {
-                if (!obj.isExtended) {
-                  const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(obj.auid)})
-                    .lean()
-                    .exec()
-
-                  // add applicant list since to prevent re-apply of jobsters
-                  if (obj.status === 'Applying' || obj.status === 'Waiting') {
-                    const history = await History.find(
-                      {
-                        gid: mongoose.Types.ObjectId(obj._id),
-                        status: ['Waiting', 'Applying']
-                      },
-                      {uid: 1, status: 1, _id: 1, createdAt: 1}
-                    )
-                      .find()
-                      .lean()
-
-                    return {
-                      ...obj,
-                      applicants: history,
-                      account
-                    }
-                  }
-
-                  return {
-                    ...obj,
-                    account
-                  }
-                } else {
-                  return obj
-                }
-              })
         )
 
-        let gigData = gigs
+        const optimizedGigs = updatedGigs.filter((obj) => obj)
+
+        let gigData = optimizedGigs
+        console.log(gigData, 'gig data')
         if (contracts.length > 0) {
           gigData = [contracts[0], ...gigs]
         }

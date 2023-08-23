@@ -338,12 +338,11 @@ var controllers = {
         //     // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
         //   })
         //   .exec()
-
         gigs = await Gigs.aggregate([
           {
             $match: {
               uid: mongoose.Types.ObjectId(id)
-              // status: { $in: ['Waiting', 'Applying'] } MQ: 03-09-2022 Fixed issue of pending gigs not showing
+              // status: { $in: ['Waiting', 'Applying'] }  // Uncomment if needed
             }
           },
           {
@@ -355,11 +354,23 @@ var controllers = {
             }
           },
           {
+            $unwind: {
+              path: '$extended',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
             $lookup: {
               from: 'gigs-histories',
               localField: '_id',
               foreignField: 'gid',
               as: 'history'
+            }
+          },
+          {
+            $unwind: {
+              path: '$history',
+              preserveNullAndEmptyArrays: true
             }
           },
           {
@@ -383,121 +394,117 @@ var controllers = {
               date: 1,
               dateCreated: 1,
               auid: 1,
-              history: {
-                $filter: {
-                  input: '$history',
-                  as: 'h',
-                  cond: {$in: ['$$h.status', ['Applying', 'Waiting']]}
-                }
-              },
+              history: 1,
               commissionRate: 1,
               gigFeeType: 1,
-              applicants: {$ifNull: ['$extended.applicants', []]},
-              maximumApplicants: {$ifNull: ['$extended.maximumApplicants', 0]},
+              applicants: 1,
+              maximumApplicants: '$extended.maximumApplicants',
               numberofApplicants: {
-                $size: {
-                  $filter: {
-                    input: '$extended.applicants',
-                    as: 's',
-                    cond: {$eq: ['$$s.status', 'Applying']}
-                  }
-                }
+                $cond: [
+                  {
+                    $and: [
+                      {$eq: ['$extended.applicants.status', 'Applying']},
+                      {$gt: ['$extended.applicants.auid', null]}
+                    ]
+                  },
+                  1,
+                  0
+                ]
               }
             }
           }
         ])
 
-        // gigs = await Promise.all(
-        //   gigs &&
-        //     gigs
-        //       .filter((obj) => {
-        //         if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
-        //           if (contracts.length > 0 && obj.status != 'Contracts') return obj
-        //           if (contracts.length == 0) return obj
-        //         }
-        //       })
-        //       .map(async (obj) => {
-        //         if (!obj.isExtended) {
-        //           const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(obj.auid)})
-        //             .lean()
-        //             .exec()
+        gigs = await Promise.all(
+          gigs &&
+            gigs
+              .filter((obj) => {
+                if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
+                  if (contracts.length > 0 && obj.status != 'Contracts') return obj
+                  if (contracts.length == 0) return obj
+                }
+              })
+              .map(async (obj) => {
+                if (!obj.isExtended) {
+                  const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(obj.auid)})
+                    .lean()
+                    .exec()
 
-        //           // add applicant list since to prevent re-apply of jobsters
-        //           if (obj.status === 'Applying' || obj.status === 'Waiting') {
-        //             const history = await History.find(
-        //               {
-        //                 gid: mongoose.Types.ObjectId(obj._id),
-        //                 status: ['Waiting', 'Applying']
-        //               },
-        //               {uid: 1, status: 1, _id: 1, createdAt: 1}
-        //             )
-        //               .find()
-        //               .lean()
-
-        //             return {
-        //               ...obj,
-        //               applicants: history,
-        //               account
-        //             }
-        //           }
-
-        //           return {
-        //             ...obj,
-        //             account
-        //           }
-        //         } else {
-        //           return obj
-        //         }
-        //       })
-        // )
-
-        const filteredGigs = gigs
-          ? await Promise.all(
-              gigs
-                .filter((obj) => {
-                  if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
-                    if (contracts.length > 0 && obj.status !== 'Contracts') return true
-                    if (contracts.length === 0) return true
-                  }
-                  return false
-                })
-                .map(async (obj) => {
-                  if (!obj.isExtended) {
-                    const account = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(obj.auid)})
+                  // add applicant list since to prevent re-apply of jobsters
+                  if (obj.status === 'Applying' || obj.status === 'Waiting') {
+                    const history = await History.find(
+                      {
+                        gid: mongoose.Types.ObjectId(obj._id),
+                        status: ['Waiting', 'Applying']
+                      },
+                      {uid: 1, status: 1, _id: 1, createdAt: 1}
+                    )
+                      .find()
                       .lean()
-                      .exec()
-
-                    if (obj.status === 'Applying' || obj.status === 'Waiting') {
-                      const history = await History.find(
-                        {
-                          gid: mongoose.Types.ObjectId(obj._id),
-                          status: {$in: ['Waiting', 'Applying']}
-                        },
-                        {uid: 1, status: 1, _id: 1, createdAt: 1}
-                      ).lean()
-
-                      return {
-                        ...obj,
-                        applicants: history,
-                        account
-                      }
-                    }
 
                     return {
                       ...obj,
+                      applicants: history,
                       account
                     }
-                  } else {
-                    return obj
                   }
-                })
-            )
-          : []
 
-        // You can use filteredGigs as needed
+                  return {
+                    ...obj,
+                    account
+                  }
+                } else {
+                  return obj
+                }
+              })
+        )
 
-        let gigData = filteredGigs
-        console.log(gigData, 'gig data')
+        // const filteredGigs = gigs
+        //   ? await Promise.all(
+        //       gigs
+        //         .filter((obj) => {
+        //           if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
+        //             if (contracts.length > 0 && obj.status !== 'Contracts') return true
+        //             if (contracts.length === 0) return true
+        //           }
+        //           return false
+        //         })
+        //         .map(async (obj) => {
+        //           if (!obj.isExtended) {
+        //             const account = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(obj.auid)})
+        //               .lean()
+        //               .exec()
+        //             console.log(account)
+        //             if (obj.status === 'Applying' || obj.status === 'Waiting') {
+        //               const history = await History.find(
+        //                 {
+        //                   gid: mongoose.Types.ObjectId(obj._id),
+        //                   status: {$in: ['Waiting', 'Applying']}
+        //                 },
+        //                 {uid: 1, status: 1, _id: 1, createdAt: 1}
+        //               ).lean()
+
+        //               return {
+        //                 ...obj,
+        //                 applicants: history,
+        //                 account
+        //               }
+        //             }
+
+        //             return {
+        //               ...obj,
+        //               account
+        //             }
+        //           } else {
+        //             return obj
+        //           }
+        //         })
+        //     )
+        //   : []
+
+        // // You can use filteredGigs as needed
+
+        let gigData = gigs
         if (contracts.length > 0) {
           gigData = [contracts[0], ...gigs]
         }

@@ -73,7 +73,6 @@ async function sendNotification(request, gigs, status) {
         let acceptedAuid
         if (acceptedRecords.length > 0) {
           acceptedAuid = acceptedRecords[0].auidValues
-        } else {
         }
 
         user = await Users.find({_id: {$in: auidValues}})
@@ -81,7 +80,7 @@ async function sendNotification(request, gigs, status) {
           .exec()
 
         let applyingUsers = []
-        const acceptedAuidString = acceptedAuid.toString()
+        // const acceptedAuidString = acceptedAuid.toString()
         if (user && user.length > 0) {
           user.forEach((data) => {
             if (!data._id.equals(acceptedAuid)) {
@@ -106,6 +105,7 @@ async function sendNotification(request, gigs, status) {
             })
             url = urlLink + 'freelancer/message'
             await Notifications.create(notificationInput)
+            console.log('------------Sending Gig Taken Notif----------')
             fcm.send_notif(fcmTokenArray, message[0].description, url)
           }
         }
@@ -125,35 +125,9 @@ async function sendNotification(request, gigs, status) {
 
       // if (!user || !user[0].deviceId) return true
 
-      if (fcmTokenArray.length != 0) {
+      if (fcmTokenArray.length != 0 && message[0].status !== 'Gig-Taken') {
         console.log('------------Sending Notif----------')
         fcm.send_notif(fcmTokenArray, message[0].description, url)
-        // await fetch('https://fcm.googleapis.com/fcm/send', {
-        //   method: 'post',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     Authorization: 'key=' + process.env.FCM_SERVER_KEY
-        //   },
-        //   data: {
-        //     notification: {
-        //       title: 'Starjobs',
-        //       body: message[0].description,
-        //       icon: 'https://www.starjobs.com.ph/app-logo.png',
-        //       sound: 1,
-        //       vibrate: 1,
-        //       content_available: true,
-        //       show_in_foreground: true,
-        //       priority: 'high'
-        //     },
-        //     data: {
-        //       // status:  message[0].status,
-        //       // gig_status: message[0].type,
-        //       url: url,
-        //       type: 'route'
-        //     },
-        //     registration_ids: fcmTokenArray
-        //   }
-        // })
       }
       // Send SMS Notif
       // sms.cast_sms(recipients, message[0].description)

@@ -72,7 +72,9 @@ async function sendNotification(request, gigs, status) {
         const acceptedRecords = recordsArray.filter((record) => record.status === 'Accepted')
         let acceptedAuid
         if (acceptedRecords.length > 0) {
-          acceptedAuid = acceptedRecords[0].auidValues
+          acceptedAuid = acceptedRecords[0]?.auid
+          
+          auidValues.splice(auidValues.indexOf(acceptedAuid), 1); // Remove acceptedAuid from auidValues
         }
 
         user = await Users.find({_id: {$in: auidValues}})
@@ -92,6 +94,7 @@ async function sendNotification(request, gigs, status) {
               .lean()
               .exec()
               .then((users_fcm) => users_fcm.map((userToken) => userToken.fcmToken))
+            console.log("🚀 ~ file: gigs-apply-type.service.js:99 ~ sendNotification ~ fcmTokenArray:", fcmTokenArray)
             let message = messageList.filter((obj) => {
               if (obj.status === 'Gig-Taken') return obj
             })
@@ -124,8 +127,8 @@ async function sendNotification(request, gigs, status) {
       if (!message) return true
 
       // if (!user || !user[0].deviceId) return true
-
-      if (fcmTokenArray.length != 0 && message[0].status !== 'Gig-Taken') {
+      
+      if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
         fcm.send_notif(fcmTokenArray, message[0].description, url)
       }

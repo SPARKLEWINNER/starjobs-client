@@ -115,6 +115,7 @@ async function sendNotification(request, gigs, status) {
               }
           }
         }
+        return true
       }
     }
     if (user && user.length > 0) {

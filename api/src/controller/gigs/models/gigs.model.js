@@ -92,6 +92,7 @@ const gigsData = {
     proposedWorkTime: String
   },
   gigFeeType: String,
+  gigOffered: String,
   commissionRate: String,
   applicants: [],
   records: []

@@ -241,6 +241,7 @@ var controllers = {
               category: true,
               commissionRate: true,
               gigFeeType: true,
+              gigOffered: true,
               from: '$gigs.from',
               time: '$gigs.time',
               shift: '$gigs.shift',
@@ -397,6 +398,7 @@ var controllers = {
               history: 1,
               commissionRate: 1,
               gigFeeType: 1,
+              gigOffered: 1,
               applicants: 1,
               maximumApplicants: '$extended.maximumApplicants',
               numberofApplicants: {

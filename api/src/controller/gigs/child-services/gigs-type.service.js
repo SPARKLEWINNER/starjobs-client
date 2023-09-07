@@ -32,6 +32,7 @@ const services = {
       repeatTimes,
       repeatEvery,
       gigFeeType,
+      gigOffered,
       commissionFee
     } = req.body
     const now = new Date()
@@ -85,6 +86,7 @@ const services = {
       uid: mongoose.Types.ObjectId(id),
       dateCreated: now.toISOString(),
       gigFeeType: gigFeeType,
+      gigOffered: gigOffered,
       commissionRate: commissionFee
     }
 

@@ -164,12 +164,12 @@ var services = {
       uid: Types.ObjectId(uid),
       isExtended: false
     }
-
+   
     try {
       let gigs = await Gigs.find({_id: Types.ObjectId(id)})
         .lean()
         .exec()
-
+     
       if (!gigs) res.status(400).json({success: false, msg: 'Gig not found'}) // gig not found
       gigs = gigs.pop()
 
@@ -246,13 +246,12 @@ var services = {
               grossWithHolding,
               serviceCost,
               jobsterTotal
-            } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.locationRate)
-
+            } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.locationRate, gigs.gigOffered)
+            
             const feeHistoryInput = new FeeHistory({
               gigid: Types.ObjectId(id),
               ...gigs
             })
-
             await Gigs.findOneAndUpdate(
               {_id: Types.ObjectId(id)},
               {

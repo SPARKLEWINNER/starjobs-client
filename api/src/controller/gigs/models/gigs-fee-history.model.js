@@ -39,7 +39,7 @@ const feeHistorySchema = new Schema(
     locationRate: {
       default: 'NCR',
       type: String,
-      enum: ['NCR', 'Provincial']
+      enum: ['NCR', 'Provincial', 'Not applicable']
     },
     fees: {
       computedFeeByHr: String,

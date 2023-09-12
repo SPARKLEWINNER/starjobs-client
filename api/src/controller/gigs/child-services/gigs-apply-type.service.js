@@ -121,7 +121,7 @@ async function sendNotification(request, gigs, status) {
             })
             url = urlLink + 'freelancer/message'
             await Notifications.create(notificationInput)
-            fcm.send_notif(fcmTokenArray, message[0].description, url)
+            fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
           }
         }
       }
@@ -143,7 +143,7 @@ async function sendNotification(request, gigs, status) {
 
       if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
-        fcm.send_notif(fcmTokenArray, message[0].description, url)
+        fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
         // await fetch('https://fcm.googleapis.com/fcm/send', {
         //   method: 'post',
         //   headers: {

@@ -262,11 +262,93 @@ var controllers = {
           }
         ]).exec()
 
+        // gigs = await Gigs.aggregate([
+        //   {
+        //     $lookup: {
+        //       localField: 'gigs._id',
+        //       from: 'extended',
+        //       foreignField: 'gigId',
+        //       as: 'extended'
+        //     }
+        //   },
+        //   {
+        //     $unwind: {
+        //       path: '$extended',
+        //       preserveNullAndEmptyArrays: true
+        //     }
+        //   },
+        //   {
+        //     $lookup: {
+        //       localField: 'gigs._id',
+        //       from: 'gigs-histories',
+        //       foreignField: 'gid',
+        //       as: 'history'
+        //     }
+        //   },
+        //   {
+        //     $unwind: {
+        //       path: '$history',
+        //       preserveNullAndEmptyArrays: true
+        //     }
+        //   },
+        //   {
+        //     $project: {
+        //       _id: 1,
+        //       position: 1,
+        //       hours: 1,
+        //       nation: 1,
+        //       from: 1,
+        //       late: 1,
+        //       time: 1,
+        //       status: 1,
+        //       shift: 1,
+        //       fee: 1,
+        //       user: 1,
+        //       uid: 1,
+        //       isExtended: 1,
+        //       isApprove: 1,
+        //       category: 1,
+        //       createdAt: 1,
+        //       date: 1,
+        //       dateCreated: 1,
+        //       auid: 1,
+        //       history: 1,
+        //       commissionRate: 1,
+        //       gigFeeType: 1,
+        //       applicants: 1,
+        //       maximumApplicants: '$extended.maximumApplicants',
+        //       numberofApplicants: {
+        //         $filter: {
+        //           input: '$extended.applicants',
+        //           as: 's',
+        //           cond: [
+        //             {
+        //               $eq: ['$$s.status', 'Applying']
+        //             },
+        //             '$s.auid',
+        //             []
+        //           ]
+        //         }
+        //       }
+        //     }
+        //   }
+        // ])
+        //   .match({
+        //     uid: mongoose.Types.ObjectId(id)
+        //     // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
+        //   })
+        //   .exec()
         gigs = await Gigs.aggregate([
           {
+            $match: {
+              uid: mongoose.Types.ObjectId(id)
+              // status: { $in: ['Waiting', 'Applying'] }  // Uncomment if needed
+            }
+          },
+          {
             $lookup: {
-              localField: 'gigs._id',
               from: 'extended',
+              localField: '_id',
               foreignField: 'gigId',
               as: 'extended'
             }
@@ -279,8 +361,8 @@ var controllers = {
           },
           {
             $lookup: {
-              localField: 'gigs._id',
               from: 'gigs-histories',
+              localField: '_id',
               foreignField: 'gid',
               as: 'history'
             }
@@ -318,26 +400,20 @@ var controllers = {
               applicants: 1,
               maximumApplicants: '$extended.maximumApplicants',
               numberofApplicants: {
-                $filter: {
-                  input: '$extended.applicants',
-                  as: 's',
-                  cond: [
-                    {
-                      $eq: ['$$s.status', 'Applying']
-                    },
-                    '$s.auid',
-                    []
-                  ]
-                }
+                $cond: [
+                  {
+                    $and: [
+                      {$eq: ['$extended.applicants.status', 'Applying']},
+                      {$gt: ['$extended.applicants.auid', null]}
+                    ]
+                  },
+                  1,
+                  0
+                ]
               }
             }
           }
         ])
-          .match({
-            uid: mongoose.Types.ObjectId(id)
-            // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
-          })
-          .exec()
 
         gigs = await Promise.all(
           gigs &&
@@ -383,6 +459,51 @@ var controllers = {
               })
         )
 
+        // const filteredGigs = gigs
+        //   ? await Promise.all(
+        //       gigs
+        //         .filter((obj) => {
+        //           if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
+        //             if (contracts.length > 0 && obj.status !== 'Contracts') return true
+        //             if (contracts.length === 0) return true
+        //           }
+        //           return false
+        //         })
+        //         .map(async (obj) => {
+        //           if (!obj.isExtended) {
+        //             const account = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(obj.auid)})
+        //               .lean()
+        //               .exec()
+        //             console.log(account)
+        //             if (obj.status === 'Applying' || obj.status === 'Waiting') {
+        //               const history = await History.find(
+        //                 {
+        //                   gid: mongoose.Types.ObjectId(obj._id),
+        //                   status: {$in: ['Waiting', 'Applying']}
+        //                 },
+        //                 {uid: 1, status: 1, _id: 1, createdAt: 1}
+        //               ).lean()
+
+        //               return {
+        //                 ...obj,
+        //                 applicants: history,
+        //                 account
+        //               }
+        //             }
+
+        //             return {
+        //               ...obj,
+        //               account
+        //             }
+        //           } else {
+        //             return obj
+        //           }
+        //         })
+        //     )
+        //   : []
+
+        // // You can use filteredGigs as needed
+
         let gigData = gigs
         if (contracts.length > 0) {
           gigData = [contracts[0], ...gigs]
@@ -402,7 +523,6 @@ var controllers = {
 
     return res.status(200).json(client)
   },
-
   get_client_edit_profile: async function (req, res) {
     const {id} = req.params
     if (!id || id === 'undefined') return res.status(502).json({success: false, msg: 'User id missing'})

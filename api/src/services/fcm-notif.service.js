@@ -29,7 +29,8 @@ var controller = {
           vibrate: 1,
           content_available: true,
           show_in_foreground: true,
-          priority: 'high'
+          priority: 'high',
+          status: status
         },
         data: {
           // status:  message[0].status,

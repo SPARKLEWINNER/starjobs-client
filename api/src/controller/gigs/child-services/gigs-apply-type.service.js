@@ -98,6 +98,7 @@ async function sendNotification(request, gigs, status) {
             let message = messageList.filter((obj) => {
               if (obj.status === 'Gig-Taken') return obj
             })
+
               const notificationInput = new Notifications({
                 title: 'Gig is already taken',
                 body: message[0].description,
@@ -111,7 +112,7 @@ async function sendNotification(request, gigs, status) {
               await Notifications.create(notificationInput);
               if (fcmTokenArray.length > 0) { // Check if there are any FCM tokens before sending the notification
                 console.log('------------Sending Gig Taken Notif----------');
-                fcm.send_notif(fcmTokenArray, message[0].description, url);
+                fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status);
               }
           }
         }
@@ -134,7 +135,8 @@ async function sendNotification(request, gigs, status) {
       
       if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
-        fcm.send_notif(fcmTokenArray, message[0].description, url)
+
+        fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
       }
       // Send SMS Notif
       // sms.cast_sms(recipients, message[0].description)

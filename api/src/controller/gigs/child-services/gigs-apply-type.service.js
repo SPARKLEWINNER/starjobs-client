@@ -246,7 +246,7 @@ var services = {
               grossWithHolding,
               serviceCost,
               jobsterTotal
-            } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.locationRate)
+            } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.fees.voluntaryFee)
 
             const feeHistoryInput = new FeeHistory({
               gigid: Types.ObjectId(id),

@@ -11,17 +11,18 @@ let ncrRate = {
 }
 
 var controller = {
-  default_calculations: function (hours, fee, locationRate) {
+  default_calculations: function (hours, fee, volFee) {
     let computedFeeByHr = parseFloat(hours * fee)
-    let voluntaryFee =
-      parseFloat(hours * ncrRate.sss) + parseFloat(hours * ncrRate.pagibig) + parseFloat(hours * ncrRate.philhealth)
+    let voluntaryFee = parseFloat(volFee)
+    //  Comment out old computation
+    //   parseFloat(hours * ncrRate.sss) + parseFloat(hours * ncrRate.pagibig) + parseFloat(hours * ncrRate.philhealth)
 
-    if (locationRate === 'Provincial') {
-      voluntaryFee =
-        parseFloat(hours * pronvicialRate.sss) +
-        parseFloat(hours * pronvicialRate.pagibig) +
-        parseFloat(hours * pronvicialRate.philhealth)
-    }
+    // if (locationRate === 'Provincial') {
+    //   voluntaryFee =
+    //     parseFloat(hours * pronvicialRate.sss) +
+    //     parseFloat(hours * pronvicialRate.pagibig) +
+    //     parseFloat(hours * pronvicialRate.philhealth)
+    // }
 
     let appFee = parseFloat(hours * 1.25)
     let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.1 // 10%

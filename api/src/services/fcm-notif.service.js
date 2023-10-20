@@ -4,10 +4,11 @@ const {ENV} = process.env
 
 var controller = {
   send_notif: async function (fcmTokenArray, message, url, status) {
+    console.log(status, 'status')
     let notifSound
     let channel
     if (status === 'Applying') {
-      notifSound = 'notification_sound.mp3'
+      notifSound = 'notification_sound.wav'
       channel = 'sound_channel'
     } else {
       notifSound = 'default'
@@ -35,7 +36,8 @@ var controller = {
           // status:  message[0].status,
           // gig_status: message[0].type,
           url: url,
-          type: 'route'
+          type: 'route',
+          status: status
         },
         registration_ids: fcmTokenArray
       }

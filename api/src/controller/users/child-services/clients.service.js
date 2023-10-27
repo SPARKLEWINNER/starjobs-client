@@ -398,6 +398,7 @@ var controllers = {
               commissionRate: 1,
               gigFeeType: 1,
               applicants: 1,
+              fees: 1,
               maximumApplicants: '$extended.maximumApplicants',
               numberofApplicants: {
                 $cond: [

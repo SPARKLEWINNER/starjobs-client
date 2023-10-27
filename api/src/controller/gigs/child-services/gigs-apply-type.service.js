@@ -1,6 +1,7 @@
 const fetch = require('axios')
 const mongoose = require('mongoose')
 const {Types} = mongoose
+const moment = require('moment')
 
 const Contracts = require('../../gigs/models/gig-contracts.model')
 const Extends = require('../../gigs/models/gigs-extends.model')
@@ -238,45 +239,100 @@ var services = {
               }
             )
           } else if (status === 'Confirm-End-Shift') {
-            const {
-              computedFeeByHr,
-              voluntaryFee,
-              appFee,
-              transactionFee,
-              grossGigFee,
-              grossVAT,
-              grossWithHolding,
-              serviceCost,
-              jobsterTotal
-            } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.locationRate)
+            let postingDays = moment(gigs.time).diff(moment(gigs.from), 'days') + 1
+            console.log("🚀 ~ file: gigs-apply-type.service.js:241 ~ postingDays:", postingDays)
+            console.log("🚀 ~ file: gigs-apply-type.service.js:258 ~  gigs.gigOffered:",  gigs.gigOffered)
+            
+            // Add new calculation for construction and other form
+            if(gigs.gigOffered){
+              const {
+                computedFeeByHr,
+                computedDaily,
+                grossGigDaily,
+                voluntaryFee,
+                appFee,
+                transactionFee,
+                grossGigFee,
+                grossVAT,
+                grossWithHolding,
+                serviceCost,
+                jobsterTotal
+              } = calculations.new_calculation(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.gigOffered, postingDays)
 
-            const feeHistoryInput = new FeeHistory({
-              gigid: Types.ObjectId(id),
-              ...gigs
-            })
-
-            await Gigs.findOneAndUpdate(
-              {_id: Types.ObjectId(id)},
-              {
-                status: status,
-                hours: gigs.fees.proposedWorkTime,
-                fee: gigs.fees.proposedRate,
-                fees: {
-                  computedFeeByHr: computedFeeByHr,
-                  voluntaryFee: voluntaryFee,
-                  appFee: appFee,
-                  transactionFee: transactionFee,
-                  grossGigFee: grossGigFee,
-                  grossVAT: grossVAT,
-                  grossWithHolding: grossWithHolding,
-                  serviceCost: serviceCost,
-                  jobsterTotal: jobsterTotal
-                },
-                late: late ?? null
-              }
-            )
-
-            await FeeHistory.create(feeHistoryInput)
+              const feeHistoryInput = new FeeHistory({
+                gigid: Types.ObjectId(id),
+                ...gigs
+              })
+  
+              await Gigs.findOneAndUpdate(
+                {_id: Types.ObjectId(id)},
+                {
+                  status: status,
+                  hours: gigs.fees.proposedWorkTime,
+                  fee: gigs.fees.proposedRate,
+                  fees: {
+                    computedFeeByHr: computedFeeByHr,
+                    computedDaily: computedDaily,
+                    grossGigDaily: grossGigDaily,
+                    voluntaryFee: voluntaryFee,
+                    appFee: appFee,
+                    transactionFee: transactionFee,
+                    grossGigFee: grossGigFee,
+                    grossVAT: grossVAT,
+                    grossWithHolding: grossWithHolding,
+                    serviceCost: serviceCost,
+                    jobsterTotal: jobsterTotal
+                  },
+                  late: late ?? null
+                }
+              )
+  
+              await FeeHistory.create(feeHistoryInput)
+            }
+            else{
+              const {
+                computedFeeByHr,
+                voluntaryFee,
+                appFee,
+                transactionFee,
+                grossGigFee,
+                grossVAT,
+                grossWithHolding,
+                serviceCost,
+                jobsterTotal,
+                premiumFee
+              } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.fees.voluntaryFee, gigs.fees.premiumFee)
+  
+              const feeHistoryInput = new FeeHistory({
+                gigid: Types.ObjectId(id),
+                ...gigs
+              })
+  
+              await Gigs.findOneAndUpdate(
+                {_id: Types.ObjectId(id)},
+                {
+                  status: status,
+                  hours: gigs.fees.proposedWorkTime,
+                  fee: gigs.fees.proposedRate,
+                  fees: {
+                    computedFeeByHr: computedFeeByHr,
+                    voluntaryFee: voluntaryFee,
+                    appFee: appFee,
+                    transactionFee: transactionFee,
+                    grossGigFee: grossGigFee,
+                    grossVAT: grossVAT,
+                    grossWithHolding: grossWithHolding,
+                    serviceCost: serviceCost,
+                    jobsterTotal: jobsterTotal,
+                    premiumFee: premiumFee
+                  },
+                  late: late ?? null
+                }
+              )
+  
+              await FeeHistory.create(feeHistoryInput)
+            }
+            
           } else {
             await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {status: status, late: late ?? null})
           }

@@ -36,11 +36,11 @@ const feeHistorySchema = new Schema(
     notes: String,
     dateCreated: Date,
     user: [userSchema],
-    locationRate: {
-      default: 'NCR',
-      type: String,
-      enum: ['NCR', 'Provincial']
-    },
+    // locationRate: {
+    //   default: 'NCR',
+    //   type: String,
+    //   enum: ['NCR', 'Provincial']
+    // },
     fees: {
       computedFeeByHr: String,
       voluntaryFee: String,

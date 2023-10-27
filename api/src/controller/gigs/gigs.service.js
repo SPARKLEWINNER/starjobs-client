@@ -53,6 +53,7 @@ var controllers = {
         user: 1,
         from: 1,
         time: 1,
+        fees: 1,
         locationRate: 1,
         category:1
       };
@@ -205,6 +206,7 @@ var controllers = {
         from: 1,
         time: 1,
         locationRate: 1,
+        fees:1,
         category:1
       };
 

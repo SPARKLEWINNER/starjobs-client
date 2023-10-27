@@ -89,9 +89,13 @@ const gigsData = {
     serviceCost: String,
     jobsterTotal: String,
     proposedRate: String,
-    proposedWorkTime: String
+    proposedWorkTime: String,
+    nightSurge: String,
+    holidaySurge: String,
+    premiumFee: String,
   },
   gigFeeType: String,
+  gigOffered: String,
   commissionRate: String,
   applicants: [],
   records: []

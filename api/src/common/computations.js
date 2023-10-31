@@ -11,7 +11,7 @@
 // }
 
 var controller = {
-  default_calculations: function (hours, fee, volFee) {
+  default_calculations: function (hours, fee, volFee, premFee) {
     let computedFeeByHr = parseFloat(hours * fee)
     let voluntaryFee = parseFloat(volFee)
     //  Comment out old computation
@@ -23,14 +23,14 @@ var controller = {
     //     parseFloat(hours * pronvicialRate.pagibig) +
     //     parseFloat(hours * pronvicialRate.philhealth)
     // }
-
+    let premiumFee = parseFloat(premFee)
     let appFee = parseFloat(hours * 1.25)
     let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.1 // 10%
-    let grossGigFee = parseFloat(computedFeeByHr + voluntaryFee + appFee + transactionFee)
+    let grossGigFee = parseFloat(computedFeeByHr + voluntaryFee + appFee + transactionFee + premiumFee)
     let grossVAT = parseFloat(grossGigFee * 0.12) // 12%
     let grossWithHolding = parseFloat(grossGigFee * 0.02) // 2%
     let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding)
-    let jobsterTotal = parseFloat(fee + voluntaryFee / hours)
+    let jobsterTotal = parseFloat(fee) + voluntaryFee / hours
 
     return {
       computedFeeByHr,
@@ -41,7 +41,8 @@ var controller = {
       grossVAT,
       grossWithHolding,
       serviceCost,
-      jobsterTotal
+      jobsterTotal,
+      premiumFee
     }
   },
   new_calculation : function(hours, fee, gigOffered, postingDays){

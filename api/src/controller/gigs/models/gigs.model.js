@@ -92,6 +92,7 @@ const gigsData = {
     proposedWorkTime: String,
     nightSurge: String,
     holidaySurge: String,
+    premiumFee: String,
   },
   gigFeeType: String,
   gigOffered: String,

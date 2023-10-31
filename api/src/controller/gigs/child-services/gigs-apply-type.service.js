@@ -299,8 +299,9 @@ var services = {
                 grossVAT,
                 grossWithHolding,
                 serviceCost,
-                jobsterTotal
-              } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.fees.voluntaryFee)
+                jobsterTotal,
+                premiumFee
+              } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.fees.voluntaryFee, gigs.fees.premiumFee)
   
               const feeHistoryInput = new FeeHistory({
                 gigid: Types.ObjectId(id),
@@ -322,7 +323,8 @@ var services = {
                     grossVAT: grossVAT,
                     grossWithHolding: grossWithHolding,
                     serviceCost: serviceCost,
-                    jobsterTotal: jobsterTotal
+                    jobsterTotal: jobsterTotal,
+                    premiumFee: premiumFee
                   },
                   late: late ?? null
                 }

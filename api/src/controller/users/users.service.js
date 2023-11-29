@@ -9,6 +9,8 @@ const History = require('../gigs/models/gig-histories.model')
 const Notification = require('../notifications/models/notifications.model')
 
 const logger = require('../../common/loggers')
+const FcmTokens = require('./models/fcm-tokens')
+const fcm = require('../../services/fcm-notif.service')
 
 var controllers = {
   get_user: async function (req, res) {
@@ -464,6 +466,32 @@ var controllers = {
     console.log(updated_user)
     result = {
       ...updated_user[0]
+    }
+    return res.status(200).json(result)
+  },
+  test_notification: async function (req, res) {
+    const {id} = req.params
+    console.log(id)
+
+    const message = {
+      description: 'This is a test notification. Please Disregard',
+      status: 'Testing',
+      url: ''
+    }
+
+    const users_fcm = await FcmTokens.find({userId: mongoose.Types.ObjectId.ObjectId(id)})
+      .lean()
+      .exec()
+    console.log('🚀 ~ file: users.service.js:485 ~ users_fcm:', users_fcm)
+    const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
+    console.log('🚀 ~ file: users.service.js:487 ~ fcmTokenArray:', fcmTokenArray)
+
+    if (fcmTokenArray.length > 0) {
+      fcm.send_notif(fcmTokenArray, message.description, message.url, message.status)
+      console.log('------------Sent Testing Notif----------')
+    }
+    const result = {
+      ...fcmTokenArray
     }
     return res.status(200).json(result)
   }

@@ -170,6 +170,9 @@ var controllers = {
     let freelancers
     let {searchTerm, category} = req.body
     let skills
+    // const oneWeekAgo = new Date()
+    // oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+
     if (category === 'Restaurant Services') {
       skills = 'Food and Restaurant'
     } else if (category === 'Sales & Marketing') {
@@ -228,6 +231,17 @@ var controllers = {
             isVerified: true,
             $or: [{firstName: {$regex: searchTerm, $options: 'i'}}, {lastName: {$regex: searchTerm, $options: 'i'}}]
           })
+          .project({
+            _id: 1,
+            'details.uuid': 1,
+            'details.firstName': 1,
+            'details.middleInitial': 1,
+            'details.lastName': 1,
+            'details.presentCity': 1,
+            'details.photo': 1,
+            'details.expertise.skillOffer': 1,
+            createdAt: 1
+          })
           .sort({createdAt: -1})
           .exec()
       } catch (error) {
@@ -237,6 +251,12 @@ var controllers = {
       }
     }
 
+    // Only Show active users from 1 week ago
+    // const sortFreelancer = freelancers.filter((item) => {
+    //   const updatedAtDAte = new Date(item?.updatedAt)
+    //   return updatedAtDAte >= oneWeekAgo
+    // })
+    // console.log(sortFreelancer)
     return res.status(200).json(freelancers)
   }
 }

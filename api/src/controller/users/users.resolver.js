@@ -35,6 +35,10 @@ module.exports = function (app) {
     .route(`${apiPath}${apiVersion}/users/testNotification/:id`)
     .post(jwt.require_sign_in, UsersController.test_notification)
 
+  app
+    .route(`${apiPath}${apiVersion}/users/activeFCMToken/:id`)
+    .get(jwt.require_sign_in, FcmRegistrationController.get_active_fcm_token)
+
   app.route(`${apiPath}${apiVersion}/user/account`).patch(jwt.require_sign_in, UsersController.patch_user_token)
 
   app.route(`${apiPath}${apiVersion}/user/list`).get(jwt.require_admin_access, UsersController.get_users)

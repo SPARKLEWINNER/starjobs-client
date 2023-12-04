@@ -64,6 +64,7 @@ async function sendNotification(request, gigs, status) {
       }
 
       user = await Users.find(jobster_id).lean().exec()
+      console.log('🚀 ~ file: gigs-apply-type.service.js:67 ~ sendNotification ~ user:', user)
 
       if (status === 'Accepted' && gigs.category === 'restaurant-services') {
         const getApplying = await Gigs.findById(gigs._id).lean().exec()
@@ -74,14 +75,13 @@ async function sendNotification(request, gigs, status) {
         let acceptedAuid
         if (acceptedRecords.length > 0) {
           acceptedAuid = acceptedRecords[0]?.auid
-          
-          auidValues.splice(auidValues.indexOf(acceptedAuid), 1); // Remove acceptedAuid from auidValues
+
+          auidValues.splice(auidValues.indexOf(acceptedAuid), 1) // Remove acceptedAuid from auidValues
         }
 
         user = await Users.find({_id: {$in: auidValues}})
           .lean()
           .exec()
-
         let applyingUsers = []
         // const acceptedAuidString = acceptedAuid.toString()
         if (user && user.length > 0) {
@@ -91,30 +91,48 @@ async function sendNotification(request, gigs, status) {
             }
           })
           if (applyingUsers) {
-            const fcmTokenArray = await FcmTokens.find({userId: {$in: applyingUsers}})
+            const fcmTokenArray = await FcmTokens.distinct('fcmToken', {userId: {$in: applyingUsers}})
               .lean()
               .exec()
               .then((users_fcm) => users_fcm.map((userToken) => userToken.fcmToken))
-            console.log("🚀 ~ file: gigs-apply-type.service.js:99 ~ sendNotification ~ fcmTokenArray:", fcmTokenArray)
             let message = messageList.filter((obj) => {
               if (obj.status === 'Gig-Taken') return obj
             })
 
-              const notificationInput = new Notifications({
-                title: 'Gig is already taken',
-                body: message[0].description,
-                targetUsers: applyingUsers,
-                type: 'GigNotif',
-                target: 'Selected',
-                additionalData: JSON.stringify(gigs)
-              });
-          
-              url = urlLink + 'freelancer/message';
-              await Notifications.create(notificationInput);
-              if (fcmTokenArray.length > 0) { // Check if there are any FCM tokens before sending the notification
-                console.log('------------Sending Gig Taken Notif----------');
-                fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status);
-              }
+            const notificationInput = new Notifications({
+              title: 'Gig is already taken',
+              body: message[0].description,
+              targetUsers: applyingUsers,
+              type: 'GigNotif',
+              target: 'Selected',
+              additionalData: JSON.stringify(gigs)
+            })
+
+            url = urlLink + 'freelancer/message'
+            await Notifications.create(notificationInput)
+            if (fcmTokenArray.length > 0) {
+              // Check if there are any FCM tokens before sending the notification
+              console.log('------------Sending Gig Taken Notif----------')
+              fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+            }
+          }
+          if (acceptedAuid) {
+            // Notify Accepted Jobster
+            console.log('------------Sending Accepted Notif----------')
+            const users_fcm = await FcmTokens.find({userId: Types.ObjectId(acceptedAuid)})
+              .lean()
+              .exec()
+            console.log('🚀 ~ file: gigs-apply-type.service.js:126 ~ sendNotification ~ users_fcm:', users_fcm)
+            const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
+            console.log('🚀 ~ file: gigs-apply-type.service.js:128 ~ sendNotification ~ fcmTokenArray:', fcmTokenArray)
+
+            let message = messageList.filter((obj) => {
+              if (obj.status === 'Accepted') return obj
+            })
+            if (fcmTokenArray.length > 0) {
+              fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+              console.log('------------Sent Accepted Notif----------')
+            }
           }
         }
         return true
@@ -133,7 +151,7 @@ async function sendNotification(request, gigs, status) {
       if (!message) return true
 
       // if (!user || !user[0].deviceId) return true
-      
+
       if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
 
@@ -154,7 +172,7 @@ async function sendNotification(request, gigs, status) {
 
 var services = {
   default: async function (req, res) {
-    const {uid, status, actualTime, actualRate, late} = req.body
+    const {uid, status, actualTime, late, actualExtension, actualNightSurge} = req.body
     const {id} = req.params
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
 
@@ -166,6 +184,16 @@ var services = {
       date_created: now.toISOString(),
       uid: Types.ObjectId(uid),
       isExtended: false
+    }
+
+    let nightSurgeRate
+    let gigExtentionRate
+    if (req.body.locationRate === 'National Capital Region') {
+      gigExtentionRate = parseFloat(100) * parseFloat(actualExtension)
+      nightSurgeRate = parseFloat(8) * parseFloat(actualNightSurge)
+    } else {
+      gigExtentionRate = parseFloat(75) * parseFloat(actualExtension)
+      nightSurgeRate = parseFloat(5) * parseFloat(actualNightSurge)
     }
 
     try {
@@ -235,16 +263,22 @@ var services = {
               {_id: Types.ObjectId(id)},
               {
                 status: status,
-                fees: {...gigs.fees, proposedWorkTime: actualTime, proposedRate: actualRate}
+                fees: {
+                  ...gigs.fees,
+                  proposedWorkTime: actualTime,
+                  proposedLateMin: late,
+                  proposedExtensionHr: actualExtension,
+                  proposedNightSurgeHr: actualNightSurge
+                }
               }
             )
           } else if (status === 'Confirm-End-Shift') {
             let postingDays = moment(gigs.time).diff(moment(gigs.from), 'days') + 1
-            console.log("🚀 ~ file: gigs-apply-type.service.js:241 ~ postingDays:", postingDays)
-            console.log("🚀 ~ file: gigs-apply-type.service.js:258 ~  gigs.gigOffered:",  gigs.gigOffered)
-            
+            console.log('🚀 ~ file: gigs-apply-type.service.js:241 ~ postingDays:', postingDays)
+            console.log('🚀 ~ file: gigs-apply-type.service.js:258 ~  gigs.gigOffered:', gigs.gigOffered)
+
             // Add new calculation for construction and other form
-            if(gigs.gigOffered){
+            if (gigs.gigOffered) {
               const {
                 computedFeeByHr,
                 computedDaily,
@@ -257,19 +291,26 @@ var services = {
                 grossWithHolding,
                 serviceCost,
                 jobsterTotal
-              } = calculations.new_calculation(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.gigOffered, postingDays)
+              } = calculations.new_calculation(
+                gigs.fees.proposedWorkTime,
+                gigs.fee,
+                gigs.gigOffered,
+                postingDays,
+                late,
+                gigExtentionRate
+              )
 
               const feeHistoryInput = new FeeHistory({
                 gigid: Types.ObjectId(id),
                 ...gigs
               })
-  
+
               await Gigs.findOneAndUpdate(
                 {_id: Types.ObjectId(id)},
                 {
                   status: status,
                   hours: gigs.fees.proposedWorkTime,
-                  fee: gigs.fees.proposedRate,
+                  fee: gigs.fee,
                   fees: {
                     computedFeeByHr: computedFeeByHr,
                     computedDaily: computedDaily,
@@ -286,10 +327,9 @@ var services = {
                   late: late ?? null
                 }
               )
-  
+
               await FeeHistory.create(feeHistoryInput)
-            }
-            else{
+            } else {
               const {
                 computedFeeByHr,
                 voluntaryFee,
@@ -301,19 +341,27 @@ var services = {
                 serviceCost,
                 jobsterTotal,
                 premiumFee
-              } = calculations.default_calculations(gigs.fees.proposedWorkTime, gigs.fees.proposedRate, gigs.fees.voluntaryFee, gigs.fees.premiumFee)
-  
+              } = calculations.default_calculations(
+                gigs.fees.proposedWorkTime,
+                gigs.fee,
+                gigs.fees.voluntaryFee,
+                gigs.fees.premiumFee,
+                late,
+                nightSurgeRate,
+                gigExtentionRate
+              )
+
               const feeHistoryInput = new FeeHistory({
                 gigid: Types.ObjectId(id),
                 ...gigs
               })
-  
+
               await Gigs.findOneAndUpdate(
                 {_id: Types.ObjectId(id)},
                 {
                   status: status,
                   hours: gigs.fees.proposedWorkTime,
-                  fee: gigs.fees.proposedRate,
+                  fee: gigs.fee,
                   fees: {
                     computedFeeByHr: computedFeeByHr,
                     voluntaryFee: voluntaryFee,
@@ -329,10 +377,9 @@ var services = {
                   late: late ?? null
                 }
               )
-  
+
               await FeeHistory.create(feeHistoryInput)
             }
-            
           } else {
             await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {status: status, late: late ?? null})
           }

@@ -11,8 +11,14 @@
 // }
 
 var controller = {
-  default_calculations: function (hours, fee, volFee, premFee) {
-    let computedFeeByHr = parseFloat(hours * fee)
+  default_calculations: function (hours, fee, volFee, premFee, late, nightSurgeRate, gigExtentionRate) {
+    let lateByHours = parseFloat(late) / parseFloat(60)
+    if (late === null || late === undefined) {
+      lateByHours = 0
+    }
+
+    const finalHours = hours - lateByHours
+    let computedFeeByHr = parseFloat(finalHours * fee)
     let voluntaryFee = parseFloat(volFee)
     //  Comment out old computation
     //   parseFloat(hours * ncrRate.sss) + parseFloat(hours * ncrRate.pagibig) + parseFloat(hours * ncrRate.philhealth)
@@ -24,13 +30,16 @@ var controller = {
     //     parseFloat(hours * pronvicialRate.philhealth)
     // }
     let premiumFee = parseFloat(premFee)
-    let appFee = parseFloat(hours * 1.25)
+    let appFee = parseFloat(finalHours * 1.25)
     let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.1 // 10%
-    let grossGigFee = parseFloat(computedFeeByHr + voluntaryFee + appFee + transactionFee + premiumFee)
+    let grossGigFee = parseFloat(
+      computedFeeByHr + voluntaryFee + appFee + transactionFee + premiumFee + gigExtentionRate + nightSurgeRate
+    )
+
     let grossVAT = parseFloat(grossGigFee * 0.12) // 12%
     let grossWithHolding = parseFloat(grossGigFee * 0.02) // 2%
     let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding)
-    let jobsterTotal = parseFloat(fee) + voluntaryFee / hours
+    let jobsterTotal = parseFloat(fee) + voluntaryFee / finalHours
 
     return {
       computedFeeByHr,
@@ -42,19 +51,22 @@ var controller = {
       grossWithHolding,
       serviceCost,
       jobsterTotal,
-      premiumFee
+      premiumFee,
+      lateByHours
     }
   },
-  new_calculation : function(hours, fee, gigOffered, postingDays){
-    const totalGigFee = gigOffered === 'Hourly' ? parseFloat(fee) * hours : parseFloat(fee)
+  new_calculation: function (hours, fee, gigOffered, postingDays, late) {
+    let lateByHours = parseFloat(late) / parseFloat(60)
+    const finalHours = hours - lateByHours
+    const totalGigFee = gigOffered === 'Hourly' ? parseFloat(fee) * finalHours : parseFloat(fee)
     let totalGigFeeDaily = parseFloat(fee) * postingDays
     const voluntaryFee = 80.19
-    const appFee = parseFloat(hours * 1.25)
+    const appFee = parseFloat(finalHours * 1.25)
     let feePerHr
     if (gigOffered === 'Hourly' || gigOffered == undefined) {
       feePerHr = parseFloat(fee)
     } else {
-      feePerHr = (parseFloat(fee) - parseFloat(voluntaryFee).toFixed(2)) / hours
+      feePerHr = (parseFloat(fee) - parseFloat(voluntaryFee).toFixed(2)) / finalHours
     }
     const computedFeeByHr = totalGigFee
     const computedDaily = totalGigFeeDaily - parseFloat(voluntaryFee)
@@ -68,9 +80,9 @@ var controller = {
     const grossWithHolding = gigOffered === 'Daily' ? grossGigDaily * 0.02 : grossGigFee * 0.02 // 2%
     const serviceCost =
       gigOffered === 'Daily' ? grossGigDaily + grossVAT - grossWithHolding : grossGigFee + grossVAT - grossWithHolding
-  
+
     const jobsterTotal = parseFloat(fee)
-  
+
     return {
       computedFeeByHr,
       computedDaily,
@@ -82,7 +94,8 @@ var controller = {
       grossVAT,
       grossWithHolding,
       serviceCost,
-      jobsterTotal
+      jobsterTotal,
+      lateByHours
     }
   },
   parcel_calculations: function (hours, fee) {

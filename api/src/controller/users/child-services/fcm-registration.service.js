@@ -59,28 +59,26 @@ var controllers = {
     try {
       const userId = req.params.id
       console.log('🚀 ~ file: fcm-registration.service.js:57 ~ userId:', userId)
-      const thresholdTime = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+      // const thresholdTime = 24 * 60 * 60 * 1000
 
-      // Find the FCM token associated with the user
-      const token = await FCMTOKEN.findOne({userId: mongoose.Types.ObjectId(userId)})
-        .sort({createdAt: -1}) // Sort by createdAt field in descending order
+      const token = await FCMTOKEN.find({userId: mongoose.Types.ObjectId(userId)})
+        // .sort({createdAt: -1})
         .exec()
       console.log('🚀 ~ file: fcm-registration.service.js:61 ~ token:', token)
 
       if (token) {
-        // Check if the token was updated within the threshold time
-        const currentTime = new Date()
-        const tokenUpdateTime = new Date(token.updatedAt) // Assuming 'updatedAt' is the timestamp field
+        return res.json({success: true, fcmToken: token.fcmToken})
 
-        if (currentTime - tokenUpdateTime < thresholdTime) {
-          console.log('active token return')
+        // const currentTime = new Date()
+        // const tokenUpdateTime = new Date(token.updatedAt)
 
-          return res.json({success: true, fcmToken: token.fcmToken})
-        } else {
-          return res.json({success: false, message: 'Inactive FCM token.'})
-        }
+        // if (currentTime - tokenUpdateTime < thresholdTime) {
+        //   console.log('active token return')
+
+        // } else {
+        //   return res.json({success: false, message: 'Inactive FCM token.'})
+        // }
       } else {
-        // No active token found
         return res.json({success: false, message: 'No FCM token found for the user.'})
       }
     } catch (error) {

@@ -181,6 +181,8 @@ var controllers = {
       skills = 'Parcels and Logistics'
     } else if (category === 'Construction') {
       skills = 'Construction'
+    } else {
+      skills = 'Others'
     }
 
     let token = req.headers['authorization']

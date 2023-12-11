@@ -379,6 +379,8 @@ var controllers = {
               position: 1,
               hours: 1,
               nation: 1,
+              location: 1,
+              breakHr: 1,
               from: 1,
               late: 1,
               time: 1,

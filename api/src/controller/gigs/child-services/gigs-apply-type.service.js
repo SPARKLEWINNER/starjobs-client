@@ -186,16 +186,6 @@ var services = {
       isExtended: false
     }
 
-    let nightSurgeRate
-    let gigExtentionRate
-    if (req.body.locationRate === 'National Capital Region') {
-      gigExtentionRate = parseFloat(100) * parseFloat(actualExtension)
-      nightSurgeRate = parseFloat(8) * parseFloat(actualNightSurge)
-    } else {
-      gigExtentionRate = parseFloat(75) * parseFloat(actualExtension)
-      nightSurgeRate = parseFloat(5) * parseFloat(actualNightSurge)
-    }
-
     try {
       let gigs = await Gigs.find({_id: Types.ObjectId(id)})
         .lean()
@@ -297,7 +287,7 @@ var services = {
                 gigs.gigOffered,
                 postingDays,
                 late,
-                gigExtentionRate
+                actualExtension
               )
 
               const feeHistoryInput = new FeeHistory({
@@ -340,15 +330,20 @@ var services = {
                 grossWithHolding,
                 serviceCost,
                 jobsterTotal,
-                premiumFee
+                premiumFee,
+                nightSurge,
+                gigExtension,
+                jobsterFinal,
+                holidaySurge
               } = calculations.default_calculations(
                 gigs.fees.proposedWorkTime,
                 gigs.fee,
                 gigs.fees.voluntaryFee,
                 gigs.fees.premiumFee,
+                gigs.fees.holidaySurge,
                 late,
-                nightSurgeRate,
-                gigExtentionRate
+                actualExtension,
+                actualNightSurge
               )
 
               const feeHistoryInput = new FeeHistory({
@@ -372,7 +367,11 @@ var services = {
                     grossWithHolding: grossWithHolding,
                     serviceCost: serviceCost,
                     jobsterTotal: jobsterTotal,
-                    premiumFee: premiumFee
+                    premiumFee: premiumFee,
+                    nightSurge: nightSurge,
+                    gigExtension: gigExtension,
+                    jobsterFinal: jobsterFinal,
+                    holidaySurge: holidaySurge
                   },
                   late: late ?? null
                 }

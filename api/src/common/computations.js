@@ -11,13 +11,21 @@
 // }
 
 var controller = {
-  default_calculations: function (hours, fee, volFee, premFee, late, nightSurgeRate, gigExtentionRate) {
+  default_calculations: function (hours, fee, volFee, premFee, holiday, late, gigExtentionHr, nightSurgeHr) {
     let lateByHours = parseFloat(late) / parseFloat(60)
     if (late === null || late === undefined) {
       lateByHours = 0
     }
-
+    let holidaySurge
+    if (!holiday) {
+      holidaySurge = parseFloat(0)
+    } else {
+      holidaySurge = parseFloat(holiday)
+    }
     const finalHours = hours - lateByHours
+    const nightSurge = parseFloat(fee) * 0.1 * parseFloat(nightSurgeHr)
+    const gigExtension = parseFloat(fee) * 1.25 * parseFloat(gigExtentionHr)
+
     let computedFeeByHr = parseFloat(finalHours * fee)
     let voluntaryFee = parseFloat(volFee)
     //  Comment out old computation
@@ -29,17 +37,32 @@ var controller = {
     //     parseFloat(hours * pronvicialRate.pagibig) +
     //     parseFloat(hours * pronvicialRate.philhealth)
     // }
+    console.log('lateByHours' + lateByHours)
+    console.log('FEE ' + fee)
+    console.log('volFee ' + voluntaryFee)
+    console.log('premFee ' + premFee)
+    console.log('nightSurgeHr ' + nightSurgeHr)
+    console.log('nightSurgeHr  nightSurgeHr ' + nightSurgeHr)
+    console.log('nightSurge  ' + nightSurge)
+
+    console.log('gigExtentionHr gigExtentionHr  ' + gigExtentionHr)
+    console.log('gigExtentionHr ' + gigExtension)
+
+    console.log('holidaySurge ' + holidaySurge)
+    console.log('holiday ' + holiday)
+
     let premiumFee = parseFloat(premFee)
     let appFee = parseFloat(finalHours * 1.25)
     let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.1 // 10%
     let grossGigFee = parseFloat(
-      computedFeeByHr + voluntaryFee + appFee + transactionFee + premiumFee + gigExtentionRate + nightSurgeRate
+      computedFeeByHr + voluntaryFee + appFee + transactionFee + premiumFee + nightSurge + gigExtension + holidaySurge
     )
 
     let grossVAT = parseFloat(grossGigFee * 0.12) // 12%
     let grossWithHolding = parseFloat(grossGigFee * 0.02) // 2%
     let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding)
     let jobsterTotal = parseFloat(fee) + voluntaryFee / finalHours
+    let jobsterFinal = parseFloat(computedFeeByHr + voluntaryFee + nightSurge + gigExtension + holidaySurge)
 
     return {
       computedFeeByHr,
@@ -52,7 +75,10 @@ var controller = {
       serviceCost,
       jobsterTotal,
       premiumFee,
-      lateByHours
+      nightSurge,
+      gigExtension,
+      jobsterFinal,
+      holidaySurge
     }
   },
   new_calculation: function (hours, fee, gigOffered, postingDays, late) {

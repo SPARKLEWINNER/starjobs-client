@@ -366,7 +366,7 @@ var services = {
                     grossVAT: grossVAT,
                     grossWithHolding: grossWithHolding,
                     serviceCost: serviceCost,
-                    // jobsterTotal: jobsterTotal,
+                    jobsterTotal: gigs.fees.jobsterTotal,
                     premiumFee: premiumFee,
                     nightSurge: nightSurge,
                     gigExtension: gigExtension,

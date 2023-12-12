@@ -61,7 +61,7 @@ var controller = {
     let grossVAT = parseFloat(grossGigFee * 0.12) // 12%
     let grossWithHolding = parseFloat(grossGigFee * 0.02) // 2%
     let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding)
-    let jobsterTotal = parseFloat(fee) + voluntaryFee / finalHours
+    let jobsterTotal = parseFloat(fee) + voluntaryFee / hours
     let jobsterFinal = parseFloat(computedFeeByHr + voluntaryFee + nightSurge + gigExtension + holidaySurge)
 
     return {

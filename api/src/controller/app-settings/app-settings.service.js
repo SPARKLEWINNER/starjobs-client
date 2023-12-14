@@ -51,7 +51,7 @@ var controllers = {
   get_categories: async function (req, res) {
     let categories
     try {
-      categories = await Categories.find({}).lean().exec()
+      categories = await Categories.find({status: 0}).lean().exec()
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Categories.get_categories', null, null, 'GET')

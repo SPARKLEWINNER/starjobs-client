@@ -12,6 +12,9 @@ module.exports = function (app) {
   app.route(`${apiPath}${apiVersion}/category/:id`).get(jwt.require_sign_in, AppSettingsController.get_category)
   app.route(`${apiPath}${apiVersion}/category`).get(jwt.require_sign_in, AppSettingsController.get_categories)
 
+  // Rates
+  app.route(`${apiPath}${apiVersion}/rates`).get(jwt.require_sign_in, AppSettingsController.get_rates)
+
   // Logs
-  app.route(`${apiPath}${apiVersion}/logs/list`).get(jwt.require_admin_access, AppSettingsController.get_logs)
+  app.route(`${apiPath}${apiVersion}/logs/list`).get(jwt.require_admin_access, AppSettingsController.get_rates)
 }

@@ -172,7 +172,7 @@ async function sendNotification(request, gigs, status) {
 
 var services = {
   default: async function (req, res) {
-    const {uid, status, actualTime, actualRate, late} = req.body
+    const {uid, status, actualTime, late, actualExtension, actualNightSurge} = req.body
     const {id} = req.params
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
 
@@ -253,7 +253,13 @@ var services = {
               {_id: Types.ObjectId(id)},
               {
                 status: status,
-                fees: {...gigs.fees, proposedWorkTime: actualTime, proposedRate: actualRate}
+                fees: {
+                  ...gigs.fees,
+                  proposedWorkTime: actualTime,
+                  proposedLateMin: late,
+                  proposedExtensionHr: actualExtension,
+                  proposedNightSurgeHr: actualNightSurge
+                }
               }
             )
           } else if (status === 'Confirm-End-Shift') {
@@ -277,9 +283,11 @@ var services = {
                 jobsterTotal
               } = calculations.new_calculation(
                 gigs.fees.proposedWorkTime,
-                gigs.fees.proposedRate,
+                gigs.fee,
                 gigs.gigOffered,
-                postingDays
+                postingDays,
+                late,
+                actualExtension
               )
 
               const feeHistoryInput = new FeeHistory({
@@ -292,7 +300,7 @@ var services = {
                 {
                   status: status,
                   hours: gigs.fees.proposedWorkTime,
-                  fee: gigs.fees.proposedRate,
+                  fee: gigs.fee,
                   fees: {
                     computedFeeByHr: computedFeeByHr,
                     computedDaily: computedDaily,
@@ -321,13 +329,21 @@ var services = {
                 grossVAT,
                 grossWithHolding,
                 serviceCost,
-                jobsterTotal,
-                premiumFee
+                // jobsterTotal,
+                premiumFee,
+                nightSurge,
+                gigExtension,
+                jobsterFinal,
+                holidaySurge
               } = calculations.default_calculations(
                 gigs.fees.proposedWorkTime,
-                gigs.fees.proposedRate,
+                gigs.fee,
                 gigs.fees.voluntaryFee,
-                gigs.fees.premiumFee
+                gigs.fees.premiumFee,
+                gigs.fees.holidaySurge,
+                late,
+                actualExtension,
+                actualNightSurge
               )
 
               const feeHistoryInput = new FeeHistory({
@@ -340,7 +356,7 @@ var services = {
                 {
                   status: status,
                   hours: gigs.fees.proposedWorkTime,
-                  fee: gigs.fees.proposedRate,
+                  fee: gigs.fee,
                   fees: {
                     computedFeeByHr: computedFeeByHr,
                     voluntaryFee: voluntaryFee,
@@ -350,8 +366,12 @@ var services = {
                     grossVAT: grossVAT,
                     grossWithHolding: grossWithHolding,
                     serviceCost: serviceCost,
-                    jobsterTotal: jobsterTotal,
-                    premiumFee: premiumFee
+                    jobsterTotal: gigs.fees.jobsterTotal,
+                    premiumFee: premiumFee,
+                    nightSurge: nightSurge,
+                    gigExtension: gigExtension,
+                    jobsterFinal: jobsterFinal,
+                    holidaySurge: holidaySurge
                   },
                   late: late ?? null
                 }

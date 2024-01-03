@@ -70,9 +70,9 @@ const gigsData = {
     type: String
   },
   locationRate: {
-    default: 'NCR',
-    type: String,
-    enum: ['NCR', 'Provincial', 'Not applicable']
+    // default: 'NCR',
+    type: String
+    // enum: ['NCR', 'Provincial', 'Not applicable']
   },
   late: {
     type: String,
@@ -90,9 +90,14 @@ const gigsData = {
     jobsterTotal: String,
     proposedRate: String,
     proposedWorkTime: String,
+    proposedLateMin: String,
+    proposedExtensionHr: String,
+    proposedNightSurgeHr: String,
     nightSurge: String,
+    gigExtension: String,
+    jobsterFinal: String,
     holidaySurge: String,
-    premiumFee: String,
+    premiumFee: String
   },
   gigFeeType: String,
   gigOffered: String,

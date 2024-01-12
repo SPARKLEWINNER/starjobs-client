@@ -84,9 +84,11 @@ var controller = {
   new_calculation: function (hours, fee, gigOffered, postingDays, late) {
     let lateByHours = parseFloat(late) / parseFloat(60)
     const finalHours = hours - lateByHours
-    const totalGigFee = gigOffered === 'Hourly' ? parseFloat(fee) * finalHours : parseFloat(fee)
+    const totalGigFee = parseFloat(fee)
     let totalGigFeeDaily = parseFloat(fee) * postingDays
-    const voluntaryFee = 80.19
+    let totalGigFeeHourly = parseFloat(fee) * hours
+    let transactionFee
+    let voluntaryFee = 0.0
     const appFee = parseFloat(finalHours * 1.25)
     let feePerHr
     if (gigOffered === 'Hourly' || gigOffered == undefined) {
@@ -94,29 +96,57 @@ var controller = {
     } else {
       feePerHr = (parseFloat(fee) - parseFloat(voluntaryFee).toFixed(2)) / finalHours
     }
-    const computedFeeByHr = totalGigFee
-    const computedDaily = totalGigFeeDaily - parseFloat(voluntaryFee)
-    const dailyRate = parseFloat(fee)
-    let transactionFee = parseFloat(totalGigFee + appFee + voluntaryFee) * 0.1
-    // let txnFeeDaily = parseFloat(totalGigFeeDaily + appFee + voluntaryFee) * 0.1
-    // console.log('🚀 ~ file: gigComputation.js:35 ~ calculations ~ txnFeeDaily:', txnFeeDaily)
-    const grossGigFee = totalGigFee + appFee + parseFloat(transactionFee)
-    const grossGigDaily = totalGigFeeDaily + appFee + parseFloat(transactionFee)
-    const grossVAT = gigOffered === 'Daily' ? grossGigDaily * 0.12 : grossGigFee * 0.12 // 12%
-    const grossWithHolding = gigOffered === 'Daily' ? grossGigDaily * 0.02 : grossGigFee * 0.02 // 2%
-    const serviceCost =
-      gigOffered === 'Daily' ? grossGigDaily + grossVAT - grossWithHolding : grossGigFee + grossVAT - grossWithHolding
 
-    const jobsterTotal = parseFloat(fee)
+    const computedFeeByHr = totalGigFee
+    const computedDaily = gigOffered === 'Daily' ? totalGigFeeDaily - 80.19 : 0
+    const computedHourly = gigOffered === 'Hourly' ? totalGigFeeHourly - 80.19 : 0
+
+    if (gigOffered === 'By-the-job') {
+      transactionFee = parseFloat(totalGigFee + appFee) * 0.1
+    } else if (gigOffered === 'Hourly') {
+      transactionFee = parseFloat(totalGigFeeHourly + appFee) * 0.1
+    } else if (gigOffered === 'Daily') {
+      transactionFee = parseFloat(totalGigFeeDaily + appFee) * 0.1
+    } else {
+      transactionFee = 0
+    }
+    const grossGigFee = totalGigFee + appFee + parseFloat(transactionFee)
+    const grossGigDaily = gigOffered === 'Daily' ? totalGigFeeDaily + appFee + parseFloat(transactionFee) : 0
+    const grossGigHourly = gigOffered === 'Hourly' ? totalGigFeeHourly + appFee + parseFloat(transactionFee) : 0
+
+    const grossVAT =
+      gigOffered === 'Daily'
+        ? grossGigDaily * 0.12
+        : gigOffered === 'Hourly'
+        ? grossGigHourly * 0.12
+        : grossGigFee * 0.12
+    const grossWithHolding =
+      gigOffered === 'Daily'
+        ? grossGigDaily * 0.02
+        : gigOffered === 'Hourly'
+        ? grossGigHourly * 0.02
+        : grossGigFee * 0.02
+
+    const serviceCost =
+      gigOffered === 'Daily'
+        ? grossGigDaily + grossVAT - grossWithHolding
+        : gigOffered === 'Hourly'
+        ? grossGigHourly + grossVAT - grossWithHolding
+        : grossGigFee + grossVAT - grossWithHolding
+
+    const jobsterTotal =
+      gigOffered === 'Daily' ? totalGigFeeDaily : gigOffered === 'Hourly' ? totalGigFeeHourly : parseFloat(fee)
 
     return {
       computedFeeByHr,
       computedDaily,
-      grossGigDaily,
+      computedHourly,
       voluntaryFee,
       appFee,
       transactionFee,
       grossGigFee,
+      grossGigDaily,
+      grossGigHourly,
       grossVAT,
       grossWithHolding,
       serviceCost,

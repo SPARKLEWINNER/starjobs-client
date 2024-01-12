@@ -399,6 +399,7 @@ var controllers = {
               history: 1,
               commissionRate: 1,
               gigFeeType: 1,
+              gigOffered: 1,
               applicants: 1,
               fees: 1,
               maximumApplicants: '$extended.maximumApplicants',

@@ -1,5 +1,6 @@
 const logger = require('../../../common/loggers')
 const FCMTOKEN = require('../models/fcm-tokens')
+const Users = require('../models/users.model')
 const mongoose = require('mongoose')
 
 var controllers = {
@@ -21,6 +22,8 @@ var controllers = {
       })
 
       await token.save()
+
+      await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isNotifOn: true})
 
       return res.status(200).json({success: true, msg: 'Successfully registered fcm token', data: token})
     } catch (error) {

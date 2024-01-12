@@ -485,7 +485,6 @@ var controllers = {
     console.log('🚀 ~ file: users.service.js:485 ~ users_fcm:', users_fcm)
     const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
     console.log('🚀 ~ file: users.service.js:487 ~ fcmTokenArray:', fcmTokenArray)
-
     if (fcmTokenArray.length > 0) {
       fcm.send_notif(fcmTokenArray, message.description, message.url, message.status)
       console.log('------------Sent Testing Notif----------')

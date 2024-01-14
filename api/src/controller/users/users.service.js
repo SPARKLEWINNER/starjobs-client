@@ -493,6 +493,20 @@ var controllers = {
       ...fcmTokenArray
     }
     return res.status(200).json(result)
+  },
+  get_user_with_notif: async function (req, res) {
+    const {id} = req.params
+    console.log(id)
+    const account = await Users.find({_id: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    const notifStatus = account[0].isNotifOn
+    const result = {
+      notifStatus
+    }
+    console.log('🚀 ~ account:', result)
+    return res.status(200).json(result)
   }
 }
 

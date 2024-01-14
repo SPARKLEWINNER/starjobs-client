@@ -34,6 +34,9 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/users/testNotification/:id`)
     .post(jwt.require_sign_in, UsersController.test_notification)
+  app
+    .route(`${apiPath}${apiVersion}/users/getUserWithNotif/:id`)
+    .get(jwt.require_sign_in, UsersController.get_user_with_notif)
 
   app
     .route(`${apiPath}${apiVersion}/users/activeFCMToken/:id`)

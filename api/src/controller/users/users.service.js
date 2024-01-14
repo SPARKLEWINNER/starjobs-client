@@ -485,7 +485,6 @@ var controllers = {
     console.log('🚀 ~ file: users.service.js:485 ~ users_fcm:', users_fcm)
     const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
     console.log('🚀 ~ file: users.service.js:487 ~ fcmTokenArray:', fcmTokenArray)
-
     if (fcmTokenArray.length > 0) {
       fcm.send_notif(fcmTokenArray, message.description, message.url, message.status)
       console.log('------------Sent Testing Notif----------')
@@ -493,6 +492,20 @@ var controllers = {
     const result = {
       ...fcmTokenArray
     }
+    return res.status(200).json(result)
+  },
+  get_user_with_notif: async function (req, res) {
+    const {id} = req.params
+    console.log(id)
+    const account = await Users.find({_id: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    const notifStatus = account[0].isNotifOn
+    const result = {
+      notifStatus
+    }
+    console.log('🚀 ~ account:', result)
     return res.status(200).json(result)
   }
 }

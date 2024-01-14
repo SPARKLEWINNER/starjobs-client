@@ -93,6 +93,10 @@ const userSchema = new Schema(
       type: String,
       trim: true,
       default: null
+    },
+    isNotifOn: {
+      type: Boolean,
+      default: false
     }
   },
   {timestamps: true}

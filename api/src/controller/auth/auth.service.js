@@ -204,12 +204,12 @@ var controllers = {
           msg: 'Unable to sign up'
         })
       }
-      const recipients = [
-        {
-          ContactNumber: phone
-        }
-      ]
-      sms.cast_sms(recipients, `Starjobs verification code ${code}`)
+      // const recipients = [
+      //   {
+      //     ContactNumber: phone
+      //   }
+      // ]
+      // sms.cast_sms(recipients, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)

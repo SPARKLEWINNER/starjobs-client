@@ -24,11 +24,11 @@ var controllers = {
     try {
       // let initial_find = await Gigs.find({
       //   status: ['Waiting', 'Applying', 'Contracts']
-        
+
       // }, {position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
       //   .lean()
       //   .exec()
-        
+
       // gigs = initial_find.filter((obj) => {
       //   return !moment(obj.time).isBefore(moment(), 'day')
       // })
@@ -36,14 +36,11 @@ var controllers = {
       // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
       // console.log(filter_gig.length)
 
-      const today = moment.utc().startOf('day');
+      const today = moment.utc().startOf('day')
       const filter = {
-        status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-        $or: [
-          { time: { $gte: today.toISOString() } },
-          { time: { $gte: today } }
-        ]
-      };
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}]
+      }
 
       const projection = {
         position: 1,
@@ -55,15 +52,14 @@ var controllers = {
         time: 1,
         fees: 1,
         locationRate: 1,
-        category:1
-      };
+        category: 1
+      }
 
-      const initial_find = await Gigs.find(filter, projection).lean().exec();
-     
-      filter_gig = initial_find.filter(obj => {
-        return moment(obj.from).isValid();
-      });
+      const initial_find = await Gigs.find(filter, projection).lean().exec()
 
+      filter_gig = initial_find.filter((obj) => {
+        return moment(obj.from).isValid()
+      })
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
     } catch (error) {
@@ -186,16 +182,13 @@ var controllers = {
       // })
       // gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
       // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-      const today = moment.utc().startOf('day');
+      const today = moment.utc().startOf('day')
 
       const filter = {
-        status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-        $or: [
-          { time: { $gte: today.toISOString() } },
-          { time: { $gte: today } }
-        ],
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}],
         category: category
-      };
+      }
 
       const projection = {
         position: 1,
@@ -206,15 +199,15 @@ var controllers = {
         from: 1,
         time: 1,
         locationRate: 1,
-        fees:1,
-        category:1
-      };
+        fees: 1,
+        category: 1
+      }
 
-      const initial_find = await Gigs.find(filter, projection).lean().exec();
+      const initial_find = await Gigs.find(filter, projection).lean().exec()
 
-      categ_gigs = initial_find.filter(obj => {
-        return moment(obj.from).isValid();
-      });
+      categ_gigs = initial_find.filter((obj) => {
+        return moment(obj.from).isValid()
+      })
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
     } catch (error) {
@@ -322,21 +315,28 @@ var controllers = {
           .match({
             'records.auid': mongoose.Types.ObjectId(id)
           })
-          .sort({createdAt: -1})
+          .sort({createdAt: 1})
           .exec()
 
         let gigsData = reports.filter((obj) => {
+          // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
           //express as a duration
-          const previousDays = moment().subtract(3, 'days')
-          const aheadDays = moment().add(3, 'days')
+          const timeDate = moment(obj.time)
+          const date = moment(obj.date)
+
+          const previousDays = moment(date).subtract(3, 'days')
+          const aheadDays = moment(timeDate).add(3, 'days')
+
           const range = moment().range(previousDays, aheadDays)
+          console.log('🚀 ~ file: gigs.service.js:328 ~ gigsData ~ range:', range)
 
           // between 0 days and 2 days before current day
-          if (range.contains(moment(obj.date))) {
+          if (range.contains(moment())) {
             return obj
           }
           return
         })
+        // console.log('🚀 ~ file: gigs.service.js:335 ~ gigsData ~ gigsData:', gigsData)
 
         if (contracts.length > 0) {
           gigsData = [...gigsData, ...contracts]

@@ -423,9 +423,17 @@ var controllers = {
           gigs &&
             gigs
               .filter((obj) => {
-                if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
+                const timeDate = moment(obj.time)
+
+                const previousDays = moment(obj.date).subtract(10, 'days')
+                const aheadDays = moment(timeDate).add(10, 'days')
+                const range = moment().range(previousDays, aheadDays)
+                console.log(range)
+                // between 0 days and 2 days before current day
+                if (range.contains(moment())) {
                   if (contracts.length > 0 && obj.status != 'Contracts') return obj
                   if (contracts.length == 0) return obj
+                  // return obj
                 }
               })
               .map(async (obj) => {

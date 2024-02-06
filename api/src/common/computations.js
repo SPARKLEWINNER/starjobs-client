@@ -22,8 +22,8 @@ var controller = {
     } else {
       holidaySurge = parseFloat(holiday)
     }
-    // let computedFeeByHr = parseFloat(finalHours * fee)
-    // let voluntaryFee = parseFloat(volFee)
+    let computedFeeByHr = parseFloat(finalHours * fee)
+    let voluntaryFee = parseFloat(volFee)
     // let basicRate = parseFloat(fee) - voluntaryFee
     // console.log('🚀 ~ file: computations.js:26 ~ basicRate:', basicRate)
     const finalHours = hours - lateByHours

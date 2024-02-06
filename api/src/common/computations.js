@@ -28,7 +28,7 @@ var controller = {
     console.log('🚀 ~ file: computations.js:26 ~ basicRate:', basicRate)
     const finalHours = hours - lateByHours
     const nightSurge = parseFloat(fee) * 0.1 * parseFloat(nightSurgeHr)
-    const gigExtension = parseFloat(basicRate) * 1.25 * parseFloat(gigExtentionHr)
+    const gigExtension = parseFloat(fee) * 1.25 * parseFloat(gigExtentionHr)
 
     //  Comment out old computation
     //   parseFloat(hours * ncrRate.sss) + parseFloat(hours * ncrRate.pagibig) + parseFloat(hours * ncrRate.philhealth)

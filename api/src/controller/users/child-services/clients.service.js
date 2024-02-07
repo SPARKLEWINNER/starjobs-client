@@ -425,8 +425,8 @@ var controllers = {
               .filter((obj) => {
                 const timeDate = moment(obj.time)
 
-                const previousDays = moment(obj.date).subtract(10, 'days')
-                const aheadDays = moment(timeDate).add(10, 'days')
+                const previousDays = moment(obj.date).subtract(7, 'days')
+                const aheadDays = moment(timeDate).add(7, 'days')
                 const range = moment().range(previousDays, aheadDays)
                 console.log(range)
                 // between 0 days and 2 days before current day

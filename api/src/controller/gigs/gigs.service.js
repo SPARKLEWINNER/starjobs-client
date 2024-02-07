@@ -324,8 +324,8 @@ var controllers = {
           const timeDate = moment(obj.time)
           const date = moment(obj.date)
 
-          const previousDays = moment(date).subtract(10, 'days')
-          const aheadDays = moment(timeDate).add(10, 'days')
+          const previousDays = moment(date).subtract(7, 'days')
+          const aheadDays = moment(timeDate).add(7, 'days')
 
           const range = moment().range(previousDays, aheadDays)
           console.log('🚀 ~ file: gigs.service.js:328 ~ gigsData ~ range:', range)

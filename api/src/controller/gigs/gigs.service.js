@@ -328,7 +328,6 @@ var controllers = {
           const aheadDays = moment(timeDate).add(7, 'days')
 
           const range = moment().range(previousDays, aheadDays)
-          console.log('🚀 ~ file: gigs.service.js:328 ~ gigsData ~ range:', range)
 
           // between 0 days and 2 days before current day
           if (range.contains(moment())) {

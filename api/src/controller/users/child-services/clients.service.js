@@ -428,7 +428,6 @@ var controllers = {
                 const previousDays = moment(obj.date).subtract(7, 'days')
                 const aheadDays = moment(timeDate).add(7, 'days')
                 const range = moment().range(previousDays, aheadDays)
-                console.log(range)
                 // between 0 days and 2 days before current day
                 if (range.contains(moment())) {
                   if (contracts.length > 0 && obj.status != 'Contracts') return obj

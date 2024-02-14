@@ -64,7 +64,6 @@ async function sendNotification(request, gigs, status) {
       }
 
       user = await Users.find(jobster_id).lean().exec()
-      console.log('🚀 ~ file: gigs-apply-type.service.js:67 ~ sendNotification ~ user:', user)
 
       if (status === 'Accepted' && gigs.category === 'restaurant-services') {
         const getApplying = await Gigs.findById(gigs._id).lean().exec()

@@ -22,11 +22,12 @@ var controller = {
     } else {
       holidaySurge = parseFloat(holiday)
     }
+    const finalHours = hours - lateByHours
     let computedFeeByHr = parseFloat(finalHours * fee)
     let voluntaryFee = parseFloat(volFee)
     // let basicRate = parseFloat(fee) - voluntaryFee
     // console.log('🚀 ~ file: computations.js:26 ~ basicRate:', basicRate)
-    const finalHours = hours - lateByHours
+
     const nightSurge = parseFloat(fee) * 0.1 * parseFloat(nightSurgeHr)
     const gigExtension = parseFloat(fee) * 1.25 * parseFloat(gigExtentionHr)
 
@@ -39,19 +40,19 @@ var controller = {
     //     parseFloat(hours * pronvicialRate.pagibig) +
     //     parseFloat(hours * pronvicialRate.philhealth)
     // }
-    console.log('lateByHours' + lateByHours)
-    console.log('FEE ' + fee)
-    console.log('volFee ' + voluntaryFee)
-    console.log('premFee ' + premFee)
-    console.log('nightSurgeHr ' + nightSurgeHr)
-    console.log('nightSurgeHr  nightSurgeHr ' + nightSurgeHr)
-    console.log('nightSurge  ' + nightSurge)
+    // console.log('lateByHours' + lateByHours)
+    // console.log('FEE ' + fee)
+    // console.log('volFee ' + voluntaryFee)
+    // console.log('premFee ' + premFee)
+    // console.log('nightSurgeHr ' + nightSurgeHr)
+    // console.log('nightSurgeHr  nightSurgeHr ' + nightSurgeHr)
+    // console.log('nightSurge  ' + nightSurge)
 
-    console.log('gigExtentionHr gigExtentionHr  ' + gigExtentionHr)
-    console.log('gigExtentionHr ' + gigExtension)
+    // console.log('gigExtentionHr gigExtentionHr  ' + gigExtentionHr)
+    // console.log('gigExtentionHr ' + gigExtension)
 
-    console.log('holidaySurge ' + holidaySurge)
-    console.log('holiday ' + holiday)
+    // console.log('holidaySurge ' + holidaySurge)
+    // console.log('holiday ' + holiday)
 
     let premiumFee = parseFloat(premFee)
     let appFee = parseFloat(finalHours * 1.25)

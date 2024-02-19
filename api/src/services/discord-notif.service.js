@@ -97,7 +97,7 @@ var controller = {
             },
             {
               name: '',
-              value: `- Php ${parseFloat(lateDeduction).toFixed(2)} \n`,
+              value: `-Php ${parseFloat(lateDeduction).toFixed(2)} \n`,
               inline: true
             },
             {

@@ -17,6 +17,7 @@ const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
 const calculations = require('../../../common/computations')
 const fcm = require('../../../services/fcm-notif.service')
+const discord = require('../../../services/discord-notif.service')
 
 const {ENV} = process.env
 
@@ -267,6 +268,14 @@ var services = {
             console.log('🚀 ~ file: gigs-apply-type.service.js:241 ~ postingDays:', postingDays)
             console.log('🚀 ~ file: gigs-apply-type.service.js:258 ~  gigs.gigOffered:', gigs.gigOffered)
 
+            let jobsterData = await Users.find({_id: Types.ObjectId(uid)})
+              .lean()
+              .exec()
+
+            let clientData = await Users.find({_id: Types.ObjectId(gigs.uid)})
+              .lean()
+              .exec()
+
             // Add new calculation for construction and other form
             if (gigs.gigOffered) {
               const {
@@ -378,6 +387,18 @@ var services = {
               )
 
               await FeeHistory.create(feeHistoryInput)
+              discord.send_endshift(
+                jobsterData,
+                clientData,
+                gigs,
+                holidaySurge,
+                nightSurge,
+                gigExtension,
+                late,
+                jobsterFinal,
+                computedFeeByHr,
+                gigs.fees.proposedWorkTime
+              )
             }
           } else {
             await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {status: status, late: late ?? null})

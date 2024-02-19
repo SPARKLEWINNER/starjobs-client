@@ -59,10 +59,6 @@ var controller = {
               value: `${gigs.shift}`
             },
             {
-              name: 'Late',
-              value: `${gigs.late ? `${gigs.late}` : 'none'}`
-            },
-            {
               name: 'Start',
               value: `${moment(gigs.from).format('MMMM Do YYYY, h:mm:ss a')} `,
               inline: true
@@ -87,8 +83,8 @@ var controller = {
               inline: true
             },
             {
-              name: '',
-              value: ``
+              name: 'Late',
+              value: `${late ? `${late} mins` : 'none'}`
             },
             {
               name: 'Late Deduction',

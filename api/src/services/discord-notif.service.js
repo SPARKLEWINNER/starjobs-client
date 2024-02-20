@@ -33,7 +33,7 @@ var controller = {
       embeds: [
         {
           title: `**Client Gig End Shift**`,
-          description: `${clientData[0].firstName} ${clientData[0].lastName}| Client`,
+          description: `${gigs.user[0].companyName}| ${gigs.location}| Client`,
           color: 15258703,
           fields: [
             {

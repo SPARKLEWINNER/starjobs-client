@@ -52,7 +52,8 @@ var controllers = {
         time: 1,
         fees: 1,
         locationRate: 1,
-        category: 1
+        category: 1,
+        createdAt: 1
       }
 
       const initial_find = await Gigs.find(filter, projection).lean().exec()
@@ -200,7 +201,8 @@ var controllers = {
         time: 1,
         locationRate: 1,
         fees: 1,
-        category: 1
+        category: 1,
+        createdAt: 1
       }
 
       const initial_find = await Gigs.find(filter, projection).lean().exec()

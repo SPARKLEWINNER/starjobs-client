@@ -22,6 +22,8 @@ var controller = {
     } else {
       holidaySurge = parseFloat(holiday)
     }
+
+    const lateDeduction = parseFloat(lateByHours * fee)
     const finalHours = hours - lateByHours
     const nightSurge = parseFloat(fee) * 0.1 * parseFloat(nightSurgeHr)
     const gigExtension = parseFloat(fee) * 1.25 * parseFloat(gigExtentionHr)
@@ -78,7 +80,8 @@ var controller = {
       nightSurge,
       gigExtension,
       jobsterFinal,
-      holidaySurge
+      holidaySurge,
+      lateDeduction
     }
   },
   new_calculation: function (hours, fee, gigOffered, postingDays, late) {

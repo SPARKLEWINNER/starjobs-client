@@ -343,7 +343,8 @@ var services = {
                 nightSurge,
                 gigExtension,
                 jobsterFinal,
-                holidaySurge
+                holidaySurge,
+                lateDeduction
               } = calculations.default_calculations(
                 gigs.fees.proposedWorkTime,
                 gigs.fee,
@@ -380,7 +381,10 @@ var services = {
                     nightSurge: nightSurge,
                     gigExtension: gigExtension,
                     jobsterFinal: jobsterFinal,
-                    holidaySurge: holidaySurge
+                    holidaySurge: holidaySurge,
+                    lateDeduction: lateDeduction,
+                    proposedExtensionHr: actualExtension,
+                    proposedNightSurgeHr: actualNightSurge
                   },
                   late: late ?? null
                 }

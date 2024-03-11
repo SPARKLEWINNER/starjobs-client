@@ -401,7 +401,9 @@ var services = {
                 late,
                 jobsterFinal,
                 computedFeeByHr,
-                gigs.fees.proposedWorkTime
+                gigs.fees.proposedWorkTime,
+                actualExtension,
+                actualNightSurge
               )
             }
           } else {

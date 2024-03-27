@@ -361,7 +361,7 @@ var controllers = {
 
   patch_gig_details: async function (req, res) {
     const {id, uid: owner_id} = req.params
-    const {time, shift, hours, fee, date, category, position, from, notes} = req.body
+    const {time, shift, hours, fee, date, category, position, from, notes, breakHr} = req.body
     console.log(req.body)
     const isGigOwner = await Gigs.find({_id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(owner_id)})
       .lean()
@@ -375,6 +375,7 @@ var controllers = {
         time,
         from,
         shift,
+        breakHr,
         hours,
         fee,
         date,

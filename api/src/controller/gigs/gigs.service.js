@@ -315,21 +315,27 @@ var controllers = {
           .match({
             'records.auid': mongoose.Types.ObjectId(id)
           })
-          .sort({createdAt: -1})
+          .sort({createdAt: 1})
           .exec()
 
         let gigsData = reports.filter((obj) => {
+          // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
           //express as a duration
-          const previousDays = moment().subtract(3, 'days')
-          const aheadDays = moment().add(3, 'days')
+          const timeDate = moment(obj.time)
+          const date = moment(obj.date)
+
+          const previousDays = moment(date).subtract(7, 'days')
+          const aheadDays = moment(timeDate).add(7, 'days')
+
           const range = moment().range(previousDays, aheadDays)
 
           // between 0 days and 2 days before current day
-          if (range.contains(moment(obj.date))) {
+          if (range.contains(moment())) {
             return obj
           }
           return
         })
+        // console.log('🚀 ~ file: gigs.service.js:335 ~ gigsData ~ gigsData:', gigsData)
 
         if (contracts.length > 0) {
           gigsData = [...gigsData, ...contracts]

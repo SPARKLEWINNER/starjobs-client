@@ -399,6 +399,7 @@ var controllers = {
               history: 1,
               commissionRate: 1,
               gigFeeType: 1,
+              gigOffered: 1,
               applicants: 1,
               fees: 1,
               maximumApplicants: '$extended.maximumApplicants',
@@ -422,9 +423,16 @@ var controllers = {
           gigs &&
             gigs
               .filter((obj) => {
-                if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
+                const timeDate = moment(obj.time)
+
+                const previousDays = moment(obj.date).subtract(7, 'days')
+                const aheadDays = moment(timeDate).add(7, 'days')
+                const range = moment().range(previousDays, aheadDays)
+                // between 0 days and 2 days before current day
+                if (range.contains(moment())) {
                   if (contracts.length > 0 && obj.status != 'Contracts') return obj
                   if (contracts.length == 0) return obj
+                  // return obj
                 }
               })
               .map(async (obj) => {

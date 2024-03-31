@@ -21,8 +21,9 @@ var controller = {
       Tags: [],
       SendDate: null,
       Mask: process.env.SENDER_ID,
-      HasUnsubscribeLink: ''
+      HasUnsubscribeLink: false
     }
+
     const headers = {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + process.env.CAST_AUTH_TOKEN
@@ -32,7 +33,7 @@ var controller = {
       const response = await axios.post(url, data, {headers})
       console.log(response.data)
     } catch (error) {
-      console.error(error)
+      console.error(error.response.data) // Log the response data for more details on the error
     }
   }
 }

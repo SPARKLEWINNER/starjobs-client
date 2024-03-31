@@ -65,7 +65,6 @@ async function sendNotification(request, gigs, status) {
       }
 
       user = await Users.find(jobster_id).lean().exec()
-      console.log('🚀 ~ file: gigs-apply-type.service.js:67 ~ sendNotification ~ user:', user)
 
       if (status === 'Accepted' && gigs.category === 'restaurant-services') {
         const getApplying = await Gigs.findById(gigs._id).lean().exec()
@@ -281,7 +280,9 @@ var services = {
               const {
                 computedFeeByHr,
                 computedDaily,
+                computedHourly,
                 grossGigDaily,
+                grossGigHourly,
                 voluntaryFee,
                 appFee,
                 transactionFee,
@@ -303,6 +304,7 @@ var services = {
                 gigid: Types.ObjectId(id),
                 ...gigs
               })
+              console.log('🚀 ~ file: gigs-apply-type.service.js:324 ~ gigs.gigOffered:', gigs.gigOffered)
 
               await Gigs.findOneAndUpdate(
                 {_id: Types.ObjectId(id)},
@@ -310,10 +312,13 @@ var services = {
                   status: status,
                   hours: gigs.fees.proposedWorkTime,
                   fee: gigs.fee,
+                  gigOffered: gigs.gigOffered,
                   fees: {
                     computedFeeByHr: computedFeeByHr,
                     computedDaily: computedDaily,
+                    computedHourly: computedHourly,
                     grossGigDaily: grossGigDaily,
+                    grossGigHourly: grossGigHourly,
                     voluntaryFee: voluntaryFee,
                     appFee: appFee,
                     transactionFee: transactionFee,

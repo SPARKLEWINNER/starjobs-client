@@ -98,7 +98,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(id)},
-          {isActive: true, firstName: firstName, lastName: lastName}
+          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
         )
       }
     } catch (error) {

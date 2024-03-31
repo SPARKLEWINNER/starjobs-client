@@ -12,7 +12,9 @@ var controller = {
     late,
     jobsterFinal,
     computedFeeByHr,
-    time
+    time,
+    gigExtensionHr,
+    nightSurgeHr
   ) {
     let lateByHour = parseFloat(late) / parseFloat(60)
     if (late === null || late === undefined) {
@@ -21,6 +23,10 @@ var controller = {
     const lateDeduction = parseFloat(lateByHour * gigs.fee)
 
     const feeRate = parseFloat(gigs.fees.jobsterTotal * time)
+    console.log(
+      'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' +
+        nightSurgeHr
+    )
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_ENDSHIFT_KEY}`, {
       // method: 'post',
@@ -41,117 +47,24 @@ var controller = {
               value: ``
             },
             {
-              name: 'Position',
-              value: `${gigs.position} `,
+              name: 'Details',
+              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Gig Extension Fee:**\n**Night Surge:**\n**Night Surge Fee:**\n**Holiday Surge:**\n\n**Jobster Total:**`,
               inline: true
             },
             {
-              name: 'Fee',
-              value: `${gigs.fee} `,
+              name: '-',
+              value: `${gigs.position}\n${gigs.fee}\n${jobsterData[0].firstName} ${jobsterData[0].lastName}\n${
+                gigs.shift
+              }\n${moment(gigs.from).format('MMMM Do YYYY, h:mm:ss a')}\n${moment(gigs.time).format(
+                'MMMM Do YYYY, h:mm:ss a'
+              )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${late ? `${late} mins` : 'none'}\n-Php ${parseFloat(
+                lateDeduction
+              ).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(2)} hours \nPhp ${parseFloat(gigExtension).toFixed(
+                2
+              )} \n ${parseFloat(nightSurgeHr).toFixed(2)} hours \nPhp ${parseFloat(nightSurge).toFixed(
+                2
+              )}\nPhp ${parseFloat(holidaySurge).toFixed(2)}\n\nPhp ${parseFloat(jobsterFinal).toFixed(2)}\n `,
               inline: true
-            },
-            {
-              name: 'Jobster Assigned',
-              value: `${jobsterData[0].firstName} ${jobsterData[0].lastName}`
-            },
-            {
-              name: 'Shift',
-              value: `${gigs.shift}`
-            },
-            {
-              name: 'Start',
-              value: `${moment(gigs.from).format('MMMM Do YYYY, h:mm:ss a')} `,
-              inline: true
-            },
-            {
-              name: 'End',
-              value: `${moment(gigs.time).format('MMMM Do YYYY, h:mm:ss a')}  `,
-              inline: true
-            },
-            {
-              name: 'Hours',
-              value: `${time} `
-            },
-            {
-              name: 'Gig Fee Rate',
-              value: ` `,
-              inline: true
-            },
-            {
-              name: '',
-              value: `Php ${parseFloat(feeRate).toFixed(2)} \n`,
-              inline: true
-            },
-            {
-              name: 'Late',
-              value: `${late ? `${late} mins` : 'none'}`
-            },
-            {
-              name: 'Late Deduction',
-              value: ``,
-              inline: true
-            },
-            {
-              name: '',
-              value: `-Php ${parseFloat(lateDeduction).toFixed(2)} \n`,
-              inline: true
-            },
-            {
-              name: '',
-              value: ``
-            },
-            {
-              name: 'Gig Extension',
-              value: ``,
-              inline: true
-            },
-            {
-              name: '',
-              value: `Php ${parseFloat(gigExtension).toFixed(2)} \n`,
-              inline: true
-            },
-            {
-              name: '',
-              value: ``
-            },
-            {
-              name: 'Night Surge',
-              value: ` `,
-              inline: true
-            },
-
-            {
-              name: '',
-              value: `Php ${parseFloat(nightSurge).toFixed(2)} `,
-              inline: true
-            },
-            {
-              name: '',
-              value: ``
-            },
-            {
-              name: 'Holiday Surge',
-              value: ``,
-              inline: true
-            },
-            {
-              name: '',
-              value: `Php ${parseFloat(holidaySurge).toFixed(2)}`,
-              inline: true
-            },
-            // {
-            //   name: '',
-            //   value: ``
-            // },
-            {
-              name: 'Jobster Total',
-              value: ` `
-              // inline: true
-            },
-            {
-              name: '',
-              value: `Php ${parseFloat(jobsterFinal).toFixed(2)}`
-              // inline: true
             }
           ],
           footer: {

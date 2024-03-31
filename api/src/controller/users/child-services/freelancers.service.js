@@ -46,8 +46,13 @@ var controllers = {
       education,
       rate,
       payment,
-      photo
+      photo,
+      requirement_files,
+      selfie
     } = req.body
+    console.log('🚀 ~ rate:', rate)
+    console.log('🚀 ~ selfie:', selfie)
+    console.log('🚀 ~ requirement_files:', requirement_files)
 
     const accountObj = new Freelancers({
       uuid: mongoose.Types.ObjectId(id),
@@ -76,6 +81,14 @@ var controllers = {
       rate,
       payment,
       photo,
+      requirementFiles: {
+        nbi: requirement_files.nbiClearance || '',
+        validIds: requirement_files.validIds || '',
+        vacinationCard: requirement_files.vacinationCard || '',
+        brgyClearance: requirement_files.barangayClearance || '',
+        map: requirement_files.residencyMap || ''
+      },
+      selfie,
       dateCreated: now.toDateString()
     })
 
@@ -136,7 +149,9 @@ var controllers = {
       education,
       rate,
       payment,
-      photo
+      photo,
+      requirement_files,
+      selfie
     } = req.body
 
     const details = {
@@ -164,7 +179,15 @@ var controllers = {
       education,
       rate,
       payment,
-      photo
+      photo,
+      requirementFiles: {
+        nbi: requirement_files.nbiClearance || '',
+        validIds: requirement_files.validIds || '',
+        vacinationCard: requirement_files.vacinationCard || '',
+        brgyClearance: requirement_files.barangayClearance || '',
+        map: requirement_files.residencyMap || ''
+      },
+      selfie
     }
 
     const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})

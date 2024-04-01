@@ -70,6 +70,10 @@ const userSchema = new Schema(
       required: true,
       default: false
     },
+    adminStatus: {
+      type: String,
+      required: true
+    },
     isCityUpdated: {
       type: Boolean,
       required: true,

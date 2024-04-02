@@ -81,14 +81,14 @@ var controllers = {
       rate,
       payment,
       photo,
-      requirementFiles: {
-        nbi: requirement_files.nbiClearance || '',
-        validIds: requirement_files.validIds || '',
-        vacinationCard: requirement_files.vacinationCard || '',
-        brgyClearance: requirement_files.barangayClearance || '',
-        map: requirement_files.residencyMap || ''
-      },
-      selfie,
+      // requirementFiles: {
+      //   nbi: requirement_files.nbiClearance || '',
+      //   validIds: requirement_files.validIds || '',
+      //   vacinationCard: requirement_files.vacinationCard || '',
+      //   brgyClearance: requirement_files.barangayClearance || '',
+      //   map: requirement_files.residencyMap || ''
+      // },
+      // selfie,
       dateCreated: now.toDateString()
     })
 
@@ -179,15 +179,15 @@ var controllers = {
       education,
       rate,
       payment,
-      photo,
-      requirementFiles: {
-        nbi: requirement_files.nbiClearance || '',
-        validIds: requirement_files.validIds || '',
-        vacinationCard: requirement_files.vacinationCard || '',
-        brgyClearance: requirement_files.barangayClearance || '',
-        map: requirement_files.residencyMap || ''
-      },
-      selfie
+      photo
+      // requirementFiles: {
+      //   nbi: requirement_files.nbiClearance || '',
+      //   validIds: requirement_files.validIds || '',
+      //   vacinationCard: requirement_files.vacinationCard || '',
+      //   brgyClearance: requirement_files.barangayClearance || '',
+      //   map: requirement_files.residencyMap || ''
+      // },
+      // selfie
     }
 
     const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})

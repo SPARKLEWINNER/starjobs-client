@@ -194,7 +194,8 @@ var controllers = {
         phone,
         verificationCode: code,
         password: password,
-        dateCreated: new Date()
+        dateCreated: new Date(),
+        adminStatus: 'Pending'
       })
 
       let result = await Users.create(new_user)

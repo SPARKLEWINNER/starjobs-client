@@ -183,7 +183,7 @@ var controllers = {
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
         validIds: requirement_files.validIds || '',
-        vacinationCard: requirement_files.vacinationCard || '',
+        vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
         map: requirement_files.residencyMap || ''
       },
@@ -199,7 +199,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(result.uuid)},
-          {firstName: firstName, lastName: lastName}
+          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
         )
       }
 

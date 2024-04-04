@@ -146,9 +146,9 @@ var controllers = {
       education,
       rate,
       payment,
-      photo,
-      requirement_files,
-      selfie
+      photo
+      // requirement_files,
+      // selfie
     } = req.body
 
     const details = {

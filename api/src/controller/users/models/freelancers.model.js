@@ -163,7 +163,8 @@ const freelancerSchema = new Schema(
     },
     rate: {
       rateAmount: String,
-      rateType: String
+      rateType: String,
+      gcashScreenshot: String
     },
     payment: {
       accountPaymentType: {

@@ -183,6 +183,16 @@ const freelancerSchema = new Schema(
     },
     photo: {
       type: String
+    },
+    requirementFiles: {
+      nbi: String,
+      brgyClearance: String,
+      validIds: String,
+      vaccinationCard: String,
+      map: String
+    },
+    selfie: {
+      type: String
     }
   },
   {

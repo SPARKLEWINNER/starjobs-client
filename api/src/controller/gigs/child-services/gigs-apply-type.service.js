@@ -292,7 +292,7 @@ var services = {
                 serviceCost,
                 jobsterTotal
               } = calculations.new_calculation(
-                gigs.fees.proposedWorkTime,
+                actualTime,
                 gigs.fee,
                 gigs.gigOffered,
                 postingDays,
@@ -310,7 +310,7 @@ var services = {
                 {_id: Types.ObjectId(id)},
                 {
                   status: status,
-                  hours: gigs.fees.proposedWorkTime,
+                  hours: actualTime,
                   fee: gigs.fee,
                   gigOffered: gigs.gigOffered,
                   fees: {
@@ -351,7 +351,7 @@ var services = {
                 holidaySurge,
                 lateDeduction
               } = calculations.default_calculations(
-                gigs.fees.proposedWorkTime,
+                actualTime,
                 gigs.fee,
                 gigs.fees.voluntaryFee,
                 gigs.fees.premiumFee,
@@ -370,7 +370,7 @@ var services = {
                 {_id: Types.ObjectId(id)},
                 {
                   status: status,
-                  hours: gigs.fees.proposedWorkTime,
+                  hours: actualTime,
                   fee: gigs.fee,
                   fees: {
                     computedFeeByHr: computedFeeByHr,
@@ -406,7 +406,7 @@ var services = {
                 late,
                 jobsterFinal,
                 computedFeeByHr,
-                gigs.fees.proposedWorkTime,
+                actualTime,
                 actualExtension,
                 actualNightSurge
               )

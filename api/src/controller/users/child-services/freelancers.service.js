@@ -96,7 +96,10 @@ var controllers = {
       result = await Freelancers.create(accountObj).catch((err) => console.log(err))
 
       if (result) {
-        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {firstName: firstName, lastName: lastName})
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(id)},
+          {isActive: true, firstName: firstName, lastName: lastName}
+        )
       }
     } catch (error) {
       await logger.logError(error, 'Freelancers.post_account_details', accountObj, id, 'POST')

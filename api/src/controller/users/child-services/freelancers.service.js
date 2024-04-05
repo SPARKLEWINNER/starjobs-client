@@ -84,7 +84,7 @@ var controllers = {
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
         validIds: requirement_files.validIds || '',
-        vacinationCard: requirement_files.vacinationCard || '',
+        vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
         map: requirement_files.residencyMap || ''
       },

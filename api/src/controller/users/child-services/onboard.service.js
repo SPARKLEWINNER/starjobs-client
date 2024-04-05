@@ -249,7 +249,8 @@ async function rate_information(id, data) {
   const details = {
     rate: {
       rateAmount: data?.rateAmount,
-      rateType: data?.rateType
+      rateType: data?.rateType,
+      gcashProfile: data?.gcashProfile
     },
     payment: {
       accountPaymentType: data?.accountType,

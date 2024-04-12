@@ -534,6 +534,248 @@ var controllers = {
 
     return res.status(200).json(client)
   },
+
+  get_client_status_gigs: async function (req, res) {
+    const {id, status} = req.params
+    const statusArray = status.split(',')
+    // console.log(, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+    // console.log(req.body, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXbodyXXX')
+    // console.log(req.params, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXbodyXXX')
+
+    let gigs, client
+    if (!id || id === 'undefined') return res.status(502).json({success: false, msg: 'User id missing'})
+
+    try {
+      await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
+      let user = await Clients.find({uid: mongoose.Types.ObjectId(id)})
+        .lean()
+        .exec()
+
+      if (user) {
+        const contracts = await Contracts.aggregate([
+          {
+            $lookup: {
+              from: 'gigs',
+              localField: 'gid',
+              foreignField: '_id',
+              as: 'gigs'
+            }
+          },
+          {$unwind: '$gigs'},
+          {
+            $project: {
+              _id: '$gigs._id',
+              records: true,
+              category: true,
+              commissionRate: true,
+              gigFeeType: true,
+              from: '$gigs.from',
+              time: '$gigs.time',
+              shift: '$gigs.shift',
+              hours: '$gigs.hours',
+              breakHr: '$gigs.breakHr',
+              dateCreated: '$gigs.dateCreated',
+              position: '$gigs.position',
+              notes: '$gigs.notes',
+              contactNumber: '$gigs.contactNumber',
+              location: '$gigs.location',
+              isApprove: '$gigs.isApprove',
+              status: '$gigs.status',
+              date: '$gigs.date',
+              applicants: '$gigs.applicants',
+              updatedAt: true,
+              createdAt: true,
+              user: '$gigs.user'
+            }
+          }
+        ]).exec()
+
+        gigs = await Gigs.aggregate([
+          {
+            $match: {
+              uid: mongoose.Types.ObjectId(id),
+              status: {$in: statusArray} // Uncomment if needed
+            }
+          },
+          {
+            $lookup: {
+              from: 'extended',
+              localField: '_id',
+              foreignField: 'gigId',
+              as: 'extended'
+            }
+          },
+          {
+            $unwind: {
+              path: '$extended',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $lookup: {
+              from: 'gigs-histories',
+              localField: '_id',
+              foreignField: 'gid',
+              as: 'history'
+            }
+          },
+          {
+            $unwind: {
+              path: '$history',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $project: {
+              _id: 1,
+              position: 1,
+              hours: 1,
+              nation: 1,
+              location: 1,
+              breakHr: 1,
+              from: 1,
+              late: 1,
+              time: 1,
+              status: 1,
+              shift: 1,
+              fee: 1,
+              user: 1,
+              uid: 1,
+              isExtended: 1,
+              isApprove: 1,
+              category: 1,
+              createdAt: 1,
+              date: 1,
+              dateCreated: 1,
+              auid: 1,
+              history: 1,
+              commissionRate: 1,
+              gigFeeType: 1,
+              gigOffered: 1,
+              applicants: 1,
+              fees: 1,
+              maximumApplicants: '$extended.maximumApplicants',
+              numberofApplicants: {
+                $cond: [
+                  {
+                    $and: [
+                      {$eq: ['$extended.applicants.status', 'Applying']},
+                      {$gt: ['$extended.applicants.auid', null]}
+                    ]
+                  },
+                  1,
+                  0
+                ]
+              }
+            }
+          }
+        ])
+
+        console.log(gigs, 'GIGS QUERRY')
+        gigs = await Promise.all(
+          gigs &&
+            gigs
+              .filter((obj, index, self) => {
+                const firstIndex = self.findIndex((t) => t._id === obj._id)
+                if (index !== firstIndex) {
+                  return false // Skip duplicate objects
+                }
+                const timeDate = moment(obj.time)
+
+                const previousDays = moment(obj.date).subtract(7, 'days')
+                const aheadDays = moment(timeDate).add(7, 'days')
+                const range = moment().range(previousDays, aheadDays)
+                // between 0 days and 2 days before current day
+                if (range.contains(moment())) {
+                  if (contracts.length > 0 && obj.status != 'Contracts') return obj
+                  if (contracts.length == 0) return obj
+                  // return obj
+                }
+              })
+              .map(async (obj) => {
+                if (!obj.isExtended) {
+                  const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(obj.auid)})
+                    .lean()
+                    .exec()
+
+                  // add applicant list since to prevent re-apply of jobsters
+                  if (obj.status === 'Applying' || obj.status === 'Waiting') {
+                    const history = await History.find(
+                      {
+                        gid: mongoose.Types.ObjectId(obj._id),
+                        status: ['Waiting', 'Applying']
+                      },
+                      {uid: 1, status: 1, _id: 1, createdAt: 1}
+                    )
+                      .find()
+                      .lean()
+
+                    return {
+                      ...obj,
+                      applicants: history,
+                      account
+                    }
+                  }
+
+                  return {
+                    ...obj,
+                    account
+                  }
+                } else {
+                  return obj
+                }
+              })
+        )
+
+        // console.log(gigs.length, ' giglengeth')
+        let gigData = gigs
+        if (contracts.length > 0) {
+          gigData = [contracts[0], ...gigs]
+        }
+        // console.log(gigData, ' gigdate')
+        // console.log(gigData.length, ' gigdata Length')
+        const gigsObject = gigData.reduce((acc, curr) => {
+          acc[curr._id] = curr
+          return acc
+        }, {})
+        // console.log(gigsObject, ' gigdate')
+
+        // console.log(gigsObject.length, ' gigdata Length')
+
+        // let filtered_gig = gigsObject.filter(
+        //   (gig, index, self) => index === self.findIndex((obj) => obj._id === gig._id)
+        // )
+        // console.log(filtered_gig, ' filtered_gig')
+        // console.log(gigsObject.length, ' filtered_gig Length')
+        const gigsArray = Object.entries(gigsObject).map(([key, value]) => ({
+          _id: key,
+          ...value
+        }))
+
+        console.log(gigsArray, ' gigsArray')
+
+        // const dataLast = []
+        // filtered_gig &&
+        //   filtered_gig.map((value) => {
+        //     return dataLast.push(value)
+        //   })
+
+        client = {
+          details: user ? user[0] : {},
+          gigs: gigsArray,
+          gigCategory: [...new Set(gigsArray.map((item) => item.category))]
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Clients.get_client_gigs', null, id, 'GET')
+
+      return res.status(502).json({success: false, msg: 'User to get details'})
+    }
+
+    return res.status(200).json(client)
+  },
+
   get_client_edit_profile: async function (req, res) {
     const {id} = req.params
     if (!id || id === 'undefined') return res.status(502).json({success: false, msg: 'User id missing'})

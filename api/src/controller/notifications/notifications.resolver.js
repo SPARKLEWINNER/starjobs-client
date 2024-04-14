@@ -6,6 +6,10 @@ const apiPath = process.env.API_PATH
 
 module.exports = function (app) {
   app.route(`${apiPath}${apiVersion}/notifications`).get(jwt.require_sign_in, notification.get_notifications_v2)
+  app
+    .route(`${apiPath}${apiVersion}/notifications/:_id/:length`)
+    .get(jwt.require_sign_in, notification.get_notifications_v3)
+
   app.route(`${apiPath}${apiVersion}/notifications/area`).get(jwt.require_sign_in, notification.get_area_notification)
   app
     .route(`${apiPath}${apiVersion}/notifications/client/:id`)

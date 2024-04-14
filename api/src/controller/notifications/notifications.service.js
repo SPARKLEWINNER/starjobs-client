@@ -187,6 +187,32 @@ var controllers = {
     }
   },
 
+  get_notifications_v3: async function (req, res) {
+    const token = req.headers.authorization.split(' ')[1]
+    const {id} = jwt_decode(token)
+    const {length} = req.params
+    try {
+      const notifications = await Notification.find({
+        $or: [{targetUsers: id}, {target: 'General'}]
+      })
+        .skip(length * 1)
+        .sort({createdAt: -1})
+        .limit(10)
+        .exec()
+
+      const finalData = notifications.map((notification) => ({
+        ...notification._doc,
+        isRead: notification.viewedBy.includes(id)
+      }))
+
+      return res.status(200).json({success: true, data: finalData})
+    } catch (error) {
+      console.error('error', error)
+      await logger.logError(error, 'Freelancers.get_notifications', null, id, 'GET')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+  },
+
   post_notification_v2: async function (req, res) {
     try {
       const {title, body} = req.body

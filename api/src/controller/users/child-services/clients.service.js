@@ -590,88 +590,180 @@ var controllers = {
           }
         ]).exec()
 
-        gigs = await Gigs.aggregate([
-          {
-            $match: {
-              uid: mongoose.Types.ObjectId(id),
-              status: {$in: statusArray} // Uncomment if needed
-            }
-          },
-          {
-            $lookup: {
-              from: 'extended',
-              localField: '_id',
-              foreignField: 'gigId',
-              as: 'extended'
-            }
-          },
-          {
-            $unwind: {
-              path: '$extended',
-              preserveNullAndEmptyArrays: true
-            }
-          },
-          {
-            $lookup: {
-              from: 'gigs-histories',
-              localField: '_id',
-              foreignField: 'gid',
-              as: 'history'
-            }
-          },
-          {
-            $unwind: {
-              path: '$history',
-              preserveNullAndEmptyArrays: true
-            }
-          },
-          {
-            $project: {
-              _id: 1,
-              position: 1,
-              hours: 1,
-              nation: 1,
-              location: 1,
-              breakHr: 1,
-              from: 1,
-              late: 1,
-              time: 1,
-              status: 1,
-              shift: 1,
-              fee: 1,
-              user: 1,
-              uid: 1,
-              isExtended: 1,
-              isApprove: 1,
-              category: 1,
-              createdAt: 1,
-              date: 1,
-              dateCreated: 1,
-              auid: 1,
-              history: 1,
-              commissionRate: 1,
-              gigFeeType: 1,
-              gigOffered: 1,
-              applicants: 1,
-              fees: 1,
-              maximumApplicants: '$extended.maximumApplicants',
-              numberofApplicants: {
-                $cond: [
-                  {
-                    $and: [
-                      {$eq: ['$extended.applicants.status', 'Applying']},
-                      {$gt: ['$extended.applicants.auid', null]}
-                    ]
-                  },
-                  1,
-                  0
-                ]
+        if (status === 'Waiting,Pending') {
+          gigs = await Gigs.aggregate([
+            {
+              $match: {
+                uid: mongoose.Types.ObjectId(id),
+                status: {$in: statusArray} // Uncomment if needed
+              }
+            },
+            {
+              $lookup: {
+                from: 'extended',
+                localField: '_id',
+                foreignField: 'gigId',
+                as: 'extended'
+              }
+            },
+            {
+              $unwind: {
+                path: '$extended',
+                preserveNullAndEmptyArrays: true
+              }
+            },
+            {
+              $lookup: {
+                from: 'gigs-histories',
+                localField: '_id',
+                foreignField: 'gid',
+                as: 'history'
+              }
+            },
+            {
+              $unwind: {
+                path: '$history',
+                preserveNullAndEmptyArrays: true
+              }
+            },
+            {
+              $project: {
+                _id: 1,
+                position: 1,
+                hours: 1,
+                nation: 1,
+                location: 1,
+                breakHr: 1,
+                from: 1,
+                late: 1,
+                time: 1,
+                status: 1,
+                shift: 1,
+                fee: 1,
+                user: 1,
+                uid: 1,
+                isExtended: 1,
+                isApprove: 1,
+                category: 1,
+                createdAt: 1,
+                date: 1,
+                dateCreated: 1,
+                auid: 1,
+                history: 1,
+                commissionRate: 1,
+                gigFeeType: 1,
+                gigOffered: 1,
+                applicants: 1,
+                fees: 1,
+                maximumApplicants: '$extended.maximumApplicants',
+                numberofApplicants: {
+                  $cond: [
+                    {
+                      $and: [
+                        {$eq: ['$extended.applicants.status', 'Applying']},
+                        {$gt: ['$extended.applicants.auid', null]}
+                      ]
+                    },
+                    1,
+                    0
+                  ]
+                }
+              }
+            },
+            {
+              $sort: {
+                createdAt: -1
               }
             }
-          }
-        ])
+          ])
+        } else {
+          gigs = await Gigs.aggregate([
+            {
+              $match: {
+                uid: mongoose.Types.ObjectId(id),
+                status: {$in: statusArray} // Uncomment if needed
+              }
+            },
+            // {
+            //   $lookup: {
+            //     from: 'extended',
+            //     localField: '_id',
+            //     foreignField: 'gigId',
+            //     as: 'extended'
+            //   }
+            // },
+            // {
+            //   $unwind: {
+            //     path: '$extended',
+            //     preserveNullAndEmptyArrays: true
+            //   }
+            // },
+            // {
+            //   $lookup: {
+            //     from: 'gigs-histories',
+            //     localField: '_id',
+            //     foreignField: 'gid',
+            //     as: 'history'
+            //   }
+            // },
+            // {
+            //   $unwind: {
+            //     path: '$history',
+            //     preserveNullAndEmptyArrays: true
+            //   }
+            // },
+            {
+              $project: {
+                _id: 1,
+                position: 1,
+                hours: 1,
+                nation: 1,
+                location: 1,
+                breakHr: 1,
+                from: 1,
+                late: 1,
+                time: 1,
+                status: 1,
+                shift: 1,
+                fee: 1,
+                user: 1,
+                uid: 1,
+                isExtended: 1,
+                isApprove: 1,
+                category: 1,
+                createdAt: 1,
+                date: 1,
+                dateCreated: 1,
+                auid: 1,
+                history: 1,
+                commissionRate: 1,
+                gigFeeType: 1,
+                gigOffered: 1,
+                applicants: 1,
+                fees: 1
+                // maximumApplicants: '$extended.maximumApplicants',
+                // numberofApplicants: {
+                //   $cond: [
+                //     {
+                //       $and: [
+                //         {$eq: ['$extended.applicants.status', 'Applying']},
+                //         {$gt: ['$extended.applicants.auid', null]}
+                //       ]
+                //     },
+                //     1,
+                //     0
+                //   ]
+                // }
+              }
+            },
+            {
+              $sort: {
+                createdAt: -1
+              }
+            }
+          ])
+        }
 
-        console.log(gigs, 'GIGS QUERRY')
         gigs = await Promise.all(
           gigs &&
             gigs
@@ -727,20 +819,15 @@ var controllers = {
               })
         )
 
-        // console.log(gigs.length, ' giglengeth')
         let gigData = gigs
         if (contracts.length > 0) {
           gigData = [contracts[0], ...gigs]
         }
-        // console.log(gigData, ' gigdate')
-        // console.log(gigData.length, ' gigdata Length')
+
         const gigsObject = gigData.reduce((acc, curr) => {
           acc[curr._id] = curr
           return acc
         }, {})
-        // console.log(gigsObject, ' gigdate')
-
-        // console.log(gigsObject.length, ' gigdata Length')
 
         // let filtered_gig = gigsObject.filter(
         //   (gig, index, self) => index === self.findIndex((obj) => obj._id === gig._id)
@@ -751,8 +838,6 @@ var controllers = {
           _id: key,
           ...value
         }))
-
-        console.log(gigsArray, ' gigsArray')
 
         // const dataLast = []
         // filtered_gig &&

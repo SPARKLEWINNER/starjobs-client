@@ -79,6 +79,10 @@ module.exports = function (app) {
     .patch(jwt.require_sign_in, ClientsController.patch_client_documents)
   app.route(`${apiPath}${apiVersion}/clients/:id`).get(jwt.require_sign_in, ClientsController.get_client_gigs)
   app
+    .route(`${apiPath}${apiVersion}/clients/list/:id/:status`)
+    .get(jwt.require_sign_in, ClientsController.get_client_status_gigs)
+
+  app
     .route(`${apiPath}${apiVersion}/clients/edit/:id`)
     .get(jwt.require_sign_in, ClientsController.get_client_edit_profile)
 

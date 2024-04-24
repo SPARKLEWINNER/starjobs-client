@@ -168,11 +168,10 @@ var controllers = {
 
   post_freelancer_list_search: async function (req, res) {
     let freelancers
-    let {searchTerm, category} = req.body
+    let {searchTerm, category, skip, sort} = req.body
     let skills
     // const oneWeekAgo = new Date()
     // oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
-
     if (category === 'Restaurant Services') {
       skills = 'Food and Restaurant'
     } else if (category === 'Sales & Marketing') {
@@ -183,6 +182,11 @@ var controllers = {
       skills = 'Construction'
     } else {
       skills = 'Others'
+    }
+
+    let sortOptions = {createdAt: -1}
+    if (sort) {
+      sortOptions = {firstName: parseInt(sort)}
     }
 
     let token = req.headers['authorization']
@@ -201,6 +205,7 @@ var controllers = {
             }
           }
         ])
+          .sort(sortOptions)
           .match({
             accountType: 0,
             isActive: true,
@@ -208,7 +213,8 @@ var controllers = {
             'details.expertise.skillQualification': skills,
             $or: [{firstName: {$regex: searchTerm, $options: 'i'}}, {lastName: {$regex: searchTerm, $options: 'i'}}]
           })
-          .sort({createdAt: -1})
+          .skip(skip * 1)
+          .limit(5)
           .exec()
       } catch (error) {
         console.error(error)
@@ -227,6 +233,7 @@ var controllers = {
             }
           }
         ])
+          .sort(sortOptions)
           .match({
             accountType: 0,
             isActive: true,
@@ -244,7 +251,8 @@ var controllers = {
             'details.expertise.skillOffer': 1,
             createdAt: 1
           })
-          .sort({createdAt: -1})
+          .skip(skip * 1)
+          .limit(5)
           .exec()
       } catch (error) {
         console.error(error)

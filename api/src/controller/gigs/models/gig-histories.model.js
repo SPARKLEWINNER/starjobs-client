@@ -47,6 +47,10 @@ const historySchema = new Schema(
     isExtended: {
       type: Boolean,
       default: false
+    },
+    logs: {
+      type: Object,
+      default: []
     }
   },
   {timestamps: true}

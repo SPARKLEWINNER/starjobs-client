@@ -176,6 +176,10 @@ var services = {
     const {id} = req.params
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
 
+    const user = await Users.find({_id: Types.ObjectId(uid)})
+      .lean()
+      .exec()
+
     const now = new Date()
     let updatedGig
     const history_details = {
@@ -183,7 +187,14 @@ var services = {
       gid: Types.ObjectId(id),
       date_created: now.toISOString(),
       uid: Types.ObjectId(uid),
-      isExtended: false
+      isExtended: false,
+      logs: {
+        nightSurgeHr: actualNightSurge,
+        gigExtension: actualExtension,
+        late: late,
+        hours: actualTime,
+        editedBy: `${user[0].firstName} ${user[0].lastName}`
+      }
     }
 
     try {

@@ -172,11 +172,11 @@ async function sendNotification(request, gigs, status) {
 
 var services = {
   default: async function (req, res) {
-    const {uid, status, actualTime, late, actualExtension, actualNightSurge} = req.body
+    const {uid, status, actualTime, late, actualExtension, actualNightSurge, userID} = req.body
     const {id} = req.params
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
 
-    const user = await Users.find({_id: Types.ObjectId(uid)})
+    const user = await Users.find({_id: Types.ObjectId(userID ? userID : uid)})
       .lean()
       .exec()
 
@@ -189,11 +189,12 @@ var services = {
       uid: Types.ObjectId(uid),
       isExtended: false,
       logs: {
-        nightSurgeHr: actualNightSurge,
-        gigExtension: actualExtension,
-        late: late,
+        editedBy: `${user[0].firstName} ${user[0].lastName}`,
+        accountType: user[0].accountType,
         hours: actualTime,
-        editedBy: `${user[0].firstName} ${user[0].lastName}`
+        late: late,
+        gigExtension: actualExtension,
+        nightSurgeHr: actualNightSurge
       }
     }
 

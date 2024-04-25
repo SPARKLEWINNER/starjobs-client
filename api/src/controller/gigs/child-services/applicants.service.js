@@ -168,6 +168,7 @@ var controllers = {
 
   post_freelancer_list_search: async function (req, res) {
     let freelancers
+    let totalFreelancers
     let {searchTerm, category, skip, sort} = req.body
     let skills
     // const oneWeekAgo = new Date()
@@ -223,6 +224,13 @@ var controllers = {
       }
     } else {
       try {
+        totalFreelancers = await Users.countDocuments({
+          accountType: 0,
+          isActive: true,
+          isVerified: true,
+          $or: [{firstName: {$regex: searchTerm, $options: 'i'}}, {lastName: {$regex: searchTerm, $options: 'i'}}]
+        })
+
         freelancers = await Users.aggregate([
           {
             $lookup: {
@@ -267,7 +275,9 @@ var controllers = {
     //   return updatedAtDAte >= oneWeekAgo
     // })
     // console.log(sortFreelancer)
-    return res.status(200).json(freelancers)
+    return res.json({success: true, totalFreelancers, freelancers})
+
+    // return res.status(200).json(freelancers)
   }
 }
 

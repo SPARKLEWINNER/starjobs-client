@@ -15,7 +15,7 @@ module.exports = function (app) {
     .route(`${apiPath}${apiVersion}/notifications/client/:id`)
     .get(jwt.require_sign_in, notification.get_notifications_clients)
   app
-    .route(`${apiPath}${apiVersion}/notifications/details/:id`)
+    .route(`${apiPath}${apiVersion}/notifications_v2/details/:id`)
     .get(jwt.require_sign_in, notification.get_notification_details)
   app.route(`${apiPath}${apiVersion}/notifications/:id`).patch(jwt.require_sign_in, notification.patch_notification)
   app.route(`${apiPath}${apiVersion}/notifications/:id`).post(jwt.require_sign_in, notification.post_notification_v2)

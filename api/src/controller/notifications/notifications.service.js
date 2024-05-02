@@ -104,7 +104,7 @@ var controllers = {
         return res.status(400).json({success: false, msg: 'Empty notifications'})
       }
 
-      return res.status(200).json({success: false, data: result})
+      return res.status(200).json({success: true, data: result})
     } catch (error) {
       console.error('error', error)
       await logger.logError(error, 'Freelancers.get_notification_details', null, id, 'GET')

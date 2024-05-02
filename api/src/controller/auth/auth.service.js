@@ -5,6 +5,7 @@ const crypto = require('crypto')
 const Users = require('../users/models/users.model')
 const Freelancers = require('../users/models/freelancers.model')
 const Clients = require('../users/models/clients.model')
+const CastToken = require('../users/models/cast-token.model')
 
 const Guests = require('./models/guests.model')
 
@@ -209,7 +210,18 @@ var controllers = {
           ContactNumber: phone
         }
       ]
-      sms.cast_sms(recipients, `Starjobs verification code ${code}`)
+      let castToken = ''
+      const tokenDoc = await CastToken.findOne()
+      console.log(tokenDoc)
+
+      if (tokenDoc) {
+        castToken = tokenDoc.token
+        console.log('🚀 ~ CastToken:', token)
+      } else {
+        console.log('Token not found in the database')
+      }
+      console.log('🚀 ~ recipients:', recipients)
+      sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)
@@ -264,8 +276,19 @@ var controllers = {
             ContactNumber: phone
           }
         ]
+        let token = ''
+        const tokenDoc = await CastToken.findOne()
+        console.log(tokenDoc)
+
+        if (tokenDoc) {
+          token = tokenDoc.token
+          console.log('🚀 ~ CastToken:', token)
+        } else {
+          console.log('Token not found in the database')
+        }
+
         // await sms.send_sms(phone, `Starjobs verification code ${isExisting[0].verificationCode}`)
-        await sms.cast_sms(recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)
+        await sms.cast_sms(token, recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)
       } else {
         await mailer.send_mail({email, verifyCode: isExisting[0].verificationCode, type: 'sign_up'})
       }

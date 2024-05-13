@@ -244,7 +244,7 @@ var controllers = {
         msg: `Email doesn't exists`
       })
 
-    if (!isExisting[0].verificationCode) {
+    if (isExisting[0].verificationCode) {
       let new_code = Math.floor(100000 + Math.random() * 900000)
       await Users.findOneAndUpdate({email: email}, {verificationCode: new_code}, {new: true})
       isExisting[0].verificationCode = new_code

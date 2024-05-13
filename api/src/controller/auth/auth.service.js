@@ -210,18 +210,18 @@ var controllers = {
           ContactNumber: phone
         }
       ]
-      // let castToken = ''
-      // const tokenDoc = await CastToken.findOne()
-      // console.log(tokenDoc)
+      let castToken = ''
+      const tokenDoc = await CastToken.findOne()
+      console.log(tokenDoc)
 
-      // if (tokenDoc) {
-      //   castToken = tokenDoc.token
-      //   console.log('🚀 ~ CastToken:', token)
-      // } else {
-      //   console.log('Token not found in the database')
-      // }
-      // console.log('🚀 ~ recipients:', recipients)
-      // sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
+      if (tokenDoc) {
+        castToken = tokenDoc.token
+        console.log('🚀 ~ CastToken:', token)
+      } else {
+        console.log('Token not found in the database')
+      }
+      console.log('🚀 ~ recipients:', recipients)
+      sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)

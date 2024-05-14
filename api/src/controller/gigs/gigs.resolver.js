@@ -28,6 +28,10 @@ module.exports = function (app) {
   app.route(`${apiPath}${apiVersion}/gigs/contract/:id`).get(jwt.require_sign_in, GigsController.get_contract)
   app.route(`${apiPath}${apiVersion}/gigs/list/:category`).get(jwt.require_sign_in, GigsController.get_gigs_categorized)
   app.route(`${apiPath}${apiVersion}/gigs/history/:id`).get(jwt.require_sign_in, GigsController.get_gigs_history)
+  app
+    .route(`${apiPath}${apiVersion}/gigs/history/:id/:status`)
+    .get(jwt.require_sign_in, GigsController.get_gigs_history_status)
+
   app.route(`${apiPath}${apiVersion}/gigs/:id`).post(jwt.require_sign_in, GigsController.post_gig)
 
   app.route(`${apiPath}${apiVersion}/gigs/edit/:id/:uid`).patch(jwt.require_sign_in, GigsController.patch_gig_details)

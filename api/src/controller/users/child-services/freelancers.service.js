@@ -150,8 +150,8 @@ var controllers = {
       rate,
       payment,
       photo
-      // requirement_files,
-      // selfie
+      requirement_files,
+      selfie
     } = req.body
 
     const details = {

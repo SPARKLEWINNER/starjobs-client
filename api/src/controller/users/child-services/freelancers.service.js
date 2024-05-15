@@ -149,7 +149,7 @@ var controllers = {
       education,
       rate,
       payment,
-      photo
+      photo,
       requirement_files,
       selfie
     } = req.body

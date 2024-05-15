@@ -162,9 +162,15 @@ const freelancerSchema = new Schema(
       }
     },
     rate: {
-      rateAmount: String,
-      rateType: String,
-      gcashScreenshot: String
+      rateAmount: {
+        type: String
+      },
+      rateType: {
+        type: String
+      },
+      gcashProfile: {
+        type: String
+      }
     },
     payment: {
       accountPaymentType: {

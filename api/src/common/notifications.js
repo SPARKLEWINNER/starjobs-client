@@ -27,16 +27,19 @@ var controller = {
       },
       {
         $match: {
-          'account.presentCity': {$regex: new RegExp(location, 'i')}
+          'account.presentCity': {$regex: new RegExp(location, 'i')},
+          accountType: 0,
+          isActive: true,
+          isVerified: true
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1
         }
       }
-    ])
-      .match({
-        accountType: 0,
-        isActive: true,
-        isVerified: true
-      })
-      .exec()
+    ]).exec()
 
     let targetUsers = []
     if (jobster && jobster.length >= 1) {
@@ -47,6 +50,7 @@ var controller = {
       return
     }
     const users_fcm = await FcmTokens.find({userId: {$in: targetUsers}})
+      .select('fcmToken') // Only select the token field
       .lean()
       .exec()
     const fcmTokenArray = users_fcm.map((user) => user.fcmToken)
@@ -58,13 +62,13 @@ var controller = {
     //     }
     //   })
     // }
-    const recipients = jobster.reduce((result, user) => {
-      if (user.phone) {
-        const recipient = {ContactNumber: user.phone}
-        result.push(recipient)
-      }
-      return result
-    }, [])
+    // const recipients = jobster.reduce((result, user) => {
+    //   if (user.phone) {
+    //     const recipient = {ContactNumber: user.phone}
+    //     result.push(recipient)
+    //   }
+    //   return result
+    // }, [])
     const url =
       ENV == 'staging' ? 'http://192.168.1.3:8000/freelancer/message' : 'https://app.starjobs.com.ph/freelancer/message'
 

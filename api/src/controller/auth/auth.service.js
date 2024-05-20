@@ -221,7 +221,7 @@ var controllers = {
         console.log('Token not found in the database')
       }
       console.log('🚀 ~ recipients:', recipients)
-      sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
+      // sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)

@@ -52,10 +52,11 @@ var controllers = {
         time: 1,
         fees: 1,
         locationRate: 1,
-        category: 1
+        category: 1,
+        createdAt: 1
       }
 
-      const initial_find = await Gigs.find(filter, projection).lean().exec()
+      const initial_find = await Gigs.find(filter, projection).sort({createdAt: -1}).lean().exec()
 
       filter_gig = initial_find.filter((obj) => {
         return moment(obj.from).isValid()

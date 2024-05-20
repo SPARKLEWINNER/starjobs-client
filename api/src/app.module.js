@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const compression = require('compression')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
@@ -27,6 +28,8 @@ mongoose
   .catch((err) => console.log(err))
 
 app.enable('trust proxy')
+app.use(compression())
+
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())

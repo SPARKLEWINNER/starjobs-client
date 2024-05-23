@@ -211,22 +211,7 @@ var controllers = {
           ContactNumber: phone
         }
       ]
-<<<<<<< HEAD
       // sms.cast_sms(recipients, `Starjobs verification code ${code}`)
-=======
-      let castToken = ''
-      const tokenDoc = await CastToken.findOne()
-      console.log(tokenDoc)
-
-      if (tokenDoc) {
-        castToken = tokenDoc.token
-        console.log('🚀 ~ CastToken:', token)
-      } else {
-        console.log('Token not found in the database')
-      }
-      console.log('🚀 ~ recipients:', recipients)
-      sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
->>>>>>> e5bab74936f7b57380c39c28cc5fdf749b94dc5f
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)
@@ -293,11 +278,8 @@ var controllers = {
         }
 
         // await sms.send_sms(phone, `Starjobs verification code ${isExisting[0].verificationCode}`)
-<<<<<<< HEAD
-        // await sms.cast_sms(recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)
-=======
+
         await sms.cast_sms(token, recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)
->>>>>>> e5bab74936f7b57380c39c28cc5fdf749b94dc5f
       } else {
         await mailer.send_mail({email, verifyCode: isExisting[0].verificationCode, type: 'sign_up'})
       }

@@ -98,7 +98,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(id)},
-          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
+          {isActive: true, firstName: firstName, lastName: lastName}
         )
       }
     } catch (error) {
@@ -149,9 +149,9 @@ var controllers = {
       education,
       rate,
       payment,
-      photo,
-      requirement_files,
-      selfie
+      photo
+      // requirement_files,
+      // selfie
     } = req.body
 
     const details = {

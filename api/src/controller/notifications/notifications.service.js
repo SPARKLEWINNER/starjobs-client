@@ -104,7 +104,7 @@ var controllers = {
         return res.status(400).json({success: false, msg: 'Empty notifications'})
       }
 
-      return res.status(200).json({success: false, data: result})
+      return res.status(200).json({success: true, data: result})
     } catch (error) {
       console.error('error', error)
       await logger.logError(error, 'Freelancers.get_notification_details', null, id, 'GET')
@@ -172,6 +172,32 @@ var controllers = {
       })
         .sort({createdAt: -1})
         .limit(30)
+        .exec()
+
+      const finalData = notifications.map((notification) => ({
+        ...notification._doc,
+        isRead: notification.viewedBy.includes(id)
+      }))
+
+      return res.status(200).json({success: true, data: finalData})
+    } catch (error) {
+      console.error('error', error)
+      await logger.logError(error, 'Freelancers.get_notifications', null, id, 'GET')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+  },
+
+  get_notifications_v3: async function (req, res) {
+    const token = req.headers.authorization.split(' ')[1]
+    const {id} = jwt_decode(token)
+    const {length} = req.params
+    try {
+      const notifications = await Notification.find({
+        $or: [{targetUsers: id}, {target: 'General'}]
+      })
+        .skip(length * 1)
+        .sort({createdAt: -1})
+        .limit(10)
         .exec()
 
       const finalData = notifications.map((notification) => ({

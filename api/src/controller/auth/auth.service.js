@@ -211,17 +211,17 @@ var controllers = {
           ContactNumber: phone
         }
       ]
-      let castToken = ''
-      const tokenDoc = await CastToken.findOne()
-      console.log(tokenDoc)
+      // let castToken = ''
+      // const tokenDoc = await CastToken.findOne()
+      // console.log(tokenDoc)
 
-      if (tokenDoc) {
-        castToken = tokenDoc.token
-        console.log('🚀 ~ CastToken:', token)
-      } else {
-        console.log('Token not found in the database')
-      }
-      console.log('🚀 ~ recipients:', recipients)
+      // if (tokenDoc) {
+      //   castToken = tokenDoc.token
+      //   console.log('🚀 ~ CastToken:', token)
+      // } else {
+      //   console.log('Token not found in the database')
+      // }
+      // console.log('🚀 ~ recipients:', recipients)
       // sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
@@ -277,16 +277,16 @@ var controllers = {
             ContactNumber: phone
           }
         ]
-        let token = ''
-        const tokenDoc = await CastToken.findOne()
-        console.log(tokenDoc)
+        // let token = ''
+        // const tokenDoc = await CastToken.findOne()
+        // console.log(tokenDoc)
 
-        if (tokenDoc) {
-          token = tokenDoc.token
-          console.log('🚀 ~ CastToken:', token)
-        } else {
-          console.log('Token not found in the database')
-        }
+        // if (tokenDoc) {
+        //   token = tokenDoc.token
+        //   console.log('🚀 ~ CastToken:', token)
+        // } else {
+        //   console.log('Token not found in the database')
+        // }
 
         // await sms.send_sms(phone, `Starjobs verification code ${isExisting[0].verificationCode}`)
         // await sms.cast_sms(token, recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)

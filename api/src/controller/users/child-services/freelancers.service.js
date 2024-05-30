@@ -98,7 +98,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(id)},
-          {isActive: true, firstName: firstName, lastName: lastName}
+          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
         )
       }
     } catch (error) {
@@ -153,6 +153,7 @@ var controllers = {
       requirement_files,
       selfie
     } = req.body
+    console.log('🚀 ~ requirement_files:', requirement_files)
 
     const details = {
       firstName,
@@ -189,6 +190,7 @@ var controllers = {
       },
       selfie
     }
+    console.log('🚀 ~ details:', details.requirementFiles)
 
     const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})
       .lean()

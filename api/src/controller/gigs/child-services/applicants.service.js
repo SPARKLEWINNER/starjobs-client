@@ -154,13 +154,36 @@ var controllers = {
         completeness,
         showRate
       }
+      // Fetch comments sorted by createdAt
+      let comments = await GigRating.find({uid: mongoose.Types.ObjectId(id)})
+        .sort({createdAt: -1})
+        .select({comments: 1, uid: 1}) // Include comments and uid fields
+        .lean()
+        .exec()
+
+      // Filter out null comments
+      comments = comments.filter((comment) => comment.comments !== null)
+
+      // Fetch user details
+      const userComments = await Users.findOne({_id: mongoose.Types.ObjectId(id)})
+        .select({name: 1}) // Include only the name field
+        .lean()
+        .exec()
+
+      // Combine comments with user name
+      const commentsWithUserName = comments.map((comment) => ({
+        comments: comment.comments,
+        userName: userComments ? userComments.name : null
+      }))
+
+      console.log(commentsWithUserName)
       // Assign account details
       account[0].email = user[0].email
       account[0].deviceId = user[0].deviceId
       account[0].accountType = user[0].accountType
 
       // Return account details along with rating counts
-      return res.status(200).json({account, ratings})
+      return res.status(200).json({account, ratings, commentsWithUserName})
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Applicant', null, id, 'GET')

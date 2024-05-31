@@ -84,9 +84,11 @@ var controllers = {
       photo,
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
+        nbiExpirationDate: requirement_files.nbiExpirationDate || '',
         validIds: requirement_files.validIds || '',
         vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
+        brgyExpirationDate: requirement_files.brgyExpirationDate || '',
         map: requirement_files.residencyMap || ''
       },
       selfie,
@@ -184,9 +186,11 @@ var controllers = {
       photo,
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
+        nbiExpirationDate: requirement_files.nbiExpirationDate || '',
         validIds: requirement_files.validIds || '',
         vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
+        brgyExpirationDate: requirement_files.brgyExpirationDate || '',
         map: requirement_files.residencyMap || ''
       },
       selfie

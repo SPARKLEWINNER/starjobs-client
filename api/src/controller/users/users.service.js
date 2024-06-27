@@ -8,6 +8,7 @@ const Clients = require('./models/clients.model')
 const History = require('../gigs/models/gig-histories.model')
 const Notification = require('../notifications/models/notifications.model')
 
+const Archive = require('./models/archived_users')
 const logger = require('../../common/loggers')
 const FcmTokens = require('./models/fcm-tokens')
 const fcm = require('../../services/fcm-notif.service')
@@ -389,25 +390,27 @@ var controllers = {
       return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
     let update_user
     const id = jwt_decode(token)['id']
-    const user = await Users.find({_id: mongoose.Types.ObjectId(id)})
-      .lean()
-      .exec()
-
-    if (!user) {
-      return res.status(502).json({success: false, msg: 'Unable to update user account'})
-    }
+    let user
 
     try {
-      update_user = await Users.findByIdAndUpdate(
-        {_id: mongoose.Types.ObjectId(id)},
-        {
-          email: null,
-          name: null,
-          isActive: false
-        }
-      )
-        .lean()
-        .exec()
+      user = await Users.findById(mongoose.Types.ObjectId(id)).lean().exec()
+      if (!user) {
+        return res.status(502).json({success: false, msg: 'User not found'})
+      }
+      // Combine firstName and lastName into a single name field
+      const name = `${user.firstName} ${user.lastName}`
+      // Move the user data to the archive collection
+      const archiveData = {
+        originalId: user._id,
+        email: user.email,
+        name: name,
+        isActive: false
+        // Add any other fields you want to archive
+      }
+      await Archive.create(archiveData)
+
+      // Remove the user from the users collection
+      await Users.deleteOne({_id: mongoose.Types.ObjectId(id)}).exec()
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Users.patch_user_account', null, id, 'GET')

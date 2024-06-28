@@ -142,6 +142,52 @@ var controllers = {
         black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '0'}),
         gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '1'})
       }
+      console.log('🚀 ~ id:', id)
+
+      const rateComments = await GigRating.aggregate([
+        {
+          $match: {
+            uid: mongoose.Types.ObjectId(id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'gigs',
+            localField: 'gid',
+            foreignField: '_id',
+            as: 'gig'
+          }
+        },
+        {
+          $unwind: '$gig'
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'gig.uid',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $unwind: '$user'
+        },
+        {
+          $project: {
+            _id: 0,
+            comments: 1,
+            'user.name': 1,
+            'user.profile_photo': 1,
+            'gig.user.thumbnail': 1
+          }
+        },
+        {
+          $match: {
+            comments: { $ne: null }
+          }
+        }
+      ]).exec()
+      console.log('🚀 ~ comments:', rateComments)
 
       console.log('Efficiency Rating Counts:', efficiency)
       console.log('Recommendable Rating Counts:', recommendable)
@@ -160,7 +206,7 @@ var controllers = {
       account[0].accountType = user[0].accountType
 
       // Return account details along with rating counts
-      return res.status(200).json({account, ratings})
+      return res.status(200).json({account, ratings, rateComments})
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Applicant', null, id, 'GET')

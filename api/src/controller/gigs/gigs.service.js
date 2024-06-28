@@ -17,6 +17,8 @@ const logger = require('../../common/loggers')
 
 const services = require('./child-services/gigs-type.service')
 
+const discord = require('../../services/discord-notif.service')
+
 var controllers = {
   get_gigs: async function (req, res) {
     let gigs = []
@@ -521,7 +523,7 @@ var controllers = {
     if (!isGigOwner || isGigOwner.length <= 0) {
       return res.status(502).json({success: false, msg: 'Not Gig owner'})
     }
-
+    console.log(isGigOwner, 'GIGGG DETAISLSS')
     try {
       const gigsObj = {
         time,
@@ -537,6 +539,8 @@ var controllers = {
       }
 
       await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj)
+      discord.send_editGig(isGigOwner, time, from, shift, breakHr, hours, fee, date, category, position, notes)
+
       return res.status(200).json(gigsObj)
     } catch (error) {
       console.error(error)

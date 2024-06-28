@@ -183,7 +183,7 @@ var controllers = {
         },
         {
           $match: {
-            comments: { $ne: null }
+            comments: {$ne: null}
           }
         }
       ]).exec()
@@ -200,6 +200,29 @@ var controllers = {
         completeness,
         showRate
       }
+      // Fetch comments sorted by createdAt
+      let comments = await GigRating.find({uid: mongoose.Types.ObjectId(id)})
+        .sort({createdAt: -1})
+        .select({comments: 1, uid: 1}) // Include comments and uid fields
+        .lean()
+        .exec()
+
+      // Filter out null comments
+      comments = comments.filter((comment) => comment.comments !== null)
+
+      // Fetch user details
+      const userComments = await Users.findOne({_id: mongoose.Types.ObjectId(id)})
+        .select({name: 1}) // Include only the name field
+        .lean()
+        .exec()
+
+      // Combine comments with user name
+      const commentsWithUserName = comments.map((comment) => ({
+        comments: comment.comments,
+        userName: userComments ? userComments.name : null
+      }))
+
+      console.log(commentsWithUserName)
       // Assign account details
       account[0].email = user[0].email
       account[0].deviceId = user[0].deviceId
@@ -220,23 +243,92 @@ var controllers = {
     if (!token || typeof token === 'undefined')
       return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
     try {
-      freelancers = await Users.aggregate([
+      // freelancers = await Users.aggregate([
+      //   {
+      //     $lookup: {
+      //       from: 'users-freelancers',
+      //       localField: '_id',
+      //       foreignField: 'uuid',
+      //       as: 'details'
+      //     }
+      //   }
+      // ])
+      //   .match({
+      //     accountType: 0,
+      //     isActive: true,
+      //     isVerified: true,
+      //     adminStatus: 'Verified'
+      //   })
+      //   .project({
+      //     _id: 1,
+      //     'details.uuid': 1,
+      //     'details.firstName': 1,
+      //     'details.middleInitial': 1,
+      //     'details.lastName': 1,
+      //     'details.presentCity': 1,
+      //     'details.photo': 1,
+      //     'details.expertise.skillOffer': 1,
+      //     createdAt: 1
+      //   })
+      //   .sort({createdAt: -1})
+      //   .exec()
+      const users = await Users.find(
         {
-          $lookup: {
-            from: 'users-freelancers',
-            localField: '_id',
-            foreignField: 'uuid',
-            as: 'details'
-          }
-        }
-      ])
-        .match({
           accountType: 0,
           isActive: true,
           isVerified: true
-        })
+          // adminStatus: 'Verified'
+        },
+        {
+          _id: 1,
+          createdAt: 1
+        }
+      )
         .sort({createdAt: -1})
         .exec()
+
+      // Extract user IDs
+      const userIds = users.map((user) => user._id)
+
+      // Step 2: Query the users_freelancers collection
+      const freelancersDetails = await Freelancers.find(
+        {
+          uuid: {$in: userIds}
+        },
+        {
+          uuid: 1,
+          firstName: 1,
+          middleInitial: 1,
+          lastName: 1,
+          presentCity: 1,
+          photo: 1,
+          'expertise.skillOffer': 1
+        }
+      ).exec()
+
+      // Step 3: Merge the data
+      freelancers = users.map((user) => {
+        const details = freelancersDetails.find((detail) => detail.uuid.equals(user._id))
+        return {
+          _id: user._id,
+          details: details
+            ? [
+                {
+                  uuid: details.uuid,
+                  firstName: details.firstName,
+                  middleInitial: details.middleInitial,
+                  lastName: details.lastName,
+                  presentCity: details.presentCity,
+                  photo: details.photo,
+                  expertise: {skillOffer: details.expertise.skillOffer}
+                }
+              ]
+            : null,
+          createdAt: user.createdAt
+        }
+      })
+
+      console.log(freelancers[0], ' freelancersfreelancers')
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Applicant.get_freelancer_list', null, null, 'GET')

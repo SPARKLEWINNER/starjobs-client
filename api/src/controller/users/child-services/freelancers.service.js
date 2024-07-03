@@ -367,6 +367,56 @@ var controllers = {
       console.log('Completeness Rating Counts:', completeness)
       console.log('ShowRate Rating Counts:', showRate)
 
+      const rateComments = await GigRating.aggregate([
+        {
+          $match: {
+            uid: mongoose.Types.ObjectId(id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'gigs',
+            localField: 'gid',
+            foreignField: '_id',
+            as: 'gig'
+          }
+        },
+        {
+          $unwind: '$gig'
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'gig.uid',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $unwind: '$user'
+        },
+        {
+          $project: {
+            _id: 0,
+            comments: 1,
+            'user.name': 1,
+            'user.profile_photo': 1,
+            'gig.user.thumbnail': 1
+          }
+        },
+        {
+          $match: {
+            comments: {$ne: null}
+          }
+        }
+      ]).exec()
+      console.log('🚀 ~ comments:', rateComments)
+
+      console.log('Efficiency Rating Counts:', efficiency)
+      console.log('Recommendable Rating Counts:', recommendable)
+      console.log('Completeness Rating Counts:', completeness)
+      console.log('ShowRate Rating Counts:', showRate)
+
       const ratings = {
         efficiency,
         recommendable,
@@ -379,7 +429,6 @@ var controllers = {
         .select({comments: 1, uid: 1}) // Include comments and uid fields
         .lean()
         .exec()
-      console.log('🚀 ~ comments:', comments)
 
       // Filter out null comments
       comments = comments.filter((comment) => comment.comments !== null)
@@ -396,11 +445,11 @@ var controllers = {
         userName: userComments ? userComments.name : null
       }))
 
-      console.log(commentsWithUserName, 'commmmments')
+      console.log(commentsWithUserName)
       result = {
         ...account,
         ratings,
-        commentsWithUserName
+        rateComments
       }
 
       if (!result) {

@@ -7,7 +7,7 @@ var controller = {
     console.log(status, 'status')
     let notifSound
     let channel
-    if (status === 'Applying' || status === 'Accepted') {
+    if (status === 'Applying' || status === 'Accepted' || status === 'End-Shift') {
       notifSound = 'notification_sound.wav'
       channel = 'sound_channel'
     } else {

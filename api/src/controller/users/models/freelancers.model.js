@@ -192,13 +192,19 @@ const freelancerSchema = new Schema(
     },
     requirementFiles: {
       nbi: String,
+      nbiExpirationDate: Date,
       brgyClearance: String,
+      brgyExpirationDate: Date,
       validIds: String,
       vaccinationCard: String,
       map: String
     },
     selfie: {
       type: String
+    },
+    isGcashUpdated: {
+      type: Boolean,
+      default: false
     }
   },
   {

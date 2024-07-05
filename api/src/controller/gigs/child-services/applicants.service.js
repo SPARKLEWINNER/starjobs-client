@@ -6,6 +6,7 @@ const Extends = require('../models/gigs-extends.model')
 
 const Users = require('../../users/models/users.model')
 const Freelancers = require('../../users/models/freelancers.model')
+const GigRating = require('../../gigs/models/gig-user-ratings.model')
 
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
@@ -122,16 +123,118 @@ var controllers = {
         .lean()
         .exec()
 
+      const efficiency = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.efficiency': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.efficiency': '1'})
+      }
+
+      const recommendable = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.recommendable': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.recommendable': '1'})
+      }
+
+      const completeness = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.completeness': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.completeness': '1'})
+      }
+
+      const showRate = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '1'})
+      }
+      console.log('🚀 ~ id:', id)
+
+      const rateComments = await GigRating.aggregate([
+        {
+          $match: {
+            uid: mongoose.Types.ObjectId(id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'gigs',
+            localField: 'gid',
+            foreignField: '_id',
+            as: 'gig'
+          }
+        },
+        {
+          $unwind: '$gig'
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'gig.uid',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $unwind: '$user'
+        },
+        {
+          $project: {
+            _id: 0,
+            comments: 1,
+            'user.name': 1,
+            'user.profile_photo': 1,
+            'gig.user.thumbnail': 1
+          }
+        },
+        {
+          $match: {
+            comments: {$ne: null}
+          }
+        }
+      ]).exec()
+      console.log('🚀 ~ comments:', rateComments)
+
+      console.log('Efficiency Rating Counts:', efficiency)
+      console.log('Recommendable Rating Counts:', recommendable)
+      console.log('Completeness Rating Counts:', completeness)
+      console.log('ShowRate Rating Counts:', showRate)
+
+      const ratings = {
+        efficiency,
+        recommendable,
+        completeness,
+        showRate
+      }
+      // Fetch comments sorted by createdAt
+      let comments = await GigRating.find({uid: mongoose.Types.ObjectId(id)})
+        .sort({createdAt: -1})
+        .select({comments: 1, uid: 1}) // Include comments and uid fields
+        .lean()
+        .exec()
+
+      // Filter out null comments
+      comments = comments.filter((comment) => comment.comments !== null)
+
+      // Fetch user details
+      const userComments = await Users.findOne({_id: mongoose.Types.ObjectId(id)})
+        .select({name: 1}) // Include only the name field
+        .lean()
+        .exec()
+
+      // Combine comments with user name
+      const commentsWithUserName = comments.map((comment) => ({
+        comments: comment.comments,
+        userName: userComments ? userComments.name : null
+      }))
+
+      console.log(commentsWithUserName)
+      // Assign account details
       account[0].email = user[0].email
       account[0].deviceId = user[0].deviceId
       account[0].accountType = user[0].accountType
+
+      // Return account details along with rating counts
+      return res.status(200).json({account, ratings, rateComments})
     } catch (error) {
       console.error(error)
-
       await logger.logError(error, 'Applicant', null, id, 'GET')
       return res.status(502).json({success: false, msg: 'User not found'})
     }
-    return res.status(200).json(account)
   },
 
   get_freelancer_list: async function (req, res) {
@@ -140,23 +243,92 @@ var controllers = {
     if (!token || typeof token === 'undefined')
       return res.status(401).json({success: false, is_authorized: false, msg: 'Not authorized'})
     try {
-      freelancers = await Users.aggregate([
+      // freelancers = await Users.aggregate([
+      //   {
+      //     $lookup: {
+      //       from: 'users-freelancers',
+      //       localField: '_id',
+      //       foreignField: 'uuid',
+      //       as: 'details'
+      //     }
+      //   }
+      // ])
+      //   .match({
+      //     accountType: 0,
+      //     isActive: true,
+      //     isVerified: true,
+      //     adminStatus: 'Verified'
+      //   })
+      //   .project({
+      //     _id: 1,
+      //     'details.uuid': 1,
+      //     'details.firstName': 1,
+      //     'details.middleInitial': 1,
+      //     'details.lastName': 1,
+      //     'details.presentCity': 1,
+      //     'details.photo': 1,
+      //     'details.expertise.skillOffer': 1,
+      //     createdAt: 1
+      //   })
+      //   .sort({createdAt: -1})
+      //   .exec()
+      const users = await Users.find(
         {
-          $lookup: {
-            from: 'users-freelancers',
-            localField: '_id',
-            foreignField: 'uuid',
-            as: 'details'
-          }
-        }
-      ])
-        .match({
           accountType: 0,
           isActive: true,
           isVerified: true
-        })
+          // adminStatus: 'Verified'
+        },
+        {
+          _id: 1,
+          createdAt: 1
+        }
+      )
         .sort({createdAt: -1})
         .exec()
+
+      // Extract user IDs
+      const userIds = users.map((user) => user._id)
+
+      // Step 2: Query the users_freelancers collection
+      const freelancersDetails = await Freelancers.find(
+        {
+          uuid: {$in: userIds}
+        },
+        {
+          uuid: 1,
+          firstName: 1,
+          middleInitial: 1,
+          lastName: 1,
+          presentCity: 1,
+          photo: 1,
+          'expertise.skillOffer': 1
+        }
+      ).exec()
+
+      // Step 3: Merge the data
+      freelancers = users.map((user) => {
+        const details = freelancersDetails.find((detail) => detail.uuid.equals(user._id))
+        return {
+          _id: user._id,
+          details: details
+            ? [
+                {
+                  uuid: details.uuid,
+                  firstName: details.firstName,
+                  middleInitial: details.middleInitial,
+                  lastName: details.lastName,
+                  presentCity: details.presentCity,
+                  photo: details.photo,
+                  expertise: {skillOffer: details.expertise.skillOffer}
+                }
+              ]
+            : null,
+          createdAt: user.createdAt
+        }
+      })
+
+      console.log(freelancers[0], ' freelancersfreelancers')
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Applicant.get_freelancer_list', null, null, 'GET')

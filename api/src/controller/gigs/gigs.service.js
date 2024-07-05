@@ -17,6 +17,8 @@ const logger = require('../../common/loggers')
 
 const services = require('./child-services/gigs-type.service')
 
+const discord = require('../../services/discord-notif.service')
+
 var controllers = {
   get_gigs: async function (req, res) {
     let gigs = []
@@ -362,6 +364,151 @@ var controllers = {
     return res.status(200).json(details)
   },
 
+  get_gigs_history_status: async function (req, res) {
+    const token = req.headers.authorization.split(' ')[1]
+    const {id} = jwt_decode(token)
+    const {status} = req.params
+    const statusArray = status.split(',')
+
+    // await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Freelancers, 'Account', id)
+
+    let details
+    try {
+      const check_user = await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
+
+      if (!check_user[0]?.isActive) {
+        details = {
+          ...check_user,
+          account: [],
+          gigs: [],
+          reports: {
+            numberOfApplied: 0,
+            numberOfCompleted: 0
+          }
+        }
+      } else {
+        // const result = await History.find({uid: id}).lean().exec()
+        // console.log(result)
+        // const user = await Users.aggregate([
+        //   {
+        //     $lookup: {
+        //       from: 'users-freelancers',
+        //       localField: '_id',
+        //       foreignField: 'uuid',
+        //       as: 'account'
+        //     }
+        //   }
+        // ])
+        //   .match({
+        //     'account.uuid': mongoose.Types.ObjectId(id)
+        //   })
+        //   .exec()
+
+        const contracts = await Contracts.aggregate([
+          {
+            $match: {
+              uid: mongoose.Types.ObjectId(id)
+            }
+          },
+          {
+            $lookup: {
+              from: 'gigs',
+              localField: 'gid',
+              foreignField: '_id',
+              as: 'gigs'
+            }
+          },
+          {$unwind: '$gigs'},
+          {
+            $project: {
+              _id: true,
+              records: true,
+              category: true,
+              commissionRate: true,
+              gigFeeType: true,
+              from: '$gigs.from',
+              time: '$gigs.time',
+              shift: '$gigs.shift',
+              hours: '$gigs.hours',
+              breakHr: '$gigs.breakHr',
+              dateCreated: '$gigs.dateCreated',
+              position: '$gigs.position',
+              notes: '$gigs.notes',
+              contactNumber: '$gigs.contactNumber',
+              location: '$gigs.location',
+              isApprove: '$gigs.isApprove',
+              status: '$gigs.status',
+              date: '$gigs.date',
+              applicants: '$gigs.applicants',
+              updatedAt: true,
+              createdAt: true,
+              user: '$gigs.user'
+            }
+          }
+        ])
+          .sort({createdAt: -1})
+          .exec()
+
+        const reports = await Gigs.aggregate([
+          {
+            $lookup: {
+              from: 'gigs-histories',
+              localField: '_id',
+              foreignField: 'gid',
+              as: 'history'
+            }
+          }
+        ])
+          .match({
+            'records.auid': mongoose.Types.ObjectId(id),
+            status: {$in: statusArray}
+          })
+          .sort({createdAt: 1})
+          .exec()
+
+        let gigsData = reports.filter((obj) => {
+          // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
+          //express as a duration
+          const timeDate = moment(obj.time)
+          const date = moment(obj.date)
+
+          const previousDays = moment(date).subtract(7, 'days')
+          const aheadDays = moment(timeDate).add(7, 'days')
+
+          const range = moment().range(previousDays, aheadDays)
+
+          // between 0 days and 2 days before current day
+          if (range.contains(moment())) {
+            return obj
+          }
+          return
+        })
+        // console.log('🚀 ~ file: gigs.service.js:335 ~ gigsData ~ gigsData:', gigsData)
+
+        if (contracts.length > 0) {
+          gigsData = [...gigsData, ...contracts]
+        }
+
+        details = {
+          // ...user,
+          // account: user && user.length > 0 && user[0].isActive ? user[0].account[0] : [],
+          gigs: gigsData,
+          reports: {
+            numberOfApplied: reports.filter((obj) => obj.status === 'Applying').length,
+            numberOfCompleted: reports.filter((obj) => obj.status === 'Confirm-End-Shift').length
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Gigs.get_gigs_history', null, id, 'GET')
+
+      return res.status(502).json({success: false, msg: 'Unable to get history details'})
+    }
+
+    return res.status(200).json(details)
+  },
+
   post_gig: async function (req, res, next) {
     return await services.default(req, res, next)
   },
@@ -376,7 +523,7 @@ var controllers = {
     if (!isGigOwner || isGigOwner.length <= 0) {
       return res.status(502).json({success: false, msg: 'Not Gig owner'})
     }
-
+    console.log(isGigOwner, 'GIGGG DETAISLSS')
     try {
       const gigsObj = {
         time,
@@ -392,6 +539,8 @@ var controllers = {
       }
 
       await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj)
+      discord.send_editGig(isGigOwner, time, from, shift, breakHr, hours, fee, date, category, position, notes)
+
       return res.status(200).json(gigsObj)
     } catch (error) {
       console.error(error)

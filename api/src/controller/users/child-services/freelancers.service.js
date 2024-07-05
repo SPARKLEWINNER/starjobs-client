@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const Freelancers = require('../models/freelancers.model')
 const Users = require('../models/users.model')
 
-const Ratings = require('../../gigs/models/gig-user-ratings.model')
+// const Ratings = require('../../gigs/models/gig-user-ratings.model')
+const GigRating = require('../../gigs/models/gig-user-ratings.model')
 
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
@@ -83,9 +84,11 @@ var controllers = {
       photo,
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
+        nbiExpirationDate: requirement_files.nbiExpirationDate || '',
         validIds: requirement_files.validIds || '',
         vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
+        brgyExpirationDate: requirement_files.brgyExpirationDate || '',
         map: requirement_files.residencyMap || ''
       },
       selfie,
@@ -98,7 +101,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(id)},
-          {isActive: true, firstName: firstName, lastName: lastName}
+          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
         )
       }
     } catch (error) {
@@ -149,10 +152,11 @@ var controllers = {
       education,
       rate,
       payment,
-      photo
-      // requirement_files,
-      // selfie
+      photo,
+      requirement_files,
+      selfie
     } = req.body
+    console.log('🚀 ~ requirement_files:', requirement_files)
 
     const details = {
       firstName,
@@ -182,13 +186,16 @@ var controllers = {
       photo,
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
+        nbiExpirationDate: requirement_files.nbiExpirationDate || '',
         validIds: requirement_files.validIds || '',
         vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
+        brgyExpirationDate: requirement_files.brgyExpirationDate || '',
         map: requirement_files.residencyMap || ''
       },
       selfie
     }
+    console.log('🚀 ~ details:', details.requirementFiles)
 
     const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})
       .lean()
@@ -261,11 +268,106 @@ var controllers = {
         .lean()
         .exec()
 
-      const ratings = await Ratings.find({uid: mongoose.Types.ObjectId(id)})
-        .populate('gid', 'uid user.thumbnail')
-        .lean()
-        .exec()
-      const rateComments = await Ratings.aggregate([
+      // const ratings = await Ratings.find({uid: mongoose.Types.ObjectId(id)})
+      //   .populate('gid', 'uid user.thumbnail')
+      //   .lean()
+      //   .exec()
+      // const rateComments = await Ratings.aggregate([
+      //   {
+      //     $match: {
+      //       uid: mongoose.Types.ObjectId(id)
+      //     }
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: 'gigs',
+      //       localField: 'gid',
+      //       foreignField: '_id',
+      //       as: 'gig'
+      //     }
+      //   },
+      //   {
+      //     $unwind: '$gig'
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: 'users',
+      //       localField: 'gig.uid',
+      //       foreignField: '_id',
+      //       as: 'user'
+      //     }
+      //   },
+      //   {
+      //     $unwind: '$user'
+      //   },
+      //   {
+      //     $project: {
+      //       _id: 0,
+      //       comments: 1,
+      //       'user.name': 1,
+      //       'user.profile_photo': 1,
+      //       'gig.user.thumbnail': 1
+      //     }
+      //   }
+      // ]).exec()
+      // const transformedResult = rateComments.map((item) => ({
+      //   comment: item.comment,
+      //   userName: item.user.name,
+      //   profilePhoto: item.user.profile_photo
+      // }))
+
+      // if (!ratings) {
+      //   result = account
+      // } else {
+      //   const comments = ratings.map(({gid, comments, uid}) => [gid, comments, uid])
+
+      //   const ratesArray = ratings.map(({rates}) => rates)
+      //   const countTotalValues = (...objects) => {
+      //     const counts = {}
+      //     for (const obj of objects) {
+      //       for (const key in obj) {
+      //         const value = obj[key]
+      //         const color = value === '1' ? 'gold' : 'black'
+      //         counts[key] = counts[key] || {black: 0, gold: 0}
+      //         counts[key][color] = counts[key][color] + 1
+      //       }
+      //     }
+      //     return counts
+      //   }
+      //   const valueCounts = countTotalValues(...ratesArray)
+      //   console.log('valueCounts: ' + JSON.stringify(valueCounts))
+
+      //   // let totalEfficiency = parseFloat(ratings.length * efficiency) / 100
+      //   // let totalOnTime = parseFloat(ratings.length * onTime) / 100
+      //   // let totalCompleteness = parseFloat(ratings.length * completeness) / 100
+      //   // let totalShowRate = parseFloat(ratings.length * showRate) / 100
+
+      const efficiency = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.efficiency': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.efficiency': '1'})
+      }
+
+      const recommendable = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.recommendable': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.recommendable': '1'})
+      }
+
+      const completeness = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.completeness': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.completeness': '1'})
+      }
+
+      const showRate = {
+        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '0'}),
+        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '1'})
+      }
+
+      console.log('Efficiency Rating Counts:', efficiency)
+      console.log('Recommendable Rating Counts:', recommendable)
+      console.log('Completeness Rating Counts:', completeness)
+      console.log('ShowRate Rating Counts:', showRate)
+
+      const rateComments = await GigRating.aggregate([
         {
           $match: {
             uid: mongoose.Types.ObjectId(id)
@@ -301,62 +403,65 @@ var controllers = {
             'user.profile_photo': 1,
             'gig.user.thumbnail': 1
           }
+        },
+        {
+          $match: {
+            comments: {$ne: null}
+          }
         }
       ]).exec()
-      const transformedResult = rateComments.map((item) => ({
-        comment: item.comment,
-        userName: item.user.name,
-        profilePhoto: item.user.profile_photo
+      console.log('🚀 ~ comments:', rateComments)
+
+      console.log('Efficiency Rating Counts:', efficiency)
+      console.log('Recommendable Rating Counts:', recommendable)
+      console.log('Completeness Rating Counts:', completeness)
+      console.log('ShowRate Rating Counts:', showRate)
+
+      const ratings = {
+        efficiency,
+        recommendable,
+        completeness,
+        showRate
+      }
+      // Fetch comments sorted by createdAt
+      let comments = await GigRating.find({uid: mongoose.Types.ObjectId(id)})
+        .sort({createdAt: -1})
+        .select({comments: 1, uid: 1}) // Include comments and uid fields
+        .lean()
+        .exec()
+
+      // Filter out null comments
+      comments = comments.filter((comment) => comment.comments !== null)
+
+      // Fetch user details
+      const userComments = await Users.findOne({_id: mongoose.Types.ObjectId(id)})
+        .select({name: 1}) // Include only the name field
+        .lean()
+        .exec()
+
+      // Combine comments with user name
+      const commentsWithUserName = comments.map((comment) => ({
+        comments: comment.comments,
+        userName: userComments ? userComments.name : null
       }))
 
-      if (!ratings) {
-        result = account
-      } else {
-        const comments = ratings.map(({gid, comments, uid}) => [gid, comments, uid])
-
-        const ratesArray = ratings.map(({rates}) => rates)
-        const countTotalValues = (...objects) => {
-          const counts = {}
-          for (const obj of objects) {
-            for (const key in obj) {
-              const value = obj[key]
-              const color = value === '1' ? 'gold' : 'black'
-              counts[key] = counts[key] || {black: 0, gold: 0}
-              counts[key][color] = counts[key][color] + 1
-            }
-          }
-          return counts
-        }
-        const valueCounts = countTotalValues(...ratesArray)
-        console.log('valueCounts: ' + JSON.stringify(valueCounts))
-
-        // let totalEfficiency = parseFloat(ratings.length * efficiency) / 100
-        // let totalOnTime = parseFloat(ratings.length * onTime) / 100
-        // let totalCompleteness = parseFloat(ratings.length * completeness) / 100
-        // let totalShowRate = parseFloat(ratings.length * showRate) / 100
-
-        result = {
-          ...account,
-          ratings: {
-            ...valueCounts
-          },
-          comments: {
-            ...rateComments
-          }
-        }
+      console.log(commentsWithUserName)
+      result = {
+        ...account,
+        ratings,
+        rateComments
       }
 
       if (!result) {
         return res.status(502).json({success: false, msg: 'User not found'})
       }
+      return res.status(200).json(result)
     } catch (error) {
       console.error(error)
 
       await logger.logError(error, 'Accounts', null, id, 'GET')
       return res.status(502).json({success: false, msg: 'User not found'})
     }
-
-    return res.status(200).json(result)
   }
 }
 

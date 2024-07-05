@@ -85,7 +85,8 @@ var controllers = {
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
         nbiExpirationDate: requirement_files.nbiExpirationDate || '',
-        validIds: requirement_files.validIds || '',
+        validId1: requirement_files.validId1 || '',
+        validId2: requirement_files.validId2 || '',
         vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
         brgyExpirationDate: requirement_files.brgyExpirationDate || '',
@@ -187,7 +188,8 @@ var controllers = {
       requirementFiles: {
         nbi: requirement_files.nbiClearance || '',
         nbiExpirationDate: requirement_files.nbiExpirationDate || '',
-        validIds: requirement_files.validIds || '',
+        validId1: requirement_files.validId1 || '',
+        validId2: requirement_files.validId2 || '',
         vaccinationCard: requirement_files.vaccinationCard || '',
         brgyClearance: requirement_files.barangayClearance || '',
         brgyExpirationDate: requirement_files.brgyExpirationDate || '',

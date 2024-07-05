@@ -36,7 +36,10 @@ var controllers = {
       res.cookie('jwt', token, {expire: new Date() + 9999})
       if (userData.isActive) {
         if (userData.accountType === 0) {
-          const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(userData._id)}, {photo: 1})
+          const account = await Freelancers.find(
+            {uuid: mongoose.Types.ObjectId(userData._id)},
+            {photo: 1, isGcashUpdated: 1}
+          )
             .lean()
             .exec()
 
@@ -44,7 +47,8 @@ var controllers = {
             token,
             refreshToken,
             ...userData,
-            photo: account[0]?.photo
+            photo: account[0]?.photo,
+            isGcashUpdated: account[0].isGcashUpdated
           }) // freelancer
         } else {
           const client = await Clients.find({uid: mongoose.Types.ObjectId(userData._id)}, {photo: 1})

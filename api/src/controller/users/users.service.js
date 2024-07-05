@@ -12,6 +12,7 @@ const Archive = require('./models/archived_users')
 const logger = require('../../common/loggers')
 const FcmTokens = require('./models/fcm-tokens')
 const fcm = require('../../services/fcm-notif.service')
+const requestToken = require('../../common/jwt')
 
 var controllers = {
   get_user: async function (req, res) {
@@ -510,6 +511,54 @@ var controllers = {
     }
     console.log('🚀 ~ account:', result)
     return res.status(200).json(result)
+  },
+  patch_user_gcash: async function (req, res) {
+    const {id} = req.params
+    console.log('🚀 ~ id:', id)
+
+    // Verify if the provided id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({error: 'Invalid ID format'})
+    }
+
+    const {accountType, accountNumber, accountName} = req.body.values
+    console.log('🚀 ~ req.body.values:', req.body.values)
+
+    // Check if required fields are present
+    if (!accountType || !accountNumber || !accountName) {
+      return res.status(400).json({error: 'Account type, number, and name are required'})
+    }
+
+    try {
+      // Update payment details directly in the document
+      const updatedFreelancer = await Freelancers.findOneAndUpdate(
+        {uuid: mongoose.Types.ObjectId(id)},
+        {
+          'payment.accountPaymentType': accountType,
+          'payment.acccountPaymentName': accountName,
+          'payment.acccountPaymentNumber': accountNumber,
+          isGcashUpdated: true
+        },
+        {new: true} // Return the updated document
+      )
+      if (!updatedFreelancer) {
+        return res.status(404).json({message: 'Freelancer not found'})
+      }
+      const user = await Users.find({_id: mongoose.Types.ObjectId(updatedFreelancer.uuid)})
+        .lean()
+        .exec()
+      let {accessToken: token, refreshToken} = requestToken.create_token(updatedFreelancer.uuid)
+      result = {
+        ...user[0],
+        token,
+        refreshToken,
+        isGcashUpdated: updatedFreelancer.isGcashUpdated
+      }
+      return res.status(200).json(result)
+    } catch (error) {
+      console.error('Error updating Gcash details:', error)
+      return res.status(500).json({error: 'Internal server error'})
+    }
   }
 }
 

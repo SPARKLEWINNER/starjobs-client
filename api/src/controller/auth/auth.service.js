@@ -227,6 +227,7 @@ var controllers = {
       // }
       // console.log('🚀 ~ recipients:', recipients)
       // sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
+      // sms.cast_sms(recipients, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)
@@ -293,7 +294,9 @@ var controllers = {
         // }
 
         // await sms.send_sms(phone, `Starjobs verification code ${isExisting[0].verificationCode}`)
+
         // await sms.cast_sms(token, recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)
+
       } else {
         await mailer.send_mail({email, verifyCode: isExisting[0].verificationCode, type: 'sign_up'})
       }

@@ -1,6 +1,5 @@
 require('dotenv').config()
 const express = require('express')
-const compression = require('compression')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
@@ -11,10 +10,7 @@ const routes = require('./app.routes')
 const port = process.env.PORT || 3001
 const app = express()
 const useragent = require('express-useragent')
-const Token = require('../src/controller/users/models/cast-token.model')
 
-const cron = require('node-cron')
-const axios = require('axios')
 const MONGO_DATABASE_URL = process.env.MONGODB_URI
 
 mongoose
@@ -28,8 +24,6 @@ mongoose
   .catch((err) => console.log(err))
 
 app.enable('trust proxy')
-app.use(compression())
-
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
@@ -79,6 +73,8 @@ app.use(useragent.express())
 //     console.error('Error updating token:', error)
 //   }
 // })
+=======
+
 routes(app)
 
 const pusher = new Pusher({

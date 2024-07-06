@@ -1,6 +1,8 @@
 const fetch = require('axios')
 const mongoose = require('mongoose')
 const moment = require('moment')
+const momentTz = require('moment-timezone')
+
 var controller = {
   send_endshift: async function (
     jobsterData,
@@ -23,10 +25,10 @@ var controller = {
     const lateDeduction = parseFloat(lateByHour * gigs.fee)
 
     const feeRate = parseFloat(gigs.fees.jobsterTotal * time)
-    console.log(
-      'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' +
-        nightSurgeHr
-    )
+
+    const convertToPhilippinesTime = (date) => {
+      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+    }
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_ENDSHIFT_KEY}`, {
       // method: 'post',
@@ -55,8 +57,8 @@ var controller = {
               name: '-',
               value: `${gigs.position}\n${gigs.fee}\n${jobsterData[0].firstName} ${jobsterData[0].lastName}\n${
                 gigs.shift
-              }\n${moment(gigs.from).format('MMMM Do YYYY, h:mm:ss a')}\n${moment(gigs.time).format(
-                'MMMM Do YYYY, h:mm:ss a'
+              }\n${convertToPhilippinesTime(gigs.from)}\n${convertToPhilippinesTime(
+                gigs.time
               )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${late ? `${late} mins` : 'none'}\n-Php ${parseFloat(
                 lateDeduction
               ).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(2)} hours \nPhp ${parseFloat(gigExtension).toFixed(
@@ -81,6 +83,10 @@ var controller = {
     const gigs = gig[0]
     const feeRate = parseFloat(gigs.fees?.jobsterTotal * gigs.hours)
     const NewfeeRate = parseFloat(gigs.fees?.jobsterTotal * hours)
+
+    const convertToPhilippinesTime = (date) => {
+      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+    }
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_EDITGIG_KEY}`, {
       // method: 'post',
@@ -107,9 +113,9 @@ var controller = {
             },
             {
               name: 'Old',
-              value: `${gigs.position}\n${gigs.fee}\n${gigs.shift}\n${moment(gigs.from).format(
-                'MMMM Do YYYY, h:mm:ss a'
-              )}\n${moment(gigs.time).format('MMMM Do YYYY, h:mm:ss a')}\n${hours}\nPhp ${parseFloat(feeRate).toFixed(
+              value: `${gigs.position}\n${gigs.fee}\n${gigs.shift}\n${convertToPhilippinesTime(
+                gigs.from
+              )}\n${convertToPhilippinesTime(gigs.time)}\n${hours}\nPhp ${parseFloat(feeRate).toFixed(
                 2
               )} \n ${parseFloat(gigs.fees?.proposedNightSurgeHr).toFixed(2)} hours \nPhp ${parseFloat(
                 gigs.fees?.nightSurge
@@ -118,9 +124,9 @@ var controller = {
             },
             {
               name: 'New',
-              value: `${position}\n${fee}\n${shift}\n${moment(from).format('MMMM Do YYYY, h:mm:ss a')}\n${moment(
+              value: `${position}\n${fee}\n${shift}\n${convertToPhilippinesTime(from)}\n${convertToPhilippinesTime(
                 time
-              ).format('MMMM Do YYYY, h:mm:ss a')}\n${hours}\nPhp ${parseFloat(NewfeeRate).toFixed(2)} \n ${parseFloat(
+              )}\n${hours}\nPhp ${parseFloat(NewfeeRate).toFixed(2)} \n ${parseFloat(
                 gigs.fees?.proposedNightSurgeHr
               ).toFixed(2)} hours \nPhp ${parseFloat(gigs.fees?.nightSurge).toFixed(2)}\nPhp ${parseFloat(
                 gigs.fees?.holidaySurge

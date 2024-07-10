@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const Pusher = require('pusher')
 const routes = require('./app.routes')
-
+const logRequests = require('./common/requestLogger');
 const port = process.env.PORT || 3001
 const app = express()
 const useragent = require('express-useragent')
@@ -35,6 +35,7 @@ app.use(function (req, res, next) {
   next()
 })
 app.use(useragent.express())
+app.use(logRequests);
 // cron.schedule('*/25 * * * *', async () => {
 //   try {
 //     // Generate a new token
@@ -73,7 +74,7 @@ app.use(useragent.express())
 //     console.error('Error updating token:', error)
 //   }
 // })
-=======
+//=======
 
 routes(app)
 

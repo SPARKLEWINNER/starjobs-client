@@ -36,7 +36,10 @@ var controllers = {
       res.cookie('jwt', token, {expire: new Date() + 9999})
       if (userData.isActive) {
         if (userData.accountType === 0) {
-          const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(userData._id)}, {photo: 1})
+          const account = await Freelancers.find(
+            {uuid: mongoose.Types.ObjectId(userData._id)},
+            {photo: 1, isGcashUpdated: 1}
+          )
             .lean()
             .exec()
 
@@ -44,7 +47,8 @@ var controllers = {
             token,
             refreshToken,
             ...userData,
-            photo: account[0]?.photo
+            photo: account[0]?.photo,
+            isGcashUpdated: account[0].isGcashUpdated
           }) // freelancer
         } else {
           const client = await Clients.find({uid: mongoose.Types.ObjectId(userData._id)}, {photo: 1})
@@ -223,6 +227,7 @@ var controllers = {
       // }
       // console.log('🚀 ~ recipients:', recipients)
       // sms.cast_sms(castToken, recipients, `Starjobs verification code ${code}`)
+      // sms.cast_sms(recipients, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)
@@ -289,7 +294,9 @@ var controllers = {
         // }
 
         // await sms.send_sms(phone, `Starjobs verification code ${isExisting[0].verificationCode}`)
+
         // await sms.cast_sms(token, recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)
+
       } else {
         await mailer.send_mail({email, verifyCode: isExisting[0].verificationCode, type: 'sign_up'})
       }

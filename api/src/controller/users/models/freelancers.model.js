@@ -201,6 +201,10 @@ const freelancerSchema = new Schema(
     },
     selfie: {
       type: String
+    },
+    isGcashUpdated: {
+      type: Boolean,
+      default: false
     }
   },
   {

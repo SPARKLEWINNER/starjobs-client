@@ -195,12 +195,17 @@ const freelancerSchema = new Schema(
       nbiExpirationDate: Date,
       brgyClearance: String,
       brgyExpirationDate: Date,
-      validIds: String,
+      validId1: String,
+      validId2: String,
       vaccinationCard: String,
       map: String
     },
     selfie: {
       type: String
+    },
+    isGcashUpdated: {
+      type: Boolean,
+      default: false
     }
   },
   {

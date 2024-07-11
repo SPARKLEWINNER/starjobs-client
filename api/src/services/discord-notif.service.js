@@ -1,6 +1,8 @@
 const fetch = require('axios')
 const mongoose = require('mongoose')
 const moment = require('moment')
+const momentTz = require('moment-timezone')
+
 var controller = {
   send_endshift: async function (
     jobsterData,
@@ -23,10 +25,10 @@ var controller = {
     const lateDeduction = parseFloat(lateByHour * gigs.fee)
 
     const feeRate = parseFloat(gigs.fees.jobsterTotal * time)
-    console.log(
-      'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' +
-        nightSurgeHr
-    )
+
+    const convertToPhilippinesTime = (date) => {
+      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+    }
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_ENDSHIFT_KEY}`, {
       // method: 'post',
@@ -55,8 +57,8 @@ var controller = {
               name: '-',
               value: `${gigs.position}\n${gigs.fee}\n${jobsterData[0].firstName} ${jobsterData[0].lastName}\n${
                 gigs.shift
-              }\n${moment(gigs.from).format('MMMM Do YYYY, h:mm:ss a')}\n${moment(gigs.time).format(
-                'MMMM Do YYYY, h:mm:ss a'
+              }\n${convertToPhilippinesTime(gigs.from)}\n${convertToPhilippinesTime(
+                gigs.time
               )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${late ? `${late} mins` : 'none'}\n-Php ${parseFloat(
                 lateDeduction
               ).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(2)} hours \nPhp ${parseFloat(gigExtension).toFixed(
@@ -64,6 +66,71 @@ var controller = {
               )} \n ${parseFloat(nightSurgeHr).toFixed(2)} hours \nPhp ${parseFloat(nightSurge).toFixed(
                 2
               )}\nPhp ${parseFloat(holidaySurge).toFixed(2)}\n\nPhp ${parseFloat(jobsterFinal).toFixed(2)}\n `,
+              inline: true
+            }
+          ],
+          footer: {
+            text: `${moment().format('MMM-DD-YYYY hh:mm A')}`,
+            icon_url:
+              'https://images-ext-1.discordapp.net/external/KfTbvCiVmFUlsvw_NRHZP5ttamV6eSRStISSJuSgkRI/https/app.starjobs.com.ph/icons/icon-512x512.png'
+          }
+        }
+      ]
+    })
+  },
+
+  send_editGig: async function (gig, time, from, shift, breakHr, hours, fee, date, category, position, notes) {
+    const gigs = gig[0]
+    const feeRate = parseFloat(gigs.fees?.jobsterTotal * gigs.hours)
+    const NewfeeRate = parseFloat(gigs.fees?.jobsterTotal * hours)
+
+    const convertToPhilippinesTime = (date) => {
+      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+    }
+
+    await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_EDITGIG_KEY}`, {
+      // method: 'post',
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // },
+      username: `Gig Details  - Edit Gig`,
+      avatar_url:
+        'https://cdn.discordapp.com/avatars/1069382190800056340/c9a9e35eecc4bc6a825f85ccb0e3a207.webp?size=80',
+      embeds: [
+        {
+          title: `**Client Gig End Shift**`,
+          description: `${gigs.user[0].companyName}| ${gigs.location}| Client`,
+          color: 15258703,
+          fields: [
+            {
+              name: '',
+              value: ``
+            },
+            {
+              name: 'Details',
+              value: `**Position:**\n**Fee:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Night Surge:**\n**Night Surge Fee:**\n**Holiday Surge:**\n**Notes:**`,
+              inline: true
+            },
+            {
+              name: 'Old',
+              value: `${gigs.position}\n${gigs.fee}\n${gigs.shift}\n${convertToPhilippinesTime(
+                gigs.from
+              )}\n${convertToPhilippinesTime(gigs.time)}\n${hours}\nPhp ${parseFloat(feeRate).toFixed(
+                2
+              )} \n ${parseFloat(gigs.fees?.proposedNightSurgeHr).toFixed(2)} hours \nPhp ${parseFloat(
+                gigs.fees?.nightSurge
+              ).toFixed(2)}\nPhp ${parseFloat(gigs.fees?.holidaySurge).toFixed(2)}\n${gigs.notes}\n`,
+              inline: true
+            },
+            {
+              name: 'New',
+              value: `${position}\n${fee}\n${shift}\n${convertToPhilippinesTime(from)}\n${convertToPhilippinesTime(
+                time
+              )}\n${hours}\nPhp ${parseFloat(NewfeeRate).toFixed(2)} \n ${parseFloat(
+                gigs.fees?.proposedNightSurgeHr
+              ).toFixed(2)} hours \nPhp ${parseFloat(gigs.fees?.nightSurge).toFixed(2)}\nPhp ${parseFloat(
+                gigs.fees?.holidaySurge
+              ).toFixed(2)}\n${notes}\n `,
               inline: true
             }
           ],

@@ -17,6 +17,10 @@ module.exports = function (app) {
   app.route(`${apiPath}${apiVersion}/user/change/:id`).patch(jwt.require_sign_in, UsersController.patch_change_password)
 
   app
+    .route(`${apiPath}${apiVersion}/user/patchUserGCash/:id`)
+    .patch(jwt.require_sign_in, UsersController.patch_user_gcash)
+
+  app
     .route(`${apiPath}${apiVersion}/user/notifications/read/all`)
     .patch(jwt.require_sign_in, UsersController.patch_read_all_notification)
 

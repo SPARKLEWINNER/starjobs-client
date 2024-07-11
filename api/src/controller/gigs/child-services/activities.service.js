@@ -22,7 +22,7 @@ var controllers = {
           auid: mongoose.Types.ObjectId(id),
           createdAt: {
             $lt: new Date(),
-            $gte: new Date(new Date().setDate(new Date().getDate() - 1))
+            $gte: new Date(new Date().setDate(new Date().getDate() - 7))
           },
           status: 'Confirm-End-Shift'
         })

@@ -40,7 +40,11 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Expose-Headers', 'X-Total-Count')
   next()
 })
+
 app.use(useragent.express())
+app.get('/health', (req, res) => {
+  res.status(200).json({status: 'ok', timestamp: new Date()})
+})
 // cron.schedule('*/25 * * * *', async () => {
 //   try {
 //     // Generate a new token

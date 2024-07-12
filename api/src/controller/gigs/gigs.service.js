@@ -61,7 +61,7 @@ var controllers = {
       const initial_find = await Gigs.find(filter, projection).sort({createdAt: -1}).lean().exec()
 
       filter_gig = initial_find.filter((obj) => {
-        return moment(obj.from).isValid()
+        return moment(obj.from, moment.ISO_8601, true).isValid()
       })
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})

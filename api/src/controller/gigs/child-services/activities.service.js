@@ -108,8 +108,7 @@ var controllers = {
     try {
       const fromDate = new Date(from)
       const toDate = new Date(time)
-      console.log(fromDate, ' fromDate')
-      console.log(toDate, ' toDatetoDatetoDate')
+
       result = await Gigs.find({
         uid: mongoose.Types.ObjectId(id),
         status: 'Confirm-End-Shift'
@@ -117,7 +116,10 @@ var controllers = {
         .lean()
         .exec()
 
-      console.log(result, 'RESOLT BEFORE FILTER DATE')
+      console.log(result.length, 'RESULT Length')
+      console.log(result[0].from, 'result first data')
+      console.log(result[result.length - 1].from, 'RESULT LAST DATA')
+
       result = result.filter((gig) => {
         const gigFromDate = new Date(gig.from) // Convert from string to date
         return gigFromDate >= fromDate && gigFromDate <= toDate

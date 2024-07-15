@@ -116,14 +116,14 @@ var controllers = {
         .lean()
         .exec()
 
-      console.log(result.length, 'RESULT Length')
-      console.log(result[0].from, 'result first data')
-      console.log(result[result.length - 1].from, 'RESULT LAST DATA')
-
       result = result.filter((gig) => {
         const gigFromDate = new Date(gig.from) // Convert from string to date
         return gigFromDate >= fromDate && gigFromDate <= toDate
       })
+
+      console.log(result.length, 'RESULT Length')
+      console.log(result[0].from, 'result first data')
+      console.log(result[result.length - 1].from, 'RESULT LAST DATA')
 
       if (!result) {
         return res.status(400).json({success: false, msg: 'Empty notifications'})

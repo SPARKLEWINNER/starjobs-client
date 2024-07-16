@@ -209,7 +209,8 @@ var controllers = {
       const initial_find = await Gigs.find(filter, projection).lean().exec()
 
       categ_gigs = initial_find.filter((obj) => {
-        return moment(obj.from).isValid()
+        // return moment(obj.from).isValid()
+        return moment(obj.from, moment.ISO_8601, true).isValid()
       })
 
       if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})

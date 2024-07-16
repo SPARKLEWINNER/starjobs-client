@@ -64,6 +64,9 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/activity/client/:id`)
     .get(jwt.require_sign_in, ActivitiesController.get_gigs_activity_client)
+  app
+    .route(`${apiPath}${apiVersion}/activity/request/client/:id`)
+    .post(jwt.require_sign_in, ActivitiesController.get_request_gigs_activity_client)
 
   // ==== Ratings controller ====
   app.route(`${apiPath}${apiVersion}/rating/new/:id`).post(jwt.require_sign_in, RatingsController.post_rating_gig)

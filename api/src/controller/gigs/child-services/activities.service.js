@@ -102,8 +102,6 @@ var controllers = {
     const {id} = req.params
     const {from, time} = req.body
     let result, gigs
-    console.log(from, ' from')
-    console.log(time, ' time')
 
     try {
       const fromDate = new Date(from)
@@ -120,10 +118,6 @@ var controllers = {
         const gigFromDate = new Date(gig.from) // Convert from string to date
         return gigFromDate >= fromDate && gigFromDate <= toDate
       })
-
-      console.log(result.length, 'RESULT Length')
-      console.log(result[0].from, 'result first data')
-      console.log(result[result.length - 1].from, 'RESULT LAST DATA')
 
       if (!result) {
         return res.status(400).json({success: false, msg: 'Empty notifications'})

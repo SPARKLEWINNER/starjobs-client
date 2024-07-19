@@ -46,7 +46,7 @@ var controllers = {
         return res.status(400).json({success: false, msg: 'Invalid request'})
       }
 
-      await FCMTOKEN.deleteOne({
+      await FCMTOKEN.deleteMany({
         fcmToken: fcmToken
       })
 
@@ -70,7 +70,7 @@ var controllers = {
       console.log('🚀 ~ file: fcm-registration.service.js:61 ~ token:', token)
 
       if (token) {
-        return res.json({success: true, fcmToken: token.fcmToken})
+        return res.json({success: true, fcmTokens: token})
 
         // const currentTime = new Date()
         // const tokenUpdateTime = new Date(token.updatedAt)

@@ -377,6 +377,11 @@ var services = {
                 gigid: Types.ObjectId(id),
                 ...gigs
               })
+              // Log the feeHistoryInput to debug
+              console.log('🚀 ~ feeHistoryInput:', feeHistoryInput)
+
+              // Remove _id if it exists to avoid duplicate key error
+              delete feeHistoryInput._id
 
               await Gigs.findOneAndUpdate(
                 {_id: Types.ObjectId(id)},
@@ -407,7 +412,20 @@ var services = {
                 }
               )
 
-              await FeeHistory.create(feeHistoryInput)
+              try {
+                await FeeHistory.create(feeHistoryInput)
+              } catch (error) {
+                if (error.code === 11000) {
+                  console.error('Duplicate key error:', error)
+                  // Send a response to the client to handle the duplicate key error gracefully
+                  res.status(400).json({message: 'Duplicate entry detected', error: error.message})
+                } else {
+                  console.error('Unexpected error occurred:', error)
+                  // Handle other errors or rethrow
+                  res.status(500).json({message: 'An unexpected error occurred', error: error.message})
+                  throw error
+                }
+              }
               discord.send_endshift(
                 jobsterData,
                 clientData,

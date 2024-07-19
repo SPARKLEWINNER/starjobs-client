@@ -327,8 +327,6 @@ var controllers = {
           createdAt: user.createdAt
         }
       })
-
-      console.log(freelancers[0], ' freelancersfreelancers')
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Applicant.get_freelancer_list', null, null, 'GET')

@@ -79,6 +79,12 @@ var controllers = {
 
     try {
       // gigs = await Gigs.findById(id).lean().exec();
+      // Validate the ID format
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.log('Invalid ObjectId')
+        throw new Error('Invalid ObjectId format')
+      }
+
       gigs = await Gigs.aggregate([
         {
           $lookup: {
@@ -102,6 +108,10 @@ var controllers = {
         })
         .sort({createdAt: -1})
         .exec()
+
+      if (!gigs || gigs.length === 0) {
+        return res.status(404).json({success: false, msg: 'Gig not found'})
+      }
     } catch (error) {
       console.error(error)
 

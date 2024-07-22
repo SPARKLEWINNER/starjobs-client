@@ -521,39 +521,55 @@ var controllers = {
       return res.status(400).json({error: 'Invalid ID format'})
     }
 
-    const {accountType, accountNumber, accountName} = req.body.values
+    const {accountType, accountNumber, accountName, altAccountNumber, altAccountName} = req.body.values
     console.log('🚀 ~ req.body.values:', req.body.values)
 
-    // Check if required fields are present
-    if (!accountType || !accountNumber || !accountName) {
-      return res.status(400).json({error: 'Account type, number, and name are required'})
-    }
-
     try {
+      // Prepare the update fields
+      const updateFields = {
+        'payment.accountPaymentType': accountType,
+        'payment.acccountPaymentName': accountName,
+        'payment.acccountPaymentNumber': accountNumber,
+        'payment.altAcctPaymentName': altAccountName,
+        'payment.altAcctPaymentNumber': altAccountNumber,
+        isGcashUpdated: true
+      }
+
+      // Remove fields that are not provided (null or undefined)
+      Object.keys(updateFields).forEach((key) => {
+        if (updateFields[key] === undefined || updateFields[key] === null) {
+          delete updateFields[key]
+        }
+      })
+
       // Update payment details directly in the document
       const updatedFreelancer = await Freelancers.findOneAndUpdate(
         {uuid: mongoose.Types.ObjectId(id)},
-        {
-          'payment.accountPaymentType': accountType,
-          'payment.acccountPaymentName': accountName,
-          'payment.acccountPaymentNumber': accountNumber,
-          isGcashUpdated: true
-        },
-        {new: true} // Return the updated document
-      )
+        updateFields,
+        {new: true, fields: 'uuid payment isGcashUpdated'} // Return the updated fields and exclude unnecessary data
+      ).exec() // Use exec() to get a proper promise
+      console.log('🚀 ~ updatedFreelancer:', updatedFreelancer)
+
       if (!updatedFreelancer) {
         return res.status(404).json({message: 'Freelancer not found'})
       }
-      const user = await Users.find({_id: mongoose.Types.ObjectId(updatedFreelancer.uuid)})
-        .lean()
-        .exec()
-      let {accessToken: token, refreshToken} = requestToken.create_token(updatedFreelancer.uuid)
-      result = {
-        ...user[0],
+
+      // Fetch user details for the updated freelancer
+      const user = await Users.findById(mongoose.Types.ObjectId(updatedFreelancer.uuid)).lean().exec() // Use exec() to get a proper promise
+      console.log('🚀 ~ user:', user)
+
+      if (!user) {
+        return res.status(404).json({message: 'User not found'})
+      }
+
+      const {accessToken: token, refreshToken} = requestToken.create_token(updatedFreelancer.uuid)
+      const result = {
+        ...user,
         token,
         refreshToken,
         isGcashUpdated: updatedFreelancer.isGcashUpdated
       }
+
       return res.status(200).json(result)
     } catch (error) {
       console.error('Error updating Gcash details:', error)

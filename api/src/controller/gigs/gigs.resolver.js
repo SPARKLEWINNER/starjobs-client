@@ -31,6 +31,7 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/gigs/history/:id/:status`)
     .get(jwt.require_sign_in, GigsController.get_gigs_history_status)
+  app.route(`${apiPath}${apiVersion}/gigs/:gig_id/`).get(jwt.require_sign_in, GigsController.get_gig_status)
 
   app.route(`${apiPath}${apiVersion}/gigs/:id`).post(jwt.require_sign_in, GigsController.post_gig)
 

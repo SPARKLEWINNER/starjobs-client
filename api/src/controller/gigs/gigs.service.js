@@ -693,6 +693,31 @@ var controllers = {
       await logger.logError(error, 'GIGS.patch_remove_gig', null, null, 'PATCH')
       return res.status(502).json({success: false, msg: 'Unable to remove gig'})
     }
+  },
+  get_gig_status: async function (req, res) {
+    try {
+      const {gig_id} = req.params // Extract the gig ID from the request parameters
+
+      // Validate that the gigId is a valid MongoDB ObjectId
+      if (!mongoose.Types.ObjectId.isValid(gig_id)) {
+        return res.status(400).json({error: 'Invalid gig ID'})
+      }
+
+      // Find the gig by ID
+      const gig = await Gigs.findById(gig_id).select('status')
+
+      // If the gig does not exist, return a 404 error
+      if (!gig) {
+        return res.status(404).json({error: 'Gig not found'})
+      }
+
+      // Respond with the gig status
+      res.status(200).json({status: gig.status})
+    } catch (error) {
+      // Handle any errors that occur
+      console.error('Error fetching gig status:', error)
+      res.status(500).json({error: 'Internal server error'})
+    }
   }
 }
 

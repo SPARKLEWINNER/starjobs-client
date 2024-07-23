@@ -81,6 +81,11 @@ async function extended_gig(id) {
 var controllers = {
   get_applicants: async function (req, res) {
     const {id} = req.params
+
+    // Check if id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({success: false, msg: 'Invalid ID format'})
+    }
     await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Gigs, 'Gigs', id)
     let details
     try {
@@ -113,6 +118,9 @@ var controllers = {
 
   get_applicant_details: async function (req, res) {
     const {id} = req.params
+
+    console.log('🚀 ~ id:', id)
+
     await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
     let account
     try {
@@ -142,7 +150,6 @@ var controllers = {
         black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '0'}),
         gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '1'})
       }
-      console.log('🚀 ~ id:', id)
 
       const rateComments = await GigRating.aggregate([
         {

@@ -181,6 +181,12 @@ const freelancerSchema = new Schema(
       },
       acccountPaymentNumber: {
         type: String
+      },
+      altAcctPaymentName: {
+        type: String
+      },
+      altAcctPaymentNumber: {
+        type: String
       }
     },
     dateCreated: {

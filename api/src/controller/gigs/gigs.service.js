@@ -75,7 +75,13 @@ var controllers = {
 
   get_gig: async function (req, res) {
     const {id} = req.params
+    console.log('🚀 ~ Get Gig id:', id)
     let gigs
+
+    // Verify if the provided id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({error: 'Invalid ID format'})
+    }
 
     try {
       // gigs = await Gigs.findById(id).lean().exec();
@@ -379,11 +385,13 @@ var controllers = {
     const token = req.headers.authorization.split(' ')[1]
     const {id} = jwt_decode(token)
     const {status} = req.params
+    console.log('🚀 ~ status:', status)
     const statusArray = status.split(',')
 
     // await getSpecificData({uuid: mongoose.Types.ObjectId(id)}, Freelancers, 'Account', id)
 
     let details
+    let reports
     try {
       const check_user = await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
 
@@ -460,22 +468,46 @@ var controllers = {
           .sort({createdAt: -1})
           .exec()
 
-        const reports = await Gigs.aggregate([
-          {
-            $lookup: {
-              from: 'gigs-histories',
-              localField: '_id',
-              foreignField: 'gid',
-              as: 'history'
+        if (status === 'Confirm-End-Shift') {
+          console.log('Confirm-End-Shift')
+          // Confirm-End-Shift
+          reports = await Gigs.aggregate([
+            {
+              $lookup: {
+                from: 'gigs-histories',
+                localField: '_id',
+                foreignField: 'gid',
+                as: 'history'
+              }
             }
-          }
-        ])
-          .match({
-            'records.auid': mongoose.Types.ObjectId(id),
-            status: {$in: statusArray}
-          })
-          .sort({createdAt: 1})
-          .exec()
+          ])
+            .match({
+              auid: mongoose.Types.ObjectId(id),
+              status: status
+            })
+            .sort({createdAt: 1})
+            .exec()
+          console.log('🚀 ~ Confirm End Shift reports:', reports)
+        } else {
+          console.log('Others')
+          // Other Status
+          reports = await Gigs.aggregate([
+            {
+              $lookup: {
+                from: 'gigs-histories',
+                localField: '_id',
+                foreignField: 'gid',
+                as: 'history'
+              }
+            }
+          ])
+            .match({
+              'records.auid': mongoose.Types.ObjectId(id),
+              status: {$in: statusArray}
+            })
+            .sort({createdAt: 1})
+            .exec()
+        }
 
         let gigsData = reports.filter((obj) => {
           // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
@@ -494,8 +526,6 @@ var controllers = {
           }
           return
         })
-        // console.log('🚀 ~ file: gigs.service.js:335 ~ gigsData ~ gigsData:', gigsData)
-
         if (contracts.length > 0) {
           gigsData = [...gigsData, ...contracts]
         }

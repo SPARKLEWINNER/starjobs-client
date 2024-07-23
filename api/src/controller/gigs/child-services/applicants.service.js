@@ -119,7 +119,9 @@ var controllers = {
   get_applicant_details: async function (req, res) {
     const {id} = req.params
 
-    console.log('🚀 ~ id:', id)
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({error: 'Invalid ID format'})
+    }
 
     await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
     let account

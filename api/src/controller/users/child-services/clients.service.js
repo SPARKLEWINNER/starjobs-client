@@ -423,16 +423,18 @@ var controllers = {
           gigs &&
             gigs
               .filter((obj) => {
+                console.log('🚀 ~ .filter ~ obj.time:', obj.time)
                 const timeDate = moment(obj.time)
+                if (!timeDate.isValid()) {
+                  throw new Error('Invalid date format')
+                }
 
                 const previousDays = moment(obj.date).subtract(7, 'days')
                 const aheadDays = moment(timeDate).add(7, 'days')
                 const range = moment().range(previousDays, aheadDays)
-                // between 0 days and 2 days before current day
                 if (range.contains(moment())) {
                   if (contracts.length > 0 && obj.status != 'Contracts') return obj
                   if (contracts.length == 0) return obj
-                  // return obj
                 }
               })
               .map(async (obj) => {

@@ -39,6 +39,36 @@ app.use(useragent.express())
 app.get('/health', (req, res) => {
   res.status(200).json({status: 'ok', timestamp: new Date()})
 })
+
+// Variable to track update status
+let updateAvailable = false
+
+// Route to check for updates
+app.get('/api/check-update', (req, res) => {
+  res.json({updateAvailable})
+})
+
+// Route to handle GitHub webhook
+app.post('/webhook', (req, res) => {
+  const secret = process.env.GITHUB_WEBHOOK_SECRET
+
+  // Validate the webhook request using the secret
+  if (secret) {
+    const signature = `sha256=${crypto.createHmac('sha256', secret).update(JSON.stringify(req.body)).digest('hex')}`
+
+    if (req.headers['x-hub-signature-256'] !== signature) {
+      return res.status(401).send('Invalid signature')
+    }
+  }
+
+  // Check if the main branch is updated
+  if (req.body.ref === 'refs/heads/main') {
+    updateAvailable = true
+    console.log('Main branch updated')
+  }
+
+  res.status(200).send('Webhook received')
+})
 // cron.schedule('*/25 * * * *', async () => {
 //   try {
 //     // Generate a new token

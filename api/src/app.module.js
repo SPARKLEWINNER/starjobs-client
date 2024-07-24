@@ -71,6 +71,11 @@ app.post('/webhook', (req, res) => {
 
   res.status(200).send('Webhook received')
 })
+app.post('/api/reset-update', (req, res) => {
+  updateAvailable = false
+  console.log('Update flag reset')
+  res.status(200).send('Update flag reset')
+})
 // cron.schedule('*/25 * * * *', async () => {
 //   try {
 //     // Generate a new token

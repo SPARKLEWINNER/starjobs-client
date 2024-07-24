@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const Pusher = require('pusher')
 const routes = require('./app.routes')
+const crypto = require('crypto')
 
 const port = process.env.PORT || 3001
 const app = express()
@@ -50,7 +51,9 @@ app.get('/api/check-update', (req, res) => {
 
 // Route to handle GitHub webhook
 app.post('/webhook', (req, res) => {
+  console.log('Received headers:', req.headers)
   const secret = process.env.GITHUB_WEBHOOK_SECRET
+  console.log('🚀 ~ app.post ~ secret:', secret)
 
   // Validate the webhook request using the secret
   if (secret) {
@@ -60,7 +63,6 @@ app.post('/webhook', (req, res) => {
       return res.status(401).send('Invalid signature')
     }
   }
-
   // Check if the main branch is updated
   if (req.body.ref === 'refs/heads/main') {
     updateAvailable = true

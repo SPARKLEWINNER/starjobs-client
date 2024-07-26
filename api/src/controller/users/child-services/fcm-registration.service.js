@@ -15,17 +15,49 @@ var controllers = {
         return res.status(400).json({success: false, msg: 'Invalid request'})
       }
 
-      let token = new FCMTOKEN({
-        userId: id,
-        fcmToken: fcmToken,
-        device: device
-      })
+      const checkFCMTokens = await FCMTOKEN.find({ fcmToken: fcmToken });
 
-      await token.save()
+      let dupCount = 0;
+      let diffCount = 0;
+      let token;
 
-      await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isNotifOn: true})
+      if (checkFCMTokens.length > 0) {
+        await Promise.all(checkFCMTokens.map(async (fcm) => {
+          if (fcm.userId.toString() !== id.toString()) {
+            diffCount++;
+            await FCMTOKEN.deleteOne({ fcmToken: fcm.fcmToken, userId: fcm.userId });
+          } else {
+            dupCount++;
+            if (dupCount > 1) {
+              await FCMTOKEN.deleteOne({ fcmToken: fcm.fcmToken, userId: id });
+            }
+          }
+        }));
+        if (dupCount === 0 && diffCount >= 1) {
+          token = new FCMTOKEN({
+            userId: id,
+            fcmToken: fcmToken,
+            device: device
+          });
+          await token.save();
 
-      return res.status(200).json({success: true, msg: 'Successfully registered fcm token', data: token})
+          await Users.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { isNotifOn: true });
+          return res.status(200).json({ success: true, msg: 'Successfully registered FCM token', data: token });
+        }
+
+        await Users.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { isNotifOn: true });
+        return res.status(200).json({ success: true, msg: 'Token already exists, proceeding to login', data: token });
+      } else {
+        token = new FCMTOKEN({
+          userId: id,
+          fcmToken: fcmToken,
+          device: device
+        });
+        await token.save();
+        await Users.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { isNotifOn: true });
+
+        return res.status(200).json({ success: true, msg: 'Successfully registered FCM token', data: token });
+      }
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'fcm-registration.service.register_fcm_token', null, id, 'POST')

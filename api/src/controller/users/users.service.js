@@ -499,18 +499,33 @@ var controllers = {
     return res.status(200).json(result)
   },
   get_user_with_notif: async function (req, res) {
-    const {id} = req.params
-    console.log(id)
-    const account = await Users.find({_id: mongoose.Types.ObjectId(id)})
-      .lean()
-      .exec()
+    try {
+      const {id} = req.params
 
-    const notifStatus = account[0].isNotifOn
-    const result = {
-      notifStatus
+      // Validate the ID format
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({error: 'get_user_with_notif - Invalid user ID format'})
+      }
+
+      // Find the user by ID
+      const account = await Users.find({_id: mongoose.Types.ObjectId(id)})
+        .lean()
+        .exec()
+      console.log('🚀 ~ account:', account)
+
+      if (!account || account.length === 0) {
+        return res.status(404).json({error: 'get_user_with_notif - User not found'})
+      }
+
+      const notifStatus = account[0].isNotifOn
+      console.log('🚀 ~ notifStatus:', notifStatus)
+
+      const result = {notifStatus}
+      return res.status(200).json(result)
+    } catch (error) {
+      console.error('Error in get_user_with_notif:', error)
+      return res.status(500).json({error: 'Internal server error'})
     }
-    console.log('🚀 ~ account:', result)
-    return res.status(200).json(result)
   },
   patch_user_gcash: async function (req, res) {
     const {id} = req.params

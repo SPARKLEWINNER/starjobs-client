@@ -424,18 +424,24 @@ var controllers = {
             gigs
               .filter((obj) => {
                 console.log('🚀 ~ .filter ~ obj.time:', obj.time)
-                const timeDate = moment(obj.time)
+
+                // Check if obj.time is a valid date format
+                const timeDate = moment(obj.time, moment.ISO_8601, true)
                 if (!timeDate.isValid()) {
-                  throw new Error('Invalid date format')
+                  console.warn('Invalid date format:', obj.time)
+                  return false // Skip this object
                 }
 
                 const previousDays = moment(obj.date).subtract(7, 'days')
-                const aheadDays = moment(timeDate).add(7, 'days')
+                const aheadDays = timeDate.add(7, 'days')
                 const range = moment().range(previousDays, aheadDays)
+
                 if (range.contains(moment())) {
-                  if (contracts.length > 0 && obj.status != 'Contracts') return obj
-                  if (contracts.length == 0) return obj
+                  if (contracts.length > 0 && obj.status !== 'Contracts') return obj
+                  if (contracts.length === 0) return obj
                 }
+
+                return false // Skip this object if not in range
               })
               .map(async (obj) => {
                 if (!obj.isExtended) {
@@ -443,7 +449,7 @@ var controllers = {
                     .lean()
                     .exec()
 
-                  // add applicant list since to prevent re-apply of jobsters
+                  // Add applicant list to prevent re-apply of jobsters
                   if (obj.status === 'Applying' || obj.status === 'Waiting') {
                     const history = await History.find(
                       {
@@ -451,9 +457,7 @@ var controllers = {
                         status: ['Waiting', 'Applying']
                       },
                       {uid: 1, status: 1, _id: 1, createdAt: 1}
-                    )
-                      .find()
-                      .lean()
+                    ).lean()
 
                     return {
                       ...obj,

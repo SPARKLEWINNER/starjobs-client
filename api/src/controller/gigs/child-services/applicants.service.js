@@ -285,8 +285,8 @@ var controllers = {
         {
           accountType: 0,
           isActive: true,
-          isVerified: true
-          // adminStatus: 'Verified'
+          isVerified: true,
+          adminStatus: {$ne: null}
         },
         {
           _id: 1,

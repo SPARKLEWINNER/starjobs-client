@@ -47,7 +47,7 @@ var controllers = {
     const {id} = req.params
     let result, gigs
     console.log('-get_gigs_activity_client-')
-    const todayStart = moment().startOf('day')
+    const todayStart = moment().utc().startOf('day')
     try {
       result = await Gigs.find({
         uid: mongoose.Types.ObjectId(id),
@@ -59,7 +59,7 @@ var controllers = {
           }
         ]
       })
-        .sort({date: 1})
+        .sort({date: -1})
         .limit(30)
         .lean()
         .exec()

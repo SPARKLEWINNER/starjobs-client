@@ -78,11 +78,6 @@ var controllers = {
     console.log('🚀 ~ Get Gig id:', id)
     let gigs
 
-    // Verify if the provided id is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({error: 'Invalid ID format'})
-    }
-
     try {
       // gigs = await Gigs.findById(id).lean().exec();
       // Validate the ID format

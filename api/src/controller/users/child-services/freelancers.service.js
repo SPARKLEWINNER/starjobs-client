@@ -185,16 +185,18 @@ var controllers = {
       rate,
       payment,
       photo,
-      requirementFiles: {
-        nbi: requirement_files.nbiClearance || '',
-        nbiExpirationDate: requirement_files.nbiExpirationDate || '',
-        validId1: requirement_files.validId1 || '',
-        validId2: requirement_files.validId2 || '',
-        vaccinationCard: requirement_files.vaccinationCard || '',
-        brgyClearance: requirement_files.barangayClearance || '',
-        brgyExpirationDate: requirement_files.brgyExpirationDate || '',
-        map: requirement_files.residencyMap || ''
-      },
+      ...(requirement_files && {
+        requirementFiles: {
+          nbi: requirement_files.nbiClearance,
+          nbiExpirationDate: requirement_files.nbiExpirationDate,
+          validId1: requirement_files.validId1,
+          validId2: requirement_files.validId2,
+          vaccinationCard: requirement_files.vaccinationCard,
+          brgyClearance: requirement_files.barangayClearance,
+          brgyExpirationDate: requirement_files.brgyExpirationDate,
+          map: requirement_files.residencyMap
+        }
+      }),
       selfie
     }
     console.log('🚀 ~ details:', details.requirementFiles)
@@ -219,6 +221,66 @@ var controllers = {
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Freelancers.patch_account_details', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+
+    let {accessToken: token, refreshToken} = requestToken.create_token(result.uuid)
+    result = {
+      ...user[0],
+      photo: result.photo,
+      token,
+      refreshToken
+    }
+
+    return res.status(200).json(result)
+  },
+
+  patch_requirements: async function (req, res) {
+    const {id} = req.params
+    let user, result
+    await getSpecificData({uuid: id}, Freelancers, 'User', id) // validate if data exists
+
+    const {requirement_files} = req.body
+    console.log('🚀 ~ requirement_files:', requirement_files)
+    console.log('🚀 ~ ID:', id)
+
+    if (!requirement_files) {
+      return res.status(400).json({success: false, msg: 'No requirement files provided'})
+    }
+
+    const details = {
+      requirementFiles: {
+        nbi: requirement_files.nbiClearance,
+        nbiExpirationDate: requirement_files.nbiExpirationDate,
+        validId1: requirement_files.validId1,
+        validId2: requirement_files.validId2,
+        vaccinationCard: requirement_files.vaccinationCard,
+        brgyClearance: requirement_files.barangayClearance,
+        brgyExpirationDate: requirement_files.brgyExpirationDate,
+        map: requirement_files.residencyMap
+      }
+    }
+    console.log('🚀 ~ details:', details.requirementFiles)
+
+    const oldDetails = await Freelancers.find({uuid: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    try {
+      result = await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, details)
+      if (result) {
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(result.uuid)}, {adminStatus: 'Pending'})
+      }
+      console.log('🚀 ~ result:', result)
+
+      user = await Users.find({_id: mongoose.Types.ObjectId(result.uuid)})
+        .lean()
+        .exec()
+
+      await logger.logAccountHistory(user[0]?.accountType, details, id, oldDetails[0])
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Freelancers.patch_requirements', null, id, 'PATCH')
       return res.status(502).json({success: false, msg: 'User not found'})
     }
 

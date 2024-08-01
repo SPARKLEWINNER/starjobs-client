@@ -457,7 +457,7 @@ var services = {
       )
       let history = new History(history_details)
       await History.create(history)
-      global.pusher.trigger('notifications', 'notify_gig', gigs)
+      //global.pusher.trigger('notifications', 'notify_gig', gigs)
       await sendNotification(req.body, gigs, status)
       updatedGig = gigs
     } catch (error) {
@@ -534,7 +534,7 @@ var services = {
         )
       }
 
-      global.pusher.trigger('notifications', 'notify_gig', gigs)
+      //global.pusher.trigger('notifications', 'notify_gig', gigs)
       await sendNotification(req.body, gigs, status)
       updatedGig = gigs
     } catch (error) {

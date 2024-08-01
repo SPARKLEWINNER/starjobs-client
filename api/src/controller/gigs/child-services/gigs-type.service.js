@@ -102,7 +102,7 @@ const services = {
     try {
       const postedGig = await Gigs.create(gigsObj)
 
-      global.pusher.trigger('notifications', 'new_notification', postedGig)
+      // global.pusher.trigger('notifications', 'new_notification', postedGig)
 
       if (areas && areas.length > 0) {
         if (areas.length > 1) {
@@ -212,7 +212,7 @@ const services = {
     try {
       const postedGig = await Gigs.create(gigsObj)
 
-      global.pusher.trigger('notifications', 'new_notification', postedGig)
+      // global.pusher.trigger('notifications', 'new_notification', postedGig)
 
       if (areas && areas.length > 0) {
         if (areas.length > 1) {

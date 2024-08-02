@@ -3,6 +3,7 @@ const Gigs = require('../models/gigs.model')
 const logger = require('../../../common/loggers')
 const Freelancers = require('../../users/models/freelancers.model')
 const History = require('../../gigs/models/gig-histories.model')
+const moment = require('moment')
 
 var controllers = {
   // list of gigs by activity (payroll)
@@ -45,10 +46,20 @@ var controllers = {
   get_gigs_activity_client: async function (req, res) {
     const {id} = req.params
     let result, gigs
-
+    console.log('-get_gigs_activity_client-')
+    const todayStart = moment().startOf('day')
     try {
-      result = await Gigs.find({uid: mongoose.Types.ObjectId(id), status: 'Confirm-End-Shift'})
-        .sort({createdAt: -1})
+      result = await Gigs.find({
+        uid: mongoose.Types.ObjectId(id),
+        $or: [
+          {status: {$in: ['Confirm-End-Shift', 'Cancelled']}},
+          {
+            status: 'Waiting',
+            from: {$lt: todayStart.toDate()} // `from` date is in the past
+          }
+        ]
+      })
+        .sort({date: 1})
         .limit(30)
         .lean()
         .exec()

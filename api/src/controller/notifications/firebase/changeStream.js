@@ -39,11 +39,23 @@ const notifyUsers = async (updatedDocument) => {
                 }));
 
                 // Send all messages and wait for all promises to resolve
-                const responses = await Promise.all(messages.map((message) => messaging.send(message)));
+                const responses = await Promise.allSettled(messages.map((message) => messaging.send(message)));
 
-                // Log successful responses
-                responses.forEach((response, index) => {
-                    console.log(`Successfully sent message to token ${fcm[index].fcmToken}:`, response);
+                 // Process responses
+                responses.forEach(async (result, index) => {
+                    const token = fcm[index].fcmToken;
+                    if (result.status === 'fulfilled') {
+                    console.log(`Successfully sent message to token ${token}:`, result.value);
+                    } else {
+                        const error = result.reason;
+                        console.error(`Error sending message to token ${token}:`, error);
+                        if (error.code === 'messaging/registration-token-not-registered' || error.code === 'messaging/invalid-registration-token') {
+                            console.log('The FCM token is invalid or has expired. Removing it from the database.');
+                            await FCMTOKEN.deleteMany({
+                                fcmToken: token
+                            })
+                        }
+                    }
                 });
             } else {
                 console.log('No tokens available to send notifications');

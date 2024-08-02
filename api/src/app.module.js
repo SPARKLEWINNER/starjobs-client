@@ -10,8 +10,6 @@ const routes = require('./app.routes')
 const port = process.env.PORT || 3001
 const app = express()
 const useragent = require('express-useragent')
-require('./controller/notifications/firebase/changeStream')
-
 const MONGO_DATABASE_URL = process.env.MONGODB_URI
 
 mongoose

@@ -377,21 +377,11 @@ var services = {
                 gigid: Types.ObjectId(id),
                 ...gigs
               })
-              // Check if a FeeHistory document with the same gigid already exists
-              const existingFeeHistory = await FeeHistory.findOne({gigid: feeHistoryInput.gigid})
+              // Log the feeHistoryInput to debug
+              console.log('🚀 ~ feeHistoryInput:', feeHistoryInput)
 
-              if (existingFeeHistory) {
-                console.warn('FeeHistory with the same gigid already exists.')
-                return res.status(400).json({message: 'FeeHistory already exists for this gig'})
-              }
-
-              try {
-                // Create a new FeeHistory document if it doesn't exist
-                await FeeHistory.create(feeHistoryInput)
-              } catch (error) {
-                console.error('Unexpected error occurred during FeeHistory creation:', error)
-                return res.status(500).json({message: 'An unexpected error occurred', error: error.message})
-              }
+              // Remove _id if it exists to avoid duplicate key error
+              delete feeHistoryInput._id
 
               await Gigs.findOneAndUpdate(
                 {_id: Types.ObjectId(id)},
@@ -422,6 +412,20 @@ var services = {
                 }
               )
 
+              try {
+                await FeeHistory.create(feeHistoryInput)
+              } catch (error) {
+                if (error.code === 11000) {
+                  console.error('Duplicate key error:', error)
+                  // Send a response to the client to handle the duplicate key error gracefully
+                  res.status(400).json({message: 'Duplicate entry detected', error: error.message})
+                } else {
+                  console.error('Unexpected error occurred:', error)
+                  // Handle other errors or rethrow
+                  res.status(500).json({message: 'An unexpected error occurred', error: error.message})
+                  throw error
+                }
+              }
               discord.send_endshift(
                 jobsterData,
                 clientData,

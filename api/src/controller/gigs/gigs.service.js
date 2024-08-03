@@ -79,11 +79,15 @@ var controllers = {
     let gigs
 
     try {
-      // gigs = await Gigs.findById(id).lean().exec();
+      if (!id) {
+        console.log('ID is undefined or null')
+        return res.status(400).json({success: false, msg: 'ID is required'})
+      }
+
       // Validate the ID format
       if (!mongoose.Types.ObjectId.isValid(id)) {
         console.log('Invalid ObjectId')
-        throw new Error('Invalid ObjectId format')
+        return res.status(400).json({success: false, msg: 'Invalid ObjectId format'})
       }
 
       gigs = await Gigs.aggregate([

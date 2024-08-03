@@ -11,12 +11,12 @@ var controllers = {
   get_app_settings: async function (req, res) {
     let result
     try {
-      const ads = await Advertisements.find({}).lean().exec()
+      // const ads = await Advertisements.find({}).lean().exec()
       const appSettings = await AppSettings.find({}).lean().exec()
 
       if (appSettings && appSettings.length > 0) {
         result = {
-          ads,
+          // ads,
           ...appSettings[0]
         }
       } else {

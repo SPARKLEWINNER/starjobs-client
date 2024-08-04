@@ -104,4 +104,13 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/onboard/client/:id`)
     .post(jwt.require_sign_in, OnboardController.update_client_profile)
+
+  // Banners
+  app
+    .route(`${apiPath}${apiVersion}/users/jobsterBanner/list/`)
+    .get(jwt.require_sign_in, UsersController.get_jobster_banners)
+
+  app
+    .route(`${apiPath}${apiVersion}/users/clientBanner/list/`)
+    .get(jwt.require_sign_in, UsersController.get_client_banners)
 }

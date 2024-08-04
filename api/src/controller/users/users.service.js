@@ -7,6 +7,7 @@ const Freelancers = require('./models/freelancers.model')
 const Clients = require('./models/clients.model')
 const History = require('../gigs/models/gig-histories.model')
 const Notification = require('../notifications/models/notifications.model')
+const Banners = require('./models/banner.model')
 
 const Archive = require('./models/archived_users')
 const logger = require('../../common/loggers')
@@ -589,6 +590,26 @@ var controllers = {
     } catch (error) {
       console.error('Error updating Gcash details:', error)
       return res.status(500).json({error: 'Internal server error'})
+    }
+  },
+  get_jobster_banners: async function (req, res) {
+    try {
+      const banners = await Banners.find({accountType: 'jobster'}).sort({createdAt: -1}).lean()
+
+      return res.status(200).json(banners)
+    } catch (error) {
+      console.error('Error fetching jobster banners:', error)
+      res.status(500).json({error: 'Failed to fetch jobster banners'})
+    }
+  },
+  get_client_banners: async function (req, res) {
+    try {
+      const banners = await Banners.find({accountType: 'client'}).sort({createdAt: -1}).lean()
+
+      return res.status(200).json(banners)
+    } catch (error) {
+      console.error('Error fetching jobster banners:', error)
+      res.status(500).json({error: 'Failed to fetch jobster banners'})
     }
   }
 }

@@ -167,19 +167,29 @@ var controllers = {
       //     return res.status(200).json({success: true, data: finalData})
       //   })
 
-      const notifications = await Notification.find({
-        $or: [{targetUsers: id}, {target: 'General'}]
-      })
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
+
+      const [notifications, totalItems] = await Promise.all([
+        Notification.find({
+          $or: [{targetUsers: id}, {target: 'General'}]
+        })
         .sort({createdAt: -1})
-        .limit(30)
-        .exec()
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+        Notification.countDocuments({
+          $or: [{targetUsers: id}, {target: 'General'}]
+        })
+      ]);
 
       const finalData = notifications.map((notification) => ({
         ...notification._doc,
         isRead: notification.viewedBy.includes(id)
-      }))
+      }));
 
-      return res.status(200).json({success: true, data: finalData})
+      return res.status(200).json({success: true, data: finalData, totalItems});
     } catch (error) {
       console.error('error', error)
       await logger.logError(error, 'Freelancers.get_notifications', null, id, 'GET')

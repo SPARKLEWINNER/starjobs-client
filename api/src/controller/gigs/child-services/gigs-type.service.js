@@ -47,7 +47,7 @@ const services = {
       return res.status(502).json({success: false, msg: 'User not found'})
     }
 
-    const client = await Clients.find({uid: mongoose.Types.ObjectId(id)})
+    const client = await Clients.findOne({uid: mongoose.Types.ObjectId(id)})
       .lean()
       .exec()
 

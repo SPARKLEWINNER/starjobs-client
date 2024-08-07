@@ -594,8 +594,7 @@ var controllers = {
   },
   get_jobster_banners: async function (req, res) {
     try {
-      const banners = await Banners.find({accountType: 'jobster'}).sort({createdAt: -1}).lean()
-
+      const banners = await Banners.find({accountType: 'jobster', status: 'active'}).sort({createdAt: -1}).lean()
       return res.status(200).json(banners)
     } catch (error) {
       console.error('Error fetching jobster banners:', error)

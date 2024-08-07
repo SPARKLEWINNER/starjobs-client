@@ -107,8 +107,7 @@ const services = {
       if (areas && areas.length > 0) {
         areas.map(async (item) => {
           notification.globalNotification(gigsObj, item)
-          })
-        }
+        })
       }
 
       if (isRepeatable) {

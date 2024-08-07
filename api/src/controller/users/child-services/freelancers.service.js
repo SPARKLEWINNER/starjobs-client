@@ -182,9 +182,9 @@ var controllers = {
       work,
       expertise,
       education,
-      rate,
-      payment,
-      photo,
+      ...(rate && {rate}),
+      ...(payment && {payment}),
+      ...(photo && {photo}),
       ...(requirement_files && {
         requirementFiles: {
           nbi: requirement_files.nbiClearance,
@@ -197,9 +197,8 @@ var controllers = {
           map: requirement_files.residencyMap
         }
       }),
-      selfie
+      ...(selfie && {selfie})
     }
-    console.log('🚀 ~ details:', details.requirementFiles)
 
     const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})
       .lean()

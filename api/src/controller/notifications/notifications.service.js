@@ -48,9 +48,19 @@ var controllers = {
   },
 
   get_notifications_clients: async function (req, res) {
-    const {id} = req.params
-    let result
+    const { id } = req.params;
+    const { page = 1, pageSize = 10 } = req.query; 
+    let result;
+
     try {
+      const pageNum = parseInt(page, 10);
+      const limit = parseInt(pageSize, 10);
+      const skip = (pageNum - 1) * limit;
+
+      if (isNaN(pageNum) || isNaN(limit) || pageNum <= 0 || limit <= 0) {
+        return res.status(400).json({ success: false, msg: 'Invalid page or pageSize parameters' });
+      }
+
       let query = await History.aggregate([
         {
           $lookup: {
@@ -59,24 +69,35 @@ var controllers = {
             foreignField: '_id',
             as: 'details'
           }
-        }
-      ])
-        .match({
+        },
+      {
+        $match:{
           createdAt: {
             $lt: new Date(),
             $gte: new Date(new Date().setDate(new Date().getDate() - 1))
+          },
+            'details.uid': id
           }
-        })
-        .sort({createdAt: -1})
-        .exec()
+        },
+        {
+          $sort: { createdAt: -1 }
+        },
+        {
+          $skip: skip
+        },
+        {
+          $limit: limit 
+        }
+      ]).exec();
 
-      if (!query) {
+      if (!query || query.length === 0) {
         return res.status(400).json({success: false, msg: 'Empty notifications'})
       }
-      result = query.filter((obj) => obj.details[0].uid.toString() === id)
-      return res.status(200).json({success: false, data: result})
+
+      result = query;
+      return res.status(200).json({success: true, data: result})
     } catch (error) {
-      console.error('error', error)
+      console.error('error', error);
       await logger.logError(error, 'Freelancers.get_notifications_clients', null, id, 'GET')
       return res.status(502).json({success: false, msg: 'User not found'})
     }

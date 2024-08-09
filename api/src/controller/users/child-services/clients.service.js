@@ -543,6 +543,7 @@ var controllers = {
 
   get_client_status_gigs: async function (req, res) {
     const {id, status} = req.params
+    const {page, limit} = req.query
     const statusArray = status.split(',')
     // console.log(, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
     // console.log(req.body, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXbodyXXX')
@@ -597,7 +598,7 @@ var controllers = {
         ]).exec()
 
         if (status === 'Waiting,Pending') {
-          gigs = await Gigs.aggregate([
+          let aggregationPipeline = [
             {
               $match: {
                 uid: mongoose.Types.ObjectId(id),
@@ -681,9 +682,18 @@ var controllers = {
                 createdAt: -1
               }
             }
-          ])
+          ];
+
+          if (page && limit) {
+              const skip = (parseInt(page) - 1) * parseInt(limit);
+              aggregationPipeline.push({ $skip: skip });
+              aggregationPipeline.push({ $limit: parseInt(limit) });
+          }
+
+          gigs = await Gigs.aggregate(aggregationPipeline);
+
         } else {
-          gigs = await Gigs.aggregate([
+          let aggregationPipeline = [
             {
               $match: {
                 uid: mongoose.Types.ObjectId(id),
@@ -767,7 +777,14 @@ var controllers = {
                 createdAt: -1
               }
             }
-          ])
+          ];
+          if (page && limit) {
+              const skip = (parseInt(page) - 1) * parseInt(limit);
+              aggregationPipeline.push({ $skip: skip });
+              aggregationPipeline.push({ $limit: parseInt(limit) });
+          }
+          
+          gigs = await Gigs.aggregate(aggregationPipeline);
         }
 
         gigs = await Promise.all(

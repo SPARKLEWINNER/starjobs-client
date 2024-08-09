@@ -20,60 +20,8 @@ const services = require('./child-services/gigs-type.service')
 const discord = require('../../services/discord-notif.service')
 
 var controllers = {
+
   get_gigs: async function (req, res) {
-    let gigs = []
-    let filter_gig = []
-    try {
-      // let initial_find = await Gigs.find({
-      //   status: ['Waiting', 'Applying', 'Contracts']
-
-      // }, {position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
-      //   .lean()
-      //   .exec()
-
-      // gigs = initial_find.filter((obj) => {
-      //   return !moment(obj.time).isBefore(moment(), 'day')
-      // })
-      // gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-      // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-      // console.log(filter_gig.length)
-
-      const today = moment.utc().startOf('day')
-      const filter = {
-        status: {$in: ['Waiting', 'Applying', 'Contracts']},
-        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}]
-      }
-
-      const projection = {
-        position: 1,
-        uid: 1,
-        hours: 1,
-        fee: 1,
-        user: 1,
-        from: 1,
-        time: 1,
-        fees: 1,
-        locationRate: 1,
-        category: 1,
-        createdAt: 1
-      }
-
-      const initial_find = await Gigs.find(filter, projection).sort({createdAt: -1}).lean().exec()
-
-      filter_gig = initial_find.filter((obj) => {
-        return moment(obj.from, moment.ISO_8601, true).isValid()
-      })
-
-      if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
-    } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Gigs.get_gigs_categorized', filter_gig, null, 'GET')
-      return res.status(502).json({success: false, msg: 'Gigs not found'})
-    }
-    return res.status(200).json(filter_gig)
-  },
-
-  get_gigss: async function (req, res) {
     const { page, limit} = req.query; // Default to page 1 and limit 10
     let filter_gig = [];
     try {
@@ -237,61 +185,6 @@ var controllers = {
   },
 
   get_gigs_categorized: async function (req, res) {
-    const {category} = req.params
-    let categ_gigs = []
-    try {
-      // let initial_find = await Gigs.find({
-      //   category: category,
-      //   status: ['Waiting', 'Applying', 'Contracts']
-      // },{category:1, position:1, uid:1, hours:1, fee:1, user:1, from:1, time:1, locationRate:1})
-      //   .lean()
-      //   .exec()
-
-      // gigs = initial_find.filter((obj) => {
-      //   return !moment(obj.time).isBefore(moment(), 'day')
-      // })
-      // gigs.sort((a, b) => (moment(a.date + ' ' + a.time) > moment(b.date + ' ' + b.time) ? 1 : -1))
-      // filter_gig = gigs.filter((obj) => (moment(obj.from).isValid() ? obj : ''))
-      const today = moment.utc().startOf('day')
-
-      const filter = {
-        status: {$in: ['Waiting', 'Applying', 'Contracts']},
-        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}],
-        category: category
-      }
-
-      const projection = {
-        position: 1,
-        uid: 1,
-        hours: 1,
-        fee: 1,
-        user: 1,
-        from: 1,
-        time: 1,
-        locationRate: 1,
-        fees: 1,
-        category: 1
-      }
-
-      const initial_find = await Gigs.find(filter, projection).lean().exec()
-
-      categ_gigs = initial_find.filter((obj) => {
-        // return moment(obj.from).isValid()
-        return moment(obj.from, moment.ISO_8601, true).isValid()
-      })
-
-      if (!initial_find) res.status(502).json({success: false, msg: 'Gigs not found'})
-    } catch (error) {
-      console.error(error)
-
-      await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET')
-      return res.status(502).json({success: false, msg: 'Gigs not found'})
-    }
-
-    return res.status(200).json(categ_gigs)
-  },
-
-  get_gigs_categorizeds: async function (req, res) {
     const { category } = req.params;
     const { page, limit } = req.query;
     const skip = (page - 1) * 10;

@@ -209,7 +209,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(result.uuid)},
-          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
+          {firstName: firstName, lastName: lastName}
         )
       }
 

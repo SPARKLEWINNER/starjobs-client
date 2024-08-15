@@ -207,9 +207,14 @@ var controllers = {
     try {
       result = await Freelancers.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, details)
       if (result) {
+        const oldUserData = await Users.findOne({_id: mongoose.Types.ObjectId(result.uuid)})
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(result.uuid)},
-          {firstName: firstName, lastName: lastName}
+          {
+            firstName: firstName,
+            lastName: lastName,
+            ...(oldUserData.adminStatus !== 'Verified' && {adminStatus: 'Pending'})
+          }
         )
       }
 

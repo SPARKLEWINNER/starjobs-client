@@ -182,6 +182,7 @@ var controllers = {
       work,
       expertise,
       education,
+      isRequirementsEdited: false,
       ...(rate && {rate}),
       ...(payment && {payment}),
       ...(photo && {photo}),
@@ -269,7 +270,8 @@ var controllers = {
         validId2: oldDetails.requirementFiles.validId2,
         vaccinationCard: oldDetails.requirementFiles.vaccinationCard,
         map: oldDetails.requirementFiles.map
-      }
+      },
+      isRequirementsEdited: true
     }
     // const details = {
     //   requirementFiles: {

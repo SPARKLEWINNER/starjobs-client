@@ -212,6 +212,10 @@ const freelancerSchema = new Schema(
     isGcashUpdated: {
       type: Boolean,
       default: false
+    },
+    isRequirementsEdited: {
+      type: Boolean,
+      default: false
     }
   },
   {

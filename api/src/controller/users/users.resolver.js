@@ -94,7 +94,7 @@ module.exports = function (app) {
     .get(jwt.require_sign_in, ClientsController.get_client_edit_profile)
 
   // ==== FCM controller ====
-  app.route(`${apiPath}${apiVersion}/subscriber/:id`).get(FCMController.get_token)
+  app.route(`${apiPath}${apiVersion}/subscriber/:id`).get(jwt.require_sign_in, FCMController.get_token)
   app.route(`${apiPath}${apiVersion}/subscriber/:id`).patch(jwt.require_sign_in, FCMController.patch_token)
 
   // ==== Upload controller ====

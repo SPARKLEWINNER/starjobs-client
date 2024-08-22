@@ -182,22 +182,23 @@ var controllers = {
       work,
       expertise,
       education,
-      rate,
-      payment,
-      photo,
-      requirementFiles: {
-        nbi: requirement_files.nbiClearance || '',
-        nbiExpirationDate: requirement_files.nbiExpirationDate || '',
-        validId1: requirement_files.validId1 || '',
-        validId2: requirement_files.validId2 || '',
-        vaccinationCard: requirement_files.vaccinationCard || '',
-        brgyClearance: requirement_files.barangayClearance || '',
-        brgyExpirationDate: requirement_files.brgyExpirationDate || '',
-        map: requirement_files.residencyMap || ''
-      },
-      selfie
+      ...(rate && {rate}),
+      ...(payment && {payment}),
+      ...(photo && {photo}),
+      ...(requirement_files && {
+        requirementFiles: {
+          nbi: requirement_files.nbiClearance,
+          nbiExpirationDate: requirement_files.nbiExpirationDate,
+          validId1: requirement_files.validId1,
+          validId2: requirement_files.validId2,
+          vaccinationCard: requirement_files.vaccinationCard,
+          brgyClearance: requirement_files.barangayClearance,
+          brgyExpirationDate: requirement_files.brgyExpirationDate,
+          map: requirement_files.residencyMap
+        }
+      }),
+      ...(selfie && {selfie})
     }
-    console.log('🚀 ~ details:', details.requirementFiles)
 
     const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})
       .lean()
@@ -206,9 +207,14 @@ var controllers = {
     try {
       result = await Freelancers.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, details)
       if (result) {
+        const oldUserData = await Users.findOne({_id: mongoose.Types.ObjectId(result.uuid)})
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(result.uuid)},
-          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
+          {
+            firstName: firstName,
+            lastName: lastName,
+            ...(oldUserData.adminStatus !== 'Verified' && {adminStatus: 'Pending'})
+          }
         )
       }
 
@@ -228,6 +234,85 @@ var controllers = {
       photo: result.photo,
       token,
       refreshToken
+    }
+
+    return res.status(200).json(result)
+  },
+
+  patch_requirements: async function (req, res) {
+    const {id} = req.params
+    let user, result
+    await getSpecificData({uuid: id}, Freelancers, 'User', id) // validate if data exists
+
+    const {requirement_files} = req.body
+
+    if (!requirement_files) {
+      return res.status(400).json({success: false, msg: 'No requirement files provided'})
+    }
+
+    const oldDetails = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    if (!oldDetails) {
+      return res.status(404).json({success: false, msg: 'Freelancer not found'})
+    }
+
+    const details = {
+      requirementFiles: {
+        nbi: requirement_files.nbiClearance || oldDetails.requirementFiles.nbi,
+        nbiExpirationDate: requirement_files.nbiExpirationDate || oldDetails.requirementFiles.nbiExpirationDate,
+        brgyClearance: requirement_files.barangayClearance || oldDetails.requirementFiles.brgyClearance,
+        brgyExpirationDate: requirement_files.brgyExpirationDate || oldDetails.requirementFiles.brgyExpirationDate,
+        // Keep other old details if new details are not provided
+        validId1: oldDetails.requirementFiles.validId1,
+        validId2: oldDetails.requirementFiles.validId2,
+        vaccinationCard: oldDetails.requirementFiles.vaccinationCard,
+        map: oldDetails.requirementFiles.map
+      }
+    }
+    // const details = {
+    //   requirementFiles: {
+    //     nbi: requirement_files.nbiClearance,
+    //     nbiExpirationDate: requirement_files.nbiExpirationDate,
+    //     validId1: requirement_files.validId1,
+    //     validId2: requirement_files.validId2,
+    //     vaccinationCard: requirement_files.vaccinationCard,
+    //     brgyClearance: requirement_files.barangayClearance,
+    //     brgyExpirationDate: requirement_files.brgyExpirationDate,
+    //     map: requirement_files.residencyMap
+    //   }
+    // }
+
+    // const oldDetails = await Freelancers.find({uuid: mongoose.Types.ObjectId(id)})
+    //   .lean()
+    //   .exec()
+
+    try {
+      result = await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, details)
+      if (result) {
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(result.uuid)}, {adminStatus: 'Pending'})
+      }
+      console.log('🚀 ~ result:', result)
+
+      user = await Users.find({_id: mongoose.Types.ObjectId(result.uuid)})
+        .lean()
+        .exec()
+
+      await logger.logAccountHistory(user[0]?.accountType, details, id, oldDetails[0])
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Freelancers.patch_requirements', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+
+    let {accessToken: token, refreshToken} = requestToken.create_token(result.uuid)
+    result = {
+      ...user[0],
+      photo: result.photo,
+      token,
+      refreshToken,
+      details
     }
 
     return res.status(200).json(result)

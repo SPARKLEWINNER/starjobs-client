@@ -217,6 +217,8 @@ var controllers = {
     let gigs, client
     if (!id || id === 'undefined') return res.status(502).json({success: false, msg: 'User id missing'})
 
+    const now = moment().toDate()
+    const fifteenDaysAgo = moment().subtract(30, 'days').toDate()
     try {
       await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
       let user = await Clients.find({uid: mongoose.Types.ObjectId(id)})
@@ -338,11 +340,96 @@ var controllers = {
         //     // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
         //   })
         //   .exec()
+
+        // gigs = await Gigs.aggregate([
+        //   {
+        //     $match: {
+        //       uid: mongoose.Types.ObjectId(id)
+        //       // status: { $in: ['Waiting', 'Applying'] }  // Uncomment if needed
+        //     }
+        //   },
+        //   {
+        //     $lookup: {
+        //       from: 'extended',
+        //       localField: '_id',
+        //       foreignField: 'gigId',
+        //       as: 'extended'
+        //     }
+        //   },
+        //   {
+        //     $unwind: {
+        //       path: '$extended',
+        //       preserveNullAndEmptyArrays: true
+        //     }
+        //   },
+        //   {
+        //     $lookup: {
+        //       from: 'gigs-histories',
+        //       localField: '_id',
+        //       foreignField: 'gid',
+        //       as: 'history'
+        //     }
+        //   },
+        //   {
+        //     $unwind: {
+        //       path: '$history',
+        //       preserveNullAndEmptyArrays: true
+        //     }
+        //   },
+        //   {
+        //     $project: {
+        //       _id: 1,
+        //       position: 1,
+        //       hours: 1,
+        //       nation: 1,
+        //       location: 1,
+        //       breakHr: 1,
+        //       from: 1,
+        //       late: 1,
+        //       time: 1,
+        //       status: 1,
+        //       shift: 1,
+        //       fee: 1,
+        //       user: 1,
+        //       uid: 1,
+        //       isExtended: 1,
+        //       isApprove: 1,
+        //       category: 1,
+        //       createdAt: 1,
+        //       date: 1,
+        //       dateCreated: 1,
+        //       auid: 1,
+        //       history: 1,
+        //       commissionRate: 1,
+        //       gigFeeType: 1,
+        //       gigOffered: 1,
+        //       applicants: 1,
+        //       fees: 1,
+        //       maximumApplicants: '$extended.maximumApplicants',
+        //       numberofApplicants: {
+        //         $cond: [
+        //           {
+        //             $and: [
+        //               {$eq: ['$extended.applicants.status', 'Applying']},
+        //               {$gt: ['$extended.applicants.auid', null]}
+        //             ]
+        //           },
+        //           1,
+        //           0
+        //         ]
+        //       }
+        //     }
+        //   }
+        // ])
+
         gigs = await Gigs.aggregate([
           {
             $match: {
-              uid: mongoose.Types.ObjectId(id)
-              // status: { $in: ['Waiting', 'Applying'] }  // Uncomment if needed
+              uid: mongoose.Types.ObjectId(id),
+              dateCreated: {
+                $gte: fifteenDaysAgo, // Greater than or equal to 15 days ago
+                $lte: now // Less than or equal to now
+              }
             }
           },
           {
@@ -354,23 +441,11 @@ var controllers = {
             }
           },
           {
-            $unwind: {
-              path: '$extended',
-              preserveNullAndEmptyArrays: true
-            }
-          },
-          {
             $lookup: {
               from: 'gigs-histories',
               localField: '_id',
               foreignField: 'gid',
               as: 'history'
-            }
-          },
-          {
-            $unwind: {
-              path: '$history',
-              preserveNullAndEmptyArrays: true
             }
           },
           {
@@ -396,19 +471,19 @@ var controllers = {
               date: 1,
               dateCreated: 1,
               auid: 1,
-              history: 1,
+              history: {$arrayElemAt: ['$history', 0]},
               commissionRate: 1,
               gigFeeType: 1,
               gigOffered: 1,
               applicants: 1,
               fees: 1,
-              maximumApplicants: '$extended.maximumApplicants',
+              maximumApplicants: {$arrayElemAt: ['$extended.maximumApplicants', 0]},
               numberofApplicants: {
                 $cond: [
                   {
                     $and: [
-                      {$eq: ['$extended.applicants.status', 'Applying']},
-                      {$gt: ['$extended.applicants.auid', null]}
+                      {$eq: [{$arrayElemAt: ['$extended.applicants.status', 0]}, 'Applying']},
+                      {$gt: [{$arrayElemAt: ['$extended.applicants.auid', 0]}, null]}
                     ]
                   },
                   1,
@@ -423,7 +498,8 @@ var controllers = {
           gigs &&
             gigs
               .filter((obj) => {
-                console.log('🚀 ~ .filter ~ obj.time:', obj.time)
+                // console.log('🚀 ~ .filter ~ obj.time: 426', obj.time)
+                // console.log('🚀 ~ .filter ~ obj.time length: 426', obj.time.length)
 
                 // Check if obj.time is a valid date format
                 const timeDate = moment(obj.time, moment.ISO_8601, true)

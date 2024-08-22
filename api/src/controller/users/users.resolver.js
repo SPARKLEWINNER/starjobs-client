@@ -72,6 +72,9 @@ module.exports = function (app) {
     .route(`${apiPath}${apiVersion}/accounts/:id`)
     .patch(jwt.require_sign_in, FreelancersController.patch_account_details)
   app
+    .route(`${apiPath}${apiVersion}/accounts/requirements/:id`)
+    .patch(jwt.require_sign_in, FreelancersController.patch_requirements)
+  app
     .route(`${apiPath}${apiVersion}/accounts/edit/:id`)
     .patch(jwt.require_sign_in, FreelancersController.patch_account_specific)
 
@@ -91,7 +94,7 @@ module.exports = function (app) {
     .get(jwt.require_sign_in, ClientsController.get_client_edit_profile)
 
   // ==== FCM controller ====
-  app.route(`${apiPath}${apiVersion}/subscriber/:id`).get(FCMController.get_token)
+  app.route(`${apiPath}${apiVersion}/subscriber/:id`).get(jwt.require_sign_in, FCMController.get_token)
   app.route(`${apiPath}${apiVersion}/subscriber/:id`).patch(jwt.require_sign_in, FCMController.patch_token)
 
   // ==== Upload controller ====
@@ -104,4 +107,13 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/onboard/client/:id`)
     .post(jwt.require_sign_in, OnboardController.update_client_profile)
+
+  // Banners
+  app
+    .route(`${apiPath}${apiVersion}/users/jobsterBanner/list/`)
+    .get(jwt.require_sign_in, UsersController.get_jobster_banners)
+
+  app
+    .route(`${apiPath}${apiVersion}/users/clientBanner/list/`)
+    .get(jwt.require_sign_in, UsersController.get_client_banners)
 }

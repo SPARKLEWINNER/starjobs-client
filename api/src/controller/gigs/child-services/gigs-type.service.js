@@ -47,7 +47,7 @@ const services = {
       return res.status(502).json({success: false, msg: 'User not found'})
     }
 
-    const client = await Clients.find({uid: mongoose.Types.ObjectId(id)})
+    const client = await Clients.findOne({uid: mongoose.Types.ObjectId(id)})
       .lean()
       .exec()
 
@@ -58,11 +58,11 @@ const services = {
     const gigData = {
       user: [
         {
-          _id: mongoose.Types.ObjectId(client[0]._id),
-          location: client[0].location,
-          companyName: client[0].companyName,
-          website: client[0].website,
-          thumbnail: BUCKET_URL + client[0].photo
+          _id: mongoose.Types.ObjectId(client._id),
+          location: client.location,
+          companyName: client.companyName,
+          website: client.website,
+          thumbnail: BUCKET_URL + client.photo
         }
       ],
       time,
@@ -102,16 +102,12 @@ const services = {
     try {
       const postedGig = await Gigs.create(gigsObj)
 
-      global.pusher.trigger('notifications', 'new_notification', postedGig)
+      // global.pusher.trigger('notifications', 'new_notification', postedGig)
 
       if (areas && areas.length > 0) {
-        if (areas.length > 1) {
-          await areas.map(async (item) => {
-            await notification.globalNotification(postedGig, item)
-          })
-        } else {
-          await notification.globalNotification(postedGig, areas[0])
-        }
+        areas.map(async (item) => {
+          notification.globalNotification(gigsObj, item)
+        })
       }
 
       if (isRepeatable) {
@@ -212,7 +208,7 @@ const services = {
     try {
       const postedGig = await Gigs.create(gigsObj)
 
-      global.pusher.trigger('notifications', 'new_notification', postedGig)
+      // global.pusher.trigger('notifications', 'new_notification', postedGig)
 
       if (areas && areas.length > 0) {
         if (areas.length > 1) {

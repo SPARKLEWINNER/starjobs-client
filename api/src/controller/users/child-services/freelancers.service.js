@@ -320,6 +320,43 @@ var controllers = {
     return res.status(200).json(result)
   },
 
+  patch_requirement_expiration: async function (req, res) {
+    const {id} = req.params
+    const {nbiExpirationDate, brgyExpirationDate} = req.body
+    let result
+
+    const oldDetails = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    if (!oldDetails) {
+      return res.status(404).json({success: false, msg: 'Freelancer not found'})
+    }
+
+    const details = {
+      requirementFiles: {
+        nbi: oldDetails.requirementFiles.nbi,
+        nbiExpirationDate: nbiExpirationDate || oldDetails.requirementFiles.nbiExpirationDate,
+        brgyClearance: oldDetails.requirementFiles.brgyClearance,
+        brgyExpirationDate: brgyExpirationDate || oldDetails.requirementFiles.brgyExpirationDate,
+        validId1: oldDetails.requirementFiles.validId1,
+        validId2: oldDetails.requirementFiles.validId2,
+        vaccinationCard: oldDetails.requirementFiles.vaccinationCard,
+        map: oldDetails.requirementFiles.map
+      }
+    }
+
+    try {
+      // Update Jobster
+      result = await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, details)
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Freelancers.patch_account_specific', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+    return res.status(200).json(result)
+  },
+
   patch_account_specific: async function (req, res) {
     const {id} = req.params
     const newCity = req.body

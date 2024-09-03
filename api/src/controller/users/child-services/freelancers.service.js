@@ -266,8 +266,12 @@ var controllers = {
         brgyClearance: requirement_files.barangayClearance || oldDetails.requirementFiles.brgyClearance,
         brgyExpirationDate: requirement_files.brgyExpirationDate || oldDetails.requirementFiles.brgyExpirationDate,
         // Keep other old details if new details are not provided
-        validId1: oldDetails.requirementFiles.validId1,
-        validId2: oldDetails.requirementFiles.validId2,
+        validId1: oldDetails.requirementFiles.validIds
+          ? oldDetails.requirementFiles.validIds
+          : oldDetails.requirementFiles.validId1,
+        validId2: oldDetails.requirementFiles.validIds
+          ? oldDetails.requirementFiles.validIds
+          : oldDetails.requirementFiles.validId2,
         vaccinationCard: oldDetails.requirementFiles.vaccinationCard,
         map: oldDetails.requirementFiles.map
       },

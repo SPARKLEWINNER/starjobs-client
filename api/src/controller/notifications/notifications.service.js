@@ -167,6 +167,11 @@ var controllers = {
   get_notifications_v2: async function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
     const {id} = jwt_decode(token)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const now = new Date();
+    const past24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
     try {
       // await Notification.find({
@@ -188,20 +193,25 @@ var controllers = {
       //     return res.status(200).json({success: true, data: finalData})
       //   })
 
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
       const skip = (page - 1) * limit;
-
       const [notifications, totalItems] = await Promise.all([
         Notification.find({
-          $or: [{targetUsers: id}, {target: 'General'}]
+          $or: [{targetUsers: id}, {target: 'General'}],
+          createdAt: {
+            $gte: past24Hours,
+            $lt: now
+          }
         })
         .sort({createdAt: -1})
         .skip(skip)
         .limit(limit)
         .exec(),
         Notification.countDocuments({
-          $or: [{targetUsers: id}, {target: 'General'}]
+          $or: [{targetUsers: id}, {target: 'General'}],
+          createdAt: {
+            $gte: past24Hours,
+            $lt: now
+          }
         })
       ]);
 
@@ -217,6 +227,7 @@ var controllers = {
       return res.status(502).json({success: false, msg: 'User not found'})
     }
   },
+
 
   get_notifications_v3: async function (req, res) {
     const token = req.headers.authorization.split(' ')[1]

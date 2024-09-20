@@ -53,7 +53,6 @@ var controllers = {
     let branches
     try {
       branches = await Branches.find({status: 'active'}).lean().exec()
-      console.log(branches, 'XXXXXXXXXXXXXXXX')
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Branches.get_branches', null, null, 'GET')

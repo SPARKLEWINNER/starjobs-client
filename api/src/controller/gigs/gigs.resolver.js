@@ -24,6 +24,8 @@ const createAccountLimiter = rateLimit({
 module.exports = function (app) {
   // ==== Gigs controller ====
   app.route(`${apiPath}${apiVersion}/gigs`).get(jwt.require_sign_in, GigsController.get_gigs)
+  app.route(`${apiPath}${apiVersion}/gigs/search`).get(jwt.require_sign_in, GigsController.get_gigs_search)
+
   app.route(`${apiPath}${apiVersion}/gigs/:id`).get(jwt.require_sign_in, GigsController.get_gig)
   app.route(`${apiPath}${apiVersion}/gigs/contract/:id`).get(jwt.require_sign_in, GigsController.get_contract)
   app.route(`${apiPath}${apiVersion}/gigs/list/:category`).get(jwt.require_sign_in, GigsController.get_gigs_categorized)

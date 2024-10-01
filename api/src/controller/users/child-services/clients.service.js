@@ -618,6 +618,7 @@ var controllers = {
   },
 
   get_client_status_gigs: async function (req, res) {
+    console.log('🚀 ~ get_client_status_gigs:')
     const {id, status} = req.params
     const {page, limit} = req.query
     const statusArray = status.split(',')
@@ -758,16 +759,15 @@ var controllers = {
                 createdAt: -1
               }
             }
-          ];
+          ]
 
           if (page && limit) {
-              const skip = (parseInt(page) - 1) * parseInt(limit);
-              aggregationPipeline.push({ $skip: skip });
-              aggregationPipeline.push({ $limit: parseInt(limit) });
+            const skip = (parseInt(page) - 1) * parseInt(limit)
+            aggregationPipeline.push({$skip: skip})
+            aggregationPipeline.push({$limit: parseInt(limit)})
           }
 
-          gigs = await Gigs.aggregate(aggregationPipeline);
-
+          gigs = await Gigs.aggregate(aggregationPipeline)
         } else {
           let aggregationPipeline = [
             {
@@ -776,34 +776,6 @@ var controllers = {
                 status: {$in: statusArray} // Uncomment if needed
               }
             },
-            // {
-            //   $lookup: {
-            //     from: 'extended',
-            //     localField: '_id',
-            //     foreignField: 'gigId',
-            //     as: 'extended'
-            //   }
-            // },
-            // {
-            //   $unwind: {
-            //     path: '$extended',
-            //     preserveNullAndEmptyArrays: true
-            //   }
-            // },
-            // {
-            //   $lookup: {
-            //     from: 'gigs-histories',
-            //     localField: '_id',
-            //     foreignField: 'gid',
-            //     as: 'history'
-            //   }
-            // },
-            // {
-            //   $unwind: {
-            //     path: '$history',
-            //     preserveNullAndEmptyArrays: true
-            //   }
-            // },
             {
               $project: {
                 _id: 1,
@@ -832,20 +804,14 @@ var controllers = {
                 gigFeeType: 1,
                 gigOffered: 1,
                 applicants: 1,
-                fees: 1
-                // maximumApplicants: '$extended.maximumApplicants',
-                // numberofApplicants: {
-                //   $cond: [
-                //     {
-                //       $and: [
-                //         {$eq: ['$extended.applicants.status', 'Applying']},
-                //         {$gt: ['$extended.applicants.auid', null]}
-                //       ]
-                //     },
-                //     1,
-                //     0
-                //   ]
-                // }
+                fees: 1,
+                pickup: 1,
+                dropOffs: 1,
+                numberOfRiders: 1,
+                ridersFee: 1,
+                riderType: 1,
+                vehicleType: 1,
+                type: 1
               }
             },
             {
@@ -853,14 +819,14 @@ var controllers = {
                 createdAt: -1
               }
             }
-          ];
+          ]
           if (page && limit) {
-              const skip = (parseInt(page) - 1) * parseInt(limit);
-              aggregationPipeline.push({ $skip: skip });
-              aggregationPipeline.push({ $limit: parseInt(limit) });
+            const skip = (parseInt(page) - 1) * parseInt(limit)
+            aggregationPipeline.push({$skip: skip})
+            aggregationPipeline.push({$limit: parseInt(limit)})
           }
-          
-          gigs = await Gigs.aggregate(aggregationPipeline);
+
+          gigs = await Gigs.aggregate(aggregationPipeline)
         }
 
         gigs = await Promise.all(

@@ -172,7 +172,24 @@ async function sendNotification(request, gigs, status) {
 
 var services = {
   default: async function (req, res) {
-    const {uid, status, actualTime, late, actualExtension, actualNightSurge, userID} = req.body
+    console.log('🚀 ~ req.body:', req.body)
+
+    const {
+      uid,
+      status,
+      actualTime,
+      late,
+      actualExtension,
+      actualNightSurge,
+      userID,
+      category,
+      addPerDrop,
+      totalKm,
+      gigRatePerKm,
+      expectedPayment,
+      allowance,
+      dropOffs
+    } = req.body
     const {id} = req.params
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
 
@@ -225,6 +242,7 @@ var services = {
           })
 
         if (status !== 'Accepted') {
+          console.log('not accepted')
           await Extends.findOneAndUpdate(
             {gigId: Types.ObjectId(gigs._id)},
             {
@@ -273,6 +291,38 @@ var services = {
                   proposedNightSurgeHr: actualNightSurge
                 }
               }
+            )
+          } else if (status === 'Applying' && category === 'parcels') {
+            // return
+            // Parcels
+            // Extract the addresses from req.body.dropOffs
+            const dropOffAddresses = dropOffs.map((dropOff) => dropOff.value)
+
+            // Update function to retain only dropOffs with matching addresses
+            await Gigs.findOneAndUpdate(
+              {_id: Types.ObjectId(id)},
+              {
+                status: status,
+                ridersFee: {
+                  addPerDrop: addPerDrop,
+                  totalKm: totalKm,
+                  gigRatePerKm: gigRatePerKm,
+                  expectedPayment: expectedPayment,
+                  allowance: allowance || 0
+                },
+                // Use $pull to remove dropOffs not in req.body.dropOffs array
+                $pull: {
+                  dropOffs: {
+                    address: {$nin: dropOffAddresses} // remove if address is not in req.body.dropOffs
+                  }
+                }
+              }
+            )
+            // Update function to update dropOffs with matching addresses
+            await Gigs.updateMany(
+              {_id: Types.ObjectId(id), 'dropOffs.address': {$in: dropOffAddresses}},
+              {$set: {'dropOffs.$[elem].status': 'Applying'}}, // Set status to 'Applying'
+              {arrayFilters: [{'elem.address': {$in: dropOffAddresses}}]}
             )
           } else if (status === 'Confirm-End-Shift') {
             let postingDays = moment(gigs.time).diff(moment(gigs.from), 'days') + 1

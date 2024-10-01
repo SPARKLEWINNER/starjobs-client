@@ -33,11 +33,22 @@ const services = {
       repeatTimes,
       repeatEvery,
       gigFeeType,
-      commissionFee
+      commissionFee,
+      riderType, // 'single' or 'multiple'
+      vehicleType, // e.g., 'bike', 'motorcycle'
+      pickup, // pickup details
+      dropoff, // array of dropoff details
+      numberOfRiders, // e.g., 1 or more for multiple riders
+      baseFare,
+      allowance,
+      rateType, // e.g., 'Per KM' or 'Per trip'
+      ratePerKm,
+      addPerDrop
     } = req.body
-    const now = new Date()
+    console.log('🚀 ~ req.body:', req.body)
 
-    let locationRate = req.body.locationRate || 'Not applicable'
+    const now = new Date()
+    const locationRate = req.body.locationRate || 'Not applicable'
 
     const isUserExists = await Users.find({_id: mongoose.Types.ObjectId(id), accountType: 1})
       .lean()
@@ -52,82 +63,141 @@ const services = {
       .exec()
 
     if (!client) {
-      return res.status(502).json({success: false, msg: 'User not found'})
+      return res.status(502).json({success: false, msg: 'Client not found'})
     }
 
-    const gigData = {
-      user: [
-        {
-          _id: mongoose.Types.ObjectId(client._id),
-          location: client.location,
-          companyName: client.companyName,
-          website: client.website,
-          thumbnail: BUCKET_URL + client.photo
-        }
-      ],
-      time,
-      from,
-      shift,
-      hours,
-      fee,
-      date,
-      category,
-      position,
-      breakHr,
-      fees: {
-        ...fees,
-        proposedWorkTime: 0,
-        proposedRate: 0
-      },
-      location,
-      contactNumber,
-      notes,
-      gigOffered: gigOffered,
-      locationRate: locationRate,
-      uid: mongoose.Types.ObjectId(id),
-      dateCreated: now.toISOString(),
-      gigFeeType: gigFeeType,
-      commissionRate: commissionFee
-    }
-
-    if (!gigFeeType || gigFeeType == 'undefined') {
-      gigData['gigFeeType'] = 'Daily'
-    }
-
-    if (gigFeeType && gigFeeType !== 'Daily') {
-      gigData['status'] = 'Contracts'
-    }
-
-    const gigsObj = new Gigs(gigData)
     try {
-      const postedGig = await Gigs.create(gigsObj)
+      if (category === 'parcels') {
+        console.log('🚀 ~ category:', category)
+        const parseRiders = parseInt(numberOfRiders)
 
-      // global.pusher.trigger('notifications', 'new_notification', postedGig)
+        // Create gigs for each rider
+        const gigPromises = []
 
-      if (areas && areas.length > 0) {
-        areas.map(async (item) => {
-          notification.globalNotification(gigsObj, item)
+        for (let riderIndex = 0; riderIndex < parseRiders; riderIndex++) {
+          const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
+          const uniquePosition = `Rider-${uniqueCode}`
+          const singleGigData = {
+            user: [
+              {
+                _id: mongoose.Types.ObjectId(client._id),
+                location: client.location,
+                companyName: client.companyName,
+                website: client.website,
+                thumbnail: BUCKET_URL + client.photo
+              }
+            ],
+            time,
+            from,
+            hours,
+            date,
+            category,
+            position: uniquePosition,
+            notes,
+            uid: mongoose.Types.ObjectId(id),
+            dateCreated: now.toISOString(),
+            type: riderType,
+            vehicleType: vehicleType,
+            pickup: {
+              address: pickup?.location,
+              lat: pickup?.lat,
+              long: pickup?.long
+            },
+            dropOffs: dropoff.map((d) => ({
+              address: d.location,
+              route: d.route,
+              lat: d.lat,
+              long: d.long,
+              status: 'Pending'
+            })),
+            numberOfRiders,
+            rateType: rateType,
+            ridersFee: {
+              baseFare,
+              gigRatePerKm: ratePerKm,
+              addPerDrop,
+              allowance
+            },
+            gigRatePerKm: ratePerKm
+          }
+          console.log('🚀 ~ singleGigData:', singleGigData)
+
+          // Add gig creation to the list of promises
+          gigPromises.push(Gigs.create(singleGigData))
+        }
+
+        const postedGigs = await Promise.all(gigPromises)
+
+        return res.status(201).json({
+          success: true,
+          message: `${postedGigs.length} gig(s) created successfully`,
+          gig: postedGigs
         })
-      }
-
-      if (isRepeatable) {
-        const jobsObj = new Jobs({
-          repeatTimes: repeatTimes,
-          repeatEvery: repeatEvery,
-          gid: mongoose.Types.ObjectId(postedGig._id),
+      } else {
+        // Handle non-parcel categories
+        const gigData = {
+          user: [
+            {
+              _id: mongoose.Types.ObjectId(client._id),
+              location: client.location,
+              companyName: client.companyName,
+              website: client.website,
+              thumbnail: BUCKET_URL + client.photo
+            }
+          ],
+          time,
+          from,
+          shift,
+          hours,
+          fee,
+          date,
+          category,
+          position,
+          breakHr,
+          fees: {
+            ...fees,
+            proposedWorkTime: 0,
+            proposedRate: 0
+          },
+          location,
+          contactNumber,
+          notes,
+          gigOffered,
+          locationRate,
           uid: mongoose.Types.ObjectId(id),
-          dateCreated: now.toISOString()
-        })
+          dateCreated: now.toISOString(),
+          gigFeeType: gigFeeType || 'Daily',
+          commissionRate: commissionFee
+        }
 
-        await Jobs.create(jobsObj)
+        const postedGig = await Gigs.create(gigData)
+
+        // Send notifications for areas
+        if (areas && areas.length > 0) {
+          areas.map(async (area) => {
+            notification.globalNotification(gigData, area)
+          })
+        }
+
+        // Handle repeatable gigs
+        if (isRepeatable) {
+          const jobsObj = new Jobs({
+            repeatTimes,
+            repeatEvery,
+            gid: mongoose.Types.ObjectId(postedGig._id),
+            uid: mongoose.Types.ObjectId(id),
+            dateCreated: now.toISOString()
+          })
+          await Jobs.create(jobsObj)
+        }
+
+        return res.status(201).json({success: true, gig: postedGig})
       }
     } catch (error) {
       console.error(error)
-      await logger.logError(error, 'Gigs.post_gig', gigsObj, client[0]._id, 'POST')
-      return res.status(502).json({success: false, msg: 'User not found'})
+      await logger.logError(error, 'Gigs.post_gig', null, id, 'POST')
+      return res.status(502).json({success: false, msg: 'An error occurred while posting the gig'})
     }
-
-    return res.status(201).json(gigsObj)
   },
   contract: async function (req, res) {
     const {id} = req.params

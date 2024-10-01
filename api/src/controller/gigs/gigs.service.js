@@ -20,59 +20,59 @@ const services = require('./child-services/gigs-type.service')
 const discord = require('../../services/discord-notif.service')
 
 var controllers = {
-
   get_gigs: async function (req, res) {
-    const { page, limit} = req.query; // Default to page 1 and limit 10
-    let filter_gig = [];
+    const {page, limit} = req.query // Default to page 1 and limit 10
+    let filter_gig = []
     try {
-        const today = moment.utc().startOf('day');
-        const filter = {
-            status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-            $or: [{ time: { $gte: today.toISOString() } }, { time: { $gte: today } }]
-        };
+      const today = moment.utc().startOf('day')
+      const filter = {
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}]
+      }
 
-        const projection = {
-            position: 1,
-            uid: 1,
-            hours: 1,
-            fee: 1,
-            user: 1,
-            from: 1,
-            time: 1,
-            fees: 1,
-            locationRate: 1,
-            category: 1,
-            createdAt: 1
-        };
+      const projection = {
+        position: 1,
+        uid: 1,
+        hours: 1,
+        fee: 1,
+        user: 1,
+        from: 1,
+        time: 1,
+        fees: 1,
+        locationRate: 1,
+        category: 1,
+        createdAt: 1,
+        pickup: 1,
+        dropOffs: 1
+      }
 
-        // Fetch the data with pagination
-        const initial_find = await Gigs.find(filter, projection)
-            .sort({ createdAt: -1 })
-            .skip((page - 1) * limit) 
-            .limit(parseInt(limit))
-            .lean()
-            .exec();
+      // Fetch the data with pagination
+      const initial_find = await Gigs.find(filter, projection)
+        .sort({createdAt: -1})
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit))
+        .lean()
+        .exec()
 
-        // Filter the gigs based on 'from' field validity
-        filter_gig = initial_find.filter((obj) => moment(obj.from, moment.ISO_8601, true).isValid());
-        console.log("Filter gig",filter_gig.length)
-        if (initial_find.length === 0) {
-            return res.status(404).json({ success: false, msg: 'No gigs found' });
-        }
+      // Filter the gigs based on 'from' field validity
+      filter_gig = initial_find.filter((obj) => moment(obj.from, moment.ISO_8601, true).isValid())
+      console.log('Filter gig', filter_gig.length)
+      if (initial_find.length === 0) {
+        return res.status(404).json({success: false, msg: 'No gigs found'})
+      }
 
-        const totalGigs = await Gigs.countDocuments(filter).exec();
-        const totalPages = Math.ceil(totalGigs / limit);
-        console.log(totalGigs)
-        console.log(totalPages)
-        return res.status(200).json({filter_gig, totalGigs, totalPages});
-        //return res.status(200).json(filter_gig, page:)
+      const totalGigs = await Gigs.countDocuments(filter).exec()
+      const totalPages = Math.ceil(totalGigs / limit)
+      console.log(totalGigs)
+      console.log(totalPages)
+      return res.status(200).json({filter_gig, totalGigs, totalPages})
+      //return res.status(200).json(filter_gig, page:)
     } catch (error) {
-        console.error(error);
-        await logger.logError(error, 'Gigs.get_gigs_categorized', filter_gig, null, 'GET');
-        return res.status(502).json({ success: false, msg: 'Failed to fetch gigs' });
+      console.error(error)
+      await logger.logError(error, 'Gigs.get_gigs_categorized', filter_gig, null, 'GET')
+      return res.status(502).json({success: false, msg: 'Failed to fetch gigs'})
     }
-},
-
+  },
 
   get_gig: async function (req, res) {
     const {id} = req.params
@@ -185,61 +185,58 @@ var controllers = {
   },
 
   get_gigs_categorized: async function (req, res) {
-    const { category } = req.params;
-    const { page, limit } = req.query;
-    const skip = (page - 1) * 10;
+    const {category} = req.params
+    const {page, limit} = req.query
+    const skip = (page - 1) * 10
 
-    let categ_gigs = [];
+    let categ_gigs = []
 
     try {
-        const today = moment.utc().startOf('day');
+      const today = moment.utc().startOf('day')
 
-        const filter = {
-            status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-            $or: [{ time: { $gte: today.toISOString() } }, { time: { $gte: today } }],
-            category: category
-        };
+      const filter = {
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}],
+        category: category
+      }
 
-        const projection = {
-            position: 1,
-            uid: 1,
-            hours: 1,
-            fee: 1,
-            user: 1,
-            from: 1,
-            time: 1,
-            locationRate: 1,
-            fees: 1,
-            category: 1
-        };
+      const projection = {
+        position: 1,
+        uid: 1,
+        hours: 1,
+        fee: 1,
+        user: 1,
+        from: 1,
+        time: 1,
+        locationRate: 1,
+        fees: 1,
+        category: 1,
+        pickup: 1,
+        dropOffs: 1
+      }
 
-        const initial_find = await Gigs.find(filter, projection)
-            .skip(skip)
-            .limit(Number(limit))
-            .lean()
-            .exec();
+      const initial_find = await Gigs.find(filter, projection).skip(skip).limit(Number(limit)).lean().exec()
 
-        categ_gigs = initial_find.filter((obj) => {
-            return moment(obj.from, moment.ISO_8601, true).isValid();
-        });
+      categ_gigs = initial_find.filter((obj) => {
+        return moment(obj.from, moment.ISO_8601, true).isValid()
+      })
 
-        const totalGigs = await Gigs.countDocuments(filter).exec();
-        const totalPages = Math.ceil(totalGigs / limit);
+      const totalGigs = await Gigs.countDocuments(filter).exec()
+      const totalPages = Math.ceil(totalGigs / limit)
 
-        return res.status(200).json({
-            categ_gigs,
-            page: Number(page),
-            totalPages,
-            totalGigs
-        });
+      return res.status(200).json({
+        categ_gigs,
+        page: Number(page),
+        totalPages,
+        totalGigs
+      })
     } catch (error) {
-        console.error(error);
+      console.error(error)
 
-        await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET');
-        return res.status(502).json({ success: false, msg: 'Error fetching gigs' });
+      await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET')
+      return res.status(502).json({success: false, msg: 'Error fetching gigs'})
     }
-},
-
+  },
 
   get_gigs_history: async function (req, res) {
     const token = req.headers.authorization.split(' ')[1]

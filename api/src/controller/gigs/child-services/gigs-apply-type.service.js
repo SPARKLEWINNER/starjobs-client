@@ -8,6 +8,7 @@ const Extends = require('../../gigs/models/gigs-extends.model')
 const Freelancers = require('../../users/models/freelancers.model')
 const FeeHistory = require('../../gigs/models/gigs-fee-history.model')
 const Gigs = require('../../gigs/models/gigs.model')
+const DropOffs = require('../../gigs/models/gig-dropoffs.model')
 const History = require('../../gigs/models/gig-histories.model')
 const Users = require('../../users/models/users.model')
 const FcmTokens = require('../../users/models/fcm-tokens')
@@ -270,11 +271,45 @@ var services = {
       } else {
         // gig individual acceptance
         if (status === 'Accepted') {
+          console.log('----> Accepted Status: ' + status)
+
+          // Step 1: Retrieve the current gig and get the associated dropOff IDs
+          const gig = await Gigs.findById(id).select('dropOffs')
+
+          if (!gig || !gig.dropOffs || gig.dropOffs.length === 0) {
+            return res.status(404).json({
+              success: false,
+              message: 'No drop-offs found for this gig.'
+            })
+          }
+
+          // Step 2: Retrieve the drop-offs that were applied for by the rider and are being accepted
+          const acceptedDropOffs = await DropOffs.find({
+            _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
+            status: 'Applying' // Find the drop-offs in 'Applying' status
+          }).select('_id')
+          console.log('🚀 ~ acceptedDropOffs:', acceptedDropOffs)
+
+          const acceptedDropOffIds = acceptedDropOffs.map((d) => d._id)
+          console.log('🚀 ~ acceptedDropOffIds:', acceptedDropOffIds)
+
+          // Step 3: Update the drop-offs to Accepted status in the DropOffs collection
+          await DropOffs.updateMany(
+            {
+              _id: {$in: acceptedDropOffIds} // Only update the accepted drop-offs
+            },
+            {$set: {status: 'Confirm-Arrived', gig: gig._id}} // Update the status to 'Accepted'
+          )
+
+          // Step 4: Update the gig's dropOffs array to retain only the accepted drop-offs
           await Gigs.findOneAndUpdate(
             {_id: Types.ObjectId(id)},
             {
-              auid: Types.ObjectId(uid),
-              status: status
+              $set: {
+                dropOffs: acceptedDropOffIds, // Retain only the accepted drop-off IDs
+                status: status, // Update the status of the gig to 'Accepted'
+                auid: Types.ObjectId(uid) // Store the rider's ID as the accepted rider
+              }
             }
           )
         } else {
@@ -293,36 +328,62 @@ var services = {
               }
             )
           } else if (status === 'Applying' && category === 'parcels') {
-            // return
-            // Parcels
-            // Extract the addresses from req.body.dropOffs
             const dropOffAddresses = dropOffs.map((dropOff) => dropOff.value)
+            console.log('🚀 ~ dropOffAddresses:', dropOffAddresses)
 
-            // Update function to retain only dropOffs with matching addresses
+            // Step 1: Retrieve the current gig and get the associated dropOff IDs
+            const gig = await Gigs.findById(id).select('dropOffs')
+
+            if (!gig || !gig.dropOffs || gig.dropOffs.length === 0) {
+              return res.status(404).json({
+                success: false,
+                message: 'No drop-offs found for this gig.'
+              })
+            }
+
+            // Step 2: Check if the drop-offs for this gig are already taken in the DropOffs collection
+            const takenDropOffs = await DropOffs.find({
+              _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
+              address: {$in: dropOffAddresses},
+              status: {$eq: 'Applying'}
+            }).select('_id address')
+            console.log('🚀 ~ takenDropOffs:', takenDropOffs)
+
+            const takenAddresses = takenDropOffs.map((d) => d.address)
+
+            // Step 3: Filter out the taken drop-offs from the current selection
+            const availableDropOffs = dropOffAddresses.filter((address) => !takenAddresses.includes(address))
+
+            if (availableDropOffs.length !== dropOffAddresses.length) {
+              return res.status(400).json({
+                success: false,
+                message: 'Some drop-offs are already taken by other riders',
+                taken: takenAddresses
+              })
+            }
+
+            // Step 4: Update the status of the available drop-offs to "Applying"
+            await DropOffs.updateMany(
+              {
+                _id: {$in: gig.dropOffs}, // Ensure we are updating drop-offs related to this gig
+                address: {$in: availableDropOffs}
+              },
+              {$set: {status: 'Applying', rider: userID}}
+            )
+
+            // Step 5: Update the gig document to retain existing drop-off IDs and add new taken drop-offs
             await Gigs.findOneAndUpdate(
               {_id: Types.ObjectId(id)},
               {
-                status: status,
-                ridersFee: {
-                  addPerDrop: addPerDrop,
-                  totalKm: totalKm,
-                  gigRatePerKm: gigRatePerKm,
-                  expectedPayment: expectedPayment,
-                  allowance: allowance || 0
-                },
-                // Use $pull to remove dropOffs not in req.body.dropOffs array
-                $pull: {
-                  dropOffs: {
-                    address: {$nin: dropOffAddresses} // remove if address is not in req.body.dropOffs
-                  }
+                $set: {
+                  status: status,
+                  'ridersFee.addPerDrop': addPerDrop, // Update specific properties within ridersFee
+                  'ridersFee.totalKm': totalKm,
+                  'ridersFee.perKmFee': gigRatePerKm,
+                  'ridersFee.expectedPayment': expectedPayment,
+                  'ridersFee.allowance': allowance || 0
                 }
               }
-            )
-            // Update function to update dropOffs with matching addresses
-            await Gigs.updateMany(
-              {_id: Types.ObjectId(id), 'dropOffs.address': {$in: dropOffAddresses}},
-              {$set: {'dropOffs.$[elem].status': 'Applying'}}, // Set status to 'Applying'
-              {arrayFilters: [{'elem.address': {$in: dropOffAddresses}}]}
             )
           } else if (status === 'Confirm-End-Shift') {
             let postingDays = moment(gigs.time).diff(moment(gigs.from), 'days') + 1

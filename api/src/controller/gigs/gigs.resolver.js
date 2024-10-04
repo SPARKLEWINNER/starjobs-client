@@ -86,4 +86,6 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/gigs/admin/search`)
     .get(jwt.require_admin_access, AdminGigsController.get_admin_search_users)
+
+  app.route(`${apiPath}${apiVersion}/gigs/dropoffs/:id`).get(jwt.require_sign_in, GigsController.get_gig_dropoffs)
 }

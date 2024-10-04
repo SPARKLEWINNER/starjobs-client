@@ -120,20 +120,7 @@ const gigsData = {
     waitingTime: {type: Number}
   },
   dropOffs: [
-    {
-      name: {type: String},
-      phone: {type: String},
-      address: {type: String, required: true},
-      lat: {type: String},
-      long: {type: String},
-      timeArrived: {type: Date},
-      timeDeparture: {type: Date},
-      waitingTime: {type: Number},
-      route: {type: String},
-      status: {
-        type: String
-      }
-    }
+    {type: mongoose.Schema.Types.ObjectId, ref: 'DropOffs'} // Reference to DropOffs collection
   ],
   numberOfRiders: {
     type: Number,
@@ -155,6 +142,7 @@ const gigsData = {
     baseFare: String,
     gigRatePerKm: String,
     totalKm: String,
+    perKmFee: String,
     addPerDrop: String,
     allowance: String,
     expectedPayment: String,

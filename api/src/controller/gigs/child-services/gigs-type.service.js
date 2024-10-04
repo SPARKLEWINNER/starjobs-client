@@ -6,6 +6,7 @@ const Users = require('../../users/models/users.model')
 const Clients = require('../../users/models/clients.model')
 const Jobs = require('../models/gig-queue-jobs.model')
 const Gigs = require('../models/gigs.model')
+const DropOffs = require('../models/gig-dropoffs.model')
 
 const logger = require('../../../common/loggers')
 const notification = require('../../../common/notifications')
@@ -73,7 +74,15 @@ const services = {
 
         // Create gigs for each rider
         const gigPromises = []
+        const dropOffData = dropoff.map((d) => ({
+          address: d.location,
+          route: d.route,
+          lat: d.lat,
+          long: d.long,
+          status: 'Pending' // Initial status
+        }))
 
+        const createdDropOffs = await DropOffs.insertMany(dropOffData)
         for (let riderIndex = 0; riderIndex < parseRiders; riderIndex++) {
           const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
           const uniquePosition = `Rider-${uniqueCode}`
@@ -103,13 +112,7 @@ const services = {
               lat: pickup?.lat,
               long: pickup?.long
             },
-            dropOffs: dropoff.map((d) => ({
-              address: d.location,
-              route: d.route,
-              lat: d.lat,
-              long: d.long,
-              status: 'Pending'
-            })),
+            dropOffs: createdDropOffs.map((dropOff) => dropOff._id), // Link drop-offs by their IDs
             numberOfRiders,
             rateType: rateType,
             ridersFee: {

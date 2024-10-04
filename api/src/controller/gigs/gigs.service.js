@@ -716,6 +716,39 @@ var controllers = {
       console.error('Error fetching gig status:', error)
       res.status(500).json({error: 'Internal server error'})
     }
+  },
+  get_gig_dropoffs: async function (req, res) {
+    console.log('-----Get Gig Dropoffs------')
+    const {id} = req.params // Extract the gig ID from the request parameters
+    try {
+      // Fetch the drop-offs for the gig using the gig ID and filter by status
+      const gig = await Gigs.findById(id).select('dropOffs')
+
+      // Check if the gig exists
+      if (!gig) {
+        return res.status(404).json({error: 'Gig not found'})
+      }
+
+      // Extract the drop-off addresses for pending drop-offs
+      const dropOffAddresses = gig.dropOffs
+        .filter((dropOff) => dropOff.status === 'Pending')
+        .map((dropOff) => dropOff.address)
+
+      // Find all drop-offs with a "Pending" status across multiple gigs
+      const availableDropOffs = await DropOffs.find({
+        address: {$in: dropOffAddresses},
+        status: 'Pending' // Ensure status is 'Pending'
+      }).select('address status')
+
+      console.log('🚀 ~ availableDropOffs:', availableDropOffs)
+
+      // Return the available drop-offs
+      res.status(200).json({success: true, dropOffs: availableDropOffs})
+    } catch (error) {
+      // Handle any errors that occur
+      console.error('Error fetching gig drop-offs:', error)
+      res.status(500).json({error: 'Internal server error'})
+    }
   }
 }
 

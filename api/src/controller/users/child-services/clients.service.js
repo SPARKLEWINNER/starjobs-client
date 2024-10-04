@@ -777,6 +777,14 @@ var controllers = {
               }
             },
             {
+              $lookup: {
+                from: 'gigs-dropoffs', // The name of the DropOffs collection
+                localField: 'dropOffs', // The field in the Gigs collection referencing dropOffs
+                foreignField: '_id', // The field in the DropOffs collection to join on
+                as: 'dropOffDetails' // The name for the joined data in the result
+              }
+            },
+            {
               $project: {
                 _id: 1,
                 position: 1,
@@ -806,7 +814,8 @@ var controllers = {
                 applicants: 1,
                 fees: 1,
                 pickup: 1,
-                dropOffs: 1,
+                dropOffs: 1, // Original dropOffs reference
+                dropOffDetails: 1, // Include detailed dropOffs data
                 numberOfRiders: 1,
                 ridersFee: 1,
                 riderType: 1,

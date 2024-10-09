@@ -307,7 +307,8 @@ var services = {
             {
               $set: {
                 dropOffs: acceptedDropOffIds, // Retain only the accepted drop-off IDs
-                status: status, // Update the status of the gig to 'Accepted'
+                status: 'Confirm-Arrived',
+                // status: status, // Update the status of the gig to 'Accepted'
                 auid: Types.ObjectId(uid) // Store the rider's ID as the accepted rider
               }
             }

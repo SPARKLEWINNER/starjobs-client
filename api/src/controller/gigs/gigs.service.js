@@ -20,59 +20,59 @@ const services = require('./child-services/gigs-type.service')
 const discord = require('../../services/discord-notif.service')
 
 var controllers = {
-
   get_gigs: async function (req, res) {
-    const { page, limit} = req.query; // Default to page 1 and limit 10
-    let filter_gig = [];
+    const {page, limit} = req.query // Default to page 1 and limit 10
+    let filter_gig = []
     try {
-        const today = moment.utc().startOf('day');
-        const filter = {
-            status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-            $or: [{ time: { $gte: today.toISOString() } }, { time: { $gte: today } }]
-        };
+      const today = moment.utc().startOf('day')
+      const filter = {
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}]
+      }
 
-        const projection = {
-            position: 1,
-            uid: 1,
-            hours: 1,
-            fee: 1,
-            user: 1,
-            from: 1,
-            time: 1,
-            fees: 1,
-            locationRate: 1,
-            category: 1,
-            createdAt: 1
-        };
+      const projection = {
+        position: 1,
+        uid: 1,
+        hours: 1,
+        fee: 1,
+        user: 1,
+        from: 1,
+        time: 1,
+        fees: 1,
+        locationRate: 1,
+        category: 1,
+        createdAt: 1,
+        pickup: 1,
+        dropOffs: 1
+      }
 
-        // Fetch the data with pagination
-        const initial_find = await Gigs.find(filter, projection)
-            .sort({ createdAt: -1 })
-            .skip((page - 1) * limit) 
-            .limit(parseInt(limit))
-            .lean()
-            .exec();
+      // Fetch the data with pagination
+      const initial_find = await Gigs.find(filter, projection)
+        .sort({createdAt: -1})
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit))
+        .lean()
+        .exec()
 
-        // Filter the gigs based on 'from' field validity
-        filter_gig = initial_find.filter((obj) => moment(obj.from, moment.ISO_8601, true).isValid());
-        console.log("Filter gig",filter_gig.length)
-        if (initial_find.length === 0) {
-            return res.status(404).json({ success: false, msg: 'No gigs found' });
-        }
+      // Filter the gigs based on 'from' field validity
+      filter_gig = initial_find.filter((obj) => moment(obj.from, moment.ISO_8601, true).isValid())
+      console.log('Filter gig', filter_gig.length)
+      if (initial_find.length === 0) {
+        return res.status(404).json({success: false, msg: 'No gigs found'})
+      }
 
-        const totalGigs = await Gigs.countDocuments(filter).exec();
-        const totalPages = Math.ceil(totalGigs / limit);
-        console.log(totalGigs)
-        console.log(totalPages)
-        return res.status(200).json({filter_gig, totalGigs, totalPages});
-        //return res.status(200).json(filter_gig, page:)
+      const totalGigs = await Gigs.countDocuments(filter).exec()
+      const totalPages = Math.ceil(totalGigs / limit)
+      console.log(totalGigs)
+      console.log(totalPages)
+      return res.status(200).json({filter_gig, totalGigs, totalPages})
+      //return res.status(200).json(filter_gig, page:)
     } catch (error) {
-        console.error(error);
-        await logger.logError(error, 'Gigs.get_gigs_categorized', filter_gig, null, 'GET');
-        return res.status(502).json({ success: false, msg: 'Failed to fetch gigs' });
+      console.error(error)
+      await logger.logError(error, 'Gigs.get_gigs_categorized', filter_gig, null, 'GET')
+      return res.status(502).json({success: false, msg: 'Failed to fetch gigs'})
     }
-},
-
+  },
 
   get_gig: async function (req, res) {
     const {id} = req.params
@@ -185,61 +185,58 @@ var controllers = {
   },
 
   get_gigs_categorized: async function (req, res) {
-    const { category } = req.params;
-    const { page, limit } = req.query;
-    const skip = (page - 1) * 10;
+    const {category} = req.params
+    const {page, limit} = req.query
+    const skip = (page - 1) * 10
 
-    let categ_gigs = [];
+    let categ_gigs = []
 
     try {
-        const today = moment.utc().startOf('day');
+      const today = moment.utc().startOf('day')
 
-        const filter = {
-            status: { $in: ['Waiting', 'Applying', 'Contracts'] },
-            $or: [{ time: { $gte: today.toISOString() } }, { time: { $gte: today } }],
-            category: category
-        };
+      const filter = {
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}],
+        category: category
+      }
 
-        const projection = {
-            position: 1,
-            uid: 1,
-            hours: 1,
-            fee: 1,
-            user: 1,
-            from: 1,
-            time: 1,
-            locationRate: 1,
-            fees: 1,
-            category: 1
-        };
+      const projection = {
+        position: 1,
+        uid: 1,
+        hours: 1,
+        fee: 1,
+        user: 1,
+        from: 1,
+        time: 1,
+        locationRate: 1,
+        fees: 1,
+        category: 1,
+        pickup: 1,
+        dropOffs: 1
+      }
 
-        const initial_find = await Gigs.find(filter, projection)
-            .skip(skip)
-            .limit(Number(limit))
-            .lean()
-            .exec();
+      const initial_find = await Gigs.find(filter, projection).skip(skip).limit(Number(limit)).lean().exec()
 
-        categ_gigs = initial_find.filter((obj) => {
-            return moment(obj.from, moment.ISO_8601, true).isValid();
-        });
+      categ_gigs = initial_find.filter((obj) => {
+        return moment(obj.from, moment.ISO_8601, true).isValid()
+      })
 
-        const totalGigs = await Gigs.countDocuments(filter).exec();
-        const totalPages = Math.ceil(totalGigs / limit);
+      const totalGigs = await Gigs.countDocuments(filter).exec()
+      const totalPages = Math.ceil(totalGigs / limit)
 
-        return res.status(200).json({
-            categ_gigs,
-            page: Number(page),
-            totalPages,
-            totalGigs
-        });
+      return res.status(200).json({
+        categ_gigs,
+        page: Number(page),
+        totalPages,
+        totalGigs
+      })
     } catch (error) {
-        console.error(error);
+      console.error(error)
 
-        await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET');
-        return res.status(502).json({ success: false, msg: 'Error fetching gigs' });
+      await logger.logError(error, 'Gigs.get_gigs_categorized', category, null, 'GET')
+      return res.status(502).json({success: false, msg: 'Error fetching gigs'})
     }
-},
-
+  },
 
   get_gigs_history: async function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
@@ -717,6 +714,39 @@ var controllers = {
     } catch (error) {
       // Handle any errors that occur
       console.error('Error fetching gig status:', error)
+      res.status(500).json({error: 'Internal server error'})
+    }
+  },
+  get_gig_dropoffs: async function (req, res) {
+    console.log('-----Get Gig Dropoffs------')
+    const {id} = req.params // Extract the gig ID from the request parameters
+    try {
+      // Fetch the drop-offs for the gig using the gig ID and filter by status
+      const gig = await Gigs.findById(id).select('dropOffs')
+
+      // Check if the gig exists
+      if (!gig) {
+        return res.status(404).json({error: 'Gig not found'})
+      }
+
+      // Extract the drop-off addresses for pending drop-offs
+      const dropOffAddresses = gig.dropOffs
+        .filter((dropOff) => dropOff.status === 'Pending')
+        .map((dropOff) => dropOff.address)
+
+      // Find all drop-offs with a "Pending" status across multiple gigs
+      const availableDropOffs = await DropOffs.find({
+        address: {$in: dropOffAddresses},
+        status: 'Pending' // Ensure status is 'Pending'
+      }).select('address status')
+
+      console.log('🚀 ~ availableDropOffs:', availableDropOffs)
+
+      // Return the available drop-offs
+      res.status(200).json({success: true, dropOffs: availableDropOffs})
+    } catch (error) {
+      // Handle any errors that occur
+      console.error('Error fetching gig drop-offs:', error)
       res.status(500).json({error: 'Internal server error'})
     }
   }

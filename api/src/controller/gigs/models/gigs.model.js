@@ -119,9 +119,10 @@ const gigsData = {
     timeDeparture: {type: Date},
     waitingTime: {type: Number}
   },
-  dropOffs: [
-    {type: mongoose.Schema.Types.ObjectId, ref: 'DropOffs'} // Reference to DropOffs collection
-  ],
+  dropOffs: {
+    type: Array,
+    default: []
+  },
   numberOfRiders: {
     type: Number,
     default: 1

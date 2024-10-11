@@ -287,11 +287,15 @@ var services = {
           const acceptedDropOffs = await DropOffs.find({
             _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
             status: 'Applying' // Find the drop-offs in 'Applying' status
-          }).select('_id')
+          }).select('_id address')
           console.log('🚀 ~ acceptedDropOffs:', acceptedDropOffs)
 
           const acceptedDropOffIds = acceptedDropOffs.map((d) => d._id)
-          console.log('🚀 ~ acceptedDropOffIds:', acceptedDropOffIds)
+          const combinedDropOffs = acceptedDropOffs.map((d) => ({
+            _id: d._id,
+            address: d.address
+          }))
+          console.log('🚀 ~ combinedDropOffs:', combinedDropOffs)
 
           // Step 3: Update the drop-offs to Accepted status in the DropOffs collection
           await DropOffs.updateMany(
@@ -306,7 +310,7 @@ var services = {
             {_id: Types.ObjectId(id)},
             {
               $set: {
-                dropOffs: acceptedDropOffIds, // Retain only the accepted drop-off IDs
+                dropOffs: combinedDropOffs, // Retain only the accepted drop-off IDs
                 status: 'Confirm-Arrived',
                 // status: status, // Update the status of the gig to 'Accepted'
                 auid: Types.ObjectId(uid) // Store the rider's ID as the accepted rider

@@ -99,8 +99,8 @@ var controllers = {
           position: {$regex: query, $options: 'i'} // Search by position
         })
           .sort({createdAt: -1})
-          .skip((page - 1) * limit)
-          .limit(parseInt(limit))
+          // .skip((page - 1) * limit)
+          // .limit(parseInt(limit))
           .lean()
           .exec()
 
@@ -110,8 +110,8 @@ var controllers = {
           location: {$regex: query, $options: 'i'} // Search by user location
         })
           .sort({createdAt: -1})
-          .skip((page - 1) * limit)
-          .limit(parseInt(limit))
+          // .skip((page - 1) * limit)
+          // .limit(parseInt(limit))
           .lean()
           .exec()
       }

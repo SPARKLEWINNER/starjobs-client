@@ -328,13 +328,25 @@ var controllers = {
               foreignField: 'gid',
               as: 'history'
             }
+          },
+          {
+            $lookup: {
+              from: 'gigs-dropoffs', // Name of the DropOffs collection
+              localField: '_id',
+              foreignField: 'gig', // Reference field in DropOffs
+              as: 'dropoffList' // Output field
+            }
+          },
+          {
+            $match: {
+              'records.auid': mongoose.Types.ObjectId(id)
+            }
+          },
+          {
+            $sort: {createdAt: 1}
           }
-        ])
-          .match({
-            'records.auid': mongoose.Types.ObjectId(id)
-          })
-          .sort({createdAt: 1})
-          .exec()
+        ]).exec()
+        console.log('🚀 ~ reports:', reports)
 
         let gigsData = reports.filter((obj) => {
           // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
@@ -497,14 +509,25 @@ var controllers = {
                 foreignField: 'gid',
                 as: 'history'
               }
+            },
+            {
+              $lookup: {
+                from: 'gigs-dropoffs', // Name of the DropOffs collection
+                localField: '_id',
+                foreignField: 'gig', // Field in DropOffs referencing Gigs
+                as: 'dropoffList' // Output field
+              }
+            },
+            {
+              $match: {
+                'records.auid': mongoose.Types.ObjectId(id),
+                status: {$in: statusArray}
+              }
+            },
+            {
+              $sort: {createdAt: 1}
             }
-          ])
-            .match({
-              'records.auid': mongoose.Types.ObjectId(id),
-              status: {$in: statusArray}
-            })
-            .sort({createdAt: 1})
-            .exec()
+          ]).exec()
         }
 
         let gigsData = reports.filter((obj) => {

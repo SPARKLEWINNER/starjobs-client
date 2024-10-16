@@ -115,9 +115,9 @@ const gigsData = {
     lat: {type: String},
     long: {type: String},
     address: {type: String, required: true},
-    timeArrived: {type: Date},
-    timeDeparture: {type: Date},
-    waitingTime: {type: Number},
+    timeArrived: {type: String},
+    timeDeparture: {type: String},
+    waitingTime: {type: String},
     proof: {type: String}
   },
   deliveryProof: {

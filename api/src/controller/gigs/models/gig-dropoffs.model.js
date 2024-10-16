@@ -32,9 +32,9 @@ const DropOffSchema = new Schema({
   proof: {
     type: String
   },
-  timeArrived: {type: Date},
-  timeDeparture: {type: Date},
-  waitingTime: {type: Number},
+  timeArrived: {type: String},
+  timeDeparture: {type: String},
+  waitingTime: {type: String},
   createdAt: {
     type: Date,
     default: Date.now

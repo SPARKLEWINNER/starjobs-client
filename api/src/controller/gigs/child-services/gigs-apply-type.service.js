@@ -189,7 +189,11 @@ var services = {
       gigRatePerKm,
       expectedPayment,
       allowance,
-      dropOffs
+      dropOffs,
+      dropoffDetails,
+      pickupDetails,
+      updatedRidersFee,
+      uploadedFiles
     } = req.body
     const {id} = req.params
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
@@ -319,19 +323,66 @@ var services = {
           )
         } else {
           if (status === 'End-Shift') {
-            await Gigs.findOneAndUpdate(
-              {_id: Types.ObjectId(id)},
-              {
-                status: status,
+            if (category === 'parcels') {
+              // Process new or existing drop-offs
+              const dropOffUpdates = dropoffDetails.map((detail, index) => ({
+                address: detail.address.value || detail.address.label,
+                route: detail.address.route || '',
+                lat: detail.address.lat,
+                long: detail.address.long,
+                status: 'End-Shift',
+                proof: uploadedFiles[`dropoff_${index}_timeStamp`] || '',
+                timeArrived: detail.timeArrived,
+                timeDeparture: detail.timeFinnished,
+                waitingTime: detail.totalTime,
+                gig: Types.ObjectId(id) // Reference to the gig
+              }))
+
+              // Bulk update or create drop-offs and collect their ObjectIDs
+              const dropOffObjectIds = await Promise.all(
+                dropOffUpdates.map(async (drop) => {
+                  const updatedDropOff = await DropOffs.findOneAndUpdate(
+                    {address: drop.address, gig: drop.gig},
+                    {$set: drop},
+                    {upsert: true, new: true}
+                  )
+                  return updatedDropOff._id // Collect ObjectIDs
+                })
+              )
+
+              // Update the gig's status and other fields, including drop-offs and riders fee
+              const gigUpdate = {
+                status,
                 fees: {
-                  ...gigs.fees,
                   proposedWorkTime: actualTime,
                   proposedLateMin: late,
                   proposedExtensionHr: actualExtension,
                   proposedNightSurgeHr: actualNightSurge
-                }
+                },
+                ridersFee: {
+                  ...updatedRidersFee
+                },
+                dropOffs: dropOffObjectIds, // Store the references to drop-offs
+                deliveryProof: uploadedFiles.deliveryProof_0 || ''
               }
-            )
+
+              await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {$set: gigUpdate}, {new: true})
+              // res.status(200).json({message: 'End-Shift and drop-offs updated successfully.'})
+            } else {
+              await Gigs.findOneAndUpdate(
+                {_id: Types.ObjectId(id)},
+                {
+                  status: status,
+                  fees: {
+                    ...gigs.fees,
+                    proposedWorkTime: actualTime,
+                    proposedLateMin: late,
+                    proposedExtensionHr: actualExtension,
+                    proposedNightSurgeHr: actualNightSurge
+                  }
+                }
+              )
+            }
           } else if (status === 'Applying' && category === 'parcels') {
             const dropOffAddresses = dropOffs.map((dropOff) => dropOff.value)
             console.log('🚀 ~ dropOffAddresses:', dropOffAddresses)

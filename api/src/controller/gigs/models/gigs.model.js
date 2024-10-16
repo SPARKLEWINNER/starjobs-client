@@ -117,12 +117,13 @@ const gigsData = {
     address: {type: String, required: true},
     timeArrived: {type: Date},
     timeDeparture: {type: Date},
-    waitingTime: {type: Number}
+    waitingTime: {type: Number},
+    proof: {type: String}
   },
-  dropOffs: {
-    type: Array,
-    default: []
+  deliveryProof: {
+    type: String
   },
+  dropOffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'DropOffs'}],
   numberOfRiders: {
     type: Number,
     default: 1

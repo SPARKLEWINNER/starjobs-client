@@ -24,14 +24,17 @@ const DropOffSchema = new Schema({
     ], // Add other statuses as needed
     default: 'Pending'
   },
-  gig: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Gigs' // Reference the gig where this drop-off belongs (optional)
-  },
+  gig: {type: mongoose.Schema.Types.ObjectId, ref: 'Gigs'},
   rider: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User' // Reference the rider who took the drop-off
   },
+  proof: {
+    type: String
+  },
+  timeArrived: {type: Date},
+  timeDeparture: {type: Date},
+  waitingTime: {type: Number},
   createdAt: {
     type: Date,
     default: Date.now

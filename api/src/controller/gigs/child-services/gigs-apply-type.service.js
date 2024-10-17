@@ -324,7 +324,6 @@ var services = {
         } else {
           if (status === 'End-Shift') {
             if (category === 'parcels') {
-              console.log('------Parcels End Shift')
               // Process new or existing drop-offs
               const dropOffUpdates = dropoffDetails.map((detail, index) => ({
                 address: detail.address.value || detail.address.label,

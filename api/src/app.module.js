@@ -7,7 +7,6 @@ const morgan = require('morgan')
 const Pusher = require('pusher')
 const routes = require('./app.routes')
 const crypto = require('crypto')
-require('dotenv').config()
 
 const port = process.env.PORT || 3001
 const app = express()

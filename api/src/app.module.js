@@ -16,6 +16,7 @@ require('./controller/notifications/firebase/changeStream')
 
 const MONGO_DATABASE_URL = process.env.MONGODB_URI
 
+// Database connection
 mongoose
   .connect(MONGO_DATABASE_URL, {
     useUnifiedTopology: true,
@@ -28,30 +29,32 @@ mongoose
 
 app.enable('trust proxy')
 
-// Helmet middleware with CSP & Frameguard for clickjacking prevention
+// Helmet middleware with improved CSP, anti-clickjacking, and other security headers
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", 'https://example.com'],
+        scriptSrc: ["'self'", "'unsafe-inline'", 'https://trusted-scripts.com'],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        imgSrc: ["'self'", 'data:', 'https://example.com'],
-        connectSrc: ["'self'", 'https://api.example.com', process.env.PUSHER_APP_CLUSTER],
+        imgSrc: ["'self'", 'data:', 'https://trusted-images.com'],
+        connectSrc: ["'self'", 'https://api.example.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        frameSrc: ["'self'"], // Prevents embedding by other domains
-        objectSrc: ["'none'"] // Disallow embedding of object tags
+        frameSrc: ["'none'"], // Prevents iframe embedding
+        objectSrc: ["'none'"] // Blocks plugins (e.g., Flash)
       }
     },
-    crossOriginEmbedderPolicy: true,
-    frameguard: {action: 'deny'} // Prevents embedding in iframes (anti-clickjacking)
+    frameguard: {action: 'deny'}, // Anti-clickjacking header (X-Frame-Options)
+    referrerPolicy: {policy: 'no-referrer-when-downgrade'} // Adds Referrer-Policy header
   })
 )
 
+// JSON parsing, logging, and cookies
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
 
+// Define allowed origins for CORS
 const allowedOrigins = [
   'http://localhost:7003',
   'http://localhost:8000',
@@ -60,39 +63,35 @@ const allowedOrigins = [
   'https://staging-starjobs.onrender.com/api/internal/v1'
 ]
 
+// CORS configuration
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true)
+        callback(null, true) // Allow if origin is in the list
       } else {
         callback(new Error('Not allowed by CORS'))
       }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Limit allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Control allowed headers
-    exposedHeaders: ['X-Total-Count'], // Allow only specific headers to be exposed
-    credentials: true
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['X-Total-Count'], // Exposes custom headers
+    credentials: true // Allow cookies
   })
 )
 
-app.use(function (req, res, next) {
-  // res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  res.header('Access-Control-Expose-Headers', 'X-Total-Count')
-  res.header('Referrer-Policy', 'no-referrer-when-downgrade')
-  res.header('X-Frame-Options', 'DENY') // Additional anti-clickjacking header
-  next()
-})
-
+// User-agent parser middleware
 app.use(useragent.express())
 
+// Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({status: 'ok', timestamp: new Date()})
 })
 
+// Initialize routes
 routes(app)
 
+// Pusher configuration
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID,
   key: process.env.PUSHER_APP_KEY,
@@ -103,6 +102,7 @@ const pusher = new Pusher({
 
 global.pusher = pusher
 
+// Start the server
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)
 })

@@ -1,4 +1,4 @@
-const helmet = require('helmet')
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
@@ -25,55 +25,14 @@ mongoose
   .catch((err) => console.log(err))
 
 app.enable('trust proxy')
-
-// Helmet middleware with CSP & Frameguard for clickjacking prevention
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", 'https://example.com'],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        imgSrc: ["'self'", 'data:', 'https://example.com'],
-        connectSrc: ["'self'", 'https://api.example.com', process.env.PUSHER_APP_CLUSTER],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        frameSrc: ["'self'"], // Prevents embedding by other domains
-        objectSrc: ["'none'"] // Disallow embedding of object tags
-      }
-    },
-    crossOriginEmbedderPolicy: true,
-    frameguard: {action: 'deny'} // Prevents embedding in iframes (anti-clickjacking)
-  })
-)
-
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
-
-const allowedOrigins = ['http://localhost:7003', 'http://localhost:8000', 'https://app.starjobs.com.ph']
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true)
-      } else {
-        callback(new Error('Not allowed by CORS'))
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Limit allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Control allowed headers
-    exposedHeaders: ['X-Total-Count'], // Allow only specific headers to be exposed
-    credentials: true
-  })
-)
-
+app.use(cors())
 app.use(function (req, res, next) {
-  // res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
   res.header('Access-Control-Expose-Headers', 'X-Total-Count')
-  res.header('Referrer-Policy', 'no-referrer-when-downgrade')
-  res.header('X-Frame-Options', 'DENY') // Additional anti-clickjacking header
   next()
 })
 
@@ -82,6 +41,44 @@ app.get('/health', (req, res) => {
   res.status(200).json({status: 'ok', timestamp: new Date()})
 })
 
+// cron.schedule('*/25 * * * *', async () => {
+//   try {
+//     // Generate a new token
+//     const response = await axios.post(
+//       'https://svc.app.cast.ph/api/auth/signin',
+//       {
+//         username: process.env.CAST_USERNAME,
+//         password: process.env.CAST_PASSWORD
+//       },
+//       {
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }
+//       }
+//     )
+//     console.log('🚀 ~ cron.schedule ~ response:', response)
+
+//     const newToken = response.data.Token
+
+//     // If you need to use the new token for something else, you can do it here
+//     console.log('New token:', newToken)
+
+//     // Find the existing token and update its value
+//     const existingToken = await Token.findOne()
+//     console.log('🚀 ~ cron.schedule ~ existingToken:', existingToken)
+//     if (existingToken) {
+//       existingToken.token = newToken
+//       await existingToken.save()
+//       console.log('Token updated:', newToken)
+//     } else {
+//       // If no token exists, create a new one
+//       await Token.create({token: newToken})
+//       console.log('New token created:', newToken)
+//     }
+//   } catch (error) {
+//     console.error('Error updating token:', error)
+//   }
+// })
 routes(app)
 
 const pusher = new Pusher({

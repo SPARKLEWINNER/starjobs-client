@@ -52,7 +52,12 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
 
-const allowedOrigins = ['http://localhost:7003', 'http://localhost:8000', 'https://app.starjobs.com.ph']
+const allowedOrigins = [
+  'http://localhost:7003',
+  'http://localhost:8000',
+  'https://app.starjobs.com.ph',
+  'https://rider-map-implementation.starjobs-gatsby.pages.dev/'
+]
 
 app.use(
   cors({

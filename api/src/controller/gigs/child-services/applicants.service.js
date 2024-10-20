@@ -89,9 +89,31 @@ var controllers = {
     await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Gigs, 'Gigs', id)
     let details
     try {
-      let gigs = await Gigs.find({_id: mongoose.Types.ObjectId(id)})
-        .lean()
-        .exec()
+      // Use aggregation to fetch the gig along with dropOffDetails
+      let gigs = await Gigs.aggregate([
+        {
+          $match: {_id: mongoose.Types.ObjectId(id)}
+        },
+        {
+          $lookup: {
+            from: 'gigs-dropoffs', // DropOffs collection
+            let: {dropOffIds: '$dropOffs'}, // Pass dropOff IDs from Gigs
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      {$in: ['$_id', '$$dropOffIds']}, // Match relevant dropOffs
+                      {$eq: ['$status', 'Applying']} // Filter by 'Applying' status
+                    ]
+                  }
+                }
+              }
+            ],
+            as: 'dropOffDetails'
+          }
+        }
+      ]).exec()
 
       if (!gigs) return res.status(502).json({success: false, msg: 'Gig not found'})
 

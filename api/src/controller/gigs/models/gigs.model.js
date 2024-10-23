@@ -39,6 +39,7 @@ const gigsData = {
     default: false
   },
   notes: String,
+  remarks: String,
   dateCreated: {
     type: Date,
     timezone: timezone

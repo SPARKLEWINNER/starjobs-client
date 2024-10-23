@@ -107,6 +107,14 @@ var controllers = {
             foreignField: 'gid',
             as: 'history'
           }
+        },
+        {
+          $lookup: {
+            from: 'gigs-dropoffs',
+            localField: 'dropOffs',
+            foreignField: '_id',
+            as: 'dropoffList'
+          }
         }
       ])
         .match({

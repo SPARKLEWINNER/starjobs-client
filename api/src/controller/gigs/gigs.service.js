@@ -328,6 +328,14 @@ var controllers = {
               foreignField: 'gid',
               as: 'history'
             }
+          },
+          {
+            $lookup: {
+              from: 'gigs-dropoffs',
+              localField: '_id',
+              foreignField: 'gig',
+              as: 'dropoffList'
+            }
           }
         ])
           .match({
@@ -496,6 +504,14 @@ var controllers = {
                 localField: '_id',
                 foreignField: 'gid',
                 as: 'history'
+              }
+            },
+            {
+              $lookup: {
+                from: 'gigs-dropoffs',
+                localField: '_id',
+                foreignField: 'gig',
+                as: 'dropoffList'
               }
             }
           ])

@@ -344,6 +344,11 @@ var controllers = {
               foreignField: 'gig',
               as: 'dropoffList'
             }
+          },
+          {
+            $addFields: {
+              dropoffList: {$reverseArray: {$sortArray: {input: '$dropoffList', sortBy: {createdAt: -1}}}}
+            }
           }
         ])
           .match({
@@ -520,6 +525,11 @@ var controllers = {
                 localField: '_id',
                 foreignField: 'gig',
                 as: 'dropoffList'
+              }
+            },
+            {
+              $addFields: {
+                dropoffList: {$reverseArray: {$sortArray: {input: '$dropoffList', sortBy: {createdAt: -1}}}}
               }
             }
           ])

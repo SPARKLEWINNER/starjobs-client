@@ -193,7 +193,8 @@ var services = {
       dropoffDetails,
       pickupDetails,
       updatedRidersFee,
-      uploadedFiles
+      uploadedFiles,
+      remarks
     } = req.body
     const {id} = req.params
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
@@ -465,171 +466,192 @@ var services = {
               }
             )
           } else if (status === 'Confirm-End-Shift') {
-            let postingDays = moment(gigs.time).diff(moment(gigs.from), 'days') + 1
-            console.log('🚀 ~ file: gigs-apply-type.service.js:241 ~ postingDays:', postingDays)
-            console.log('🚀 ~ file: gigs-apply-type.service.js:258 ~  gigs.gigOffered:', gigs.gigOffered)
+            if (category === 'parcels') {
+              // Process new or existing drop-offs
 
-            let jobsterData = await Users.find({_id: Types.ObjectId(uid)})
-              .lean()
-              .exec()
-
-            let clientData = await Users.find({_id: Types.ObjectId(gigs.uid)})
-              .lean()
-              .exec()
-
-            // Add new calculation for construction and other form
-            if (gigs.gigOffered) {
-              const {
-                computedFeeByHr,
-                computedDaily,
-                computedHourly,
-                grossGigDaily,
-                grossGigHourly,
-                voluntaryFee,
-                appFee,
-                transactionFee,
-                grossGigFee,
-                grossVAT,
-                grossWithHolding,
-                serviceCost,
-                jobsterTotal
-              } = calculations.new_calculation(
-                actualTime,
-                gigs.fee,
-                gigs.gigOffered,
-                postingDays,
-                late,
-                actualExtension
-              )
-
-              const feeHistoryInput = new FeeHistory({
-                gigid: Types.ObjectId(id),
-                ...gigs
-              })
-              console.log('🚀 ~ file: gigs-apply-type.service.js:324 ~ gigs.gigOffered:', gigs.gigOffered)
-
-              await Gigs.findOneAndUpdate(
-                {_id: Types.ObjectId(id)},
-                {
-                  status: status,
-                  hours: actualTime,
-                  fee: gigs.fee,
-                  gigOffered: gigs.gigOffered,
-                  fees: {
-                    computedFeeByHr: computedFeeByHr,
-                    computedDaily: computedDaily,
-                    computedHourly: computedHourly,
-                    grossGigDaily: grossGigDaily,
-                    grossGigHourly: grossGigHourly,
-                    voluntaryFee: voluntaryFee,
-                    appFee: appFee,
-                    transactionFee: transactionFee,
-                    grossGigFee: grossGigFee,
-                    grossVAT: grossVAT,
-                    grossWithHolding: grossWithHolding,
-                    serviceCost: serviceCost,
-                    jobsterTotal: jobsterTotal
-                  },
-                  late: late ?? null
-                }
-              )
-
-              await FeeHistory.create(feeHistoryInput)
-            } else {
-              const {
-                computedFeeByHr,
-                voluntaryFee,
-                appFee,
-                transactionFee,
-                grossGigFee,
-                grossVAT,
-                grossWithHolding,
-                serviceCost,
-                // jobsterTotal,
-                premiumFee,
-                nightSurge,
-                gigExtension,
-                jobsterFinal,
-                holidaySurge,
-                lateDeduction
-              } = calculations.default_calculations(
-                actualTime,
-                gigs.fee,
-                gigs.fees.voluntaryFee,
-                gigs.fees.premiumFee,
-                gigs.fees.holidaySurge,
-                late,
-                actualExtension,
-                actualNightSurge
-              )
-
-              const feeHistoryInput = new FeeHistory({
-                gigid: Types.ObjectId(id),
-                ...gigs
-              })
-              // Log the feeHistoryInput to debug
-              console.log('🚀 ~ feeHistoryInput:', feeHistoryInput)
-
-              // Remove _id if it exists to avoid duplicate key error
-              delete feeHistoryInput._id
-
-              await Gigs.findOneAndUpdate(
-                {_id: Types.ObjectId(id)},
-                {
-                  status: status,
-                  hours: actualTime,
-                  fee: gigs.fee,
-                  fees: {
-                    computedFeeByHr: computedFeeByHr,
-                    voluntaryFee: voluntaryFee,
-                    appFee: appFee,
-                    transactionFee: transactionFee,
-                    grossGigFee: grossGigFee,
-                    grossVAT: grossVAT,
-                    grossWithHolding: grossWithHolding,
-                    serviceCost: serviceCost,
-                    jobsterTotal: gigs.fees.jobsterTotal,
-                    premiumFee: premiumFee,
-                    nightSurge: nightSurge,
-                    gigExtension: gigExtension,
-                    jobsterFinal: jobsterFinal,
-                    holidaySurge: holidaySurge,
-                    lateDeduction: lateDeduction,
-                    proposedExtensionHr: actualExtension,
-                    proposedNightSurgeHr: actualNightSurge
-                  },
-                  late: late ?? null
-                }
-              )
-
-              try {
-                await FeeHistory.create(feeHistoryInput)
-              } catch (error) {
-                if (error.code === 11000) {
-                  console.error('Duplicate key error:', error)
-                  // Send a response to the client to handle the duplicate key error gracefully
-                  res.status(400).json({message: 'Duplicate entry detected', error: error.message})
-                } else {
-                  console.error('Unexpected error occurred:', error)
-                  // Handle other errors or rethrow
-                  res.status(500).json({message: 'An unexpected error occurred', error: error.message})
-                  throw error
-                }
+              // Update the gig's status and other fields, including drop-offs and riders fee
+              const gigUpdate = {
+                status,
+                remarks
               }
-              discord.send_endshift(
-                jobsterData,
-                clientData,
-                gigs,
-                holidaySurge,
-                nightSurge,
-                gigExtension,
-                late,
-                jobsterFinal,
-                computedFeeByHr,
-                actualTime,
-                actualExtension,
-                actualNightSurge
-              )
+
+              await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {$set: gigUpdate}, {new: true})
+
+              // discord.send_endshift_rider(
+              //   gigs,
+              //   late,
+              //   actualTime,
+              //   actualExtension,
+              //   actualNightSurge
+              // )
+              // res.status(200).json({message: 'End-Shift and drop-offs updated successfully.'})
+            } else {
+              let postingDays = moment(gigs.time).diff(moment(gigs.from), 'days') + 1
+              console.log('🚀 ~ file: gigs-apply-type.service.js:241 ~ postingDays:', postingDays)
+              console.log('🚀 ~ file: gigs-apply-type.service.js:258 ~  gigs.gigOffered:', gigs.gigOffered)
+
+              let jobsterData = await Users.find({_id: Types.ObjectId(uid)})
+                .lean()
+                .exec()
+
+              let clientData = await Users.find({_id: Types.ObjectId(gigs.uid)})
+                .lean()
+                .exec()
+
+              // Add new calculation for construction and other form
+              if (gigs.gigOffered) {
+                const {
+                  computedFeeByHr,
+                  computedDaily,
+                  computedHourly,
+                  grossGigDaily,
+                  grossGigHourly,
+                  voluntaryFee,
+                  appFee,
+                  transactionFee,
+                  grossGigFee,
+                  grossVAT,
+                  grossWithHolding,
+                  serviceCost,
+                  jobsterTotal
+                } = calculations.new_calculation(
+                  actualTime,
+                  gigs.fee,
+                  gigs.gigOffered,
+                  postingDays,
+                  late,
+                  actualExtension
+                )
+
+                const feeHistoryInput = new FeeHistory({
+                  gigid: Types.ObjectId(id),
+                  ...gigs
+                })
+                console.log('🚀 ~ file: gigs-apply-type.service.js:324 ~ gigs.gigOffered:', gigs.gigOffered)
+
+                await Gigs.findOneAndUpdate(
+                  {_id: Types.ObjectId(id)},
+                  {
+                    status: status,
+                    hours: actualTime,
+                    fee: gigs.fee,
+                    gigOffered: gigs.gigOffered,
+                    fees: {
+                      computedFeeByHr: computedFeeByHr,
+                      computedDaily: computedDaily,
+                      computedHourly: computedHourly,
+                      grossGigDaily: grossGigDaily,
+                      grossGigHourly: grossGigHourly,
+                      voluntaryFee: voluntaryFee,
+                      appFee: appFee,
+                      transactionFee: transactionFee,
+                      grossGigFee: grossGigFee,
+                      grossVAT: grossVAT,
+                      grossWithHolding: grossWithHolding,
+                      serviceCost: serviceCost,
+                      jobsterTotal: jobsterTotal
+                    },
+                    late: late ?? null
+                  }
+                )
+
+                await FeeHistory.create(feeHistoryInput)
+              } else {
+                const {
+                  computedFeeByHr,
+                  voluntaryFee,
+                  appFee,
+                  transactionFee,
+                  grossGigFee,
+                  grossVAT,
+                  grossWithHolding,
+                  serviceCost,
+                  // jobsterTotal,
+                  premiumFee,
+                  nightSurge,
+                  gigExtension,
+                  jobsterFinal,
+                  holidaySurge,
+                  lateDeduction
+                } = calculations.default_calculations(
+                  actualTime,
+                  gigs.fee,
+                  gigs.fees.voluntaryFee,
+                  gigs.fees.premiumFee,
+                  gigs.fees.holidaySurge,
+                  late,
+                  actualExtension,
+                  actualNightSurge
+                )
+
+                const feeHistoryInput = new FeeHistory({
+                  gigid: Types.ObjectId(id),
+                  ...gigs
+                })
+                // Log the feeHistoryInput to debug
+                console.log('🚀 ~ feeHistoryInput:', feeHistoryInput)
+
+                // Remove _id if it exists to avoid duplicate key error
+                delete feeHistoryInput._id
+
+                await Gigs.findOneAndUpdate(
+                  {_id: Types.ObjectId(id)},
+                  {
+                    status: status,
+                    hours: actualTime,
+                    fee: gigs.fee,
+                    fees: {
+                      computedFeeByHr: computedFeeByHr,
+                      voluntaryFee: voluntaryFee,
+                      appFee: appFee,
+                      transactionFee: transactionFee,
+                      grossGigFee: grossGigFee,
+                      grossVAT: grossVAT,
+                      grossWithHolding: grossWithHolding,
+                      serviceCost: serviceCost,
+                      jobsterTotal: gigs.fees.jobsterTotal,
+                      premiumFee: premiumFee,
+                      nightSurge: nightSurge,
+                      gigExtension: gigExtension,
+                      jobsterFinal: jobsterFinal,
+                      holidaySurge: holidaySurge,
+                      lateDeduction: lateDeduction,
+                      proposedExtensionHr: actualExtension,
+                      proposedNightSurgeHr: actualNightSurge
+                    },
+                    late: late ?? null
+                  }
+                )
+
+                try {
+                  await FeeHistory.create(feeHistoryInput)
+                } catch (error) {
+                  if (error.code === 11000) {
+                    console.error('Duplicate key error:', error)
+                    // Send a response to the client to handle the duplicate key error gracefully
+                    res.status(400).json({message: 'Duplicate entry detected', error: error.message})
+                  } else {
+                    console.error('Unexpected error occurred:', error)
+                    // Handle other errors or rethrow
+                    res.status(500).json({message: 'An unexpected error occurred', error: error.message})
+                    throw error
+                  }
+                }
+                discord.send_endshift(
+                  jobsterData,
+                  clientData,
+                  gigs,
+                  holidaySurge,
+                  nightSurge,
+                  gigExtension,
+                  late,
+                  jobsterFinal,
+                  computedFeeByHr,
+                  actualTime,
+                  actualExtension,
+                  actualNightSurge
+                )
+              }
             }
           } else {
             await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {status: status, late: late ?? null})

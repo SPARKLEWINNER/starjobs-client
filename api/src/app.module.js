@@ -73,7 +73,7 @@ app.use(
         callback(new Error('Not allowed by CORS'))
       }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     exposedHeaders: ['X-Total-Count'], // Exposes custom headers
     credentials: true // Allow cookies

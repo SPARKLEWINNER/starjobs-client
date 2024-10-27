@@ -675,6 +675,7 @@ var controllers = {
         ]).exec()
 
         if (status === 'Waiting,Pending') {
+          console.log(status, '--------------status')
           let aggregationPipeline = [
             {
               $match: {
@@ -817,6 +818,7 @@ var controllers = {
                 dropOffs: 1, // Original dropOffs reference
                 dropOffDetails: 1, // Include detailed dropOffs data
                 numberOfRiders: 1,
+                remarks: 1,
                 ridersFee: 1,
                 riderType: 1,
                 vehicleType: 1,
@@ -844,6 +846,7 @@ var controllers = {
               .filter((obj, index, self) => {
                 const firstIndex = self.findIndex((t) => t._id === obj._id)
                 if (index !== firstIndex) {
+                  console.log(`Duplicate Gig found: ${JSON.stringify(obj)}`)
                   return false // Skip duplicate objects
                 }
                 const timeDate = moment(obj.time)
@@ -894,6 +897,7 @@ var controllers = {
         )
 
         let gigData = gigs
+        console.log('🚀 ~ gigData:', gigData)
         if (contracts.length > 0) {
           gigData = [contracts[0], ...gigs]
         }

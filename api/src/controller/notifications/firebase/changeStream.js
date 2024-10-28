@@ -30,10 +30,15 @@ const notifyUsers = async (updatedDocument) => {
             // const tokens = users.map(user => user.fcmToken);
             if (fcm && fcm.length > 0) {
                 // Map tokens to message payloads
+                const gig = JSON.parse(updatedDocument.additionalData)
                 const messages = fcm.map((token) => ({
                     notification: {
                         title: updatedDocument.title.toString(),
-                        body: updatedDocument.body.toString(),
+                        body: updatedDocument.body.toString()
+                    },
+                    data: {
+                        gigId: gig ? gig._id.toString() : null,
+                        gigUid: gig ? gig.uid.toString() : null
                     },
                     token: token.fcmToken,
                 }));

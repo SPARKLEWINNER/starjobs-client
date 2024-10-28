@@ -448,7 +448,7 @@ var services = {
                 _id: {$in: gig.dropOffs}, // Ensure we are updating drop-offs related to this gig
                 address: {$in: availableDropOffs}
               },
-              {$set: {status: 'Applying', rider: userID}}
+              {$set: {status: 'Applying', rider: uid}}
             )
 
             // Step 5: Update the gig document to retain existing drop-off IDs and add new taken drop-offs

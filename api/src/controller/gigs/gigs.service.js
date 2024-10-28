@@ -517,8 +517,8 @@ var controllers = {
             {
               $lookup: {
                 from: 'gigs-dropoffs',
-                localField: '_id',
-                foreignField: 'gig',
+                localField: 'dropOffs',
+                foreignField: '_id',
                 as: 'dropoffList'
               }
             }

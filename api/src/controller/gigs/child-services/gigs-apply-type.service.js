@@ -386,7 +386,7 @@ var services = {
                   ...updatedRidersFee
                 },
                 dropOffs: dropOffObjectIds, // Store the references to drop-offs
-                deliveryProof: uploadedFiles.deliveryProof_0 || '',
+                deliveryProof: uploadedFiles.deliveryProof,
                 pickup: pickupUpdates
               }
 

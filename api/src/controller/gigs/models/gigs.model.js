@@ -122,7 +122,8 @@ const gigsData = {
     proof: {type: String}
   },
   deliveryProof: {
-    type: String
+    type: [String],
+    default: []
   },
   dropOffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'DropOffs'}],
   numberOfRiders: {

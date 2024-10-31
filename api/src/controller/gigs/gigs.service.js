@@ -114,7 +114,7 @@ var controllers = {
             from: 'gigs-dropoffs',
             localField: 'dropOffs',
             foreignField: '_id',
-            as: 'dropoffList'
+            as: 'dropOffDetails'
           }
         }
       ])

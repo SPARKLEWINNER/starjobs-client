@@ -100,6 +100,7 @@ const services = {
             from,
             hours,
             date,
+            location: pickup?.location,
             category,
             position: uniquePosition,
             notes,

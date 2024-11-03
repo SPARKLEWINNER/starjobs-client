@@ -115,14 +115,15 @@ const gigsData = {
     phone: {type: String},
     lat: {type: String},
     long: {type: String},
-    address: {type: String, required: true},
+    address: {type: String},
     timeArrived: {type: String},
     timeDeparture: {type: String},
     waitingTime: {type: String},
     proof: {type: String}
   },
   deliveryProof: {
-    type: String
+    type: [String],
+    default: []
   },
   dropOffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'DropOffs'}],
   numberOfRiders: {
@@ -131,15 +132,15 @@ const gigsData = {
   },
   type: {
     type: String,
-    required: true
+    default: null
   },
   vehicleType: {
     type: String,
-    required: true
+    default: null
   },
   rateType: {
     type: String,
-    required: true
+    default: null
   },
   ridersFee: {
     baseFare: String,

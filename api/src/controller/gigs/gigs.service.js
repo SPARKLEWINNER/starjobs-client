@@ -39,6 +39,7 @@ var controllers = {
         from: 1,
         time: 1,
         fees: 1,
+        location: 1,
         locationRate: 1,
         category: 1,
         createdAt: 1,
@@ -113,7 +114,7 @@ var controllers = {
             from: 'gigs-dropoffs',
             localField: 'dropOffs',
             foreignField: '_id',
-            as: 'dropoffList'
+            as: 'dropOffDetails'
           }
         }
       ])

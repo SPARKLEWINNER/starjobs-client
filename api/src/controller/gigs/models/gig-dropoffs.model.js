@@ -25,10 +25,12 @@ const DropOffSchema = new Schema({
     default: 'Pending'
   },
   gig: {type: mongoose.Schema.Types.ObjectId, ref: 'Gigs'},
-  rider: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User' // Reference the rider who took the drop-off
-  },
+  rider: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User' // Reference the riders who took the drop-off
+    }
+  ],
   proof: {
     type: String
   },

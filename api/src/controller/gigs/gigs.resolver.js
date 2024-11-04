@@ -49,6 +49,8 @@ module.exports = function (app) {
     .route(`${apiPath}${apiVersion}/gigs/apply/:id`)
     .patch(createAccountLimiter, jwt.require_sign_in, GigApplyController.gig_apply)
 
+  app.route(`${apiPath}${apiVersion}/gigs/decline/:id`).patch(jwt.require_sign_in, GigApplyController.gig_decline)
+
   // ==== Application controller ====
   app.route(`${apiPath}${apiVersion}/applicants/:id`).get(jwt.require_sign_in, ApplicantsController.get_applicants)
   app

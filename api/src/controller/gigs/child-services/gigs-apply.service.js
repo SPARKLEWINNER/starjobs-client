@@ -4,6 +4,7 @@ const {Types} = mongoose
 const Gigs = require('../models/gigs.model')
 const Freelancers = require('../../users/models/freelancers.model')
 const DropOffs = require('../../gigs/models/gig-dropoffs.model')
+const History = require('../../gigs/models/gig-histories.model')
 
 const {getSpecificData} = require('../../../common/validates')
 
@@ -98,6 +99,13 @@ var controllers = {
     //     }
     //   }
     // )
+    await History.findOneAndUpdate(
+      {gid: Types.ObjectId(id), uid: Types.ObjectId(uid)},
+      {
+        status: 'Declined'
+      }
+    )
+
     return res.status(200).json(gigs)
   }
 }

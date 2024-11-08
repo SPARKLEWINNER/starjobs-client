@@ -74,8 +74,10 @@ const services = {
 
         // Create gigs for each rider
         const gigPromises = []
+        console.log('🚀 ~ dropOffData ~ dropoff:', dropoff)
+
         const dropOffData = dropoff.map((d) => ({
-          address: d.location,
+          address: d.value,
           route: d.route,
           lat: d.lat,
           long: d.long,

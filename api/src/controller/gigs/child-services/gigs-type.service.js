@@ -142,6 +142,7 @@ const services = {
       } else {
         // Handle non-parcel categories
         const gigData = {
+          _id: mongoose.Types.ObjectId(),
           user: [
             {
               _id: mongoose.Types.ObjectId(client._id),

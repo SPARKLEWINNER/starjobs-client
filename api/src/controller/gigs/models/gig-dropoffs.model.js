@@ -24,7 +24,7 @@ const DropOffSchema = new Schema({
     ], // Add other statuses as needed
     default: 'Pending'
   },
-  gig: {type: mongoose.Schema.Types.ObjectId, ref: 'Gigs'},
+  gig: [{type: mongoose.Schema.Types.ObjectId, ref: 'Gigs'}],
   rider: [
     {
       type: mongoose.Schema.Types.ObjectId,

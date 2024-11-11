@@ -31,7 +31,11 @@ async function sendNotification(request, gigs, status) {
   try {
     let messageList = [
       {status: 'Applying', type: 'pending', description: `Applicant has sent a gig request`},
-      {status: 'Accepted', type: 'incoming', description: `Congratulations, your gig application has been accepted.`},
+      {
+        status: 'Accepted',
+        type: request.category === 'parcels' ? 'current' : 'incoming',
+        description: `Congratulations, your gig application has been accepted.`
+      },
       {status: 'Confirm-Gig', type: 'current', description: `Jobster has confirmed pushing thru the gig.`},
       {status: 'Confirm-Arrived', type: 'current', description: `The jobster has arrived.`},
       {status: 'End-Shift', type: 'current', description: `The jobster have Ended the shift`},
@@ -39,7 +43,10 @@ async function sendNotification(request, gigs, status) {
       {
         status: 'Gig-Taken',
         type: 'incoming',
-        description: `This gig ${gigs.position} was already taken. Keep exploring other opportunities! `
+        description:
+          request.category === 'parcels'
+            ? 'Some of your chosen drop has already been taken. Try other available dropoffs.'
+            : `This gig ${gigs.position} was already taken. Keep exploring other opportunities! `
       },
 
       {
@@ -102,6 +109,78 @@ async function sendNotification(request, gigs, status) {
 
             const notificationInput = new Notifications({
               title: 'Gig is already taken',
+              body: message[0].description,
+              targetUsers: applyingUsers,
+              type: 'GigNotif',
+              target: 'Selected',
+              additionalData: JSON.stringify(gigs)
+            })
+
+            url = urlLink + 'freelancer/message'
+            await Notifications.create(notificationInput)
+            if (fcmTokenArray.length > 0) {
+              // Check if there are any FCM tokens before sending the notification
+              console.log('------------Sending Gig Taken Notif----------')
+              fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+            }
+          }
+          if (acceptedAuid) {
+            // Notify Accepted Jobster
+            console.log('------------Sending Accepted Notif----------')
+            const users_fcm = await FcmTokens.find({userId: Types.ObjectId(acceptedAuid)})
+              .lean()
+              .exec()
+            console.log('🚀 ~ file: gigs-apply-type.service.js:126 ~ sendNotification ~ users_fcm:', users_fcm)
+            const fcmTokenArray = users_fcm.map((userToken) => userToken.fcmToken)
+            console.log('🚀 ~ file: gigs-apply-type.service.js:128 ~ sendNotification ~ fcmTokenArray:', fcmTokenArray)
+
+            let message = messageList.filter((obj) => {
+              if (obj.status === 'Accepted') return obj
+            })
+            if (fcmTokenArray.length > 0) {
+              fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+              console.log('------------Sent Accepted Notif----------')
+            }
+          }
+        }
+        return true
+      } else if (status === 'Accepted' && gigs.category === 'parcels') {
+        const getApplying = await Gigs.findById(gigs._id).lean().exec()
+        const recordsArray = getApplying.records
+        // Extract the "auid" values from the recordsArray
+        const auidValues = recordsArray.map((record) => record.auid)
+        const acceptedRecords = recordsArray.filter((record) => record.status === 'Accepted')
+        let acceptedAuid
+        if (acceptedRecords.length > 0) {
+          acceptedAuid = acceptedRecords[0]?.auid
+
+          auidValues.splice(auidValues.indexOf(acceptedAuid), 1) // Remove acceptedAuid from auidValues
+        }
+
+        const otherRiders = request.otherRiders
+        console.log(auidValues, 'auid valuesasese')
+        user = await Users.find({_id: {$in: otherRiders}})
+          .lean()
+          .exec()
+        let applyingUsers = []
+        // const acceptedAuidString = acceptedAuid.toString()
+        if (user && user.length > 0) {
+          user.forEach((data) => {
+            if (!data._id.equals(acceptedAuid)) {
+              applyingUsers.push(data._id)
+            }
+          })
+          if (applyingUsers) {
+            const fcmTokenArray = await FcmTokens.distinct('fcmToken', {userId: {$in: applyingUsers}})
+              .lean()
+              .exec()
+              .then((users_fcm) => users_fcm.map((userToken) => userToken.fcmToken))
+            let message = messageList.filter((obj) => {
+              if (obj.status === 'Gig-Taken') return obj
+            })
+
+            const notificationInput = new Notifications({
+              title: 'Gig Drops are already taken',
               body: message[0].description,
               targetUsers: applyingUsers,
               type: 'GigNotif',
@@ -294,9 +373,42 @@ var services = {
             const acceptedDropOffs = await DropOffs.find({
               _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
               status: 'Applying', // Find the drop-offs in 'Applying' status
+              gig: {$in: [Types.ObjectId(id)]},
               rider: {$in: [Types.ObjectId(uid)]}
-            }).select('_id address')
+            }).select('_id address gig rider')
             console.log('🚀 ~ acceptedDropOffs:', acceptedDropOffs)
+
+            // Step 3: Decline all applicants that have same DropOff
+            const otherGigIds = acceptedDropOffs
+              .flatMap((dropOff) => dropOff.gig) // Collect all IDs in the `gig` array property
+              .filter((gigId) => !Types.ObjectId(gigId).equals(id)) // Filter out the specified id
+            console.log('All gig IDs excluding specified id:', otherGigIds, '<All gig IDs excluding specified id')
+
+            const otherRiderIds = acceptedDropOffs
+              .flatMap((dropOff) => dropOff.rider) // Collect all rider IDs
+              .filter((riderId) => !Types.ObjectId(riderId).equals(uid)) // Convert `riderId` to ObjectId before comparing
+
+            console.log('All rider IDs excluding specified uid:', otherRiderIds, 'All rider IDs excluding uid')
+
+            await History.updateMany(
+              {
+                gid: {$in: otherGigIds},
+                uid: {$in: otherRiderIds},
+                status: 'Applying'
+              },
+              {
+                $set: {status: 'Declined'}
+              }
+            )
+
+            await Gigs.updateMany(
+              {_id: {$in: otherGigIds}}, //
+              {
+                $pull: {
+                  records: {auid: {$in: otherRiderIds}}
+                }
+              }
+            )
 
             const acceptedDropOffIds = acceptedDropOffs.map((d) => d._id)
             const combinedDropOffs = acceptedDropOffs.map((d) => ({
@@ -305,7 +417,7 @@ var services = {
             }))
             console.log('🚀 ~ combinedDropOffs:', combinedDropOffs)
 
-            // Step 3: Update the drop-offs to Accepted status in the DropOffs collection
+            // Step 4: Update the drop-offs to Accepted status in the DropOffs collection
             await DropOffs.updateMany(
               {
                 _id: {$in: acceptedDropOffIds} // Only update the accepted drop-offs
@@ -313,7 +425,7 @@ var services = {
               {
                 $set: {
                   status: 'Confirm-Arrived',
-                  gig: gig._id,
+                  gig: [Types.ObjectId(gig._id)],
                   rider: [Types.ObjectId(uid)]
                 }
               }
@@ -327,9 +439,9 @@ var services = {
             const record = gig.records.find((r) => r.auid.toString() === uid.toString())
 
             console.log('🚀 ~ record:', record, '🚀 ~ record:')
-            // Step 4: Update the gig's dropOffs array to retain only the accepted drop-offs
+            // Step 6: Update the gig's dropOffs array to retain only the accepted drop-offs
             if (record && record.ridersFee) {
-              // Step 3: Update specific fields in the riderFee object within the Gigs document
+              // Step 7: Update specific fields in the riderFee object within the Gigs document
               await Gigs.findOneAndUpdate(
                 {_id: Types.ObjectId(id)},
                 {
@@ -346,6 +458,13 @@ var services = {
                 }
               )
             }
+
+            const acceptedGig = {
+              ...req.body,
+              otherRiders: [...otherRiderIds]
+            }
+
+            await sendNotification(acceptedGig, gigs, status)
           } else {
             await Gigs.findOneAndUpdate(
               {_id: Types.ObjectId(id)},
@@ -369,7 +488,7 @@ var services = {
                 timeArrived: detail.timeArrived,
                 timeDeparture: detail.timeFinnished,
                 waitingTime: detail.totalTime,
-                gig: Types.ObjectId(id) // Reference to the gig
+                gig: [Types.ObjectId(id)] // Reference to the gig
               }))
 
               // Bulk update or create drop-offs and collect their ObjectIDs
@@ -473,7 +592,10 @@ var services = {
               },
               {
                 $set: {status: 'Applying'},
-                $addToSet: {rider: uid}
+                $addToSet: {
+                  rider: uid,
+                  gig: gig._id
+                }
               }
             )
 
@@ -710,7 +832,11 @@ var services = {
       let history = new History(history_details)
       await History.create(history)
       //global.pusher.trigger('notifications', 'notify_gig', gigs)
-      await sendNotification(req.body, gigs, status)
+
+      if (status !== 'Accepted' && category !== 'parcels') {
+        await sendNotification(req.body, gigs, status)
+      }
+
       updatedGig = gigs
     } catch (error) {
       console.error(error)

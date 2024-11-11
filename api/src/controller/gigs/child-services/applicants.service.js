@@ -104,7 +104,8 @@ var controllers = {
                   $expr: {
                     $and: [
                       {$in: ['$_id', '$$dropOffIds']}, // Match relevant dropOffs
-                      {$eq: ['$status', 'Applying']} // Filter by 'Applying' status
+                      {$eq: ['$status', 'Applying']}, // Filter by 'Applying' status
+                      {$in: [mongoose.Types.ObjectId(id), '$gig']} // Check if the gig array contains the provided id
                     ]
                   }
                 }

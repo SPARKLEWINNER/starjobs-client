@@ -13,6 +13,8 @@ var controller = {
       .catch((err) => console.log(err))
   },
   cast_sms: async function (recipients, message) {
+    console.log('🚀 ~ message:', message)
+    console.log('🚀 ~ recipients:', recipients)
     let token
     try {
       // Generate a new token
@@ -37,6 +39,7 @@ var controller = {
     }
     // Send OTP
     const url = 'https://svc.app.cast.ph/api/announcement/send/otp'
+
     const data = {
       MessageFrom: process.env.SENDER_ID,
       Message: message,

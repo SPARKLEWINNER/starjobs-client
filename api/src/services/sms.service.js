@@ -31,7 +31,7 @@ var controller = {
 
       token = response.data.Token
 
-      console.log('New token:', newToken)
+      console.log('New token:', token)
     } catch (error) {
       console.error('Error generating token:', error)
     }

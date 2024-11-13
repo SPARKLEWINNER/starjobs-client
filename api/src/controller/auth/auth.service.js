@@ -210,13 +210,13 @@ var controllers = {
           msg: 'Unable to sign up'
         })
       }
-      const recipients = [
-        {
-          ContactNumber: phone
-        }
-      ]
+      // const recipients = [
+      //   {
+      //     ContactNumber: phone
+      //   }
+      // ]
 
-      sms.cast_sms(recipients, `Starjobs verification code ${code}`)
+      sms.cast_sms(phone, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})
 
       let {accessToken: token, refreshToken} = requestToken.create_token(result._doc._id)
@@ -266,13 +266,13 @@ var controllers = {
         } else {
           phone = request_phone
         }
-        const recipients = [
-          {
-            ContactNumber: phone
-          }
-        ]
+        // const recipients = [
+        //   {
+        //     ContactNumber: phone
+        //   }
+        // ]
 
-        await sms.cast_sms(recipients, `Starjobs verification code ${isExisting[0].verificationCode}`)
+        await sms.cast_sms(phone, `Starjobs verification code ${isExisting[0].verificationCode}`)
       } else {
         await mailer.send_mail({email, verifyCode: isExisting[0].verificationCode, type: 'sign_up'})
       }

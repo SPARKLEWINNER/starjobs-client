@@ -12,17 +12,37 @@ var controller = {
       .then((message) => console.log(message.sid))
       .catch((err) => console.log(err))
   },
-  cast_sms: async function (token, recipients, message) {
-    console.log(recipients, 'recipients')
-    const url = 'https://svc.app.cast.ph/api/announcement/send'
+  cast_sms: async function (recipients, message) {
+    let token
+    try {
+      // Generate a new token
+      const response = await axios.post(
+        'https://svc.app.cast.ph/api/auth/signin',
+        {
+          username: process.env.CAST_USERNAME,
+          password: process.env.CAST_PASSWORD
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+
+      token = response.data.Token
+
+      console.log('New token:', newToken)
+    } catch (error) {
+      console.error('Error generating token:', error)
+    }
+    // Send OTP
+    const url = 'https://svc.app.cast.ph/api/announcement/send/otp'
     const data = {
       MessageFrom: process.env.SENDER_ID,
       Message: message,
-      Recipients: recipients,
-      Tags: [],
-      SendDate: null,
-      Mask: process.env.SENDER_ID,
-      HasUnsubscribeLink: false
+      Recipient: {
+        ContactNumber: recipients
+      }
     }
 
     const headers = {

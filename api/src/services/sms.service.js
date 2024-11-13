@@ -47,6 +47,7 @@ var controller = {
         ContactNumber: recipients
       }
     }
+    console.log('🚀 ~ data:', data)
 
     const headers = {
       'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ var controller = {
 
     try {
       const response = await axios.post(url, data, {headers})
-      console.log(response.data)
+      console.log('🚀 ~ response:', response)
     } catch (error) {
       console.error(error.response.data) // Log the response data for more details on the error
     }

@@ -786,6 +786,28 @@ var controllers = {
               }
             },
             {
+              $addFields: {
+                dropOffDetails: {
+                  $map: {
+                    input: '$dropOffs',
+                    as: 'id',
+                    in: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$dropOffDetails',
+                            as: 'detail',
+                            cond: {$eq: ['$$detail._id', '$$id']}
+                          }
+                        },
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
               $project: {
                 _id: 1,
                 position: 1,

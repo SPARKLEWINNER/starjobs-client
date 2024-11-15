@@ -502,6 +502,28 @@ var controllers = {
                 foreignField: '_id',
                 as: 'dropoffList'
               }
+            },
+            {
+              $addFields: {
+                dropoffList: {
+                  $map: {
+                    input: '$dropOffs',
+                    as: 'id',
+                    in: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$dropoffList',
+                            as: 'detail',
+                            cond: {$eq: ['$$detail._id', '$$id']}
+                          }
+                        },
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
             }
           ])
             .match({
@@ -530,6 +552,28 @@ var controllers = {
                 foreignField: '_id',
                 as: 'dropoffList'
               }
+            },
+            {
+              $addFields: {
+                dropoffList: {
+                  $map: {
+                    input: '$dropOffs',
+                    as: 'id',
+                    in: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$dropoffList',
+                            as: 'detail',
+                            cond: {$eq: ['$$detail._id', '$$id']}
+                          }
+                        },
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
             }
           ])
             .match({
@@ -540,6 +584,7 @@ var controllers = {
             .exec()
         }
 
+        console.log('🚀 ~ reports:', reports, '🚀 ~ reports:')
         let gigsData = reports.filter((obj) => {
           // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
           //express as a duration

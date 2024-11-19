@@ -75,6 +75,79 @@ var controllers = {
     }
   },
 
+  get_gigs_search: async function (req, res) {
+    const {page = 1, limit = 10, query = ''} = req.query // Default to page 1, limit 10, and empty search query
+    let filter_gig = []
+
+    try {
+      const today = moment.utc().startOf('day')
+
+      // Base filter for time and status (applied in both queries)
+      const baseFilter = {
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        $or: [
+          {time: {$gte: today.toISOString()}}, // Time filter
+          {time: {$gte: today}}
+        ]
+      }
+
+      // Empty array to store both query results
+      let gigsByPosition = []
+      let gigsByLocation = []
+
+      // Perform the first query for 'position'
+      if (query) {
+        gigsByPosition = await Gigs.find({
+          ...baseFilter,
+          position: {$regex: query, $options: 'i'} // Search by position
+        })
+          .sort({createdAt: -1})
+          .skip((page - 1) * limit)
+          .limit(parseInt(limit))
+          .lean()
+          .exec()
+
+        // Perform the second query for 'user.location'
+        gigsByLocation = await Gigs.find({
+          ...baseFilter,
+          location: {$regex: query, $options: 'i'} // Search by user location
+        })
+          .sort({createdAt: -1})
+          .skip((page - 1) * limit)
+          .limit(parseInt(limit))
+          .lean()
+          .exec()
+      }
+
+      // Combine both arrays (gigsByPosition and gigsByLocation)
+      let combinedGigs = [...gigsByPosition, ...gigsByLocation]
+
+      // Remove duplicates based on the gig '_id'
+      const uniqueGigs = combinedGigs.filter((gig, index, self) => {
+        return index === self.findIndex((g) => g._id.toString() === gig._id.toString())
+      })
+
+      // Filter the gigs based on 'from' field validity
+      filter_gig = uniqueGigs.filter((obj) => moment(obj.from, moment.ISO_8601, true).isValid())
+
+      // If no gigs found, return 404
+      if (filter_gig.length === 0) {
+        return res.status(404).json({success: false, msg: 'No gigs found'})
+      }
+
+      // Count total gigs
+      const totalGigs = await Gigs.countDocuments(baseFilter).exec()
+      const totalPages = Math.ceil(totalGigs / limit)
+
+      // Return the results
+      return res.status(200).json({filter_gig, totalGigs, totalPages})
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Gigs.get_gigs_search', filter_gig, null, 'GET')
+      return res.status(502).json({success: false, msg: 'Failed to fetch gigs'})
+    }
+  },
+
   get_gig: async function (req, res) {
     const {id} = req.params
     console.log('🚀 ~ Get Gig id:', id)

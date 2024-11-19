@@ -24,6 +24,7 @@ const createAccountLimiter = rateLimit({
 module.exports = function (app) {
   // ==== Gigs controller ====
   app.route(`${apiPath}${apiVersion}/gigs`).get(jwt.require_sign_in, GigsController.get_gigs)
+  app.route(`${apiPath}${apiVersion}/gigs/search`).get(jwt.require_sign_in, GigsController.get_gigs_search)
   app.route(`${apiPath}${apiVersion}/gigs/:id`).get(jwt.require_sign_in, GigsController.get_gig)
   app.route(`${apiPath}${apiVersion}/gigs/contract/:id`).get(jwt.require_sign_in, GigsController.get_contract)
   app.route(`${apiPath}${apiVersion}/gigs/list/:category`).get(jwt.require_sign_in, GigsController.get_gigs_categorized)
@@ -48,8 +49,6 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/gigs/apply/:id`)
     .patch(createAccountLimiter, jwt.require_sign_in, GigApplyController.gig_apply)
-
-  app.route(`${apiPath}${apiVersion}/gigs/decline/:id`).patch(jwt.require_sign_in, GigApplyController.gig_decline)
 
   // ==== Application controller ====
   app.route(`${apiPath}${apiVersion}/applicants/:id`).get(jwt.require_sign_in, ApplicantsController.get_applicants)
@@ -88,6 +87,4 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/gigs/admin/search`)
     .get(jwt.require_admin_access, AdminGigsController.get_admin_search_users)
-
-  app.route(`${apiPath}${apiVersion}/gigs/dropoffs/:id`).get(jwt.require_sign_in, GigsController.get_gig_dropoffs)
 }

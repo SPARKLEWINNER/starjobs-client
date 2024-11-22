@@ -75,6 +75,7 @@ var controllers = {
     }
   },
 
+
   get_gigs_search: async function (req, res) {
     const {page = 1, limit = 10, query = ''} = req.query // Default to page 1, limit 10, and empty search query
     let filter_gig = []

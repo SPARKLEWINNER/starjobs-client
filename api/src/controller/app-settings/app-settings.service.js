@@ -3,6 +3,7 @@ const AppSettings = require('./models/app-settings.model')
 const Categories = require('./models/categories.model')
 const Branches = require('./models/branches.model')
 const Pickups = require('./models/pickups.model')
+
 const Logs = require('./models/loggers.model')
 const Rates = require('./models/rates.model')
 const logger = require('../../common/loggers')
@@ -87,7 +88,6 @@ var controllers = {
 
     return res.status(200).json(pickups)
   },
-
   get_categories: async function (req, res) {
     let categories
     try {

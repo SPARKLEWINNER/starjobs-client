@@ -39,6 +39,7 @@ const gigsData = {
     default: false
   },
   notes: String,
+  remarks: String,
   dateCreated: {
     type: Date,
     timezone: timezone
@@ -108,7 +109,50 @@ const gigsData = {
   gigOffered: String,
   commissionRate: String,
   applicants: [],
-  records: []
+  records: [],
+  pickup: {
+    name: {type: String},
+    phone: {type: String},
+    lat: {type: String},
+    long: {type: String},
+    address: {type: String},
+    timeArrived: {type: String},
+    timeDeparture: {type: String},
+    waitingTime: {type: String},
+    proof: {type: String}
+  },
+  deliveryProof: {
+    type: [String],
+    default: []
+  },
+  dropOffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'DropOffs'}],
+  numberOfRiders: {
+    type: Number,
+    default: 1
+  },
+  type: {
+    type: String,
+    default: null
+  },
+  vehicleType: {
+    type: String,
+    default: null
+  },
+  rateType: {
+    type: String,
+    default: null
+  },
+  ridersFee: {
+    baseFare: String,
+    gigRatePerKm: String,
+    totalKm: String,
+    perKmFee: String,
+    addPerDrop: String,
+    allowance: String,
+    expectedPayment: String,
+    totalPayment: String,
+    totalWaitingTimePay: String
+  }
 }
 
 const gigsSchema = new Schema(gigsData, {timestamps: true})

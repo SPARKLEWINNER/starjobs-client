@@ -39,9 +39,12 @@ var controllers = {
         from: 1,
         time: 1,
         fees: 1,
+        location: 1,
         locationRate: 1,
         category: 1,
-        createdAt: 1
+        createdAt: 1,
+        pickup: 1,
+        dropOffs: 1
       }
 
       // Fetch the data with pagination
@@ -71,6 +74,7 @@ var controllers = {
       return res.status(502).json({success: false, msg: 'Failed to fetch gigs'})
     }
   },
+
 
   get_gigs_search: async function (req, res) {
     const {page = 1, limit = 10, query = ''} = req.query // Default to page 1, limit 10, and empty search query
@@ -178,6 +182,14 @@ var controllers = {
             foreignField: 'gid',
             as: 'history'
           }
+        },
+        {
+          $lookup: {
+            from: 'gigs-dropoffs',
+            localField: 'dropOffs',
+            foreignField: '_id',
+            as: 'dropOffDetails'
+          }
         }
       ])
         .match({
@@ -281,7 +293,9 @@ var controllers = {
         time: 1,
         locationRate: 1,
         fees: 1,
-        category: 1
+        category: 1,
+        pickup: 1,
+        dropOffs: 1
       }
 
       const initial_find = await Gigs.find(filter, projection).skip(skip).limit(Number(limit)).lean().exec()
@@ -396,6 +410,14 @@ var controllers = {
               localField: '_id',
               foreignField: 'gid',
               as: 'history'
+            }
+          },
+          {
+            $lookup: {
+              from: 'gigs-dropoffs',
+              localField: '_id',
+              foreignField: 'gig',
+              as: 'dropoffList'
             }
           }
         ])
@@ -546,6 +568,36 @@ var controllers = {
                 foreignField: 'gid',
                 as: 'history'
               }
+            },
+            {
+              $lookup: {
+                from: 'gigs-dropoffs',
+                localField: 'dropOffs',
+                foreignField: '_id',
+                as: 'dropoffList'
+              }
+            },
+            {
+              $addFields: {
+                dropoffList: {
+                  $map: {
+                    input: '$dropOffs',
+                    as: 'id',
+                    in: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$dropoffList',
+                            as: 'detail',
+                            cond: {$eq: ['$$detail._id', '$$id']}
+                          }
+                        },
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
             }
           ])
             .match({
@@ -566,6 +618,36 @@ var controllers = {
                 foreignField: 'gid',
                 as: 'history'
               }
+            },
+            {
+              $lookup: {
+                from: 'gigs-dropoffs',
+                localField: 'dropOffs',
+                foreignField: '_id',
+                as: 'dropoffList'
+              }
+            },
+            {
+              $addFields: {
+                dropoffList: {
+                  $map: {
+                    input: '$dropOffs',
+                    as: 'id',
+                    in: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$dropoffList',
+                            as: 'detail',
+                            cond: {$eq: ['$$detail._id', '$$id']}
+                          }
+                        },
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
             }
           ])
             .match({
@@ -576,6 +658,7 @@ var controllers = {
             .exec()
         }
 
+        console.log('🚀 ~ reports:', reports, '🚀 ~ reports:')
         let gigsData = reports.filter((obj) => {
           // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
           //express as a duration
@@ -647,7 +730,9 @@ var controllers = {
       }
 
       await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj)
-      discord.send_editGig(isGigOwner, time, from, shift, breakHr, hours, fee, date, category, position, notes)
+      if (gigsObj.category !== 'parcels') {
+        discord.send_editGig(isGigOwner, time, from, shift, breakHr, hours, fee, date, category, position, notes)
+      }
 
       return res.status(200).json(gigsObj)
     } catch (error) {
@@ -783,6 +868,39 @@ var controllers = {
     } catch (error) {
       // Handle any errors that occur
       console.error('Error fetching gig status:', error)
+      res.status(500).json({error: 'Internal server error'})
+    }
+  },
+  get_gig_dropoffs: async function (req, res) {
+    console.log('-----Get Gig Dropoffs------')
+    const {id} = req.params // Extract the gig ID from the request parameters
+    try {
+      // Fetch the drop-offs for the gig using the gig ID and filter by status
+      const gig = await Gigs.findById(id).select('dropOffs')
+
+      // Check if the gig exists
+      if (!gig) {
+        return res.status(404).json({error: 'Gig not found'})
+      }
+
+      // Extract the drop-off addresses for pending drop-offs
+      const dropOffAddresses = gig.dropOffs
+        .filter((dropOff) => dropOff.status === 'Pending')
+        .map((dropOff) => dropOff.address)
+
+      // Find all drop-offs with a "Pending" status across multiple gigs
+      const availableDropOffs = await DropOffs.find({
+        address: {$in: dropOffAddresses},
+        status: 'Pending' // Ensure status is 'Pending'
+      }).select('address status')
+
+      console.log('🚀 ~ availableDropOffs:', availableDropOffs)
+
+      // Return the available drop-offs
+      res.status(200).json({success: true, dropOffs: availableDropOffs})
+    } catch (error) {
+      // Handle any errors that occur
+      console.error('Error fetching gig drop-offs:', error)
       res.status(500).json({error: 'Internal server error'})
     }
   }

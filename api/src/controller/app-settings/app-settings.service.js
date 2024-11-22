@@ -1,6 +1,9 @@
 const Advertisements = require('./models/advertisements.model')
 const AppSettings = require('./models/app-settings.model')
 const Categories = require('./models/categories.model')
+const Branches = require('./models/branches.model')
+const Pickups = require('./models/pickups.model')
+
 const Logs = require('./models/loggers.model')
 const Rates = require('./models/rates.model')
 const logger = require('../../common/loggers')
@@ -48,6 +51,43 @@ var controllers = {
     return res.status(200).json(category)
   },
 
+  get_branches: async function (req, res) {
+    let branches
+    try {
+      branches = await Branches.find({status: 'active'}).lean().exec()
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Branches.get_branches', null, null, 'GET')
+
+      return res.status(502).json({success: false, msg: 'Unable to get Branches'})
+    }
+
+    // let branch = branches.map((item) => {
+    //   item.image = BUCKET_URL + item.image
+    //   return item
+    // })
+
+    return res.status(200).json(branches)
+  },
+  get_pickups: async function (req, res) {
+    let pickups
+    try {
+      pickups = await Pickups.find().lean().exec()
+      console.log('🚀 ~ pickups:', pickups)
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Branches.get_pickups', null, null, 'GET')
+
+      return res.status(502).json({success: false, msg: 'Unable to get Pickups'})
+    }
+
+    // let branch = branches.map((item) => {
+    //   item.image = BUCKET_URL + item.image
+    //   return item
+    // })
+
+    return res.status(200).json(pickups)
+  },
   get_categories: async function (req, res) {
     let categories
     try {

@@ -618,6 +618,7 @@ var controllers = {
   },
 
   get_client_status_gigs: async function (req, res) {
+    console.log('🚀 ~ get_client_status_gigs:')
     const {id, status} = req.params
     const {page, limit} = req.query
     const statusArray = status.split(',')
@@ -674,6 +675,7 @@ var controllers = {
         ]).exec()
 
         if (status === 'Waiting,Pending') {
+          console.log(status, '--------------status')
           let aggregationPipeline = [
             {
               $match: {
@@ -758,16 +760,15 @@ var controllers = {
                 createdAt: -1
               }
             }
-          ];
+          ]
 
           if (page && limit) {
-              const skip = (parseInt(page) - 1) * parseInt(limit);
-              aggregationPipeline.push({ $skip: skip });
-              aggregationPipeline.push({ $limit: parseInt(limit) });
+            const skip = (parseInt(page) - 1) * parseInt(limit)
+            aggregationPipeline.push({$skip: skip})
+            aggregationPipeline.push({$limit: parseInt(limit)})
           }
 
-          gigs = await Gigs.aggregate(aggregationPipeline);
-
+          gigs = await Gigs.aggregate(aggregationPipeline)
         } else {
           let aggregationPipeline = [
             {
@@ -776,34 +777,36 @@ var controllers = {
                 status: {$in: statusArray} // Uncomment if needed
               }
             },
-            // {
-            //   $lookup: {
-            //     from: 'extended',
-            //     localField: '_id',
-            //     foreignField: 'gigId',
-            //     as: 'extended'
-            //   }
-            // },
-            // {
-            //   $unwind: {
-            //     path: '$extended',
-            //     preserveNullAndEmptyArrays: true
-            //   }
-            // },
-            // {
-            //   $lookup: {
-            //     from: 'gigs-histories',
-            //     localField: '_id',
-            //     foreignField: 'gid',
-            //     as: 'history'
-            //   }
-            // },
-            // {
-            //   $unwind: {
-            //     path: '$history',
-            //     preserveNullAndEmptyArrays: true
-            //   }
-            // },
+            {
+              $lookup: {
+                from: 'gigs-dropoffs', // The name of the DropOffs collection
+                localField: 'dropOffs', // The field in the Gigs collection referencing dropOffs
+                foreignField: '_id', // The field in the DropOffs collection to join on
+                as: 'dropOffDetails' // The name for the joined data in the result
+              }
+            },
+            {
+              $addFields: {
+                dropOffDetails: {
+                  $map: {
+                    input: '$dropOffs',
+                    as: 'id',
+                    in: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$dropOffDetails',
+                            as: 'detail',
+                            cond: {$eq: ['$$detail._id', '$$id']}
+                          }
+                        },
+                        0
+                      ]
+                    }
+                  }
+                }
+              }
+            },
             {
               $project: {
                 _id: 1,
@@ -832,20 +835,16 @@ var controllers = {
                 gigFeeType: 1,
                 gigOffered: 1,
                 applicants: 1,
-                fees: 1
-                // maximumApplicants: '$extended.maximumApplicants',
-                // numberofApplicants: {
-                //   $cond: [
-                //     {
-                //       $and: [
-                //         {$eq: ['$extended.applicants.status', 'Applying']},
-                //         {$gt: ['$extended.applicants.auid', null]}
-                //       ]
-                //     },
-                //     1,
-                //     0
-                //   ]
-                // }
+                fees: 1,
+                pickup: 1,
+                dropOffs: 1, // Original dropOffs reference
+                dropOffDetails: 1, // Include detailed dropOffs data
+                numberOfRiders: 1,
+                remarks: 1,
+                ridersFee: 1,
+                riderType: 1,
+                vehicleType: 1,
+                type: 1
               }
             },
             {
@@ -853,14 +852,14 @@ var controllers = {
                 createdAt: -1
               }
             }
-          ];
+          ]
           if (page && limit) {
-              const skip = (parseInt(page) - 1) * parseInt(limit);
-              aggregationPipeline.push({ $skip: skip });
-              aggregationPipeline.push({ $limit: parseInt(limit) });
+            const skip = (parseInt(page) - 1) * parseInt(limit)
+            aggregationPipeline.push({$skip: skip})
+            aggregationPipeline.push({$limit: parseInt(limit)})
           }
-          
-          gigs = await Gigs.aggregate(aggregationPipeline);
+
+          gigs = await Gigs.aggregate(aggregationPipeline)
         }
 
         gigs = await Promise.all(
@@ -869,6 +868,7 @@ var controllers = {
               .filter((obj, index, self) => {
                 const firstIndex = self.findIndex((t) => t._id === obj._id)
                 if (index !== firstIndex) {
+                  console.log(`Duplicate Gig found: ${JSON.stringify(obj)}`)
                   return false // Skip duplicate objects
                 }
                 const timeDate = moment(obj.time)
@@ -919,6 +919,7 @@ var controllers = {
         )
 
         let gigData = gigs
+        console.log('🚀 ~ gigData:', gigData)
         if (contracts.length > 0) {
           gigData = [contracts[0], ...gigs]
         }

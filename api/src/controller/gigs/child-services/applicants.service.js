@@ -96,16 +96,16 @@ var controllers = {
         },
         {
           $lookup: {
-            from: 'gigs-dropoffs', // DropOffs collection
-            let: {dropOffIds: '$dropOffs'}, // Pass dropOff IDs from Gigs
+            from: 'gigs-dropoffs', // Collection name for DropOffs
+            let: {dropOffIds: {$ifNull: ['$dropOffs', []]}}, // Use an empty array if dropOffs doesn't exist
             pipeline: [
               {
                 $match: {
                   $expr: {
                     $and: [
-                      {$in: ['$_id', '$$dropOffIds']}, // Match relevant dropOffs
-                      {$eq: ['$status', 'Applying']}, // Filter by 'Applying' status
-                      {$in: [mongoose.Types.ObjectId(id), '$gig']} // Check if the gig array contains the provided id
+                      {$in: ['$_id', '$$dropOffIds']}, // Match if _id is in dropOffIds (if present)
+                      {$eq: ['$status', 'Applying']}, // Match status
+                      {$in: [mongoose.Types.ObjectId(id), '$gig']} // Match gig ID
                     ]
                   }
                 }

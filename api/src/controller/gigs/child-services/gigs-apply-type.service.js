@@ -276,6 +276,9 @@ var services = {
       remarks
     } = req.body
     const {id} = req.params
+
+    let appliedDrops
+
     await getSpecificData({uuid: Types.ObjectId(uid)}, Freelancers, 'Account', uid)
 
     const user = await Users.find({_id: Types.ObjectId(userID ? userID : uid)})
@@ -370,21 +373,22 @@ var services = {
             }
 
             // Step 2: Retrieve the drop-offs that were applied for by the rider and are being accepted
-            const acceptedDropOffs = await DropOffs.find({
-              _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
-              status: 'Applying', // Find the drop-offs in 'Applying' status
-              gig: {$in: [Types.ObjectId(id)]},
-              rider: {$in: [Types.ObjectId(uid)]}
-            }).select('_id address gig rider')
-            console.log('🚀 ~ acceptedDropOffs:', acceptedDropOffs)
+            // const acceptedDropOffs = await DropOffs.find({
+            //   _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
+            //   status: 'Applying', // Find the drop-offs in 'Applying' status
+            //   gig: {$in: [Types.ObjectId(id)]},
+            //   rider: {$in: [Types.ObjectId(uid)]}
+            // }).select('_id address gig rider')
+            // console.log('🚀 ~ acceptedDropOffs:', acceptedDropOffs)
+            console.log('🚀 ~ dropOffs:', dropOffs, '🚀 ~ dropOffs:')
 
             // Step 3: Decline all applicants that have same DropOff
-            const otherGigIds = acceptedDropOffs
+            const otherGigIds = dropOffs
               .flatMap((dropOff) => dropOff.gig) // Collect all IDs in the `gig` array property
               .filter((gigId) => !Types.ObjectId(gigId).equals(id)) // Filter out the specified id
             console.log('All gig IDs excluding specified id:', otherGigIds, '<All gig IDs excluding specified id')
 
-            const otherRiderIds = acceptedDropOffs
+            const otherRiderIds = dropOffs
               .flatMap((dropOff) => dropOff.rider) // Collect all rider IDs
               .filter((riderId) => !Types.ObjectId(riderId).equals(uid)) // Convert `riderId` to ObjectId before comparing
 
@@ -410,8 +414,8 @@ var services = {
               }
             )
 
-            const acceptedDropOffIds = acceptedDropOffs.map((d) => d._id)
-            const combinedDropOffs = acceptedDropOffs.map((d) => ({
+            const acceptedDropOffIds = dropOffs.map((d) => d._id)
+            const combinedDropOffs = dropOffs.map((d) => ({
               _id: d._id,
               address: d.address
             }))
@@ -583,6 +587,27 @@ var services = {
             //     taken: takenAddresses
             //   })
             // }
+            const applyingDropOffs = await DropOffs.aggregate([
+              {
+                $match: {
+                  _id: {$in: gig.dropOffs},
+                  address: {$in: dropOffAddresses}
+                }
+              },
+              {
+                $addFields: {
+                  sortIndex: {
+                    $indexOfArray: [dropOffAddresses, '$address']
+                  }
+                }
+              },
+              {
+                $sort: {sortIndex: 1} // Sort by the custom field
+              }
+            ])
+
+            // set applied drops for saving drops in records
+            appliedDrops = applyingDropOffs
 
             // Step 4: Update the status of the available drop-offs to "Applying"
             await DropOffs.updateMany(
@@ -821,7 +846,8 @@ var services = {
                   perKmFee: gigRatePerKm ?? 0,
                   expectedPayment: expectedPayment ?? 0,
                   allowance: allowance ?? 0
-                }
+                },
+                appliedDropOffs: appliedDrops
               }),
               date_created: now.toISOString()
             }

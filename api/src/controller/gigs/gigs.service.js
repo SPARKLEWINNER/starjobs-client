@@ -75,7 +75,6 @@ var controllers = {
     }
   },
 
-
   get_gigs_search: async function (req, res) {
     const {page = 1, limit = 10, query = ''} = req.query // Default to page 1, limit 10, and empty search query
     let filter_gig = []
@@ -189,6 +188,28 @@ var controllers = {
             localField: 'dropOffs',
             foreignField: '_id',
             as: 'dropOffDetails'
+          }
+        },
+        {
+          $addFields: {
+            dropOffDetails: {
+              $map: {
+                input: '$dropOffs',
+                as: 'id',
+                in: {
+                  $arrayElemAt: [
+                    {
+                      $filter: {
+                        input: '$dropOffDetails',
+                        as: 'detail',
+                        cond: {$eq: ['$$detail._id', '$$id']}
+                      }
+                    },
+                    0
+                  ]
+                }
+              }
+            }
           }
         }
       ])

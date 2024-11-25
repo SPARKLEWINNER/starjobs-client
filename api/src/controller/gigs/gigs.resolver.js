@@ -29,6 +29,7 @@ module.exports = function (app) {
   app.route(`${apiPath}${apiVersion}/gigs/contract/:id`).get(jwt.require_sign_in, GigsController.get_contract)
   app.route(`${apiPath}${apiVersion}/gigs/list/:category`).get(jwt.require_sign_in, GigsController.get_gigs_categorized)
   app.route(`${apiPath}${apiVersion}/gigs/history/:id`).get(jwt.require_sign_in, GigsController.get_gigs_history)
+  app.route(`${apiPath}${apiVersion}/gigs/decline/:id`).patch(jwt.require_sign_in, GigApplyController.gig_decline)
   app
     .route(`${apiPath}${apiVersion}/gigs/history/:id/:status`)
     .get(jwt.require_sign_in, GigsController.get_gigs_history_status)

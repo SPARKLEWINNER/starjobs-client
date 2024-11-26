@@ -100,7 +100,7 @@ var controllers = {
     //   }
     // )
     await History.findOneAndUpdate(
-      {gid: Types.ObjectId(id), uid: Types.ObjectId(uid)},
+      {gid: Types.ObjectId(id), uid: Types.ObjectId(uid), status: 'Applying'},
       {
         status: 'Declined'
       }

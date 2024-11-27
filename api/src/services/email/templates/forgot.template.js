@@ -247,7 +247,7 @@ const forgotPassword = (token) => {
                                 <tbody>
                                   <tr>
                                     <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Cabin',sans-serif;" align="left">
-        
+
                                       <style>.v-button {background: transparent !important;}</style>
                                       <div align="center">
                                         <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:61px; v-text-anchor:middle; width:300px;" arcsize="41%"  stroke="f" fillcolor="#0061bf"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Cabin',sans-serif;">
@@ -261,7 +261,36 @@ const forgotPassword = (token) => {
                                         </a>
                                         </center></v:roundrect>
                                       </div>
-        
+
+                                      <!-- Fallback text link for email clients where the button might not be visible -->
+                                      <div style="text-align: center; margin-top: 10px;">
+                                        <a href="` +
+    FRONTEND_URL +
+    '/reset-password?token=' +
+    token +
+    `" style="font-family: 'Cabin', sans-serif; color: #0061bf; text-decoration: none; font-size: 18px;">
+                                          If the button is not visible, click here to reset your password
+                                        </a>
+                                      </div>
+                                       <!-- Copy-Paste Link Option (Centered and no wrapping) -->
+                                        <div style="text-align: center; margin-top: 5px;">
+                                          <span style="font-family: 'Cabin', sans-serif; color: #333333; font-size: 16px; display: block; text-align: center;">
+                                            Or, copy and paste this link into your browser:
+                                          </span>
+                                          <br>
+                                          <a href="` +
+    FRONTEND_URL +
+    '/reset-password?token=' +
+    token +
+    `" style="font-family: 'Cabin', sans-serif; color: #0061bf; text-decoration: none; font-size: 16px; display: inline-block; white-space: nowrap; text-align: center; overflow: hidden; text-overflow: ellipsis;">
+                                            ` +
+    FRONTEND_URL +
+    '/reset-password?token=' +
+    token +
+    `
+                                          </a>
+                                        </div>
+
                                     </td>
                                   </tr>
                                 </tbody>

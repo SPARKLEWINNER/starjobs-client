@@ -27,7 +27,7 @@ var controllers = {
       const today = moment.utc().startOf('day')
       const filter = {
         status: {$in: ['Waiting', 'Applying', 'Contracts']},
-        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}]
+        time: {$gte: today.toISOString()} // Ensure this field's format matches database entries
       }
 
       const projection = {
@@ -50,10 +50,11 @@ var controllers = {
       // Fetch the data with pagination
       const initial_find = await Gigs.find(filter, projection)
         .sort({createdAt: -1})
-        .skip((page - 1) * limit)
-        .limit(parseInt(limit))
+        // .skip((page - 1) * limit)
+        // .limit(parseInt(limit))
         .lean()
         .exec()
+      console.log('🚀 ~ initial_find:', initial_find.length)
 
       // Filter the gigs based on 'from' field validity
       filter_gig = initial_find.filter((obj) => moment(obj.from, moment.ISO_8601, true).isValid())
@@ -64,8 +65,6 @@ var controllers = {
 
       const totalGigs = await Gigs.countDocuments(filter).exec()
       const totalPages = Math.ceil(totalGigs / limit)
-      console.log(totalGigs)
-      console.log(totalPages)
       return res.status(200).json({filter_gig, totalGigs, totalPages})
       //return res.status(200).json(filter_gig, page:)
     } catch (error) {
@@ -319,7 +318,7 @@ var controllers = {
         dropOffs: 1
       }
 
-      const initial_find = await Gigs.find(filter, projection).skip(skip).limit(Number(limit)).lean().exec()
+      const initial_find = await Gigs.find(filter, projection).lean().exec()
 
       categ_gigs = initial_find.filter((obj) => {
         return moment(obj.from, moment.ISO_8601, true).isValid()

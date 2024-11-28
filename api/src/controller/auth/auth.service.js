@@ -423,7 +423,7 @@ var controllers = {
     const {phone, msg} = req.body
 
     try {
-      const response = await sms.cast_sms(phone, msg) // Await the response
+      const response = await sms.cast_sms_sparkle(phone, msg) // Await the response
       return res.status(200).json(response) // Respond with the result from cast_sms
     } catch (error) {
       console.error('Error in cast_send_otp:', error)

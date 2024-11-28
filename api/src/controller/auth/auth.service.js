@@ -418,6 +418,17 @@ var controllers = {
       await logger.logError(err, 'Auth.survey_guest', null, null, 'POST')
       res.status(400).json({success: false, msg: err})
     }
+  },
+  cast_send_otp: async function (req, res) {
+    const {phone, msg} = req.body
+
+    try {
+      const response = await sms.cast_sms(phone, msg) // Await the response
+      return res.status(200).json(response) // Respond with the result from cast_sms
+    } catch (error) {
+      console.error('Error in cast_send_otp:', error)
+      return res.status(500).json({success: false, error: 'Internal server error'})
+    }
   }
 }
 

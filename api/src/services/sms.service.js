@@ -56,9 +56,11 @@ var controller = {
 
     try {
       const response = await axios.post(url, data, {headers})
-      console.log('🚀 ~ response:', response)
+      console.log('🚀 ~ response:', response.data)
+      return {success: true, data: response.data} // Return the response
     } catch (error) {
-      console.error(error.response.data) // Log the response data for more details on the error
+      console.error(error.response?.data || error.message) // Log more detailed error
+      return {success: false, error: error.response?.data || 'Failed to send OTP'} // Return error details
     }
   }
 }

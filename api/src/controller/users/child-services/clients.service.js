@@ -965,11 +965,13 @@ var controllers = {
 
     try {
       const gig = await Gigs.findById(id) // Fetch gig by ID
+
+      let user = await Clients.find({uid: gig.uid}).lean().exec()
       if (!gig) {
         return res.status(404).json({message: 'Gig not found'})
       }
 
-      res.status(200).json({success: true, gig})
+      res.status(200).json({success: true, gig, details: user ? user[0] : {}})
     } catch (error) {
       console.error(error)
       res.status(500).json({success: false, message: 'Server error'})

@@ -853,11 +853,11 @@ var controllers = {
               }
             }
           ]
-          if (page && limit) {
-            const skip = (parseInt(page) - 1) * parseInt(limit)
-            aggregationPipeline.push({$skip: skip})
-            aggregationPipeline.push({$limit: parseInt(limit)})
-          }
+          // if (page && limit) {
+          //   const skip = (parseInt(page) - 1) * parseInt(limit)
+          //   aggregationPipeline.push({$skip: skip})
+          //   aggregationPipeline.push({$limit: parseInt(limit)})
+          // }
 
           gigs = await Gigs.aggregate(aggregationPipeline)
         }
@@ -959,6 +959,21 @@ var controllers = {
     }
 
     return res.status(200).json(client)
+  },
+  get_selected_gig: async function (req, res) {
+    const {id} = req.params
+
+    try {
+      const gig = await Gigs.findById(id) // Fetch gig by ID
+      if (!gig) {
+        return res.status(404).json({message: 'Gig not found'})
+      }
+
+      res.status(200).json({success: true, gig})
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({success: false, message: 'Server error'})
+    }
   },
 
   get_client_edit_profile: async function (req, res) {

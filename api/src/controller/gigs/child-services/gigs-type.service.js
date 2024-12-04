@@ -85,9 +85,13 @@ const services = {
         }))
 
         const createdDropOffs = await DropOffs.insertMany(dropOffData)
-        for (let riderIndex = 0; riderIndex < parseRiders; riderIndex++) {
-          const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
-          const uniquePosition = `Rider-${uniqueCode}`
+
+        // for (let riderIndex = 0; riderIndex < parseRiders; riderIndex++) {
+        // const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
+        // const uniquePosition = `Rider-${uniqueCode}`
+        const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
+        for (let riderIndex = 1; riderIndex <= parseRiders; riderIndex++) {
+          const uniquePosition = `Rider-${uniqueCode}-${riderIndex}` // Append the index to the unique code
           const singleGigData = {
             user: [
               {

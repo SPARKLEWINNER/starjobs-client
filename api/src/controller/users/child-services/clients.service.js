@@ -964,8 +964,21 @@ var controllers = {
     const {id} = req.params
 
     try {
-      const gig = await Gigs.findById(id) // Fetch gig by ID
-
+      const gigData = await Gigs.aggregate([
+        {$match: {_id: mongoose.Types.ObjectId(id)}},
+        {
+          $lookup: {
+            from: 'gigs-dropoffs',
+            localField: 'dropOffs',
+            foreignField: '_id',
+            as: 'dropOffDetails'
+          }
+        }
+      ])
+      if (!gigData || gigData.length === 0) {
+        return res.status(404).json({message: 'Gig not found'})
+      }
+      const gig = gigData[0]
       let user = await Clients.find({uid: gig.uid}).lean().exec()
       if (!gig) {
         return res.status(404).json({message: 'Gig not found'})

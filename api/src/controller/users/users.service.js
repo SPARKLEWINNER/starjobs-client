@@ -540,6 +540,14 @@ var controllers = {
     const {accountType, accountNumber, accountName, altAccountNumber, altAccountName} = req.body.values
     console.log('🚀 ~ req.body.values:', req.body.values)
 
+    const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    if (!oldDetails) {
+      return res.status(404).json({success: false, msg: 'Freelancer not found'})
+    }
+
     try {
       // Prepare the update fields
       const updateFields = {
@@ -566,7 +574,9 @@ var controllers = {
       ).exec() // Use exec() to get a proper promise
       console.log('🚀 ~ updatedFreelancer:', updatedFreelancer)
 
-      if (!updatedFreelancer) {
+      if (updatedFreelancer) {
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(updatedFreelancer.uuid)}, {adminStatus: 'Pending'})
+      } else {
         return res.status(404).json({message: 'Freelancer not found'})
       }
 
@@ -585,6 +595,18 @@ var controllers = {
         refreshToken,
         isGcashUpdated: updatedFreelancer.isGcashUpdated
       }
+
+      const updateDetails = {
+        payment: {
+          accountPaymentType: accountType,
+          accountPaymentName: accountName,
+          accountPaymentNumber: accountNumber,
+          altAcctPaymentName: altAccountName,
+          altAcctPaymentNumber: altAccountNumber
+        },
+        isGcashUpdated: true
+      }
+      await logger.logAccountHistory(user?.accountType, updateDetails, id, oldDetails[0])
 
       return res.status(200).json(result)
     } catch (error) {

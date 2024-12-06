@@ -328,7 +328,7 @@ var controllers = {
       const totalPages = Math.ceil(totalGigs / limit)
 
       return res.status(200).json({
-        categ_gigs,
+        filter_gig: categ_gigs,
         page: Number(page),
         totalPages,
         totalGigs

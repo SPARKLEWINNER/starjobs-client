@@ -153,6 +153,7 @@ const services = {
         const gigPromises = []
 
         for (let gigIndex = 1; gigIndex <= parseNumOfGigs; gigIndex++) {
+          const uniquePosition = `${position}-${gigIndex}`
           const gigData = {
             _id: mongoose.Types.ObjectId(),
             user: [
@@ -171,7 +172,7 @@ const services = {
             fee,
             date,
             category,
-            position,
+            position: uniquePosition,
             breakHr,
             fees: {
               ...fees,

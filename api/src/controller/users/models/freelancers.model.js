@@ -170,6 +170,10 @@ const freelancerSchema = new Schema(
       },
       gcashProfile: {
         type: String
+      },
+      altGcashProfile: {
+        type: String,
+        default: ''
       }
     },
     payment: {

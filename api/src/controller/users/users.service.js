@@ -537,10 +537,11 @@ var controllers = {
       return res.status(400).json({error: 'Invalid ID format'})
     }
 
-    const {accountType, accountNumber, accountName, altAccountNumber, altAccountName} = req.body.values
+    const {accountType, accountNumber, accountName, altAccountNumber, altAccountName, gcashProfile, altGcashProfile} =
+      req.body.values
     console.log('🚀 ~ req.body.values:', req.body.values)
 
-    const oldDetails = await Freelancers.find({_id: mongoose.Types.ObjectId(id)})
+    const oldDetails = await Freelancers.find({uuid: mongoose.Types.ObjectId(id)})
       .lean()
       .exec()
 
@@ -556,6 +557,8 @@ var controllers = {
         'payment.acccountPaymentNumber': accountNumber,
         'payment.altAcctPaymentName': altAccountName,
         'payment.altAcctPaymentNumber': altAccountNumber,
+        'rate.gcashProfile': gcashProfile,
+        'rate.altGcashProfile': altGcashProfile,
         isGcashUpdated: true
       }
 
@@ -570,7 +573,7 @@ var controllers = {
       const updatedFreelancer = await Freelancers.findOneAndUpdate(
         {uuid: mongoose.Types.ObjectId(id)},
         updateFields,
-        {new: true, fields: 'uuid payment isGcashUpdated'} // Return the updated fields and exclude unnecessary data
+        {new: true, projection: 'uuid rate payment isGcashUpdated'} // Return the updated fields and exclude unnecessary data
       ).exec() // Use exec() to get a proper promise
       console.log('🚀 ~ updatedFreelancer:', updatedFreelancer)
 
@@ -602,7 +605,9 @@ var controllers = {
           accountPaymentName: accountName,
           accountPaymentNumber: accountNumber,
           altAcctPaymentName: altAccountName,
-          altAcctPaymentNumber: altAccountNumber
+          altAcctPaymentNumber: altAccountNumber,
+          gcashProfile: gcashProfile,
+          altGcashProfile: altGcashProfile
         },
         isGcashUpdated: true
       }

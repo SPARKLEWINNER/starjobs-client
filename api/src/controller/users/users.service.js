@@ -537,8 +537,17 @@ var controllers = {
       return res.status(400).json({error: 'Invalid ID format'})
     }
 
-    const {accountType, accountNumber, accountName, altAccountNumber, altAccountName} = req.body.values
+    const {accountType, accountNumber, accountName, altAccountNumber, altAccountName, gcashProfile, altGcashProfile} =
+      req.body.values
     console.log('🚀 ~ req.body.values:', req.body.values)
+
+    const oldDetails = await Freelancers.find({uuid: mongoose.Types.ObjectId(id)})
+      .lean()
+      .exec()
+
+    if (!oldDetails) {
+      return res.status(404).json({success: false, msg: 'Freelancer not found'})
+    }
 
     try {
       // Prepare the update fields
@@ -548,6 +557,8 @@ var controllers = {
         'payment.acccountPaymentNumber': accountNumber,
         'payment.altAcctPaymentName': altAccountName,
         'payment.altAcctPaymentNumber': altAccountNumber,
+        'rate.gcashProfile': gcashProfile,
+        'rate.altGcashProfile': altGcashProfile,
         isGcashUpdated: true
       }
 
@@ -562,11 +573,13 @@ var controllers = {
       const updatedFreelancer = await Freelancers.findOneAndUpdate(
         {uuid: mongoose.Types.ObjectId(id)},
         updateFields,
-        {new: true, fields: 'uuid payment isGcashUpdated'} // Return the updated fields and exclude unnecessary data
+        {new: true, projection: 'uuid rate payment isGcashUpdated'} // Return the updated fields and exclude unnecessary data
       ).exec() // Use exec() to get a proper promise
       console.log('🚀 ~ updatedFreelancer:', updatedFreelancer)
 
-      if (!updatedFreelancer) {
+      if (updatedFreelancer) {
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(updatedFreelancer.uuid)}, {adminStatus: 'Pending'})
+      } else {
         return res.status(404).json({message: 'Freelancer not found'})
       }
 
@@ -585,6 +598,20 @@ var controllers = {
         refreshToken,
         isGcashUpdated: updatedFreelancer.isGcashUpdated
       }
+
+      const updateDetails = {
+        payment: {
+          accountPaymentType: accountType,
+          accountPaymentName: accountName,
+          accountPaymentNumber: accountNumber,
+          altAcctPaymentName: altAccountName,
+          altAcctPaymentNumber: altAccountNumber,
+          gcashProfile: gcashProfile,
+          altGcashProfile: altGcashProfile
+        },
+        isGcashUpdated: true
+      }
+      await logger.logAccountHistory(user?.accountType, updateDetails, id, oldDetails[0])
 
       return res.status(200).json(result)
     } catch (error) {

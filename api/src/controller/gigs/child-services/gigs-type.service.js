@@ -200,7 +200,7 @@ const services = {
           // Send notifications for areas
           if (areas && areas.length > 0) {
             areas.map(async (area) => {
-              notification.globalNotification(postedGigs, area)
+              notification.globalNotification(gig, area)
             })
           }
         })

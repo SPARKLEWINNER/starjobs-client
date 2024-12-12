@@ -552,13 +552,13 @@ var controllers = {
     try {
       // Prepare the update fields
       const updateFields = {
-        'payment.accountPaymentType': accountType,
-        'payment.acccountPaymentName': accountName,
-        'payment.acccountPaymentNumber': accountNumber,
-        'payment.altAcctPaymentName': altAccountName,
-        'payment.altAcctPaymentNumber': altAccountNumber,
-        'rate.gcashProfile': gcashProfile,
-        'rate.altGcashProfile': altGcashProfile,
+        'proposedPayment.accountPaymentType': accountType,
+        'proposedPayment.acccountPaymentName': accountName,
+        'proposedPayment.acccountPaymentNumber': accountNumber,
+        'proposedPayment.altAcctPaymentName': altAccountName,
+        'proposedPayment.altAcctPaymentNumber': altAccountNumber,
+        'proposedPayment.gcashProfile': gcashProfile,
+        'proposedPayment.altGcashProfile': altGcashProfile,
         isGcashUpdated: true
       }
 
@@ -573,7 +573,7 @@ var controllers = {
       const updatedFreelancer = await Freelancers.findOneAndUpdate(
         {uuid: mongoose.Types.ObjectId(id)},
         updateFields,
-        {new: true, projection: 'uuid rate payment isGcashUpdated'} // Return the updated fields and exclude unnecessary data
+        {new: true, projection: 'uuid rate proposedPayment isGcashUpdated'} // Return the updated fields and exclude unnecessary data
       ).exec() // Use exec() to get a proper promise
       console.log('🚀 ~ updatedFreelancer:', updatedFreelancer)
 
@@ -599,19 +599,19 @@ var controllers = {
         isGcashUpdated: updatedFreelancer.isGcashUpdated
       }
 
-      const updateDetails = {
-        payment: {
-          accountPaymentType: accountType,
-          accountPaymentName: accountName,
-          accountPaymentNumber: accountNumber,
-          altAcctPaymentName: altAccountName,
-          altAcctPaymentNumber: altAccountNumber,
-          gcashProfile: gcashProfile,
-          altGcashProfile: altGcashProfile
-        },
-        isGcashUpdated: true
-      }
-      await logger.logAccountHistory(user?.accountType, updateDetails, id, oldDetails[0])
+      // const updateDetails = {
+      //   payment: {
+      //     accountPaymentType: accountType,
+      //     accountPaymentName: accountName,
+      //     accountPaymentNumber: accountNumber,
+      //     altAcctPaymentName: altAccountName,
+      //     altAcctPaymentNumber: altAccountNumber,
+      //     gcashProfile: gcashProfile,
+      //     altGcashProfile: altGcashProfile
+      //   },
+      //   isGcashUpdated: true
+      // }
+      // await logger.logAccountHistory(user?.accountType, updateDetails, id, oldDetails[0])
 
       return res.status(200).json(result)
     } catch (error) {

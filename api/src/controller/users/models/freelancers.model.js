@@ -170,10 +170,6 @@ const freelancerSchema = new Schema(
       },
       gcashProfile: {
         type: String
-      },
-      altGcashProfile: {
-        type: String,
-        default: ''
       }
     },
     payment: {
@@ -191,6 +187,31 @@ const freelancerSchema = new Schema(
       },
       altAcctPaymentNumber: {
         type: String
+      }
+    },
+    proposedPayment: {
+      accountPaymentType: {
+        type: String
+      },
+      acccountPaymentName: {
+        type: String
+      },
+      acccountPaymentNumber: {
+        type: String
+      },
+      altAcctPaymentName: {
+        type: String
+      },
+      altAcctPaymentNumber: {
+        type: String
+      },
+      gcashProfile: {
+        type: String,
+        default: ''
+      },
+      altGcashProfile: {
+        type: String,
+        default: ''
       }
     },
     dateCreated: {

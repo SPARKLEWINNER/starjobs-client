@@ -40,6 +40,7 @@ const services = {
       pickup, // pickup details
       dropoff, // array of dropoff details
       numberOfRiders, // e.g., 1 or more for multiple riders
+      numberOfGigs,
       baseFare,
       allowance,
       rateType, // e.g., 'Per KM' or 'Per trip'
@@ -85,9 +86,13 @@ const services = {
         }))
 
         const createdDropOffs = await DropOffs.insertMany(dropOffData)
-        for (let riderIndex = 0; riderIndex < parseRiders; riderIndex++) {
-          const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
-          const uniquePosition = `Rider-${uniqueCode}`
+
+        // for (let riderIndex = 0; riderIndex < parseRiders; riderIndex++) {
+        // const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
+        // const uniquePosition = `Rider-${uniqueCode}`
+        const uniqueCode = Math.random().toString(36).substr(2, 5) // Generate a random 5-character string
+        for (let riderIndex = 1; riderIndex <= parseRiders; riderIndex++) {
+          const uniquePosition = `Rider-${uniqueCode}-${riderIndex}` // Append the index to the unique code
           const singleGigData = {
             user: [
               {
@@ -141,64 +146,78 @@ const services = {
         })
       } else {
         // Handle non-parcel categories
-        const gigData = {
-          _id: mongoose.Types.ObjectId(),
-          user: [
-            {
-              _id: mongoose.Types.ObjectId(client._id),
-              location: client.location,
-              companyName: client.companyName,
-              website: client.website,
-              thumbnail: BUCKET_URL + client.photo
-            }
-          ],
-          time,
-          from,
-          shift,
-          hours,
-          fee,
-          date,
-          category,
-          position,
-          breakHr,
-          fees: {
-            ...fees,
-            proposedWorkTime: 0,
-            proposedRate: 0
-          },
-          location,
-          contactNumber,
-          notes,
-          gigOffered,
-          locationRate,
-          uid: mongoose.Types.ObjectId(id),
-          dateCreated: now.toISOString(),
-          gigFeeType: gigFeeType || 'Daily',
-          commissionRate: commissionFee
+        const parseNumOfGigs = parseInt(numberOfGigs)
+        console.log('🚀 ~ parseNumOfGigs:', parseNumOfGigs)
+
+        // Create gigs for each rider
+        const gigPromises = []
+
+        for (let gigIndex = 1; gigIndex <= parseNumOfGigs; gigIndex++) {
+          const uniquePosition = `${position}-${gigIndex}`
+          const gigData = {
+            _id: mongoose.Types.ObjectId(),
+            user: [
+              {
+                _id: mongoose.Types.ObjectId(client._id),
+                location: client.location,
+                companyName: client.companyName,
+                website: client.website,
+                thumbnail: BUCKET_URL + client.photo
+              }
+            ],
+            time,
+            from,
+            shift,
+            hours,
+            fee,
+            date,
+            category,
+            position: uniquePosition,
+            breakHr,
+            fees: {
+              ...fees,
+              proposedWorkTime: 0,
+              proposedRate: 0
+            },
+            location,
+            contactNumber,
+            notes,
+            gigOffered,
+            locationRate,
+            numberOfGigs,
+            uid: mongoose.Types.ObjectId(id),
+            dateCreated: now.toISOString(),
+            gigFeeType: gigFeeType || 'Daily',
+            commissionRate: commissionFee
+          }
+          gigPromises.push(gigData)
         }
 
-        const postedGig = await Gigs.create(gigData)
+        // Insert all gigs in one call
+        const postedGigs = await Gigs.insertMany(gigPromises)
 
-        // Send notifications for areas
-        if (areas && areas.length > 0) {
-          areas.map(async (area) => {
-            notification.globalNotification(gigData, area)
-          })
-        }
+        postedGigs.map(async (gig) => {
+          // Send notifications for areas
+          if (areas && areas.length > 0) {
+            areas.map(async (area) => {
+              notification.globalNotification(gig, area)
+            })
+          }
+        })
 
         // Handle repeatable gigs
         if (isRepeatable) {
           const jobsObj = new Jobs({
             repeatTimes,
             repeatEvery,
-            gid: mongoose.Types.ObjectId(postedGig._id),
+            gid: mongoose.Types.ObjectId(postedGigs._id),
             uid: mongoose.Types.ObjectId(id),
             dateCreated: now.toISOString()
           })
           await Jobs.create(jobsObj)
         }
 
-        return res.status(201).json({success: true, gig: postedGig})
+        return res.status(201).json({success: true, gig: postedGigs})
       }
     } catch (error) {
       console.error(error)

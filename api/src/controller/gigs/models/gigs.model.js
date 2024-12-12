@@ -110,6 +110,10 @@ const gigsData = {
   commissionRate: String,
   applicants: [],
   records: [],
+  numberOfGigs: {
+    type: Number,
+    default: null
+  },
   pickup: {
     name: {type: String},
     phone: {type: String},
@@ -128,7 +132,7 @@ const gigsData = {
   dropOffs: [{type: mongoose.Schema.Types.ObjectId, ref: 'DropOffs'}],
   numberOfRiders: {
     type: Number,
-    default: 1
+    default: null
   },
   type: {
     type: String,

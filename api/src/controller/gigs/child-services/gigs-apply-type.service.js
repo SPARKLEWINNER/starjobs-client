@@ -235,7 +235,7 @@ async function sendNotification(request, gigs, status) {
       if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
 
-        fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+        // fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
       }
       // Send SMS Notif
       // sms.cast_sms(recipients, message[0].description)

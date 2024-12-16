@@ -37,7 +37,10 @@ var controllers = {
       rate,
       payment,
       photo,
-      documents
+      documents,
+      pointOfContactId,
+      businessPermit,
+      expirationDate
     } = req.body
     const now = new Date()
 
@@ -58,6 +61,9 @@ var controllers = {
       payment,
       photo,
       documents,
+      pointOfContactId,
+      businessPermit,
+      expirationDate,
       dateCreated: now.toISOString()
     })
 
@@ -66,7 +72,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(id)},
-          {isActive: true, firstName: firstName, lastName: lastName}
+          {adminStatus: 'Pending', verificationRemarks: 'New client created', firstName: firstName, lastName: lastName}
         )
       }
     } catch (error) {
@@ -145,7 +151,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(result.uid)},
-          {firstName: firstName, lastName: lastName}
+          {verificationRemarks: 'Client details updated', firstName: firstName, lastName: lastName}
         )
       }
 

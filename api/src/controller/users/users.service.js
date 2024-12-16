@@ -548,7 +548,8 @@ var controllers = {
         'payment.acccountPaymentNumber': accountNumber,
         'payment.altAcctPaymentName': altAccountName,
         'payment.altAcctPaymentNumber': altAccountNumber,
-        isGcashUpdated: true
+        isGcashUpdated: true,
+        verificationRemarks: 'Gcash details updated'
       }
 
       // Remove fields that are not provided (null or undefined)

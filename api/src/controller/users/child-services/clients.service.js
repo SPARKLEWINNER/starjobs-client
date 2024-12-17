@@ -182,14 +182,26 @@ var controllers = {
 
     await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'Client', id) // validate if data exists
 
-    const {documents} = req.body
+    const {documents, pointOfContactId, businessPermit, expirationDate} = req.body
 
+    const docsObject = {
+      documents,
+      pointOfContactId,
+      businessPermit,
+      expirationDate
+    }
     const oldDetails = await Clients.find({uid: mongoose.Types.ObjectId(id)})
       .lean()
       .exec()
 
     try {
-      result = await Clients.findOneAndUpdate({uid: mongoose.Types.ObjectId(id)}, {documents: documents})
+      result = await Clients.findOneAndUpdate({uid: mongoose.Types.ObjectId(id)}, docsObject)
+      if (result) {
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(result.uid)},
+          {verificationRemarks: 'Client documents updated', adminStatus: 'Pending'}
+        )
+      }
       user = await Users.find({_id: mongoose.Types.ObjectId(result.uid)})
         .lean()
         .exec()

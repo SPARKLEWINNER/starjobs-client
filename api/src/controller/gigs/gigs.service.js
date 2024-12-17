@@ -299,7 +299,7 @@ var controllers = {
 
       const filter = {
         status: {$in: ['Waiting', 'Applying', 'Contracts']},
-        $or: [{time: {$gte: today.toISOString()}}, {time: {$gte: today}}],
+        time: {$gte: today.toISOString()}, // Ensure this field's format matches database entries
         category: category
       }
 
@@ -311,14 +311,16 @@ var controllers = {
         user: 1,
         from: 1,
         time: 1,
-        locationRate: 1,
         fees: 1,
+        location: 1,
+        locationRate: 1,
         category: 1,
+        createdAt: 1,
         pickup: 1,
         dropOffs: 1
       }
 
-      const initial_find = await Gigs.find(filter, projection).lean().exec()
+      const initial_find = await Gigs.find(filter, projection).sort({createdAt: -1}).lean().exec()
 
       categ_gigs = initial_find.filter((obj) => {
         return moment(obj.from, moment.ISO_8601, true).isValid()

@@ -15,48 +15,50 @@ var controllers = {
         return res.status(400).json({success: false, msg: 'Invalid request'})
       }
 
-      const checkFCMTokens = await FCMTOKEN.find({ fcmToken: fcmToken });
+      const checkFCMTokens = await FCMTOKEN.find({fcmToken: fcmToken})
 
-      let dupCount = 0;
-      let diffCount = 0;
-      let token;
+      let dupCount = 0
+      let diffCount = 0
+      let token
 
       if (checkFCMTokens.length > 0) {
-        await Promise.all(checkFCMTokens.map(async (fcm) => {
-          if (fcm.userId.toString() !== id.toString()) {
-            diffCount++;
-            await FCMTOKEN.deleteOne({ fcmToken: fcm.fcmToken, userId: fcm.userId });
-          } else {
-            dupCount++;
-            if (dupCount > 1) {
-              await FCMTOKEN.deleteOne({ fcmToken: fcm.fcmToken, userId: id });
+        await Promise.all(
+          checkFCMTokens.map(async (fcm) => {
+            if (fcm.userId.toString() !== id.toString()) {
+              diffCount++
+              await FCMTOKEN.deleteOne({fcmToken: fcm.fcmToken, userId: fcm.userId})
+            } else {
+              dupCount++
+              if (dupCount > 1) {
+                await FCMTOKEN.deleteOne({fcmToken: fcm.fcmToken, userId: id})
+              }
             }
-          }
-        }));
+          })
+        )
         if (dupCount === 0 && diffCount >= 1) {
           token = new FCMTOKEN({
             userId: id,
             fcmToken: fcmToken,
             device: device
-          });
-          await token.save();
+          })
+          await token.save()
 
-          await Users.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { isNotifOn: true });
-          return res.status(200).json({ success: true, msg: 'Successfully registered FCM token', data: token });
+          await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isNotifOn: true})
+          return res.status(200).json({success: true, msg: 'Successfully registered FCM token', data: token})
         }
 
-        await Users.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { isNotifOn: true });
-        return res.status(200).json({ success: true, msg: 'Token already exists, proceeding to login', data: token });
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isNotifOn: true})
+        return res.status(200).json({success: true, msg: 'Token already exists, proceeding to login', data: token})
       } else {
         token = new FCMTOKEN({
           userId: id,
           fcmToken: fcmToken,
           device: device
-        });
-        await token.save();
-        await Users.findOneAndUpdate({ _id: mongoose.Types.ObjectId(id) }, { isNotifOn: true });
+        })
+        await token.save()
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isNotifOn: true})
 
-        return res.status(200).json({ success: true, msg: 'Successfully registered FCM token', data: token });
+        return res.status(200).json({success: true, msg: 'Successfully registered FCM token', data: token})
       }
     } catch (error) {
       console.error(error)
@@ -91,6 +93,7 @@ var controllers = {
     }
   },
   get_active_fcm_token: async function (req, res) {
+    console.log('🚀 ~ req:', req.params)
     try {
       const userId = req.params.id
       console.log('🚀 ~ file: fcm-registration.service.js:57 ~ userId:', userId)

@@ -99,6 +99,14 @@ var controllers = {
       console.log('🚀 ~ file: fcm-registration.service.js:57 ~ userId:', userId)
       // const thresholdTime = 24 * 60 * 60 * 1000
 
+      // Validate userId
+      if (!userId) {
+        return res.status(400).json({success: false, message: 'User ID is required.'})
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({success: false, message: 'Invalid User ID format.'})
+      }
       const token = await FCMTOKEN.find({userId: mongoose.Types.ObjectId(userId)})
         // .sort({createdAt: -1})
         .exec()

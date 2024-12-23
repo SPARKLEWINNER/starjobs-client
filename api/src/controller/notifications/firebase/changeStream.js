@@ -53,7 +53,8 @@ const notifyUsers = async (updatedDocument) => {
             console.error(`Error sending message to token ${token}:`, error)
             if (
               error.code === 'messaging/registration-token-not-registered' ||
-              error.code === 'messaging/invalid-registration-token'
+              error.code === 'messaging/invalid-registration-token' ||
+              error.code === 'messaging/mismatched-credential'
             ) {
               console.log('The FCM token is invalid or has expired. Removing it from the database.')
               try {
@@ -66,7 +67,7 @@ const notifyUsers = async (updatedDocument) => {
           }
         })
       } else {
-        console.log('No tokens available to send notifications')
+        console.error('No tokens available to send notifications')
       }
     } catch (error) {
       console.error('Error sending notification:', error)

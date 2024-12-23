@@ -686,7 +686,8 @@ var services = {
                   grossVAT,
                   grossWithHolding,
                   serviceCost,
-                  jobsterTotal
+                  jobsterTotal,
+                  gigExtension
                 } = calculations.new_calculation(
                   actualTime,
                   gigs.fee,
@@ -722,7 +723,10 @@ var services = {
                       grossVAT: grossVAT,
                       grossWithHolding: grossWithHolding,
                       serviceCost: serviceCost,
-                      jobsterTotal: jobsterTotal
+                      jobsterTotal: jobsterTotal,
+                      gigExtension: gigExtension,
+                      proposedExtensionHr: actualExtension,
+                      proposedNightSurgeHr: actualNightSurge
                     },
                     late: late ?? null
                   }

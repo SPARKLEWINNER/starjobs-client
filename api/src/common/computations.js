@@ -87,7 +87,7 @@ var controller = {
       lateDeduction
     }
   },
-  new_calculation: function (hours, fee, gigOffered, postingDays, late) {
+  new_calculation: function (hours, fee, gigOffered, postingDays, late, gigExtentionHr) {
     let lateByHours = parseFloat(late) / parseFloat(60)
     const finalHours = hours - lateByHours
     const totalGigFee = parseFloat(fee)
@@ -102,6 +102,7 @@ var controller = {
     } else {
       feePerHr = (parseFloat(fee) - parseFloat(voluntaryFee).toFixed(2)) / finalHours
     }
+    const gigExtension = parseFloat(fee) * 1.25 * parseFloat(gigExtentionHr)
 
     const computedFeeByHr = totalGigFee
     const computedDaily = gigOffered === 'Daily' ? totalGigFeeDaily - 80.19 : 0
@@ -116,7 +117,7 @@ var controller = {
     } else {
       transactionFee = 0
     }
-    const grossGigFee = totalGigFee + appFee + parseFloat(transactionFee)
+    const grossGigFee = totalGigFee + appFee + parseFloat(transactionFee) + gigExtension
     const grossGigDaily = gigOffered === 'Daily' ? totalGigFeeDaily + appFee + parseFloat(transactionFee) : 0
     const grossGigHourly = gigOffered === 'Hourly' ? totalGigFeeHourly + appFee + parseFloat(transactionFee) : 0
 
@@ -157,7 +158,8 @@ var controller = {
       grossWithHolding,
       serviceCost,
       jobsterTotal,
-      lateByHours
+      lateByHours,
+      gigExtension
     }
   },
   parcel_calculations: function (hours, fee) {

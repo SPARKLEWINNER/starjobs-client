@@ -831,7 +831,10 @@ var services = {
               }
             }
           } else {
-            await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {status: status, late: late ?? null})
+            await Gigs.findOneAndUpdate(
+              {_id: Types.ObjectId(id)},
+              {status: status, late: late ?? null, remarks: remarks ?? null}
+            )
           }
         }
       }
@@ -853,6 +856,7 @@ var services = {
                 },
                 appliedDropOffs: appliedDrops
               }),
+              remarks: remarks ?? null,
               date_created: now.toISOString()
             }
           }

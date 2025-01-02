@@ -34,6 +34,7 @@ const DropOffSchema = new Schema({
   proof: {
     type: String
   },
+  perDropKm: {type: String},
   timeArrived: {type: String},
   timeDeparture: {type: String},
   waitingTime: {type: String},

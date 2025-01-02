@@ -482,18 +482,25 @@ var services = {
           if (status === 'End-Shift') {
             if (category === 'parcels') {
               // Process new or existing drop-offs
-              const dropOffUpdates = dropoffDetails.map((detail, index) => ({
-                address: detail.address.value || detail.address.label,
-                route: detail.address.route || '',
-                lat: detail.address.lat,
-                long: detail.address.long,
-                status: 'End-Shift',
-                proof: uploadedFiles[`dropoff_${index}_timeStamp`] || '',
-                timeArrived: detail.timeArrived,
-                timeDeparture: detail.timeFinnished,
-                waitingTime: detail.totalTime,
-                gig: [Types.ObjectId(id)] // Reference to the gig
-              }))
+              const dropOffUpdates = dropoffDetails.map((detail, index) => {
+                if (detail.perDropKm == null) {
+                  console.error(`Missing perDropKm for drop-off at index ${index}:`, detail)
+                }
+
+                return {
+                  address: detail.address.value || detail.address.label,
+                  route: detail.address.route || '',
+                  lat: detail.address.lat,
+                  long: detail.address.long,
+                  status: 'End-Shift',
+                  perDropKm: detail.perDropKm || 0, // Default to 0 if missing
+                  proof: uploadedFiles[`dropoff_${index}_timeStamp`] || '',
+                  timeArrived: detail.timeArrived,
+                  timeDeparture: detail.timeFinnished,
+                  waitingTime: detail.totalTime,
+                  gig: [Types.ObjectId(id)] // Reference to the gig
+                }
+              })
 
               // Bulk update or create drop-offs and collect their ObjectIDs
               const dropOffObjectIds = await Promise.all(

@@ -552,14 +552,14 @@ var controllers = {
     try {
       // Prepare the update fields
       const updateFields = {
-        'proposedPayment.accountPaymentType': accountType,
-        'proposedPayment.acccountPaymentName': accountName,
-        'proposedPayment.acccountPaymentNumber': accountNumber,
-        'proposedPayment.altAcctPaymentName': altAccountName,
-        'proposedPayment.altAcctPaymentNumber': altAccountNumber,
-        'proposedPayment.gcashProfile': gcashProfile,
-        'proposedPayment.altGcashProfile': altGcashProfile,
-        isGcashUpdated: true
+        'payment.accountPaymentType': accountType,
+        'payment.acccountPaymentName': accountName,
+        'payment.acccountPaymentNumber': accountNumber,
+        'payment.altAcctPaymentName': altAccountName,
+        'payment.altAcctPaymentNumber': altAccountNumber,
+        isGcashUpdated: true,
+        verificationRemarks: 'Gcash details updated'
+
       }
 
       // Remove fields that are not provided (null or undefined)

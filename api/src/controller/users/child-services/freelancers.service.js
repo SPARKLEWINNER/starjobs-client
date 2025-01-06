@@ -102,7 +102,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(id)},
-          {adminStatus: 'Pending', firstName: firstName, lastName: lastName}
+          {adminStatus: 'Pending', verificationRemarks: 'New jobster created', firstName: firstName, lastName: lastName}
         )
       }
     } catch (error) {
@@ -214,6 +214,7 @@ var controllers = {
           {
             firstName: firstName,
             lastName: lastName,
+            verificationRemarks: 'Jobster Details Updated',
             ...(oldUserData.adminStatus !== 'Verified' && {adminStatus: 'Pending'})
           }
         )
@@ -297,7 +298,10 @@ var controllers = {
     try {
       result = await Freelancers.findOneAndUpdate({uuid: mongoose.Types.ObjectId(id)}, details)
       if (result) {
-        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(result.uuid)}, {adminStatus: 'Pending'})
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(result.uuid)},
+          {adminStatus: 'Pending', verificationRemarks: 'Requirement files updated'}
+        )
       }
       console.log('🚀 ~ result:', result)
 

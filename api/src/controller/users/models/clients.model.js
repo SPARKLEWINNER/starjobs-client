@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 const {Schema, Types} = mongoose
+const moment = require('moment-timezone')
+const timezone = moment.tz(Date.now(), 'Asia/Manila')
+
 const collectionName = 'users-clients'
+
 const clientSchema = new Schema(
   {
     uid: {type: Types.ObjectId, ref: 'Users'},
@@ -81,6 +85,16 @@ const clientSchema = new Schema(
     },
     documents: {
       type: String
+    },
+    pointOfContactId: {
+      type: String
+    },
+    businessPermit: {
+      type: String
+    },
+    expirationDate: {
+      type: Date,
+      timezone: timezone
     }
   },
   {timestamps: true}

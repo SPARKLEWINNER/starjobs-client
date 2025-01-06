@@ -39,6 +39,7 @@ const gigsData = {
     default: false
   },
   notes: String,
+  jobsterNotes: String,
   remarks: String,
   dateCreated: {
     type: Date,

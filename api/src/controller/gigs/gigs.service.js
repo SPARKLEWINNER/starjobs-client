@@ -81,7 +81,6 @@ var controllers = {
     try {
       const today = moment.utc().startOf('day')
 
-      // Base filter for time and status (applied in both queries)
       const baseFilter = {
         status: {$in: ['Waiting', 'Applying', 'Contracts']},
         $or: [
@@ -674,6 +673,7 @@ var controllers = {
           ])
             .match({
               'records.auid': mongoose.Types.ObjectId(id),
+              'records.status': {$in: statusArray},
               status: {$in: statusArray}
             })
             .sort({createdAt: 1})

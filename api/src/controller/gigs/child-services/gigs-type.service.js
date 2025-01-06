@@ -196,12 +196,14 @@ const services = {
         // Insert all gigs in one call
         const postedGigs = await Gigs.insertMany(gigPromises)
 
-        // Send notifications for areas
-        if (areas && areas.length > 0) {
-          areas.map(async (area) => {
-            notification.globalNotification(postedGigs, area)
-          })
-        }
+        postedGigs.map(async (gig) => {
+          // Send notifications for areas
+          if (areas && areas.length > 0) {
+            areas.map(async (area) => {
+              notification.globalNotification(gig, area)
+            })
+          }
+        })
 
         // Handle repeatable gigs
         if (isRepeatable) {

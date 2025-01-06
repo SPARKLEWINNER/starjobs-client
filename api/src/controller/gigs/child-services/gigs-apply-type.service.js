@@ -235,7 +235,7 @@ async function sendNotification(request, gigs, status) {
       if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
 
-        fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+        // fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
       }
       // Send SMS Notif
       // sms.cast_sms(recipients, message[0].description)
@@ -273,7 +273,8 @@ var services = {
       pickupDetails,
       updatedRidersFee,
       uploadedFiles,
-      remarks
+      remarks,
+      jobsterNotes
     } = req.body
     const {id} = req.params
 
@@ -382,37 +383,71 @@ var services = {
             // console.log('🚀 ~ acceptedDropOffs:', acceptedDropOffs)
             console.log('🚀 ~ dropOffs:', dropOffs, '🚀 ~ dropOffs:')
 
+            const takenDropOffs = await DropOffs.find({
+              _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
+              status: {$eq: 'Applying'}
+            })
+
             // Step 3: Decline all applicants that have same DropOff
-            const otherGigIds = dropOffs
+            const otherGigIds = takenDropOffs
               .flatMap((dropOff) => dropOff.gig) // Collect all IDs in the `gig` array property
               .filter((gigId) => !Types.ObjectId(gigId).equals(id)) // Filter out the specified id
             console.log('All gig IDs excluding specified id:', otherGigIds, '<All gig IDs excluding specified id')
 
-            const otherRiderIds = dropOffs
+            const otherRiderIds = takenDropOffs
               .flatMap((dropOff) => dropOff.rider) // Collect all rider IDs
               .filter((riderId) => !Types.ObjectId(riderId).equals(uid)) // Convert `riderId` to ObjectId before comparing
 
             console.log('All rider IDs excluding specified uid:', otherRiderIds, 'All rider IDs excluding uid')
 
-            await History.updateMany(
+            const declinedHistory = await History.updateMany(
               {
                 gid: {$in: otherGigIds},
                 uid: {$in: otherRiderIds},
                 status: 'Applying'
               },
               {
-                $set: {status: 'Declined'}
+                $set: {status: 'Drop-Off-Taken'}
               }
             )
 
-            await Gigs.updateMany(
-              {_id: {$in: otherGigIds}}, //
+            console.log('🚀 ~ declinedHistory:', declinedHistory, '🚀 ~ declinedHistory:')
+            // if (otherRiderIds.length > 0) {
+            //   await Gigs.updateMany(
+            //     {_id: {$in: otherGigIds}}, //
+            //     {
+            //       $pull: {
+            //         records: {auid: {$in: Types.ObjectId(otherRiderIds)}}
+            //       }
+            //     }
+            //   )
+            // }
+
+            // const gigsFound = await Gigs.find({
+            //   _id: {$in: otherGigIds},
+            //   records: {$elemMatch: {auid: {$in: otherRiderIds}}}
+            // })
+
+            // console.log(
+            //   '🚀 ~ gigs:',
+            //   gigsFound.map((gig) => gig.records)
+            // )
+
+            // Step 3: Decline all applicants that have same DropOff
+            const gigsUpdated = await Gigs.updateMany(
               {
-                $pull: {
-                  records: {auid: {$in: otherRiderIds}}
-                }
+                _id: {$in: otherGigIds},
+                'records.auid': {$in: otherRiderIds}
+              },
+              {
+                $set: {'records.$[record].status': 'Drop-Off-Taken'}
+              },
+              {
+                arrayFilters: [{'record.auid': {$in: otherRiderIds}}]
               }
             )
+
+            console.log('🚀 ~ gigsFound:', gigsUpdated, '🚀 ~ gigsFound:')
 
             const acceptedDropOffIds = dropOffs.map((d) => d._id)
             const combinedDropOffs = dropOffs.map((d) => ({
@@ -482,18 +517,25 @@ var services = {
           if (status === 'End-Shift') {
             if (category === 'parcels') {
               // Process new or existing drop-offs
-              const dropOffUpdates = dropoffDetails.map((detail, index) => ({
-                address: detail.address.value || detail.address.label,
-                route: detail.address.route || '',
-                lat: detail.address.lat,
-                long: detail.address.long,
-                status: 'End-Shift',
-                proof: uploadedFiles[`dropoff_${index}_timeStamp`] || '',
-                timeArrived: detail.timeArrived,
-                timeDeparture: detail.timeFinnished,
-                waitingTime: detail.totalTime,
-                gig: [Types.ObjectId(id)] // Reference to the gig
-              }))
+              const dropOffUpdates = dropoffDetails.map((detail, index) => {
+                if (detail.perDropKm == null) {
+                  console.error(`Missing perDropKm for drop-off at index ${index}:`, detail)
+                }
+
+                return {
+                  address: detail.address.value || detail.address.label,
+                  route: detail.address.route || '',
+                  lat: detail.address.lat,
+                  long: detail.address.long,
+                  status: 'End-Shift',
+                  perDropKm: detail.perDropKm || 0, // Default to 0 if missing
+                  proof: uploadedFiles[`dropoff_${index}_timeStamp`] || '',
+                  timeArrived: detail.timeArrived,
+                  timeDeparture: detail.timeFinnished,
+                  waitingTime: detail.totalTime,
+                  gig: [Types.ObjectId(id)] // Reference to the gig
+                }
+              })
 
               // Bulk update or create drop-offs and collect their ObjectIDs
               const dropOffObjectIds = await Promise.all(
@@ -533,7 +575,8 @@ var services = {
                 },
                 dropOffs: dropOffObjectIds, // Store the references to drop-offs
                 deliveryProof: uploadedFiles.deliveryProof,
-                pickup: pickupUpdates
+                pickup: pickupUpdates,
+                jobsterNotes: jobsterNotes || ''
               }
 
               await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {$set: gigUpdate}, {new: true})
@@ -686,7 +729,8 @@ var services = {
                   grossVAT,
                   grossWithHolding,
                   serviceCost,
-                  jobsterTotal
+                  jobsterTotal,
+                  gigExtension
                 } = calculations.new_calculation(
                   actualTime,
                   gigs.fee,
@@ -722,7 +766,10 @@ var services = {
                       grossVAT: grossVAT,
                       grossWithHolding: grossWithHolding,
                       serviceCost: serviceCost,
-                      jobsterTotal: jobsterTotal
+                      jobsterTotal: jobsterTotal,
+                      gigExtension: gigExtension,
+                      proposedExtensionHr: actualExtension,
+                      proposedNightSurgeHr: actualNightSurge
                     },
                     late: late ?? null
                   }

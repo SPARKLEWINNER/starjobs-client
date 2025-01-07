@@ -673,7 +673,7 @@ var controllers = {
           ])
             .match({
               'records.auid': mongoose.Types.ObjectId(id),
-              'records.status': {$in: statusArray},
+              // 'records.status': {$in: statusArray},
               status: {$in: statusArray}
             })
             .sort({createdAt: 1})

@@ -447,6 +447,30 @@ var services = {
               }
             )
 
+            await Gigs.findOneAndUpdate(
+              {_id: Types.ObjectId(id)},
+              {
+                $push: {
+                  records: {
+                    auid: Types.ObjectId(uid),
+                    status: 'Confirm-Arrived',
+                    ...(category === 'parcels' && {
+                      ridersFee: {
+                        addPerDrop: addPerDrop ?? 0,
+                        totalKm: totalKm ?? 0,
+                        perKmFee: gigRatePerKm ?? 0,
+                        expectedPayment: expectedPayment ?? 0,
+                        allowance: allowance ?? 0
+                      },
+                      appliedDropOffs: appliedDrops
+                    }),
+                    remarks: remarks ?? null,
+                    date_created: now.toISOString()
+                  }
+                }
+              }
+            )
+
             console.log('🚀 ~ gigsFound:', gigsUpdated, '🚀 ~ gigsFound:')
 
             const acceptedDropOffIds = dropOffs.map((d) => d._id)
@@ -900,6 +924,7 @@ var services = {
                 appliedDropOffs: appliedDrops
               }),
               remarks: remarks ?? null,
+              jobsterNotes: jobsterNotes ?? null,
               date_created: now.toISOString()
             }
           }

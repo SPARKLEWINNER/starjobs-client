@@ -37,7 +37,10 @@ var controllers = {
       rate,
       payment,
       photo,
-      documents
+      documents,
+      pointOfContactId,
+      businessPermit,
+      expirationDate
     } = req.body
     const now = new Date()
 
@@ -58,6 +61,9 @@ var controllers = {
       payment,
       photo,
       documents,
+      pointOfContactId,
+      businessPermit,
+      expirationDate,
       dateCreated: now.toISOString()
     })
 
@@ -66,7 +72,7 @@ var controllers = {
       if (result) {
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(id)},
-          {isActive: true, firstName: firstName, lastName: lastName}
+          {adminStatus: 'Pending', verificationRemarks: 'New client created', firstName: firstName, lastName: lastName}
         )
       }
     } catch (error) {
@@ -143,9 +149,15 @@ var controllers = {
     try {
       result = await Clients.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, clientObj)
       if (result) {
+        const oldUserData = await Users.findOne({_id: mongoose.Types.ObjectId(result.uid)})
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(result.uid)},
-          {firstName: firstName, lastName: lastName}
+          {
+            firstName: firstName,
+            lastName: lastName,
+            verificationRemarks: 'Client details updated',
+            ...(oldUserData.adminStatus !== 'Verified' && {adminStatus: 'Pending'})
+          }
         )
       }
 
@@ -176,14 +188,26 @@ var controllers = {
 
     await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'Client', id) // validate if data exists
 
-    const {documents} = req.body
+    const {documents, pointOfContactId, businessPermit, expirationDate} = req.body
 
+    const docsObject = {
+      documents,
+      pointOfContactId,
+      businessPermit,
+      expirationDate
+    }
     const oldDetails = await Clients.find({uid: mongoose.Types.ObjectId(id)})
       .lean()
       .exec()
 
     try {
-      result = await Clients.findOneAndUpdate({uid: mongoose.Types.ObjectId(id)}, {documents: documents})
+      result = await Clients.findOneAndUpdate({uid: mongoose.Types.ObjectId(id)}, docsObject)
+      if (result) {
+        await Users.findOneAndUpdate(
+          {_id: mongoose.Types.ObjectId(result.uid)},
+          {verificationRemarks: 'Client documents updated', adminStatus: 'Pending'}
+        )
+      }
       user = await Users.find({_id: mongoose.Types.ObjectId(result.uid)})
         .lean()
         .exec()

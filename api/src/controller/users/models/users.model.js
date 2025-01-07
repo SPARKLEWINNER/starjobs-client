@@ -74,6 +74,10 @@ const userSchema = new Schema(
       type: String,
       default: null
     },
+    verificationRemarks: {
+      type: String,
+      default: null
+    },
     isCityUpdated: {
       type: Boolean,
       required: true,

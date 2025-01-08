@@ -1,4 +1,3 @@
-const fetch = require('axios')
 const mongoose = require('mongoose')
 const {Types} = mongoose
 const moment = require('moment')
@@ -99,14 +98,24 @@ async function sendNotification(request, gigs, status) {
             }
           })
           if (applyingUsers) {
-            const fcmTokenArray = await FcmTokens.distinct('fcmToken', {userId: {$in: applyingUsers}})
+            try{
+            console.log("🚀 ~ Debugging . . .  ~ applyingUsers:", applyingUsers)
+
+            // Fetch the distinct FCM tokens and filter out null/undefined values
+            const fcmTokenArray = await FcmTokens.distinct('fcmToken', { userId: { $in: applyingUsers } })
               .lean()
               .exec()
-              .then((users_fcm) => users_fcm.map((userToken) => userToken.fcmToken))
+              .then((users_fcm) => users_fcm.filter((userToken) => userToken.fcmToken).map((userToken) => userToken.fcmToken));
+            
+            console.log("🚀 ~ Debugging . . . .  ~ fcmTokenArray:", fcmTokenArray);
+
             let message = messageList.filter((obj) => {
               if (obj.status === 'Gig-Taken') return obj
             })
 
+            if (message.length === 0) {
+              throw new Error('No message found for status "Gig-Taken"');
+            }
             const notificationInput = new Notifications({
               title: 'Gig is already taken',
               body: message[0].description,
@@ -118,11 +127,19 @@ async function sendNotification(request, gigs, status) {
 
             url = urlLink + 'freelancer/message'
             await Notifications.create(notificationInput)
+
             if (fcmTokenArray.length > 0) {
-              // Check if there are any FCM tokens before sending the notification
-              console.log('------------Sending Gig Taken Notif----------')
-              fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+              console.log('------------Sending Gig Taken Notif----------');
+              await fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status);
+            } else {
+              console.log('No valid FCM tokens found, notification not sent');
             }
+          } catch (error) {
+            console.error("Error occurred:", error.message || error);
+            // Optionally, log to an external monitoring system (e.g., Sentry, LogRocket)
+            // You can also handle the error by sending a response if needed, e.g.:
+            // return  res.status(500).json({ error: 'Something went wrong while sending the notification.' });
+          }
           }
           if (acceptedAuid) {
             // Notify Accepted Jobster

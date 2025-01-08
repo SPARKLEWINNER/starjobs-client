@@ -156,25 +156,35 @@ var controllers = {
         .lean()
         .exec()
 
-      const efficiency = {
-        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.efficiency': '0'}),
-        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.efficiency': '1'})
+      const result = await GigRating.aggregate([
+        {
+          $match: {uid: mongoose.Types.ObjectId(id)}
+        },
+        {
+          $facet: {
+            efficiency: [{$group: {_id: '$rates.efficiency', count: {$sum: 1}}}],
+            recommendable: [{$group: {_id: '$rates.recommendable', count: {$sum: 1}}}],
+            completeness: [{$group: {_id: '$rates.completeness', count: {$sum: 1}}}],
+            showRate: [{$group: {_id: '$rates.showRate', count: {$sum: 1}}}]
+          }
+        }
+      ])
+
+      // Helper function to format the result
+      const formatCounts = (facet) => {
+        const counts = {black: 0, gold: 0}
+        facet.forEach((item) => {
+          if (item._id === '0') counts.black = item.count
+          if (item._id === '1') counts.gold = item.count
+        })
+        return counts
       }
 
-      const recommendable = {
-        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.recommendable': '0'}),
-        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.recommendable': '1'})
-      }
-
-      const completeness = {
-        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.completeness': '0'}),
-        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.completeness': '1'})
-      }
-
-      const showRate = {
-        black: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '0'}),
-        gold: await GigRating.countDocuments({uid: mongoose.Types.ObjectId(id), 'rates.showRate': '1'})
-      }
+      // Format the results
+      const efficiency = formatCounts(result[0].efficiency)
+      const recommendable = formatCounts(result[0].recommendable)
+      const completeness = formatCounts(result[0].completeness)
+      const showRate = formatCounts(result[0].showRate)
 
       const rateComments = await GigRating.aggregate([
         {

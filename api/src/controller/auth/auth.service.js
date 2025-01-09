@@ -48,7 +48,7 @@ var controllers = {
             refreshToken,
             ...userData,
             photo: account[0]?.photo,
-            isGcashUpdated: account[0].isGcashUpdated
+            isGcashUpdated: account[0]?.isGcashUpdated
           }) // freelancer
         } else {
           const client = await Clients.find({uid: mongoose.Types.ObjectId(userData._id)}, {photo: 1})

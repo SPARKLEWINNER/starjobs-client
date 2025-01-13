@@ -92,6 +92,7 @@ var controllers = {
     let categories
     try {
       categories = await Categories.find({status: 0}).lean().exec()
+      console.log("🚀 ~ categories:", categories)
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Categories.get_categories', null, null, 'GET')
@@ -99,12 +100,12 @@ var controllers = {
       return res.status(502).json({success: false, msg: 'Unable to get categories'})
     }
 
-    let category = categories.map((item) => {
-      item.image = BUCKET_URL + item.image
-      return item
-    })
+    // let category = categories.map((item) => {
+    //   item.image = BUCKET_URL + item.image
+    //   return item
+    // })
 
-    return res.status(200).json(category)
+    return res.status(200).json(categories)
   },
 
   get_logs: async function (req, res) {

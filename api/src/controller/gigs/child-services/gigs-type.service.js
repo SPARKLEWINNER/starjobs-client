@@ -6,6 +6,7 @@ const Users = require('../../users/models/users.model')
 const Clients = require('../../users/models/clients.model')
 const Jobs = require('../models/gig-queue-jobs.model')
 const Gigs = require('../models/gigs.model')
+const GigsInitial = require('../models/gigs-initial.model')
 const DropOffs = require('../models/gig-dropoffs.model')
 
 const logger = require('../../../common/loggers')
@@ -48,6 +49,14 @@ const services = {
       addPerDrop
     } = req.body
     console.log('🚀 ~ req.body:', req.body)
+
+    if (!pickup || !pickup.location) {
+      return res.status(400).json({success: false, message: 'Pickup location is required'})
+    }
+
+    if (dropoff.lenght === 0) {
+      return res.status(400).json({success: false, message: 'Drop-Off location is required'})
+    }
 
     const now = new Date()
     const locationRate = req.body.locationRate || 'Not applicable'
@@ -135,6 +144,7 @@ const services = {
 
           // Add gig creation to the list of promises
           gigPromises.push(Gigs.create(singleGigData))
+          // gigPromises.push(GigsInitial.create(singleGigData))
         }
 
         const postedGigs = await Promise.all(gigPromises)
@@ -195,6 +205,7 @@ const services = {
 
         // Insert all gigs in one call
         const postedGigs = await Gigs.insertMany(gigPromises)
+        // await GigsInitial.insertMany(gigPromises)
 
         postedGigs.map(async (gig) => {
           // Send notifications for areas

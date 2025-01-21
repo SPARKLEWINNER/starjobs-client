@@ -50,14 +50,6 @@ const services = {
     } = req.body
     console.log('🚀 ~ req.body:', req.body)
 
-    if (!pickup || !pickup.location) {
-      return res.status(400).json({success: false, message: 'Pickup location is required'})
-    }
-
-    if (dropoff.lenght === 0) {
-      return res.status(400).json({success: false, message: 'Drop-Off location is required'})
-    }
-
     const now = new Date()
     const locationRate = req.body.locationRate || 'Not applicable'
 
@@ -79,6 +71,14 @@ const services = {
 
     try {
       if (category === 'parcels') {
+        if (!pickup || !pickup.location) {
+          return res.status(400).json({success: false, message: 'Pickup location is required'})
+        }
+
+        if (dropoff.lenght === 0) {
+          return res.status(400).json({success: false, message: 'Drop-Off location is required'})
+        }
+
         console.log('🚀 ~ category:', category)
         const parseRiders = parseInt(numberOfRiders)
 

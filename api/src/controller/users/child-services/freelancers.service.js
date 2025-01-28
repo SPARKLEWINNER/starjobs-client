@@ -139,8 +139,8 @@ var controllers = {
     const existingFreelancer = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(id)})
       .lean()
       .exec()
-    if (existingFreelancer) {
-      return res.status(409).json({success: false, msg: 'Freelancer account already exists'})
+    if (!existingFreelancer) {
+      return res.status(409).json({success: false, msg: 'Freelancer not found'})
     }
     const {
       firstName,

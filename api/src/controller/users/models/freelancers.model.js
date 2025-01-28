@@ -4,7 +4,7 @@ const collectionName = 'users-freelancers'
 
 const freelancerSchema = new Schema(
   {
-    uuid: {type: Types.ObjectId, ref: 'User'},
+    uuid: {type: Types.ObjectId, ref: 'User', unique: true},
     firstName: {
       type: String,
       required: true

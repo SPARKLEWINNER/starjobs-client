@@ -98,48 +98,50 @@ async function sendNotification(request, gigs, status) {
             }
           })
           if (applyingUsers) {
-            try{
-            console.log("🚀 ~ Debugging . . .  ~ applyingUsers:", applyingUsers)
+            try {
+              console.log('🚀 ~ Debugging . . .  ~ applyingUsers:', applyingUsers)
 
-            // Fetch the distinct FCM tokens and filter out null/undefined values
-            const fcmTokenArray = await FcmTokens.distinct('fcmToken', { userId: { $in: applyingUsers } })
-              .lean()
-              .exec()
-              .then((users_fcm) => users_fcm.filter((userToken) => userToken.fcmToken).map((userToken) => userToken.fcmToken));
-            
-            console.log("🚀 ~ Debugging . . . .  ~ fcmTokenArray:", fcmTokenArray);
+              // Fetch the distinct FCM tokens and filter out null/undefined values
+              const fcmTokenArray = await FcmTokens.distinct('fcmToken', {userId: {$in: applyingUsers}})
+                .lean()
+                .exec()
+                .then((users_fcm) =>
+                  users_fcm.filter((userToken) => userToken.fcmToken).map((userToken) => userToken.fcmToken)
+                )
 
-            let message = messageList.filter((obj) => {
-              if (obj.status === 'Gig-Taken') return obj
-            })
+              console.log('🚀 ~ Debugging . . . .  ~ fcmTokenArray:', fcmTokenArray)
 
-            if (message.length === 0) {
-              throw new Error('No message found for status "Gig-Taken"');
+              let message = messageList.filter((obj) => {
+                if (obj.status === 'Gig-Taken') return obj
+              })
+
+              if (message.length === 0) {
+                throw new Error('No message found for status "Gig-Taken"')
+              }
+              const notificationInput = new Notifications({
+                title: 'Gig is already taken',
+                body: message[0].description,
+                targetUsers: applyingUsers,
+                type: 'GigNotif',
+                target: 'Selected',
+                additionalData: JSON.stringify(gigs)
+              })
+
+              url = urlLink + 'freelancer/message'
+              await Notifications.create(notificationInput)
+
+              if (fcmTokenArray.length > 0) {
+                console.log('------------Sending Gig Taken Notif----------')
+                await fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
+              } else {
+                console.log('No valid FCM tokens found, notification not sent')
+              }
+            } catch (error) {
+              console.error('Error occurred:', error.message || error)
+              // Optionally, log to an external monitoring system (e.g., Sentry, LogRocket)
+              // You can also handle the error by sending a response if needed, e.g.:
+              // return  res.status(500).json({ error: 'Something went wrong while sending the notification.' });
             }
-            const notificationInput = new Notifications({
-              title: 'Gig is already taken',
-              body: message[0].description,
-              targetUsers: applyingUsers,
-              type: 'GigNotif',
-              target: 'Selected',
-              additionalData: JSON.stringify(gigs)
-            })
-
-            url = urlLink + 'freelancer/message'
-            await Notifications.create(notificationInput)
-
-            if (fcmTokenArray.length > 0) {
-              console.log('------------Sending Gig Taken Notif----------');
-              await fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status);
-            } else {
-              console.log('No valid FCM tokens found, notification not sent');
-            }
-          } catch (error) {
-            console.error("Error occurred:", error.message || error);
-            // Optionally, log to an external monitoring system (e.g., Sentry, LogRocket)
-            // You can also handle the error by sending a response if needed, e.g.:
-            // return  res.status(500).json({ error: 'Something went wrong while sending the notification.' });
-          }
           }
           if (acceptedAuid) {
             // Notify Accepted Jobster
@@ -890,11 +892,13 @@ var services = {
                   if (error.code === 11000) {
                     console.error('Duplicate key error:', error)
                     // Send a response to the client to handle the duplicate key error gracefully
-                    res.status(400).json({message: 'Duplicate entry detected', error: error.message})
+                    res.status(400).json({success: false, message: 'Duplicate entry detected', error: error.message})
                   } else {
                     console.error('Unexpected error occurred:', error)
                     // Handle other errors or rethrow
-                    res.status(500).json({message: 'An unexpected error occurred', error: error.message})
+                    res
+                      .status(500)
+                      .json({success: false, message: 'An unexpected error occurred', error: error.message})
                     throw error
                   }
                 }

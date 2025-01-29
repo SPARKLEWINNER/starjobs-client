@@ -135,13 +135,7 @@ var controllers = {
     const {id} = req.params
     let user, result
     await getSpecificData({uuid: id}, Freelancers, 'User', id) // validate if data exists
-    // Check if uuid already exists in Freelancers collection
-    const existingFreelancer = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(id)})
-      .lean()
-      .exec()
-    if (!existingFreelancer) {
-      return res.status(409).json({success: false, msg: 'Freelancer not found'})
-    }
+
     const {
       firstName,
       lastName,

@@ -24,7 +24,7 @@ var controllers = {
       .lean()
       .exec()
     if (existingFreelancer) {
-      return res.status(409).json({success: false, msg: 'Freelancer account already exists'})
+      return res.status(502).json({success: false, msg: 'Freelancer account already exists'})
     }
 
     const now = new Date()

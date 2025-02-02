@@ -766,7 +766,7 @@ var controllers = {
 
   patch_remove_gig: async function (req, res) {
     const {id, uid: owner_id} = req.params
-    const {status} = req.body
+    const {status, reason} = req.body
 
     const isGigOwner = await Gigs.find({_id: mongoose.Types.ObjectId(id), uid: mongoose.Types.ObjectId(owner_id)})
       .lean()
@@ -777,10 +777,18 @@ var controllers = {
 
     try {
       const gigsObj = {
-        status
+        status,
+        remarks: reason
       }
 
-      await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj)
+      const cancelledGig = await Gigs.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, gigsObj, {new: true})
+
+      if (cancelledGig) {
+        await discord.send_cancelledGig(isGigOwner, reason)
+      } else {
+        return res.status(404).json({message: 'Gig not found'})
+      }
+
       return res.status(200).json(gigsObj)
     } catch (error) {
       console.error(error)

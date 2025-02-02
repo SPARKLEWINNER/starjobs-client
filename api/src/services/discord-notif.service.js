@@ -142,6 +142,59 @@ var controller = {
         }
       ]
     })
+  },
+
+  send_cancelledGig: async function (gig, reason) {
+    const gigs = gig[0]
+    const feeRate = parseFloat(gigs.fees?.jobsterTotal * gigs.hours)
+
+    const convertToPhilippinesTime = (date) => {
+      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+    }
+
+    await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_CANCELLEDGIG_KEY}`, {
+      // method: 'post',
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // },
+      username: `Gig Details  - Cancelled Gig`,
+      avatar_url:
+        'https://cdn.discordapp.com/avatars/1069382190800056340/c9a9e35eecc4bc6a825f85ccb0e3a207.webp?size=80',
+      embeds: [
+        {
+          title: `**Client Cancelled Gig - ${reason}**`,
+          description: `${gigs.user[0].companyName}| ${gigs.location}| Client`,
+          color: 15258703,
+          fields: [
+            {
+              name: '\u200B', // Empty field for spacing
+              value: '\u200B'
+            },
+            {
+              name: 'Details',
+              value: `**Position:**\n**Fee:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Night Surge:**\n**Night Surge Fee:**\n**Holiday Surge:**\n**Notes:**`,
+              inline: true
+            },
+            {
+              name: 'Old',
+              value: `${gigs.position}\n${gigs.fee}\n${gigs.shift}\n${convertToPhilippinesTime(
+                gigs.from
+              )}\n${convertToPhilippinesTime(gigs.time)}\n${gigs.hours}\nPhp ${parseFloat(feeRate).toFixed(
+                2
+              )} \n ${parseFloat(gigs.fees?.proposedNightSurgeHr).toFixed(2)} hours \nPhp ${parseFloat(
+                gigs.fees?.nightSurge
+              ).toFixed(2)}\nPhp ${parseFloat(gigs.fees?.holidaySurge).toFixed(2)}\n${gigs.notes}\n`,
+              inline: true
+            }
+          ],
+          footer: {
+            text: `${moment().format('MMM-DD-YYYY hh:mm A')}`,
+            icon_url:
+              'https://images-ext-1.discordapp.net/external/KfTbvCiVmFUlsvw_NRHZP5ttamV6eSRStISSJuSgkRI/https/app.starjobs.com.ph/icons/icon-512x512.png'
+          }
+        }
+      ]
+    })
   }
 }
 

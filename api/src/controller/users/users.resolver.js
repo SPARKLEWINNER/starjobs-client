@@ -121,4 +121,6 @@ module.exports = function (app) {
   app
     .route(`${apiPath}${apiVersion}/users/clientBanner/list/`)
     .get(jwt.require_sign_in, UsersController.get_client_banners)
+  app.route(`${apiPath}${apiVersion}/users/survey/:id`).post(jwt.require_sign_in, UsersController.post_survey)
+  app.route(`${apiPath}${apiVersion}/users/survey/:id/:title`).get(jwt.require_sign_in, UsersController.get_user_survey)
 }

@@ -892,11 +892,13 @@ var services = {
                   if (error.code === 11000) {
                     console.error('Duplicate key error:', error)
                     // Send a response to the client to handle the duplicate key error gracefully
-                    res.status(400).json({message: 'Duplicate entry detected', error: error.message})
+                    res.status(400).json({success: false, message: 'Duplicate entry detected', error: error.message})
                   } else {
                     console.error('Unexpected error occurred:', error)
                     // Handle other errors or rethrow
-                    res.status(500).json({message: 'An unexpected error occurred', error: error.message})
+                    res
+                      .status(500)
+                      .json({success: false, message: 'An unexpected error occurred', error: error.message})
                     throw error
                   }
                 }

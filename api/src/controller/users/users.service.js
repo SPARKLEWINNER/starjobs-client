@@ -8,6 +8,7 @@ const Clients = require('./models/clients.model')
 const History = require('../gigs/models/gig-histories.model')
 const Notification = require('../notifications/models/notifications.model')
 const Banners = require('./models/banner.model')
+const UserFeedback = require('./models/users-feedbacks.model')
 
 const Archive = require('./models/archived_users')
 const logger = require('../../common/loggers')
@@ -637,6 +638,59 @@ var controllers = {
     } catch (error) {
       console.error('Error fetching jobster banners:', error)
       res.status(500).json({error: 'Failed to fetch jobster banners'})
+    }
+  },
+
+  post_survey: async function (req, res) {
+    const {id} = req.params
+    const {rating, comments, survey} = req.body
+
+    try {
+      const user = await Users.findById(id).select('accountType').lean()
+
+      if (!user) {
+        return res.status(404).json({error: 'User not found'})
+      }
+
+      console.log('🚀 ~ user:', user)
+      const newFeedback = new UserFeedback({
+        uid: id,
+        title: survey,
+        rating: rating,
+        comments: comments,
+        accountType: user.accountType
+      })
+
+      await newFeedback.save()
+
+      return res.status(200).json({ok: true, data: newFeedback})
+    } catch (error) {
+      console.error('Error submitting survey:', error)
+      res.status(500).json({error: 'Error submitting survey'})
+    }
+  },
+
+  get_user_survey: async function (req, res) {
+    const {id, title} = req.params
+    console.log('🚀 ~ title:', id)
+
+    try {
+      const user = await Users.findById(id).select('accountType').lean()
+
+      if (!user) {
+        return res.status(404).json({error: 'User not found'})
+      }
+
+      const feedback = await UserFeedback.findOne({uid: id, title}).lean()
+
+      if (!feedback) {
+        return res.status(200).json({ok: false, message: 'No survey data available'})
+      }
+
+      return res.status(200).json({ok: true, data: feedback})
+    } catch (error) {
+      console.error('Unable to find survey:', error)
+      res.status(500).json({error: 'Survey not found'})
     }
   }
 }

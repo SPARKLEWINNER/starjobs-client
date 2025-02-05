@@ -135,7 +135,7 @@ var controllers = {
     const {id} = req.params
     let user, result
     await getSpecificData({uuid: id}, Freelancers, 'User', id) // validate if data exists
-
+    console.log("PATCH request received with body:", req.body);
     const {
       firstName,
       lastName,
@@ -215,6 +215,10 @@ var controllers = {
 
     try {
       result = await Freelancers.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, details)
+      console.log("🚀 ~ result:", result)
+      if (!result) {
+        return res.status(404).json({ success: false, msg: "Freelancer not found" });
+      }
       if (result) {
         const oldUserData = await Users.findOne({_id: mongoose.Types.ObjectId(result.uuid)})
         await Users.findOneAndUpdate(

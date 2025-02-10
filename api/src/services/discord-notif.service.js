@@ -70,7 +70,7 @@ var controller = {
             }
           ],
           footer: {
-            text: `${moment().format('MMM-DD-YYYY hh:mm A')}`,
+            text: `${moment().tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}`,
             icon_url:
               'https://images-ext-1.discordapp.net/external/KfTbvCiVmFUlsvw_NRHZP5ttamV6eSRStISSJuSgkRI/https/app.starjobs.com.ph/icons/icon-512x512.png'
           }
@@ -130,7 +130,7 @@ var controller = {
             }
           ],
           footer: {
-            text: `${moment().format('MMM-DD-YYYY hh:mm A')}`,
+            text: `${moment().tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}`,
             icon_url:
               'https://images-ext-1.discordapp.net/external/KfTbvCiVmFUlsvw_NRHZP5ttamV6eSRStISSJuSgkRI/https/app.starjobs.com.ph/icons/icon-512x512.png'
           }

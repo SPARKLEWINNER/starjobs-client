@@ -79,6 +79,66 @@ var controller = {
     })
   },
 
+  send_jobster_endshift: async function (jobsterData, clientData, gigs, late, time, gigExtensionHr, nightSurgeHr) {
+    let lateByHour = parseFloat(late) / parseFloat(60)
+    if (late === null || late === undefined) {
+      lateByHour = 0
+    }
+    const lateDeduction = parseFloat(lateByHour * gigs.fee)
+
+    const feeRate = parseFloat(gigs.fees.jobsterTotal * time)
+
+    const convertToPhilippinesTime = (date) => {
+      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+    }
+
+    await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_JOBSTER_ENDSHIFT_KEY}`, {
+      // method: 'post',
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // },
+      username: `Gig Details  - End Shift`,
+      avatar_url:
+        'https://cdn.discordapp.com/avatars/1069382190800056340/c9a9e35eecc4bc6a825f85ccb0e3a207.webp?size=80',
+      embeds: [
+        {
+          title: `**Jobster Gig End Shift - (${gigs.category})**`,
+          description: `${gigs.user[0].companyName}| ${gigs.location}| Client`,
+          color: 15258703,
+          fields: [
+            {
+              name: '',
+              value: ``
+            },
+            {
+              name: 'Details',
+              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Night Surge:**`,
+              inline: true
+            },
+            {
+              name: '-',
+              value: `${gigs.position}\n${gigs.fee}\n${jobsterData[0].firstName} ${jobsterData[0].lastName}\n${
+                gigs.shift
+              }\n${convertToPhilippinesTime(gigs.from)}\n${convertToPhilippinesTime(
+                gigs.time
+              )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${late ? `${late} mins` : 'none'}\n-Php ${parseFloat(
+                lateDeduction
+              ).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(2)} hours \n ${parseFloat(nightSurgeHr).toFixed(
+                2
+              )} hours \n `,
+              inline: true
+            }
+          ],
+          footer: {
+            text: `${moment().format('MMM-DD-YYYY hh:mm A')}`,
+            icon_url:
+              'https://images-ext-1.discordapp.net/external/KfTbvCiVmFUlsvw_NRHZP5ttamV6eSRStISSJuSgkRI/https/app.starjobs.com.ph/icons/icon-512x512.png'
+          }
+        }
+      ]
+    })
+  },
+
   send_editGig: async function (gig, time, from, shift, breakHr, hours, fee, date, category, position, notes) {
     const gigs = gig[0]
     const feeRate = parseFloat(gigs.fees?.jobsterTotal * gigs.hours)

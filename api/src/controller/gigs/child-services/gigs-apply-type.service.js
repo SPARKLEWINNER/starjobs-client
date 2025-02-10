@@ -638,6 +638,24 @@ var services = {
                   }
                 }
               )
+
+              let jobsterData = await Users.find({_id: Types.ObjectId(uid)})
+                .lean()
+                .exec()
+
+              let clientData = await Users.find({_id: Types.ObjectId(gigs.uid)})
+                .lean()
+                .exec()
+
+              discord.send_jobster_endshift(
+                jobsterData,
+                clientData,
+                gigs,
+                late,
+                actualTime,
+                actualExtension,
+                actualNightSurge
+              )
             }
           } else if (status === 'Applying' && category === 'parcels') {
             const dropOffAddresses = dropOffs.map((dropOff) => dropOff.value)

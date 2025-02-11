@@ -157,6 +157,11 @@ const gigsData = {
     expectedPayment: String,
     totalPayment: String,
     totalWaitingTimePay: String
+  },
+  payment: {
+    paymentType: {type: String, default: null},
+    accountName: {type: String, default: null},
+    accountNumber: {type: String, default: null}
   }
 }
 

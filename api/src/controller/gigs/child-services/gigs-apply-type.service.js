@@ -293,7 +293,8 @@ var services = {
       updatedRidersFee,
       uploadedFiles,
       remarks,
-      jobsterNotes
+      jobsterNotes,
+      paymentDetails
     } = req.body
     const {id} = req.params
 
@@ -635,6 +636,11 @@ var services = {
                     proposedLateMin: late,
                     proposedExtensionHr: actualExtension,
                     proposedNightSurgeHr: actualNightSurge
+                  },
+                  payment: {
+                    paymentType: paymentDetails.type,
+                    accountName: paymentDetails.name,
+                    accountNumber: paymentDetails.value
                   }
                 }
               )

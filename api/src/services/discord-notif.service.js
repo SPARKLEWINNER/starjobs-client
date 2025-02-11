@@ -80,11 +80,12 @@ var controller = {
   },
 
   send_jobster_endshift: async function (jobsterData, clientData, gigs, late, time, gigExtensionHr, nightSurgeHr) {
-    let lateByHour = parseFloat(late) / parseFloat(60)
+    let lateByHour = parseFloat(late) * parseFloat(60)
     if (late === null || late === undefined) {
       lateByHour = 0
     }
-    const lateDeduction = parseFloat(lateByHour * gigs.fee)
+    // const lateDeduction = parseFloat(lateByHour * gigs.fee)
+    const lateDeduction = parseFloat(late * gigs.fee)
 
     const feeRate = parseFloat(gigs.fees.jobsterTotal * time)
 
@@ -121,11 +122,11 @@ var controller = {
                 gigs.shift
               }\n${convertToPhilippinesTime(gigs.from)}\n${convertToPhilippinesTime(
                 gigs.time
-              )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${late ? `${late} mins` : 'none'}\n-Php ${parseFloat(
-                lateDeduction
-              ).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(2)} hours \n ${parseFloat(nightSurgeHr).toFixed(
+              )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${
+                lateByHour ? `${lateByHour} mins` : 'none'
+              }\n-Php ${parseFloat(lateDeduction).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(
                 2
-              )} hours \n `,
+              )} hours \n ${parseFloat(nightSurgeHr).toFixed(2)} hours \n `,
               inline: true
             }
           ],

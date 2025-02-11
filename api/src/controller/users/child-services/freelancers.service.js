@@ -135,7 +135,7 @@ var controllers = {
     const {id} = req.params
     let user, result
     await getSpecificData({uuid: id}, Freelancers, 'User', id) // validate if data exists
-    console.log("PATCH request received with body:", req.body);
+    console.log('PATCH request received with body:', req.body)
     const {
       firstName,
       lastName,
@@ -215,9 +215,9 @@ var controllers = {
 
     try {
       result = await Freelancers.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, details)
-      console.log("🚀 ~ result:", result)
+      console.log('🚀 ~ result:', result)
       if (!result) {
-        return res.status(404).json({ success: false, msg: "Freelancer not found" });
+        return res.status(404).json({success: false, msg: 'Freelancer not found'})
       }
       if (result) {
         const oldUserData = await Users.findOne({_id: mongoose.Types.ObjectId(result.uuid)})
@@ -605,6 +605,26 @@ var controllers = {
     } catch (error) {
       console.error(error)
 
+      await logger.logError(error, 'Accounts', null, id, 'GET')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+  },
+
+  get_account_payment: async function (req, res) {
+    const {id} = req.params
+    let result
+
+    await Users.findOne({_id: mongoose.Types.ObjectId(id)})
+
+    try {
+      result = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(id)})
+        .select({payment: 1})
+        .lean()
+        .exec()
+      console.log('🚀 ~ resultzz:', result)
+      return res.status(200).json(result)
+    } catch (error) {
+      console.error(error)
       await logger.logError(error, 'Accounts', null, id, 'GET')
       return res.status(502).json({success: false, msg: 'User not found'})
     }

@@ -637,11 +637,15 @@ var services = {
                     proposedExtensionHr: actualExtension,
                     proposedNightSurgeHr: actualNightSurge
                   },
-                  payment: {
-                    paymentType: paymentDetails.type,
-                    accountName: paymentDetails.name,
-                    accountNumber: paymentDetails.value
-                  }
+                  ...(paymentDetails && paymentDetails.type
+                    ? {
+                        payment: {
+                          paymentType: paymentDetails.type,
+                          accountName: paymentDetails.name,
+                          accountNumber: paymentDetails.value
+                        }
+                      }
+                    : {})
                 }
               )
 

@@ -27,7 +27,7 @@ var controller = {
     const feeRate = parseFloat(gigs.fees.jobsterTotal * time)
 
     const convertToPhilippinesTime = (date) => {
-      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+      return moment.tz(date, 'Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
     }
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_ENDSHIFT_KEY}`, {
@@ -90,7 +90,7 @@ var controller = {
     const feeRate = parseFloat(gigs.fees.jobsterTotal * time)
 
     const convertToPhilippinesTime = (date) => {
-      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+      return moment.tz(date, 'Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
     }
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_JOBSTER_ENDSHIFT_KEY}`, {
@@ -146,7 +146,7 @@ var controller = {
     const NewfeeRate = parseFloat(gigs.fees?.jobsterTotal * hours)
 
     const convertToPhilippinesTime = (date) => {
-      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+      return moment.tz(date, 'Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
     }
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_EDITGIG_KEY}`, {
@@ -196,7 +196,7 @@ var controller = {
             }
           ],
           footer: {
-            text: `${moment().format('MMM-DD-YYYY hh:mm A')}`,
+            text: `${moment().tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}`,
             icon_url:
               'https://images-ext-1.discordapp.net/external/KfTbvCiVmFUlsvw_NRHZP5ttamV6eSRStISSJuSgkRI/https/app.starjobs.com.ph/icons/icon-512x512.png'
           }
@@ -210,7 +210,7 @@ var controller = {
     const feeRate = parseFloat(gigs.fees?.jobsterTotal * gigs.hours)
 
     const convertToPhilippinesTime = (date) => {
-      return momentTz(date).tz('Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
+      return moment.tz(date, 'Asia/Manila').format('MMMM Do YYYY, h:mm:ss a')
     }
 
     await fetch.post(`${process.env.DISCORD_URL}/${process.env.DISCORD_CANCELLEDGIG_KEY}`, {
@@ -249,7 +249,7 @@ var controller = {
             }
           ],
           footer: {
-            text: `${moment().format('MMM-DD-YYYY hh:mm A')}`,
+            text: `${moment().tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}`,
             icon_url:
               'https://images-ext-1.discordapp.net/external/KfTbvCiVmFUlsvw_NRHZP5ttamV6eSRStISSJuSgkRI/https/app.starjobs.com.ph/icons/icon-512x512.png'
           }

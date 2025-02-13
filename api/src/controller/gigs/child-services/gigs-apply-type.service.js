@@ -394,17 +394,17 @@ var services = {
             }
 
             // Step 2: Retrieve the drop-offs that were applied for by the rider and are being accepted
-            // const acceptedDropOffs = await DropOffs.find({
-            //   _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
-            //   status: 'Applying', // Find the drop-offs in 'Applying' status
-            //   gig: {$in: [Types.ObjectId(id)]},
-            //   rider: {$in: [Types.ObjectId(uid)]}
-            // }).select('_id address gig rider')
+            const acceptedDropOffs = await DropOffs.find({
+              _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
+              status: 'Applying', // Find the drop-offs in 'Applying' status
+              gig: {$in: [Types.ObjectId(id)]},
+              rider: {$in: [Types.ObjectId(uid)]}
+            }).select('_id address gig rider')
             // console.log('🚀 ~ acceptedDropOffs:', acceptedDropOffs)
             console.log('🚀 ~ dropOffs:', dropOffs, '🚀 ~ dropOffs:')
 
             const takenDropOffs = await DropOffs.find({
-              _id: {$in: gig.dropOffs}, // Only check drop-offs related to this gig
+              _id: {$in: acceptedDropOffs.map((d) => d._id)}, // Find drop-offs that match the accepted ones
               status: {$eq: 'Applying'}
             })
 
@@ -420,18 +420,6 @@ var services = {
 
             console.log('All rider IDs excluding specified uid:', otherRiderIds, 'All rider IDs excluding uid')
 
-            const declinedHistory = await History.updateMany(
-              {
-                gid: {$in: otherGigIds},
-                uid: {$in: otherRiderIds},
-                status: 'Applying'
-              },
-              {
-                $set: {status: 'Drop-Off-Taken'}
-              }
-            )
-
-            console.log('🚀 ~ declinedHistory:', declinedHistory, '🚀 ~ declinedHistory:')
             // if (otherRiderIds.length > 0) {
             //   await Gigs.updateMany(
             //     {_id: {$in: otherGigIds}}, //
@@ -457,7 +445,8 @@ var services = {
             const gigsUpdated = await Gigs.updateMany(
               {
                 _id: {$in: otherGigIds},
-                'records.auid': {$in: otherRiderIds}
+                'records.auid': {$in: otherRiderIds},
+                'records.appliedDropOffs._id': {$in: acceptedDropOffs.map((d) => d._id)}
               },
               {
                 $set: {'records.$[record].status': 'Drop-Off-Taken'}
@@ -466,6 +455,20 @@ var services = {
                 arrayFilters: [{'record.auid': {$in: otherRiderIds}}]
               }
             )
+
+            // const declinedHistory = await History.updateMany(
+            //   {
+            //     gid: {$in: otherGigIds},
+            //     uid: {$in: otherRiderIds},
+            //     status: 'Applying',
+            //     'records.appliedDropOffs._id': {$in: acceptedDropOffs.map((d) => d._id)}
+            //   },
+            //   {
+            //     $set: {status: 'Drop-Off-Taken'}
+            //   }
+            // )
+            // console.log('🚀 ~ declinedHistory:', declinedHistory, '🚀 ~ declinedHistory:')
+            // // end of handling drop off taken
 
             await Gigs.findOneAndUpdate(
               {_id: Types.ObjectId(id)},

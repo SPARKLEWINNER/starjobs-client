@@ -623,7 +623,16 @@ var services = {
                 dropOffs: dropOffObjectIds, // Store the references to drop-offs
                 deliveryProof: uploadedFiles.deliveryProof,
                 pickup: pickupUpdates,
-                jobsterNotes: jobsterNotes || ''
+                jobsterNotes: jobsterNotes || '',
+                ...(paymentDetails && paymentDetails.type
+                  ? {
+                      payment: {
+                        paymentType: paymentDetails.type,
+                        accountName: paymentDetails.name,
+                        accountNumber: paymentDetails.value
+                      }
+                    }
+                  : {})
               }
 
               await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {$set: gigUpdate}, {new: true})

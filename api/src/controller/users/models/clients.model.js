@@ -33,6 +33,14 @@ const clientSchema = new Schema(
       type: String,
       required: true
     },
+    accountingEmail: {
+      type: String
+      // required: true
+    },
+    managerEmail: {
+      type: String
+      // required: true
+    },
     location: {
       type: String,
       required: true

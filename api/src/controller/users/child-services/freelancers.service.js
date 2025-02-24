@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const Freelancers = require('../models/freelancers.model')
+const Clients = require('../models/clients.model')
 const Users = require('../models/users.model')
 
 // const Ratings = require('../../gigs/models/gig-user-ratings.model')
@@ -375,6 +376,65 @@ var controllers = {
       return res.status(502).json({success: false, msg: 'User not found'})
     }
     return res.status(200).json(result)
+  },
+
+  // This end point is for updating account specific details dynamically, used in most of pop up modals
+  // Do not edit this end point
+  patch_profile_specific: async function (req, res) {
+    const {id} = req.params
+    const updatedDetails = req.body
+    let isExisting
+
+    const accType = await Users.find({_id: mongoose.Types.ObjectId(id)})
+      .select('accountType')
+      .lean()
+      .exec()
+    console.log('🚀 ~ accType:', accType)
+    console.log('🚀 ~ newCity:', updatedDetails)
+
+    if (accType[0].accountType === 1) {
+      // if client
+      isExisting = await Clients.find({uid: id}).exec()
+    } else if (accType[0].accountType === 0) {
+      // if freelancer
+      isExisting = await Freelancers.find({uuid: id}).exec()
+    }
+
+    // console.log('🚀 ~ isExisting:', isExisting)
+    if (isExisting.length === 0)
+      return res.status(400).json({
+        success: false,
+        msg: `` // Email doesn't exists
+      })
+
+    try {
+      let result
+      if (accType[0].accountType === 1) {
+        // if client
+        result = await Clients.findByIdAndUpdate(
+          {_id: mongoose.Types.ObjectId(isExisting[0]._id)},
+          updatedDetails
+        ).exec()
+      } else if (accType[0].accountType === 0) {
+        // if freelancer
+        result = await Freelancers.findByIdAndUpdate(
+          {_id: mongoose.Types.ObjectId(isExisting[0]._id)},
+          updatedDetails
+        ).exec()
+      }
+
+      // console.log('🚀 ~ result:', result)
+      if (result) {
+        await Users.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, {isCityUpdated: true})
+      }
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Freelancers.patch_account_specific', null, id, 'PATCH')
+      return res.status(502).json({success: false, msg: 'User not found'})
+    }
+    const updated_user = await Users.find({_id: mongoose.Types.ObjectId(id)})
+
+    return res.status(200).json(updated_user[0])
   },
 
   patch_account_specific: async function (req, res) {

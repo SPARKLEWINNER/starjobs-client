@@ -28,6 +28,8 @@ var controllers = {
       middleInitial,
       email,
       companyName,
+      accountingEmail,
+      managerEmail,
       brandName,
       location,
       website,
@@ -51,6 +53,8 @@ var controllers = {
       middleInitial,
       email,
       companyName,
+      accountingEmail,
+      managerEmail,
       brandName,
       location,
       website,
@@ -114,6 +118,8 @@ var controllers = {
       middleInitial,
       email,
       companyName,
+      accountingEmail,
+      managerEmail,
       brandName,
       location,
       website,
@@ -131,6 +137,8 @@ var controllers = {
       middleInitial,
       email,
       companyName,
+      accountingEmail,
+      managerEmail,
       brandName,
       location,
       website,
@@ -642,7 +650,7 @@ var controllers = {
   },
 
   get_client_status_gigs: async function (req, res) {
-    console.log('🚀 ~ get_client_status_gigs:')
+    // console.log('🚀 ~ get_client_status_gigs:')
     const {id, status} = req.params
     const {page, limit} = req.query
     const statusArray = status.split(',')
@@ -943,7 +951,7 @@ var controllers = {
         )
 
         let gigData = gigs
-        console.log('🚀 ~ gigData:', gigData)
+        // console.log('🚀 ~ gigData:', gigData)
         if (contracts.length > 0) {
           gigData = [contracts[0], ...gigs]
         }

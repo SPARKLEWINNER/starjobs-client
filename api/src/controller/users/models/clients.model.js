@@ -33,6 +33,9 @@ const clientSchema = new Schema(
       type: String,
       required: true
     },
+    tin: {
+      type: String
+    },
     accountingEmail: {
       type: String
       // required: true

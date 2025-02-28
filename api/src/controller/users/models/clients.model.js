@@ -33,6 +33,9 @@ const clientSchema = new Schema(
       type: String,
       required: true
     },
+    regCompanyAddress: {
+      type: String
+    },
     tin: {
       type: String
     },
@@ -40,7 +43,7 @@ const clientSchema = new Schema(
       type: String
       // required: true
     },
-    managerEmail: {
+    storeEmail: {
       type: String
       // required: true
     },

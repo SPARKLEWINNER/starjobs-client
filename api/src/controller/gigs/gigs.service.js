@@ -680,7 +680,7 @@ var controllers = {
             .exec()
         }
 
-        console.log('🚀 ~ reports:', reports, '🚀 ~ reports:')
+        // console.log('🚀 ~ reports:', reports, '🚀 ~ reports:')
         let gigsData = reports.filter((obj) => {
           // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
           //express as a duration

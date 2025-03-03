@@ -254,6 +254,19 @@ async function sendNotification(request, gigs, status) {
       if (fcmTokenArray.length != 0) {
         console.log('------------Sending Notif----------')
 
+        // const fcmTokenstest = [
+        //   // 'ddrFIbaLTuqt8LVP6kIRPP:APA91bHXno97wgpX2FhbwU1uS2e1yVsBJ4vcdeqXQGwaYg2MZM5M83rXM75OjFnl2Iscki0fOPAk5qAWxJSwmlAB3lM7SwdjrpCExmh9853TtTsyyD5m42tya9wjW2KxVCiYDmrJUwKk',
+        //   // 'cRxDGjLbT1ybrVrCVTKofz:APA91bG1ee6Hq4ZBi8fWvM8MLse2Y5iCIOhkMlkozKgLqUhUwl7Tk9wGSsxTULKzFYXraGKoPz4SYbgShMUOJOrFeqGQpyXxDHTPPOUVR3MRRUJNUOLTJis',
+        //   'cQvCqxnB7UnVr76ajGueE9:APA91bE63G8XKTd9JxsfRjaqfaheD--q7xZvkwoMtjwhbP_GjDcUb9ZmU-BC-TrVgGmMwxMgIRY9qK2qRkyxLV4is4AUk7wuyQ7NDQjb2ya49iQ_Vcq4YkLSdg-mjZx08o3TiTK-aYuW',
+        //   'cRxDGjLbT1ybrVrCVTKofz:APA91bG1ee6Hq4ZBi8fWvM8MLse2Y5iCIOhkMlkozKgLqUhUwl7Tk9wGSsxTULKzFYXraGKoPz4SYbgShMUOJOrFeqGQpyXxDHTPPOUVR3MRRUJNUOLTJis',
+        //   'd9CdOlePRtCe8KfgfDKmQR:APA91bFvf59iYCu4oSohD788KgADuqm0zHGk7I2HoLCJr6rB9x0FHVoBgLP3XfoMyqceqmjhPtdx_Sf4nFTPcrM0OuuW7-fex33T-7Co3G7GBHLBUx-dmns'
+        // ] // Array of FCM tokens
+        // const messagetest = 'You have a new notification!'
+        // const urltest = 'https://app.starjobs.com.ph/'
+        // const statustest = 'End-Shift'
+
+        fcm.sendFCMNotifications(fcmTokenArray, message[0].description, url, message[0].status)
+
         // fcm.send_notif(fcmTokenArray, message[0].description, url, message[0].status)
       }
       // Send SMS Notif

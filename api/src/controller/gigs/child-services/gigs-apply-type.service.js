@@ -999,6 +999,12 @@ var services = {
       //global.pusher.trigger('notifications', 'notify_gig', gigs)
 
       if (status !== 'Accepted' && category !== 'parcels') {
+        console.log('acceptedNOtif')
+        await sendNotification(req.body, gigs, status)
+      }
+
+      if (status === 'Accepted' && category !== 'parcels') {
+        console.log('acceptedParcelNotif')
         await sendNotification(req.body, gigs, status)
       }
 

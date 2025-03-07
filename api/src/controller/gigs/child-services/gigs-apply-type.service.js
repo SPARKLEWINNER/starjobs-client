@@ -29,15 +29,15 @@ async function sendNotification(request, gigs, status) {
   let urlLink = ENV == 'staging' ? 'http://192.168.1.3:8000/' : 'https://app.starjobs.com.ph/'
   try {
     let messageList = [
-      {status: 'Applying', type: 'pending', description: `Applicant has sent a gig request`},
+      {status: 'Applying', type: 'pending', description: `The Jobster has sent gig application`},
       {
         status: 'Accepted',
         type: request.category === 'parcels' ? 'current' : 'incoming',
-        description: `Congratulations, your gig application has been accepted.`
+        description: `You have been accepted.`
       },
       {status: 'Confirm-Gig', type: 'current', description: `Jobster has confirmed pushing thru the gig.`},
       {status: 'Confirm-Arrived', type: 'current', description: `The jobster has arrived.`},
-      {status: 'End-Shift', type: 'current', description: `The jobster have Ended the shift`},
+      {status: 'End-Shift', type: 'current', description: `The Jobster has indicated end-shift`},
       {status: 'Gig-Success', type: 'current', description: `To monitor gig fee View gig in progress`},
       {
         status: 'Gig-Taken',
@@ -51,7 +51,7 @@ async function sendNotification(request, gigs, status) {
       {
         status: 'Confirm-End-Shift',
         type: 'billing',
-        description: `You will receive your gig fee in the next three (3) days. Thank you for using Starjobs.`
+        description: `The client has confirmed your end-shift.`
       }
     ]
 

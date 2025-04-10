@@ -218,12 +218,12 @@ var controller = {
       // headers: {
       //   'Content-Type': 'application/json'
       // },
-      username: `Gig Details  - Cancelled Gig`,
+      username: `Gig Details  - ${reason}**`,
       avatar_url:
         'https://cdn.discordapp.com/avatars/1069382190800056340/c9a9e35eecc4bc6a825f85ccb0e3a207.webp?size=80',
       embeds: [
         {
-          title: `**Client Cancelled Gig - ${reason}**`,
+          title: `**${reason} Gig**`,
           description: `${gigs.user[0].companyName}| ${gigs.location}| Client`,
           color: 15258703,
           fields: [

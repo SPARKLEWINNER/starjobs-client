@@ -92,8 +92,8 @@ var controller = {
                 priority: 'high',
                 notification: {
                   sound: 'notification_sound', // ✅ Correct placement
-                  vibrateTimings: ['0.5s', '1s', '1.5s'], // ✅ Correct format
-                  defaultVibrateTimings: true
+                  vibrateTimings: ['0.5s', '1s', '1.5s'] // ✅ Correct format
+                  // defaultVibrateTimings: true
                 }
               },
               apns: {
@@ -131,6 +131,18 @@ var controller = {
 
         const responseData = await response.json()
         console.log('Response Data:', responseData)
+
+        if (!response.ok) {
+          const errorDetails = responseData?.error
+          console.error('❌ FCM Error:', errorDetails)
+
+          const firstDetail = errorDetails?.details?.[0]
+          if (response.status === 404 && firstDetail?.errorCode === 'UNREGISTERED') {
+            console.log(`⚠️ Token ${token} is unregistered.`)
+            await handleFCMError(token)
+          }
+        }
+
         return responseData
       } catch (error) {
         console.error('Error sending FCM notification:', error)

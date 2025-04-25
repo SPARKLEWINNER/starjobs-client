@@ -112,36 +112,25 @@ var controller = {
         })
 
         console.log('response:', response)
-        // if (!response.ok) {
-        //   const errorText = await response.text()
-        //   console.error('Error Response:', errorText)
-        //   const errorDetails = JSON.parse(errorText)
-        //   if (
-        //     response.status === 404 &&
-        //     errorDetails.error &&
-        //     errorDetails.error.details &&
-        //     errorDetails.error.details[0] &&
-        //     errorDetails.error.details[0].errorCode === 'UNREGISTERED'
-        //   ) {
-        //     console.log(`Token ${token} is no longer registered.`)
-        //     // Handle the unregistered token (e.g., remove from your database)
-        //     await handleFCMError(token)
-        //   }
-        // }
-
-        const responseData = await response.json()
-        console.log('Response Data:', responseData)
-
         if (!response.ok) {
-          const errorDetails = responseData?.error
-          console.error('❌ FCM Error:', errorDetails)
-
-          const firstDetail = errorDetails?.details?.[0]
-          if (response.status === 404 && firstDetail?.errorCode === 'UNREGISTERED') {
-            console.log(`⚠️ Token ${token} is unregistered.`)
+          const errorText = await response.text()
+          console.error('Error Response:', errorText)
+          const errorDetails = JSON.parse(errorText)
+          if (
+            response.status === 404 &&
+            errorDetails.error &&
+            errorDetails.error.details &&
+            errorDetails.error.details[0] &&
+            errorDetails.error.details[0].errorCode === 'UNREGISTERED'
+          ) {
+            console.log(`Token ${token} is no longer registered.`)
+            // Handle the unregistered token (e.g., remove from your database)
             await handleFCMError(token)
           }
         }
+
+        const responseData = await response.json()
+        console.log('Response Data:', responseData)
 
         return responseData
       } catch (error) {

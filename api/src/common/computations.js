@@ -58,7 +58,7 @@ var controller = {
 
     let premiumFee = parseFloat(premFee)
     let appFee = parseFloat(finalHours * 1.25)
-    let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.1 // 10%
+    let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.05 // 10%
     let grossGigFee = parseFloat(
       computedFeeByHr + voluntaryFee + appFee + transactionFee + premiumFee + nightSurge + gigExtension + holidaySurge
     )

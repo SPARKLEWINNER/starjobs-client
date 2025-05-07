@@ -111,9 +111,9 @@ var controller = {
     if (gigOffered === 'By-the-job') {
       transactionFee = parseFloat(totalGigFee + appFee) * 0.1
     } else if (gigOffered === 'Hourly') {
-      transactionFee = parseFloat(totalGigFeeHourly + appFee) * 0.1
+      transactionFee = parseFloat(totalGigFeeHourly + appFee) * 0.05
     } else if (gigOffered === 'Daily') {
-      transactionFee = parseFloat(totalGigFeeDaily + appFee) * 0.1
+      transactionFee = parseFloat(totalGigFeeDaily + appFee) * 0.05
     } else {
       transactionFee = 0
     }

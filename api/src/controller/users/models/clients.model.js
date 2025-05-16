@@ -59,6 +59,15 @@ const clientSchema = new Schema(
       type: String,
       required: true
     },
+    personInCharge: {
+      type: String
+    },
+    accountingName: {
+      type: String
+    },
+    accountingNumber: {
+      type: String
+    },
     contact: {
       type: Array,
       default: []

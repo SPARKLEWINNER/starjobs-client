@@ -44,7 +44,10 @@ var controllers = {
       documents,
       pointOfContactId,
       businessPermit,
-      expirationDate
+      expirationDate,
+      personInCharge,
+      accountingNumber,
+      accountingName
     } = req.body
     const now = new Date()
 
@@ -72,6 +75,9 @@ var controllers = {
       pointOfContactId,
       businessPermit,
       expirationDate,
+      personInCharge,
+      accountingNumber,
+      accountingName,
       dateCreated: now.toISOString()
     })
 
@@ -130,6 +136,9 @@ var controllers = {
       location,
       website,
       companyPosition,
+      personInCharge,
+      accountingNumber,
+      accountingName,
       contact,
       industry,
       rate,
@@ -151,6 +160,9 @@ var controllers = {
       location,
       website,
       companyPosition,
+      personInCharge,
+      accountingNumber,
+      accountingName,
       contact,
       industry,
       rate,

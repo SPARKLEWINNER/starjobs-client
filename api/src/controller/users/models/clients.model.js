@@ -30,8 +30,7 @@ const clientSchema = new Schema(
       required: true
     },
     brandName: {
-      type: String,
-      required: true
+      type: String
     },
     regCompanyAddress: {
       type: String
@@ -51,9 +50,11 @@ const clientSchema = new Schema(
       type: String,
       required: true
     },
+    contactNumber: {
+      type: String
+    },
     website: {
-      type: String,
-      required: true
+      type: String
     },
     companyPosition: {
       type: String,

@@ -47,7 +47,8 @@ var controllers = {
       expirationDate,
       personInCharge,
       accountingNumber,
-      accountingName
+      accountingName,
+      contactNumber
     } = req.body
     const now = new Date()
 
@@ -78,6 +79,7 @@ var controllers = {
       personInCharge,
       accountingNumber,
       accountingName,
+      contactNumber,
       dateCreated: now.toISOString()
     })
 

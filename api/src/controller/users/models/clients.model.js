@@ -17,8 +17,7 @@ const clientSchema = new Schema(
       required: true
     },
     middleInitial: {
-      type: String,
-      required: true
+      type: String
     },
     email: {
       type: String,

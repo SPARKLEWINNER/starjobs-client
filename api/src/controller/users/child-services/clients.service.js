@@ -181,14 +181,15 @@ var controllers = {
     try {
       result = await Clients.findOneAndUpdate({_id: mongoose.Types.ObjectId(id)}, clientObj)
       if (result) {
-        const oldUserData = await Users.findOne({_id: mongoose.Types.ObjectId(result.uid)})
+        // const oldUserData = await Users.findOne({_id: mongoose.Types.ObjectId(result.uid)})
         await Users.findOneAndUpdate(
           {_id: mongoose.Types.ObjectId(result.uid)},
           {
             firstName: firstName,
             lastName: lastName,
             verificationRemarks: 'Client details updated',
-            ...(oldUserData.adminStatus !== 'Verified' && {adminStatus: 'Pending'})
+            // ...(oldUserData.adminStatus !== 'Verified' && {adminStatus: 'Pending'})
+            adminStatus: 'Pending'
           }
         )
       }

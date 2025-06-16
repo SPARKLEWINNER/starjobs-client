@@ -322,7 +322,10 @@ var services = {
         hours: actualTime,
         late: late,
         gigExtension: actualExtension,
-        nightSurgeHr: actualNightSurge
+        nightSurgeHr: actualNightSurge,
+        dropOffs: dropOffs,
+        pickupDetails: pickupDetails,
+        dropoffDetails: dropoffDetails
       }
     }
 

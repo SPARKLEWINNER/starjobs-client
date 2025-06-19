@@ -4,7 +4,8 @@ const logger = require('../../../common/loggers')
 const Freelancers = require('../../users/models/freelancers.model')
 const History = require('../../gigs/models/gig-histories.model')
 const moment = require('moment')
-
+const mailer = require('../../../services/email/email.service')
+const Users = require('../../users/models/users.model')
 var controllers = {
   // list of gigs by activity (payroll)
   get_gigs_activity: async function (req, res) {
@@ -165,6 +166,18 @@ var controllers = {
             }
           })
       )
+
+      const user = await Users.find({_id: mongoose.Types.ObjectId(id)})
+        .lean()
+        .exec()
+
+      if (!user) return res.status(502).json({success: false, msg: 'User not found'})
+      const email = user[0].email
+
+      if (!result) {
+        return res.status(400).json({success: false, msg: 'Empty notifications'})
+      }
+      await mailer.send_mail({email, historyData: gigs, type: 'request_history'})
 
       return res.status(200).json({success: false, data: gigs})
     } catch (error) {

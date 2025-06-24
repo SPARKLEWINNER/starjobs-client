@@ -11,7 +11,17 @@
 // }
 
 var controller = {
-  default_calculations: function (hours, fee, volFee, premFee, holiday, late, gigExtentionHr, nightSurgeHr) {
+  default_calculations: function (
+    hours,
+    fee,
+    volFee,
+    premFee,
+    holiday,
+    holidayPercentage,
+    late,
+    gigExtentionHr,
+    nightSurgeHr
+  ) {
     let lateByHours = parseFloat(late) / parseFloat(60)
     if (late === null || late === undefined) {
       lateByHours = 0
@@ -27,6 +37,13 @@ var controller = {
     const finalHours = hours - lateByHours
     let computedFeeByHr = parseFloat(finalHours * fee)
     let voluntaryFee = parseFloat(volFee)
+
+    if (!holidayPercentage || holidayPercentage === '0.00' || holidayPercentage === 0 || holidayPercentage === '0') {
+      holidaySurge = parseFloat(0)
+    } else {
+      const holidayNewFee = (holidayPercentage / 100) * parseFloat(computedFeeByHr)
+      holidaySurge = parseFloat(holidayNewFee)
+    }
     // let basicRate = parseFloat(fee) - voluntaryFee
     // console.log('🚀 ~ file: computations.js:26 ~ basicRate:', basicRate)
 

@@ -861,7 +861,9 @@ var services = {
                       jobsterTotal: jobsterTotal,
                       gigExtension: gigExtension,
                       proposedExtensionHr: actualExtension,
-                      proposedNightSurgeHr: actualNightSurge
+                      proposedNightSurgeHr: actualNightSurge,
+                      proposedHolidaySurge: holidaySurge,
+                      proposedholidayPercentage: holidayPercentage
                     },
                     late: late ?? null
                   }
@@ -891,6 +893,7 @@ var services = {
                   gigs.fees.voluntaryFee,
                   gigs.fees.premiumFee,
                   gigs.fees.holidaySurge,
+                  holidayPercentage,
                   late,
                   actualExtension,
                   actualNightSurge

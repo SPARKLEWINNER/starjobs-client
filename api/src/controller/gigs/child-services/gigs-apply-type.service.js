@@ -282,6 +282,8 @@ var services = {
       late,
       actualExtension,
       actualNightSurge,
+      holidaySurge,
+      holidayPercentage,
       userID,
       category,
       addPerDrop,
@@ -652,7 +654,9 @@ var services = {
                     proposedWorkTime: actualTime,
                     proposedLateMin: late,
                     proposedExtensionHr: actualExtension,
-                    proposedNightSurgeHr: actualNightSurge
+                    proposedNightSurgeHr: actualNightSurge,
+                    proposedholidaySurge: holidaySurge,
+                    proposedholidayPercentage: holidayPercentage
                   },
                   ...(paymentDetails && paymentDetails.type
                     ? {

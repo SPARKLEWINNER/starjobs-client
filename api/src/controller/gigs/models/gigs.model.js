@@ -103,6 +103,9 @@ const gigsData = {
     gigExtension: String,
     jobsterFinal: String,
     holidaySurge: String,
+    holidayPercentage: String,
+    proposedholidaySurge: String,
+    proposedholidayPercentage: String,
     premiumFee: String,
     lateDeduction: String
   },

@@ -6,6 +6,7 @@ const logger = require('../../common/loggers')
 
 const forgotPassword = require('./templates/forgot.template.js')
 const signUp = require('./templates/signup.template.js')
+const moment = require('moment')
 
 const {SG_EMAIL} = process.env
 const region = process.env.AWS_BUCKET_REGION
@@ -41,13 +42,13 @@ function generateCSV(dataArray) {
   const rows = dataArray.map((item) => {
     return [
       item.position || '',
-      item.fees?.jobsterFinal || '',
-      formatDate(item.dateCreated),
+      `${item.account?.[0]?.firstName || ''} ${item.account?.[0]?.lastName || ''}`,
+      formatDateWithTime(item.dateCreated),
       item.hours || '',
       item.breakHr || '',
       item.location || '',
-      formatDate(item.from),
-      formatDate(item.time),
+      formatDateWithTime(item.from),
+      formatDateWithTime(item.time),
       item.fee || '',
       item.late || '',
       item.fees?.gigExtension || '',
@@ -64,11 +65,7 @@ function generateCSV(dataArray) {
   return [headers.join(','), ...rows].join('\n')
 }
 
-function formatDate(dateString) {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toISOString().split('T')[0]
-}
+const formatDateWithTime = (date) => (date ? moment(date).format('MMM-DD-YYYY hh:mm A') : '')
 
 var controller = {
   send_mail: async function (data) {

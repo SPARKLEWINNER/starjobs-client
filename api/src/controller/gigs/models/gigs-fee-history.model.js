@@ -56,7 +56,19 @@ const feeHistorySchema = new Schema(
       serviceCost: String,
       jobsterTotal: String,
       proposedRate: String,
-      proposedWorkTime: String
+      proposedWorkTime: String,
+      proposedLateMin: String,
+      proposedExtensionHr: String,
+      proposedNightSurgeHr: String,
+      nightSurge: String,
+      gigExtension: String,
+      jobsterFinal: String,
+      holidaySurge: String,
+      holidayPercentage: String,
+      proposedHolidaySurge: String,
+      proposedHolidayPercentage: String,
+      premiumFee: String,
+      lateDeduction: String
     }
   },
   {timestamps: true}

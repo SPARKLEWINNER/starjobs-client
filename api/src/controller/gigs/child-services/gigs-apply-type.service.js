@@ -655,8 +655,8 @@ var services = {
                     proposedLateMin: late,
                     proposedExtensionHr: actualExtension,
                     proposedNightSurgeHr: actualNightSurge,
-                    proposedholidaySurge: holidaySurge,
-                    proposedholidayPercentage: holidayPercentage
+                    proposedHolidaySurge: holidaySurge,
+                    proposedHolidayPercentage: holidayPercentage
                   },
                   ...(paymentDetails && paymentDetails.type
                     ? {
@@ -863,7 +863,7 @@ var services = {
                       proposedExtensionHr: actualExtension,
                       proposedNightSurgeHr: actualNightSurge,
                       proposedHolidaySurge: holidaySurge,
-                      proposedholidayPercentage: holidayPercentage
+                      proposedHolidayPercentage: holidayPercentage
                     },
                     late: late ?? null
                   }

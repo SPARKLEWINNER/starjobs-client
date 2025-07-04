@@ -8,6 +8,7 @@ const Users = require('../models/users.model')
 const Freelancers = require('../models/freelancers.model')
 const Contracts = require('../../gigs/models/gig-contracts.model')
 const Clients = require('../models/clients.model')
+const ClientBranches = require('../models/client_branches')
 
 const {getSpecificData} = require('../../../common/validates')
 const logger = require('../../../common/loggers')
@@ -1042,6 +1043,21 @@ var controllers = {
       }
 
       res.status(200).json({success: true, gig, details: user ? user[0] : {}})
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({success: false, message: 'Server error'})
+    }
+  },
+  get_client_branches: async function (req, res) {
+    const {id} = req.params
+    console.log('🚀 ~ idxx:', id)
+    try {
+      const branches = await ClientBranches.find({clientId: mongoose.Types.ObjectId(id)})
+        .lean()
+        .exec()
+      console.log('🚀 ~ branchesbranches:', branches)
+
+      res.status(200).json({success: true, branches})
     } catch (error) {
       console.error(error)
       res.status(500).json({success: false, message: 'Server error'})

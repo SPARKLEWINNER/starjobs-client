@@ -13,6 +13,7 @@ const app = express()
 const useragent = require('express-useragent')
 require('./controller/notifications/firebase/changeStream')
 const MONGO_DATABASE_URL = process.env.MONGODB_URI
+console.log(MONGO_DATABASE_URL, 'MONGO_DATABASE_URL');
 
 mongoose
   .connect(MONGO_DATABASE_URL, {

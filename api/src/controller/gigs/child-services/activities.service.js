@@ -6,6 +6,7 @@ const History = require('../../gigs/models/gig-histories.model')
 const moment = require('moment')
 const mailer = require('../../../services/email/email.service')
 const Users = require('../../users/models/users.model')
+const GigEditLogs = require('../../gigs/models/gig-edit-logs.model')
 var controllers = {
   // list of gigs by activity (payroll)
   get_gigs_activity: async function (req, res) {
@@ -72,6 +73,10 @@ var controllers = {
               .lean()
               .exec()
 
+            const editLogs = await GigEditLogs.find({gigId: mongoose.Types.ObjectId(obj._id)})
+              .sort({createdAt: -1})
+              .limit(1)
+              .lean()
             // add applicant list since to prevent re-apply of jobsters
             if (obj.status === 'Applying' || obj.status === 'Waiting') {
               const history = await History.find(
@@ -86,6 +91,7 @@ var controllers = {
 
               return {
                 ...obj,
+                ...(editLogs.length > 0 && {editLogs: editLogs[0]}), // ✅ include only if exists
                 applicants: history,
                 account
               }

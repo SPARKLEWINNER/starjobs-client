@@ -159,7 +159,8 @@ const gigsData = {
     allowance: String,
     expectedPayment: String,
     totalPayment: String,
-    totalWaitingTimePay: String
+    totalWaitingTimePay: String,
+    holidaySurge: Number
   },
   payment: {
     paymentType: {type: String, default: null},

@@ -933,7 +933,8 @@ var services = {
                       holidayPercentage: holidayPercentage,
                       lateDeduction: lateDeduction,
                       proposedExtensionHr: actualExtension,
-                      proposedNightSurgeHr: actualNightSurge
+                      proposedNightSurgeHr: actualNightSurge,
+                      proposedHolidayPercentage: holidayPercentage
                     },
                     late: late ?? null
                   }

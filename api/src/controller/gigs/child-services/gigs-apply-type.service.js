@@ -930,6 +930,7 @@ var services = {
                       gigExtension: gigExtension,
                       jobsterFinal: jobsterFinal,
                       holidaySurge: holidaySurge,
+                      holidayPercentage: holidayPercentage,
                       lateDeduction: lateDeduction,
                       proposedExtensionHr: actualExtension,
                       proposedNightSurgeHr: actualNightSurge

@@ -46,7 +46,8 @@ const services = {
       allowance,
       rateType, // e.g., 'Per KM' or 'Per trip'
       ratePerKm,
-      addPerDrop
+      addPerDrop,
+      holidaySurge
     } = req.body
     console.log('🚀 ~ req.body:', req.body)
 
@@ -138,7 +139,8 @@ const services = {
               baseFare,
               gigRatePerKm: ratePerKm,
               addPerDrop,
-              allowance
+              allowance,
+              holidaySurge
             },
             gigRatePerKm: ratePerKm
           }

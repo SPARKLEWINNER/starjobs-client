@@ -572,6 +572,10 @@ var services = {
             if (category === 'parcels') {
               // Process new or existing drop-offs
               const dropOffUpdates = dropoffDetails.map((detail, index) => {
+                const uploadedParkingTickets = Object.keys(uploadedFiles)
+                  .filter((key) => key.startsWith(`dropoff_${index}_parkingTicket_`))
+                  .map((key) => uploadedFiles[key])
+
                 if (detail.perDropKm == null) {
                   console.error(`Missing perDropKm for drop-off at index ${index}:`, detail)
                 }
@@ -587,6 +591,8 @@ var services = {
                   timeArrived: detail.timeArrived,
                   timeDeparture: detail.timeFinnished,
                   waitingTime: detail.totalTime,
+                  parkingFee: detail.parkingFee,
+                  parkingTicket: uploadedParkingTickets,
                   gig: [Types.ObjectId(id)] // Reference to the gig
                 }
               })
@@ -603,6 +609,10 @@ var services = {
                 })
               )
 
+              const uploadedParkingTickets = Object.keys(uploadedFiles)
+                .filter((key) => key.startsWith('pickup_parkingTicket_'))
+                .map((key) => uploadedFiles[key])
+
               const pickupUpdates = {
                 address: pickupDetails.address.value || pickupDetails.address.label,
                 route: pickupDetails.address.route || '',
@@ -612,6 +622,8 @@ var services = {
                 timeArrived: pickupDetails.timeArrived,
                 timeDeparture: pickupDetails.timeFinnished,
                 waitingTime: pickupDetails.totalTime,
+                parkingFee: pickupDetails.parkingFee,
+                parkingTicket: uploadedParkingTickets,
                 gig: Types.ObjectId(id)
               }
 

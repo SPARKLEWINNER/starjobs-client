@@ -127,7 +127,12 @@ const gigsData = {
     timeArrived: {type: String},
     timeDeparture: {type: String},
     waitingTime: {type: String},
-    proof: {type: String}
+    proof: {type: String},
+    parkingFee: {type: Number, default: 0},
+    parkingTicket: {
+      type: [String], // Array of strings
+      default: []
+    }
   },
   deliveryProof: {
     type: [String],
@@ -160,7 +165,8 @@ const gigsData = {
     expectedPayment: String,
     totalPayment: String,
     totalWaitingTimePay: String,
-    holidaySurge: Number
+    holidaySurge: Number,
+    totalParkingFee: Number
   },
   payment: {
     paymentType: {type: String, default: null},

@@ -34,6 +34,15 @@ const DropOffSchema = new Schema({
   proof: {
     type: String
   },
+  timeStampProof: {
+    type: [String], // Array of strings
+    default: []
+  },
+  parkingTicket: {
+    type: [String], // Array of strings
+    default: []
+  },
+  parkingFee: {type: Number, default: 0},
   perDropKm: {type: String},
   timeArrived: {type: String},
   timeDeparture: {type: String},

@@ -190,7 +190,7 @@ var controllers = {
 
     try {
       let code = Math.floor(100000 + Math.random() * 900000)
-      const new_user = new Users({
+      const new_user_data = {
         email,
         name,
         firstName,
@@ -201,8 +201,13 @@ var controllers = {
         password: password,
         dateCreated: new Date(),
         adminStatus: null
-      })
+      }
 
+      if (accountType === 0) {
+        new_user_data.canPost = true // ✅ Default true for clients only
+      }
+
+      const new_user = new Users(new_user_data)
       let result = await Users.create(new_user)
       if (!result) {
         res.status(400).json({
@@ -210,11 +215,6 @@ var controllers = {
           msg: 'Unable to sign up'
         })
       }
-      // const recipients = [
-      //   {
-      //     ContactNumber: phone
-      //   }
-      // ]
 
       sms.cast_sms(phone, `Starjobs verification code ${code}`)
       await mailer.send_mail({email, verifyCode: code, type: 'sign_up'})

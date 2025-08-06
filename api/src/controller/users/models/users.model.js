@@ -105,7 +105,8 @@ const userSchema = new Schema(
     isNotifOn: {
       type: Boolean,
       default: false
-    }
+    },
+    canPost: {type: Boolean, default: true}
   },
   {timestamps: true}
 )

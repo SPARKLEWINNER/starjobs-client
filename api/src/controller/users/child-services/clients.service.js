@@ -1002,6 +1002,40 @@ var controllers = {
         //   filtered_gig.map((value) => {
         //     return dataLast.push(value)
         //   })
+        // const targetDate = new Date('2024-07-10')
+
+        const gigsDATA = await Gigs.find({
+          uid: mongoose.Types.ObjectId('65e6aff4e40cda005a544b25'),
+          // location: {$regex: `JOLLIBEE THE MIND MUSEUM`, $options: 'i'},
+          location: `MANG INASAL PADRE FAURA`,
+          // location: {$ne: `MANG INASAL PADRE FAURA`},
+          category: 'restaurant-services',
+          // position: {$regex: 'Driver', $options: 'i'},
+          date: {$gte: '2025-07-10'}
+        })
+          .sort({date: -1})
+          .lean()
+
+        console.log('🚀 ~ gigsDATA:', gigsDATA)
+        console.log('🚀 ~ gigsDATAlength:', gigsDATA.length)
+
+        // await Gigs.updateMany(
+        //   {
+        //     uid: mongoose.Types.ObjectId('65e6aff4e40cda005a544b25'),
+        //     // location: {$regex: 'Jollibee Meralco Parklane', $options: 'i'},
+        //     // location: `MI PADRE FAURA`,
+
+        //     // position: {$regex: 'DRIVER', $options: 'i'},
+        //     category: 'restaurant-services',
+
+        //     date: {$gte: '2025-07-10'}
+        //   },
+        //   {
+        //     $set: {location: `MANG INASAL PADRE FAURA`}
+        //   }
+        // )
+
+        const user = await Users.find({uuid: mongoose.Types.ObjectId(id)}).lean()
 
         client = {
           details: user ? user[0] : {},

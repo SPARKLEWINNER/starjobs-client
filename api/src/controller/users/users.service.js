@@ -703,19 +703,31 @@ var controllers = {
     }
 
     try {
-      const files = await SoaFiles.find({clientId: mongoose.Types.ObjectId(id), archived: false})
+      const files = await SoaFiles.find({
+        clientId: mongoose.Types.ObjectId(id),
+        archived: false
+      })
         .sort({uploadedAt: -1})
         .lean()
-      console.log('🚀 ~ files:', files)
 
       if (!files || files.length === 0) {
         return res.status(200).json({ok: false, message: 'No SOA files found'})
       }
 
-      const result = files.map((file) => ({
-        cutoffDate: file.cutoffDate,
-        url: `${process.env.BUCKET_URL}${file.fileKey}`
-      }))
+      const result = files.map((file) => {
+        // Get filename part (after underscore)
+        let fileName = file.fileKey.split('/').pop() // remove path if any
+        const parts = fileName.split('_')
+        if (parts.length > 1) {
+          fileName = parts.slice(1).join('_') // everything after the first underscore
+        }
+
+        return {
+          cutoffDate: file.cutoffDate,
+          url: `${process.env.BUCKET_URL}${file.fileKey}`,
+          fileName: fileName
+        }
+      })
 
       return res.status(200).json({ok: true, data: result})
     } catch (error) {

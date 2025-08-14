@@ -9,6 +9,7 @@ const History = require('../gigs/models/gig-histories.model')
 const Notification = require('../notifications/models/notifications.model')
 const Banners = require('./models/banner.model')
 const UserFeedback = require('./models/users-feedbacks.model')
+const SoaFiles = require('./models/soa-file.model')
 
 const Archive = require('./models/archived_users')
 const logger = require('../../common/loggers')
@@ -691,6 +692,46 @@ var controllers = {
     } catch (error) {
       console.error('Unable to find survey:', error)
       res.status(500).json({error: 'Survey not found'})
+    }
+  },
+  get_soa_files: async function (req, res) {
+    const {id} = req.params
+    console.log('🚀 ~ id:', id)
+
+    if (!id) {
+      return res.status(400).json({error: 'Missing clientId'})
+    }
+
+    try {
+      const files = await SoaFiles.find({
+        clientId: mongoose.Types.ObjectId(id),
+        archived: false
+      })
+        .sort({uploadedAt: -1})
+        .lean()
+
+      if (!files || files.length === 0) {
+        return res.status(200).json({ok: false, message: 'No SOA files found'})
+      }
+
+      const result = files.map((file) => {
+        let fileName = file.fileKey.split('/').pop()
+        const parts = fileName.split('_')
+        if (parts.length > 1) {
+          fileName = parts.slice(1).join('_')
+        }
+
+        return {
+          cutoffDate: file.cutoffDate,
+          url: `${process.env.BUCKET_URL}${file.fileKey}`,
+          fileName: fileName
+        }
+      })
+
+      return res.status(200).json({ok: true, data: result})
+    } catch (error) {
+      console.error('Unable to get SOA files:', error)
+      res.status(500).json({error: 'Failed to fetch SOA files'})
     }
   }
 }

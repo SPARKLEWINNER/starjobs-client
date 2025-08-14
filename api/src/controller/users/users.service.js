@@ -715,11 +715,10 @@ var controllers = {
       }
 
       const result = files.map((file) => {
-        // Get filename part (after underscore)
-        let fileName = file.fileKey.split('/').pop() // remove path if any
+        let fileName = file.fileKey.split('/').pop()
         const parts = fileName.split('_')
         if (parts.length > 1) {
-          fileName = parts.slice(1).join('_') // everything after the first underscore
+          fileName = parts.slice(1).join('_')
         }
 
         return {

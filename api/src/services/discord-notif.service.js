@@ -50,22 +50,24 @@ var controller = {
             },
             {
               name: 'Details',
-              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Gig Extension Fee:**\n**Night Surge:**\n**Night Surge Fee:**\n**Holiday Surge:**\n\n**Jobster Total:**`,
+              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Account Name:**\n**Account Number:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Gig Extension Fee:**\n**Night Surge:**\n**Night Surge Fee:**\n**Holiday Surge:**\n\n**Jobster Total:**`,
               inline: true
             },
             {
               name: '-',
               value: `${gigs.position}\n${gigs.fee}\n${jobsterData[0].firstName} ${jobsterData[0].lastName}\n${
                 gigs.shift
-              }\n${convertToPhilippinesTime(gigs.from)}\n${convertToPhilippinesTime(
-                gigs.time
-              )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${late ? `${late} mins` : 'none'}\n-Php ${parseFloat(
-                lateDeduction
-              ).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(2)} hours \nPhp ${parseFloat(gigExtension).toFixed(
+              }\n${gigs.payment.accountName}\n${gigs.payment.accountNumber}\n${convertToPhilippinesTime(
+                gigs.from
+              )}\n${convertToPhilippinesTime(gigs.time)}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${
+                late ? `${late} mins` : 'none'
+              }\n-Php ${parseFloat(lateDeduction).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(
                 2
-              )} \n ${parseFloat(nightSurgeHr).toFixed(2)} hours \nPhp ${parseFloat(nightSurge).toFixed(
+              )} hours \nPhp ${parseFloat(gigExtension).toFixed(2)} \n ${parseFloat(nightSurgeHr).toFixed(
                 2
-              )}\nPhp ${parseFloat(holidaySurge).toFixed(2)}\n\nPhp ${parseFloat(jobsterFinal).toFixed(2)}\n `,
+              )} hours \nPhp ${parseFloat(nightSurge).toFixed(2)}\nPhp ${parseFloat(holidaySurge).toFixed(
+                2
+              )}\n\nPhp ${parseFloat(jobsterFinal).toFixed(2)}\n `,
               inline: true
             }
           ],
@@ -113,16 +115,16 @@ var controller = {
             },
             {
               name: 'Details',
-              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Night Surge:**`,
+              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Account Name:**\n**Account Number:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Night Surge:**`,
               inline: true
             },
             {
               name: '-',
               value: `${gigs.position}\n${gigs.fee}\n${jobsterData[0].firstName} ${jobsterData[0].lastName}\n${
                 gigs.shift
-              }\n${convertToPhilippinesTime(gigs.from)}\n${convertToPhilippinesTime(
-                gigs.time
-              )}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${
+              }\n${gigs.payment.accountName}\n${gigs.payment.accountNumber}\n${convertToPhilippinesTime(
+                gigs.from
+              )}\n${convertToPhilippinesTime(gigs.time)}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${
                 lateByHour ? `${lateByHour} mins` : 'none'
               }\n-Php ${parseFloat(lateDeduction).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(
                 2

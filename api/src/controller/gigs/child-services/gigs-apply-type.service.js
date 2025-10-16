@@ -327,7 +327,10 @@ var services = {
         nightSurgeHr: actualNightSurge,
         dropOffs: dropOffs,
         pickupDetails: pickupDetails,
-        dropoffDetails: dropoffDetails
+        dropoffDetails: dropoffDetails,
+        gcashName: paymentDetails && paymentDetails.name ? paymentDetails.name : null,
+        gcashNumber: paymentDetails && paymentDetails.value ? paymentDetails.value : null,
+        paymentType: paymentDetails && paymentDetails.type ? paymentDetails.type : null
       }
     }
 

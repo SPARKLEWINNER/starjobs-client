@@ -700,7 +700,8 @@ var services = {
                 late,
                 actualTime,
                 actualExtension,
-                actualNightSurge
+                actualNightSurge,
+                paymentDetails
               )
             }
           } else if (status === 'Applying' && category === 'parcels') {

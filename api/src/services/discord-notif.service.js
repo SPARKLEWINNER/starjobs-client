@@ -81,7 +81,16 @@ var controller = {
     })
   },
 
-  send_jobster_endshift: async function (jobsterData, clientData, gigs, late, time, gigExtensionHr, nightSurgeHr) {
+  send_jobster_endshift: async function (
+    jobsterData,
+    clientData,
+    gigs,
+    late,
+    time,
+    gigExtensionHr,
+    nightSurgeHr,
+    paymentDetails
+  ) {
     let lateByHour = parseFloat(late) * parseFloat(60)
     if (late === null || late === undefined) {
       lateByHour = 0
@@ -122,7 +131,7 @@ var controller = {
               name: '-',
               value: `${gigs.position}\n${gigs.fee}\n${jobsterData[0].firstName} ${jobsterData[0].lastName}\n${
                 gigs.shift
-              }\n${gigs.payment.accountName}\n${gigs.payment.accountNumber}\n${convertToPhilippinesTime(
+              }\n${paymentDetails.name}\n${paymentDetails.value}\n${convertToPhilippinesTime(
                 gigs.from
               )}\n${convertToPhilippinesTime(gigs.time)}\n${time}\nPhp ${parseFloat(feeRate).toFixed(2)} \n${
                 lateByHour ? `${lateByHour} mins` : 'none'

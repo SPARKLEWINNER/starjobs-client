@@ -20,7 +20,8 @@ var controller = {
     holidayPercentage,
     late,
     gigExtentionHr,
-    nightSurgeHr
+    nightSurgeHr,
+    deductions
   ) {
     let lateByHours = parseFloat(late) / parseFloat(60)
     if (late === null || late === undefined) {
@@ -74,6 +75,7 @@ var controller = {
     // console.log('holiday ' + holiday)
 
     let premiumFee = parseFloat(premFee)
+    let deductionFees = parseFloat(deductions || 0)
     let appFee = parseFloat(finalHours * 1.25)
     let transactionFee = parseFloat(computedFeeByHr + voluntaryFee + appFee) * 0.1 // 10%
     let grossGigFee = parseFloat(
@@ -82,9 +84,11 @@ var controller = {
 
     let grossVAT = parseFloat(grossGigFee * 0.12) // 12%
     let grossWithHolding = parseFloat(grossGigFee * 0.02) // 2%
-    let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding)
+    let serviceCost = parseFloat(grossGigFee + grossVAT - grossWithHolding - deductionFees)
     // let jobsterTotal = parseFloat(fee) + voluntaryFee / hours
-    let jobsterFinal = parseFloat(computedFeeByHr + voluntaryFee + nightSurge + gigExtension + holidaySurge)
+    let jobsterFinal = parseFloat(
+      computedFeeByHr + voluntaryFee + nightSurge + gigExtension + holidaySurge - deductionFees
+    )
 
     return {
       computedFeeByHr,

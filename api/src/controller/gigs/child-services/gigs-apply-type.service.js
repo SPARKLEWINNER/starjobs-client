@@ -298,7 +298,8 @@ var services = {
       uploadedFiles,
       remarks,
       jobsterNotes,
-      paymentDetails
+      paymentDetails,
+      deductions
     } = req.body
     const {id} = req.params
 
@@ -789,6 +790,12 @@ var services = {
                 }
               }
             )
+          } else if (status === 'Confirm-End-Shift-Deducted') {
+            const gigUpdate = {
+              status: 'Confirm-End-Shift'
+            }
+
+            await Gigs.findOneAndUpdate({_id: Types.ObjectId(id)}, {$set: gigUpdate}, {new: true})
           } else if (status === 'Confirm-End-Shift') {
             if (category === 'parcels') {
               // Process new or existing drop-offs
@@ -912,7 +919,8 @@ var services = {
                   holidayPercentage,
                   late,
                   actualExtension,
-                  actualNightSurge
+                  actualNightSurge,
+                  deductions
                 )
 
                 const feeHistoryInput = new FeeHistory({
@@ -928,7 +936,7 @@ var services = {
                 await Gigs.findOneAndUpdate(
                   {_id: Types.ObjectId(id)},
                   {
-                    status: status,
+                    status: deductions > 0 ? 'End-Shift-Deducted' : status,
                     hours: actualTime,
                     fee: gigs.fee,
                     fees: {
@@ -950,8 +958,10 @@ var services = {
                       lateDeduction: lateDeduction,
                       proposedExtensionHr: actualExtension,
                       proposedNightSurgeHr: actualNightSurge,
-                      proposedHolidayPercentage: holidayPercentage
+                      proposedHolidayPercentage: holidayPercentage,
+                      deductions: deductions || 0
                     },
+                    deductionProof: uploadedFiles?.deductionProof || [],
                     late: late ?? null
                   }
                 )

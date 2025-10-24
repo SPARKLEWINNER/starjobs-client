@@ -65,7 +65,9 @@ const gigsData = {
       'No-Appearance',
       'Cancelled',
       'Archived',
-      'Contracts'
+      'Contracts',
+      'End-Shift-Deducted',
+      'Confirm-End-Shift-Deducted'
     ]
   },
   statusMessage: {
@@ -107,7 +109,8 @@ const gigsData = {
     proposedHolidaySurge: String,
     proposedHolidayPercentage: String,
     premiumFee: String,
-    lateDeduction: String
+    lateDeduction: String,
+    deductions: String
   },
   gigFeeType: String,
   gigOffered: String,
@@ -135,6 +138,10 @@ const gigsData = {
     }
   },
   deliveryProof: {
+    type: [String],
+    default: []
+  },
+  deductionProof: {
     type: [String],
     default: []
   },

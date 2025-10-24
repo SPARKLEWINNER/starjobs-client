@@ -33,7 +33,9 @@ const historySchema = new Schema(
         'Complete',
         'No-Appearance',
         'Cancelled',
-        'Archived'
+        'Archived',
+        'Confirm-End-Shift-Deducted',
+        'End-Shift-Deducted'
       ]
     },
     readUser: {

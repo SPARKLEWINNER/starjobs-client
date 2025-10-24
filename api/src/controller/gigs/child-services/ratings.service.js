@@ -11,7 +11,10 @@ var controllers = {
     const {efficiency, recommendable, completeness, showRate, comments} = req.body
     const now = new Date()
 
-    const isGigExist = await Gigs.find({_id: mongoose.Types.ObjectId(id), status: 'Confirm-End-Shift'})
+    const isGigExist = await Gigs.find({
+      _id: mongoose.Types.ObjectId(id),
+      status: {$in: ['Confirm-End-Shift', 'End-Shift-Deducted']}
+    })
       .lean()
       .exec()
 

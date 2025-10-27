@@ -95,6 +95,8 @@ var controller = {
     if (late === null || late === undefined) {
       lateByHour = 0
     }
+
+    const gigExtension = parseFloat(gigs.fee) * 1.25 * parseFloat(gigExtensionHr)
     // const lateDeduction = parseFloat(lateByHour * gigs.fee)
     const lateDeduction = parseFloat(late * gigs.fee)
 
@@ -124,7 +126,7 @@ var controller = {
             },
             {
               name: 'Details',
-              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Account Name:**\n**Account Number:**\n**Shift:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Night Surge:**`,
+              value: `**Position:**\n**Fee:**\n**Jobster Assigned:**\n**Shift:**\n**Account Name:**\n**Account Number:**\n**Start:**\n**End:**\n**Hours:**\n**Gig Fee Rate:**\n**Late:**\n**Late Deduction:**\n**Gig Extension:**\n**Gig Extension Fee:**\n**Night Surge:**`,
               inline: true
             },
             {
@@ -137,7 +139,9 @@ var controller = {
                 lateByHour ? `${lateByHour} mins` : 'none'
               }\n-Php ${parseFloat(lateDeduction).toFixed(2)} \n${parseFloat(gigExtensionHr).toFixed(
                 2
-              )} hours \n ${parseFloat(nightSurgeHr).toFixed(2)} hours \n `,
+              )} hours \n Php ${parseFloat(gigExtension).toFixed(2)} \n ${parseFloat(nightSurgeHr).toFixed(
+                2
+              )} hours \n `,
               inline: true
             }
           ],

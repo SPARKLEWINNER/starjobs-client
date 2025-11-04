@@ -74,6 +74,60 @@ var controllers = {
     }
   },
 
+  get_gigs_paginated: async function (req, res) {
+    const {page, limit} = req.query // Default to page 1 and limit 10
+    let filter_gig = []
+    try {
+      const today = moment.utc().startOf('day')
+      const filter = {
+        status: {$in: ['Waiting', 'Applying', 'Contracts']},
+        time: {$gte: today.toISOString()} // Ensure this field's format matches database entries
+      }
+
+      const projection = {
+        position: 1,
+        uid: 1,
+        hours: 1,
+        fee: 1,
+        user: 1,
+        from: 1,
+        time: 1,
+        fees: 1,
+        location: 1,
+        locationRate: 1,
+        category: 1,
+        createdAt: 1,
+        pickup: 1,
+        dropOffs: 1
+      }
+
+      // Fetch the data with pagination
+      const initial_find = await Gigs.find(filter, projection)
+        .sort({createdAt: -1})
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit))
+        .lean()
+        .exec()
+      console.log('🚀 ~ initial_find:', initial_find.length)
+
+      // Filter the gigs based on 'from' field validity
+      filter_gig = initial_find.filter((obj) => moment(obj.from, moment.ISO_8601, true).isValid())
+      console.log('Filter gig', filter_gig.length)
+      if (initial_find.length === 0) {
+        return res.status(404).json({success: false, msg: 'No gigs found'})
+      }
+
+      const totalGigs = await Gigs.countDocuments(filter).exec()
+      const totalPages = Math.ceil(totalGigs / limit)
+      return res.status(200).json({filter_gig, totalGigs, totalPages})
+      //return res.status(200).json(filter_gig, page:)
+    } catch (error) {
+      console.error(error)
+      await logger.logError(error, 'Gigs.get_gigs_categorized', filter_gig, null, 'GET')
+      return res.status(502).json({success: false, msg: 'Failed to fetch gigs'})
+    }
+  },
+
   get_gigs_search: async function (req, res) {
     const {page = 1, limit = 10, query = ''} = req.query // Default to page 1, limit 10, and empty search query
     let filter_gig = []
@@ -687,8 +741,8 @@ var controllers = {
           const timeDate = moment(obj.time)
           const date = moment(obj.date)
 
-          const previousDays = moment(date).subtract(7, 'days')
-          const aheadDays = moment(timeDate).add(7, 'days')
+          const previousDays = moment(date).subtract(30, 'days')
+          const aheadDays = moment(timeDate).add(30, 'days')
 
           const range = moment().range(previousDays, aheadDays)
 

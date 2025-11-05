@@ -28,12 +28,45 @@ app.enable('trust proxy')
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
-app.use(cors())
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  res.header('Access-Control-Expose-Headers', 'X-Total-Count')
-  next()
+
+const allowedOrigins = [
+  'https://app.starjobs.com.ph',
+  'https://www.app.starjobs.com.ph',
+  'http://localhost:7003', // dev
+  'http://localhost:8000'
+]
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (e.g. curl, mobile apps)
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true)
+      } else {
+        return callback(new Error('Not allowed by CORS'))
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    exposedHeaders: ['X-Total-Count']
+  })
+)
+
+// Handle preflight requests for all routes
+app.options('*', cors())
+
+// ✅ Fallback CORS-safe error handler
+app.use((err, req, res, next) => {
+  if (err.message === 'Not allowed by CORS') {
+    console.warn(`🚫 Blocked CORS request from origin: ${req.headers.origin}`)
+    return res.status(403).json({
+      success: false,
+      message: 'CORS policy: This origin is not allowed to access this resource.'
+    })
+  }
+  next(err)
 })
 
 app.use(useragent.express())

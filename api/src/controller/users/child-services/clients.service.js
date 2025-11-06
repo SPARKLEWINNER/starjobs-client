@@ -666,10 +666,13 @@ var controllers = {
         }
       }
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Clients.get_client_gigs', null, id, 'GET')
-
-      return res.status(502).json({success: false, msg: 'User to get details'})
+      console.error('Error in get_client_gigs:', error)
+      try {
+        await logger.logError(error, 'Clients.get_client_gigs', null, id, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Client gig details'})
     }
 
     return res.status(200).json(client)
@@ -680,9 +683,6 @@ var controllers = {
     const {id, status} = req.params
     const {page, limit} = req.query
     const statusArray = status.split(',')
-    // console.log(, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-    // console.log(req.body, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXbodyXXX')
-    // console.log(req.params, ' XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXbodyXXX')
 
     let gigs, client
     if (!id || id === 'undefined') return res.status(502).json({success: false, msg: 'User id missing'})
@@ -1044,10 +1044,13 @@ var controllers = {
         }
       }
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Clients.get_client_gigs', null, id, 'GET')
-
-      return res.status(502).json({success: false, msg: 'User to get details'})
+      console.error('Error in get_client_gigs:', error)
+      try {
+        await logger.logError(error, 'Clients.get_client_gigs', null, id, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'User to get details'})
     }
 
     return res.status(200).json(client)

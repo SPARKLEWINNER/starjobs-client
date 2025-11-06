@@ -272,19 +272,24 @@ var controllers = {
 
   get_client_gigs: async function (req, res) {
     const {id} = req.params
-    let gigs, client
     if (!id || id === 'undefined') return res.status(502).json({success: false, msg: 'User id missing'})
 
-    const now = moment().toDate()
-    const fifteenDaysAgo = moment().subtract(30, 'days').toDate()
     try {
-      await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
-      let user = await Clients.find({uid: mongoose.Types.ObjectId(id)})
-        .lean()
-        .exec()
+      // Convert to ObjectId once
+      const userId = mongoose.Types.ObjectId(id)
 
-      if (user) {
-        const contracts = await Contracts.aggregate([
+      // 🔹 Date range: 7 days before and 7 days after today
+      const today = new Date()
+      const format = (d) => d.toISOString().split('T')[0]
+      const startDateStr = format(new Date(today.getTime() - 7 * 864e5))
+      const endDateStr = format(new Date(today.getTime() + 7 * 864e5))
+
+      // 🔹 Run queries in parallel
+      const [user, contracts, gigs] = await Promise.all([
+        Clients.find({uid: userId}).lean(),
+
+        // ⚡ Contracts with linked gigs
+        Contracts.aggregate([
           {
             $lookup: {
               from: 'gigs',
@@ -297,197 +302,32 @@ var controllers = {
           {
             $project: {
               _id: '$gigs._id',
-              records: true,
-              category: true,
-              commissionRate: true,
-              gigFeeType: true,
-              from: '$gigs.from',
-              time: '$gigs.time',
+              category: 1,
+              commissionRate: 1,
+              gigFeeType: 1,
+              position: '$gigs.position',
               shift: '$gigs.shift',
+              time: '$gigs.time',
               hours: '$gigs.hours',
               breakHr: '$gigs.breakHr',
-              dateCreated: '$gigs.dateCreated',
-              position: '$gigs.position',
-              notes: '$gigs.notes',
-              contactNumber: '$gigs.contactNumber',
-              location: '$gigs.location',
-              isApprove: '$gigs.isApprove',
-              status: '$gigs.status',
               date: '$gigs.date',
+              dateCreated: '$gigs.dateCreated',
+              status: '$gigs.status',
+              location: '$gigs.location',
               applicants: '$gigs.applicants',
-              updatedAt: true,
-              createdAt: true,
-              user: '$gigs.user'
+              user: '$gigs.user',
+              updatedAt: 1,
+              createdAt: 1
             }
           }
-        ]).exec()
+        ]),
 
-        // gigs = await Gigs.aggregate([
-        //   {
-        //     $lookup: {
-        //       localField: 'gigs._id',
-        //       from: 'extended',
-        //       foreignField: 'gigId',
-        //       as: 'extended'
-        //     }
-        //   },
-        //   {
-        //     $unwind: {
-        //       path: '$extended',
-        //       preserveNullAndEmptyArrays: true
-        //     }
-        //   },
-        //   {
-        //     $lookup: {
-        //       localField: 'gigs._id',
-        //       from: 'gigs-histories',
-        //       foreignField: 'gid',
-        //       as: 'history'
-        //     }
-        //   },
-        //   {
-        //     $unwind: {
-        //       path: '$history',
-        //       preserveNullAndEmptyArrays: true
-        //     }
-        //   },
-        //   {
-        //     $project: {
-        //       _id: 1,
-        //       position: 1,
-        //       hours: 1,
-        //       nation: 1,
-        //       from: 1,
-        //       late: 1,
-        //       time: 1,
-        //       status: 1,
-        //       shift: 1,
-        //       fee: 1,
-        //       user: 1,
-        //       uid: 1,
-        //       isExtended: 1,
-        //       isApprove: 1,
-        //       category: 1,
-        //       createdAt: 1,
-        //       date: 1,
-        //       dateCreated: 1,
-        //       auid: 1,
-        //       history: 1,
-        //       commissionRate: 1,
-        //       gigFeeType: 1,
-        //       applicants: 1,
-        //       maximumApplicants: '$extended.maximumApplicants',
-        //       numberofApplicants: {
-        //         $filter: {
-        //           input: '$extended.applicants',
-        //           as: 's',
-        //           cond: [
-        //             {
-        //               $eq: ['$$s.status', 'Applying']
-        //             },
-        //             '$s.auid',
-        //             []
-        //           ]
-        //         }
-        //       }
-        //     }
-        //   }
-        // ])
-        //   .match({
-        //     uid: mongoose.Types.ObjectId(id)
-        //     // status: {$in: ['Waiting', 'Applying']} MQ: 03-09-2022 Fixed issue of pending gigs not showing
-        //   })
-        //   .exec()
-
-        // gigs = await Gigs.aggregate([
-        //   {
-        //     $match: {
-        //       uid: mongoose.Types.ObjectId(id)
-        //       // status: { $in: ['Waiting', 'Applying'] }  // Uncomment if needed
-        //     }
-        //   },
-        //   {
-        //     $lookup: {
-        //       from: 'extended',
-        //       localField: '_id',
-        //       foreignField: 'gigId',
-        //       as: 'extended'
-        //     }
-        //   },
-        //   {
-        //     $unwind: {
-        //       path: '$extended',
-        //       preserveNullAndEmptyArrays: true
-        //     }
-        //   },
-        //   {
-        //     $lookup: {
-        //       from: 'gigs-histories',
-        //       localField: '_id',
-        //       foreignField: 'gid',
-        //       as: 'history'
-        //     }
-        //   },
-        //   {
-        //     $unwind: {
-        //       path: '$history',
-        //       preserveNullAndEmptyArrays: true
-        //     }
-        //   },
-        //   {
-        //     $project: {
-        //       _id: 1,
-        //       position: 1,
-        //       hours: 1,
-        //       nation: 1,
-        //       location: 1,
-        //       breakHr: 1,
-        //       from: 1,
-        //       late: 1,
-        //       time: 1,
-        //       status: 1,
-        //       shift: 1,
-        //       fee: 1,
-        //       user: 1,
-        //       uid: 1,
-        //       isExtended: 1,
-        //       isApprove: 1,
-        //       category: 1,
-        //       createdAt: 1,
-        //       date: 1,
-        //       dateCreated: 1,
-        //       auid: 1,
-        //       history: 1,
-        //       commissionRate: 1,
-        //       gigFeeType: 1,
-        //       gigOffered: 1,
-        //       applicants: 1,
-        //       fees: 1,
-        //       maximumApplicants: '$extended.maximumApplicants',
-        //       numberofApplicants: {
-        //         $cond: [
-        //           {
-        //             $and: [
-        //               {$eq: ['$extended.applicants.status', 'Applying']},
-        //               {$gt: ['$extended.applicants.auid', null]}
-        //             ]
-        //           },
-        //           1,
-        //           0
-        //         ]
-        //       }
-        //     }
-        //   }
-        // ])
-
-        gigs = await Gigs.aggregate([
+        // ⚡ Gigs filtered by date range and joined with extended + history
+        Gigs.aggregate([
           {
             $match: {
-              uid: mongoose.Types.ObjectId(id),
-              dateCreated: {
-                $gte: fifteenDaysAgo, // Greater than or equal to 15 days ago
-                $lte: now // Less than or equal to now
-              }
+              uid: userId,
+              date: {$gte: startDateStr, $lte: endDateStr}
             }
           },
           {
@@ -495,7 +335,8 @@ var controllers = {
               from: 'extended',
               localField: '_id',
               foreignField: 'gigId',
-              as: 'extended'
+              as: 'extended',
+              pipeline: [{$project: {maximumApplicants: 1, applicants: 1}}]
             }
           },
           {
@@ -503,7 +344,8 @@ var controllers = {
               from: 'gigs-histories',
               localField: '_id',
               foreignField: 'gid',
-              as: 'history'
+              as: 'history',
+              pipeline: [{$project: {gid: 1, status: 1, createdAt: 1}}]
             }
           },
           {
@@ -511,160 +353,44 @@ var controllers = {
               _id: 1,
               position: 1,
               hours: 1,
-              nation: 1,
-              location: 1,
               breakHr: 1,
+              category: 1,
               from: 1,
-              late: 1,
               time: 1,
-              status: 1,
               shift: 1,
               fee: 1,
               user: 1,
               uid: 1,
               isExtended: 1,
               isApprove: 1,
-              category: 1,
-              createdAt: 1,
+              status: 1,
               date: 1,
               dateCreated: 1,
-              auid: 1,
-              history: {$arrayElemAt: ['$history', 0]},
-              commissionRate: 1,
-              gigFeeType: 1,
-              gigOffered: 1,
+              createdAt: 1,
               applicants: 1,
               fees: 1,
+              gigOffered: 1,
+              commissionRate: 1,
+              gigFeeType: 1,
+              location: 1,
               maximumApplicants: {$arrayElemAt: ['$extended.maximumApplicants', 0]},
-              numberofApplicants: {
-                $cond: [
-                  {
-                    $and: [
-                      {$eq: [{$arrayElemAt: ['$extended.applicants.status', 0]}, 'Applying']},
-                      {$gt: [{$arrayElemAt: ['$extended.applicants.auid', 0]}, null]}
-                    ]
-                  },
-                  1,
-                  0
-                ]
-              }
+              history: {$arrayElemAt: ['$history', 0]}
             }
           }
         ])
+      ])
 
-        gigs = await Promise.all(
-          gigs &&
-            gigs
-              .filter((obj) => {
-                // console.log('🚀 ~ .filter ~ obj.time: 426', obj.time)
-                // console.log('🚀 ~ .filter ~ obj.time length: 426', obj.time.length)
+      // 🔹 Merge contracts & gigs results
+      const gigData = contracts.length > 0 ? [contracts[0], ...gigs] : gigs
 
-                // Check if obj.time is a valid date format
-                const timeDate = moment(obj.time, moment.ISO_8601, true)
-                if (!timeDate.isValid()) {
-                  console.warn('Invalid date format:', obj.time)
-                  return false // Skip this object
-                }
-
-                const previousDays = moment(obj.date).subtract(7, 'days')
-                const aheadDays = timeDate.add(7, 'days')
-                const range = moment().range(previousDays, aheadDays)
-
-                if (range.contains(moment())) {
-                  if (contracts.length > 0 && obj.status !== 'Contracts') return obj
-                  if (contracts.length === 0) return obj
-                }
-
-                return false // Skip this object if not in range
-              })
-              .map(async (obj) => {
-                if (!obj.isExtended) {
-                  const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(obj.auid)})
-                    .lean()
-                    .exec()
-
-                  // Add applicant list to prevent re-apply of jobsters
-                  if (obj.status === 'Applying' || obj.status === 'Waiting') {
-                    const history = await History.find(
-                      {
-                        gid: mongoose.Types.ObjectId(obj._id),
-                        status: ['Waiting', 'Applying']
-                      },
-                      {uid: 1, status: 1, _id: 1, createdAt: 1}
-                    ).lean()
-
-                    return {
-                      ...obj,
-                      applicants: history,
-                      account
-                    }
-                  }
-
-                  return {
-                    ...obj,
-                    account
-                  }
-                } else {
-                  return obj
-                }
-              })
-        )
-
-        // const filteredGigs = gigs
-        //   ? await Promise.all(
-        //       gigs
-        //         .filter((obj) => {
-        //           if (!moment(new Date(obj.time)).isBefore(moment(), 'day')) {
-        //             if (contracts.length > 0 && obj.status !== 'Contracts') return true
-        //             if (contracts.length === 0) return true
-        //           }
-        //           return false
-        //         })
-        //         .map(async (obj) => {
-        //           if (!obj.isExtended) {
-        //             const account = await Freelancers.findOne({uuid: mongoose.Types.ObjectId(obj.auid)})
-        //               .lean()
-        //               .exec()
-        //             console.log(account)
-        //             if (obj.status === 'Applying' || obj.status === 'Waiting') {
-        //               const history = await History.find(
-        //                 {
-        //                   gid: mongoose.Types.ObjectId(obj._id),
-        //                   status: {$in: ['Waiting', 'Applying']}
-        //                 },
-        //                 {uid: 1, status: 1, _id: 1, createdAt: 1}
-        //               ).lean()
-
-        //               return {
-        //                 ...obj,
-        //                 applicants: history,
-        //                 account
-        //               }
-        //             }
-
-        //             return {
-        //               ...obj,
-        //               account
-        //             }
-        //           } else {
-        //             return obj
-        //           }
-        //         })
-        //     )
-        //   : []
-
-        // // You can use filteredGigs as needed
-
-        let gigData = gigs
-        if (contracts.length > 0) {
-          gigData = [contracts[0], ...gigs]
-        }
-        client = {
-          details: user ? user[0] : {},
-          gigs: gigData,
-          gigCategory: [...new Set(gigData.map((item) => item.category))]
-        }
+      // 🔹 Final formatted response
+      const client = {
+        details: user?.[0] || {},
+        gigs: gigData,
+        gigCategory: [...new Set(gigData.map((item) => item.category))]
       }
+
+      return res.status(200).json(client)
     } catch (error) {
       console.error('Error in get_client_gigs:', error)
       try {
@@ -674,386 +400,201 @@ var controllers = {
       }
       return res.status(500).json({success: false, msg: 'Client gig details'})
     }
-
-    return res.status(200).json(client)
   },
 
   get_client_status_gigs: async function (req, res) {
-    // console.log('🚀 ~ get_client_status_gigs:')
     const {id, status} = req.params
-    const {page, limit} = req.query
+    const {page = 1, limit = 20} = req.query
     const statusArray = status.split(',')
 
-    let gigs, client
-    if (!id || id === 'undefined') return res.status(502).json({success: false, msg: 'User id missing'})
+    if (!id || id === 'undefined') {
+      return res.status(502).json({success: false, msg: 'User id missing'})
+    }
 
     try {
-      await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
-      let user = await Clients.find({uid: mongoose.Types.ObjectId(id)})
-        .lean()
-        .exec()
+      const userId = mongoose.Types.ObjectId(id)
 
-      if (user) {
-        const contracts = await Contracts.aggregate([
-          {
-            $lookup: {
-              from: 'gigs',
-              localField: 'gid',
-              foreignField: '_id',
-              as: 'gigs'
-            }
-          },
-          {$unwind: '$gigs'},
-          {
-            $project: {
-              _id: '$gigs._id',
-              records: true,
-              category: true,
-              commissionRate: true,
-              gigFeeType: true,
-              from: '$gigs.from',
-              time: '$gigs.time',
-              shift: '$gigs.shift',
-              hours: '$gigs.hours',
-              breakHr: '$gigs.breakHr',
-              dateCreated: '$gigs.dateCreated',
-              position: '$gigs.position',
-              notes: '$gigs.notes',
-              contactNumber: '$gigs.contactNumber',
-              location: '$gigs.location',
-              isApprove: '$gigs.isApprove',
-              status: '$gigs.status',
-              date: '$gigs.date',
-              applicants: '$gigs.applicants',
-              updatedAt: true,
-              createdAt: true,
-              user: '$gigs.user'
-            }
+      // Run user + client fetch in parallel
+      const [userData, clientData] = await Promise.all([
+        getSpecificData({_id: userId}, Users, 'User', id),
+        Clients.find({uid: userId}).lean()
+      ])
+
+      console.log('🚀 ~ clientData:', clientData[0])
+      if (!clientData || clientData.length === 0) {
+        return res.status(404).json({success: false, msg: 'Client not found'})
+      }
+
+      // === 1️⃣ Compute 7-day date range based on client's main date (obj.date) ===
+      // Assuming `clientData[0].date` or any date field from client — adjust as needed
+      const today = new Date()
+      const format = (d) => d.toISOString().split('T')[0]
+      const startDateStr = format(new Date(today.getTime() - 7 * 864e5))
+      const endDateStr = format(new Date(today.getTime() + 7 * 864e5))
+
+      // Contracts aggregation (kept but optimized)
+      const contractsPromise = Contracts.aggregate([
+        {
+          $lookup: {
+            from: 'gigs',
+            localField: 'gid',
+            foreignField: '_id',
+            as: 'gig'
           }
-        ]).exec()
+        },
+        {$unwind: '$gig'},
+        {$replaceRoot: {newRoot: '$gig'}}
+      ])
 
-        if (status === 'Waiting,Pending') {
-          console.log(status, '--------------status')
-          let aggregationPipeline = [
-            {
-              $match: {
-                uid: mongoose.Types.ObjectId(id),
-                status: {$in: statusArray} // Uncomment if needed
-              }
-            },
-            {
-              $lookup: {
-                from: 'extended',
-                localField: '_id',
-                foreignField: 'gigId',
-                as: 'extended'
-              }
-            },
-            {
-              $unwind: {
-                path: '$extended',
-                preserveNullAndEmptyArrays: true
-              }
-            },
-            {
-              $lookup: {
-                from: 'gigs-histories',
-                localField: '_id',
-                foreignField: 'gid',
-                as: 'history'
-              }
-            },
-            {
-              $unwind: {
-                path: '$history',
-                preserveNullAndEmptyArrays: true
-              }
-            },
-            {
-              $project: {
-                _id: 1,
-                position: 1,
-                hours: 1,
-                nation: 1,
-                location: 1,
-                breakHr: 1,
-                from: 1,
-                late: 1,
-                time: 1,
-                status: 1,
-                shift: 1,
-                fee: 1,
-                user: 1,
-                uid: 1,
-                isExtended: 1,
-                isApprove: 1,
-                category: 1,
-                createdAt: 1,
-                date: 1,
-                dateCreated: 1,
-                auid: 1,
-                history: 1,
-                commissionRate: 1,
-                gigFeeType: 1,
-                gigOffered: 1,
-                applicants: 1,
-                fees: 1,
-                maximumApplicants: '$extended.maximumApplicants',
-                numberofApplicants: {
-                  $cond: [
-                    {
-                      $and: [
-                        {$eq: ['$extended.applicants.status', 'Applying']},
-                        {$gt: ['$extended.applicants.auid', null]}
-                      ]
-                    },
-                    1,
-                    0
-                  ]
-                }
-              }
-            },
-            {
-              $sort: {
-                createdAt: -1
-              }
-            }
-          ]
-
-          if (page && limit) {
-            const skip = (parseInt(page) - 1) * parseInt(limit)
-            aggregationPipeline.push({$skip: skip})
-            aggregationPipeline.push({$limit: parseInt(limit)})
-          }
-
-          gigs = await Gigs.aggregate(aggregationPipeline)
-        } else {
-          let aggregationPipeline = [
-            {
-              $match: {
-                uid: mongoose.Types.ObjectId(id),
-                status: {$in: statusArray} // Uncomment if needed
-              }
-            },
-            {
-              $lookup: {
-                from: 'gigs-dropoffs', // The name of the DropOffs collection
-                localField: 'dropOffs', // The field in the Gigs collection referencing dropOffs
-                foreignField: '_id', // The field in the DropOffs collection to join on
-                as: 'dropOffDetails' // The name for the joined data in the result
-              }
-            },
-            {
-              $addFields: {
-                dropOffDetails: {
-                  $map: {
-                    input: '$dropOffs',
-                    as: 'id',
-                    in: {
-                      $arrayElemAt: [
-                        {
-                          $filter: {
-                            input: '$dropOffDetails',
-                            as: 'detail',
-                            cond: {$eq: ['$$detail._id', '$$id']}
-                          }
-                        },
-                        0
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              $project: {
-                _id: 1,
-                position: 1,
-                hours: 1,
-                nation: 1,
-                location: 1,
-                breakHr: 1,
-                from: 1,
-                late: 1,
-                time: 1,
-                status: 1,
-                shift: 1,
-                fee: 1,
-                user: 1,
-                uid: 1,
-                isExtended: 1,
-                isApprove: 1,
-                category: 1,
-                createdAt: 1,
-                date: 1,
-                dateCreated: 1,
-                auid: 1,
-                history: 1,
-                commissionRate: 1,
-                gigFeeType: 1,
-                gigOffered: 1,
-                applicants: 1,
-                fees: 1,
-                pickup: 1,
-                dropOffs: 1, // Original dropOffs reference
-                dropOffDetails: 1, // Include detailed dropOffs data
-                numberOfRiders: 1,
-                remarks: 1,
-                ridersFee: 1,
-                riderType: 1,
-                vehicleType: 1,
-                type: 1
-              }
-            },
-            {
-              $sort: {
-                createdAt: -1
-              }
-            }
-          ]
-          // if (page && limit) {
-          //   const skip = (parseInt(page) - 1) * parseInt(limit)
-          //   aggregationPipeline.push({$skip: skip})
-          //   aggregationPipeline.push({$limit: parseInt(limit)})
-          // }
-
-          gigs = await Gigs.aggregate(aggregationPipeline)
-        }
-
-        gigs = await Promise.all(
-          gigs &&
-            gigs
-              .filter((obj, index, self) => {
-                const firstIndex = self.findIndex((t) => t._id === obj._id)
-                if (index !== firstIndex) {
-                  console.log(`Duplicate Gig found: ${JSON.stringify(obj)}`)
-                  return false // Skip duplicate objects
-                }
-                const timeDate = moment(obj.time)
-
-                const previousDays = moment(obj.date).subtract(7, 'days')
-                const aheadDays = moment(timeDate).add(7, 'days')
-                const range = moment().range(previousDays, aheadDays)
-                // between 0 days and 2 days before current day
-                if (range.contains(moment())) {
-                  if (contracts.length > 0 && obj.status != 'Contracts') return obj
-                  if (contracts.length == 0) return obj
-                  // return obj
-                }
-              })
-              .map(async (obj) => {
-                if (!obj.isExtended) {
-                  const account = await Freelancers.find({uuid: mongoose.Types.ObjectId(obj.auid)})
-                    .lean()
-                    .exec()
-
-                  // add applicant list since to prevent re-apply of jobsters
-                  if (obj.status === 'Applying' || obj.status === 'Waiting') {
-                    const history = await History.find(
-                      {
-                        gid: mongoose.Types.ObjectId(obj._id),
-                        status: ['Waiting', 'Applying']
-                      },
-                      {uid: 1, status: 1, _id: 1, createdAt: 1}
-                    )
-                      .find()
-                      .lean()
-
-                    return {
-                      ...obj,
-                      applicants: history,
-                      account
-                    }
-                  }
-
-                  return {
-                    ...obj,
-                    account
-                  }
-                } else {
-                  return obj
-                }
-              })
-        )
-
-        let gigData = gigs
-        // console.log('🚀 ~ gigData:', gigData)
-        if (contracts.length > 0) {
-          gigData = [contracts[0], ...gigs]
-        }
-
-        const gigsObject = gigData.reduce((acc, curr) => {
-          acc[curr._id] = curr
-          return acc
-        }, {})
-
-        // let filtered_gig = gigsObject.filter(
-        //   (gig, index, self) => index === self.findIndex((obj) => obj._id === gig._id)
-        // )
-        // console.log(filtered_gig, ' filtered_gig')
-        // console.log(gigsObject.length, ' filtered_gig Length')
-        const gigsArray = Object.entries(gigsObject).map(([key, value]) => ({
-          _id: key,
-          ...value
-        }))
-
-        // const dataLast = []
-        // filtered_gig &&
-        //   filtered_gig.map((value) => {
-        //     return dataLast.push(value)
-        //   })
-        // const targetDate = new Date('2024-07-10')
-
-        const gigsDATA = await Gigs.find({
-          uid: mongoose.Types.ObjectId('65e6aff4e40cda005a544b25'),
-          // location: {$regex: `JOLLIBEE THE MIND MUSEUM`, $options: 'i'},
-          location: `MANG INASAL PADRE FAURA`,
-          // location: {$ne: `MANG INASAL PADRE FAURA`},
-          category: 'restaurant-services',
-          // position: {$regex: 'Driver', $options: 'i'},
-          date: {$gte: '2025-07-10'}
-        })
-          .sort({date: -1})
-          .lean()
-
-        console.log('🚀 ~ gigsDATA:', gigsDATA)
-        console.log('🚀 ~ gigsDATAlength:', gigsDATA.length)
-
-        // await Gigs.updateMany(
-        //   {
-        //     uid: mongoose.Types.ObjectId('65e6aff4e40cda005a544b25'),
-        //     // location: {$regex: 'Jollibee Meralco Parklane', $options: 'i'},
-        //     // location: `MI PADRE FAURA`,
-
-        //     // position: {$regex: 'DRIVER', $options: 'i'},
-        //     category: 'restaurant-services',
-
-        //     date: {$gte: '2025-07-10'}
-        //   },
-        //   {
-        //     $set: {location: `MANG INASAL PADRE FAURA`}
-        //   }
-        // )
-
-        const user = await Users.find({uuid: mongoose.Types.ObjectId(id)}).lean()
-
-        client = {
-          details: user ? user[0] : {},
-          gigs: gigsArray,
-          gigCategory: [...new Set(gigsArray.map((item) => item.category))]
+      // === 2️⃣ Add matchStage with date range filter ===
+      const matchStage = {
+        $match: {
+          uid: userId,
+          status: {$in: statusArray},
+          date: {$gte: startDateStr, $lte: endDateStr} // <- added date filter
         }
       }
+
+      // === 3️⃣ Keep your lookup logic as-is ===
+      let lookupStages = []
+
+      if (status === 'Waiting,Pending') {
+        lookupStages = [
+          {
+            $lookup: {
+              from: 'extended',
+              localField: '_id',
+              foreignField: 'gigId',
+              as: 'extended'
+            }
+          },
+          {$unwind: {path: '$extended', preserveNullAndEmptyArrays: true}},
+          {
+            $lookup: {
+              from: 'gigs-histories',
+              localField: '_id',
+              foreignField: 'gid',
+              as: 'history'
+            }
+          }
+        ]
+      } else {
+        lookupStages = [
+          {
+            $lookup: {
+              from: 'gigs-dropoffs',
+              localField: 'dropOffs',
+              foreignField: '_id',
+              as: 'dropOffDetails'
+            }
+          }
+        ]
+      }
+
+      // === 4️⃣ Add date-filtered aggregation pipeline ===
+      const aggregationPipeline = [
+        matchStage,
+        ...lookupStages,
+        {$sort: {createdAt: -1}},
+        {$skip: (parseInt(page) - 1) * parseInt(limit)},
+        {$limit: parseInt(limit)},
+        {
+          $project: {
+            _id: 1,
+            position: 1,
+            hours: 1,
+            nation: 1,
+            location: 1,
+            breakHr: 1,
+            from: 1,
+            late: 1,
+            time: 1,
+            status: 1,
+            shift: 1,
+            fee: 1,
+            user: 1,
+            uid: 1,
+            isExtended: 1,
+            isApprove: 1,
+            category: 1,
+            createdAt: 1,
+            date: 1,
+            dateCreated: 1,
+            auid: 1,
+            commissionRate: 1,
+            gigFeeType: 1,
+            applicants: 1,
+            fees: 1,
+            dropOffs: 1,
+            dropOffDetails: 1,
+            extended: 1,
+            history: 1,
+            numberOfRiders: 1,
+            remarks: 1,
+            ridersFee: 1,
+            riderType: 1,
+            vehicleType: 1,
+            type: 1
+          }
+        }
+      ]
+
+      // === 5️⃣ Run aggregations ===
+      const [gigs, contracts] = await Promise.all([Gigs.aggregate(aggregationPipeline), contractsPromise])
+
+      // === 6️⃣ Batch fetch accounts + histories ===
+      const auids = gigs.map((g) => g.auid).filter(Boolean)
+      const gigIds = gigs.map((g) => g._id)
+
+      const [accounts, histories] = await Promise.all([
+        Freelancers.find({uuid: {$in: auids.map((a) => mongoose.Types.ObjectId(a))}}).lean(),
+        History.find({gid: {$in: gigIds}, status: {$in: ['Waiting', 'Applying']}})
+          .select('uid status gid createdAt')
+          .lean()
+      ])
+
+      const accountMap = new Map(accounts.map((a) => [a.uuid.toString(), a]))
+      const historyMap = histories.reduce((acc, h) => {
+        const gid = h.gid.toString()
+        acc[gid] = acc[gid] || []
+        acc[gid].push(h)
+        return acc
+      }, {})
+
+      const gigsMerged = gigs.map((g) => {
+        const acc = accountMap.get(g.auid?.toString())
+        const hist = historyMap[g._id.toString()] || []
+        return {...g, account: acc, applicants: hist}
+      })
+
+      const uniqueGigs = []
+      const seen = new Set()
+      for (const g of gigsMerged) {
+        const idStr = g._id.toString()
+        if (!seen.has(idStr)) {
+          seen.add(idStr)
+          uniqueGigs.push(g)
+        }
+      }
+
+      const gigData = contracts.length > 0 ? [contracts[0], ...uniqueGigs] : uniqueGigs
+
+      const client = {
+        details: userData || {},
+        gigs: gigData,
+        gigCategory: [...new Set(gigData.map((item) => item.category))]
+      }
+
+      return res.status(200).json(client)
     } catch (error) {
-      console.error('Error in get_client_gigs:', error)
+      console.error('Error in get_client_status_gigs:', error)
       try {
         await logger.logError(error, 'Clients.get_client_gigs', null, id, 'GET')
       } catch (logErr) {
         console.error('Logger failed:', logErr)
       }
-      return res.status(500).json({success: false, msg: 'User to get details'})
+      return res.status(500).json({success: false, msg: 'Failed to get client gigs'})
     }
-
-    return res.status(200).json(client)
   },
   get_selected_gig: async function (req, res) {
     const {id} = req.params

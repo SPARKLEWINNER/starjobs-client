@@ -35,7 +35,9 @@ const allowedOrigins = [
   'http://localhost:7003', // dev
   'http://localhost:8000',
   'https://alerts-and-prompts.starjobs-gatsby.pages.dev', // Staging
-  'https://sj.spos.site/'
+  'https://sj.spos.site/',
+  'https://staging-starjobs.onrender.com/api/internal/v1',
+  'https://api-sj.starjobs.com.ph/api/internal/v1'
 ]
 
 app.use(

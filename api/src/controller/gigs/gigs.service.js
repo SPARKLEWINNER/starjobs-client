@@ -633,9 +633,18 @@ var controllers = {
           .exec()
 
         if (status === 'Confirm-End-Shift') {
-          console.log('Confirm-End-Shift')
-          // Confirm-End-Shift
+          // Calculate date 30 days ago
+          const thirtyDaysAgo = new Date()
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
           reports = await Gigs.aggregate([
+            {
+              $match: {
+                auid: new mongoose.Types.ObjectId(id),
+                status: status,
+                createdAt: {$gte: thirtyDaysAgo} // ✅ filter last 30 days
+              }
+            },
             {
               $lookup: {
                 from: 'gigs-histories',
@@ -673,15 +682,13 @@ var controllers = {
                   }
                 }
               }
+            },
+            {
+              $sort: {createdAt: 1}
             }
-          ])
-            .match({
-              auid: mongoose.Types.ObjectId(id),
-              status: status
-            })
-            .sort({createdAt: 1})
-            .exec()
-          console.log('🚀 ~ Confirm End Shift reports:', reports)
+          ]).exec()
+
+          console.log('🚀 ~ Confirm End Shift reports:', reports.length)
         } else {
           console.log('Others')
           // Other Status

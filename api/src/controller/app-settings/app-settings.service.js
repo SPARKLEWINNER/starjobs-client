@@ -27,85 +27,80 @@ var controllers = {
           appVersions: undefined
         }
       }
+      console.log(`Fetched ${result.length} app settings`)
+      return res.status(200).json(result)
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'AppSettings.get_app_settings', null, null, 'GET')
-      return res.status(502).json({success: false, msg: 'Unable to get appSettings'})
+      console.error('Error in get_app_settings:', error)
+      try {
+        await logger.logError(error, 'AppSettings.get_app_settings', null, null, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get appSettings'})
     }
-
-    return res.status(200).json(result)
   },
 
   get_category: async function (req, res) {
     const {id} = req.params
-    let category
     try {
-      category = await Categories.findById(id).lean().exec()
+      const category = await Categories.findById(id).lean().exec()
+      console.log(`Fetched ${category.length} categories`)
+      return res.status(200).json(category)
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Category.get_category', null, id, 'GET')
-
-      return res.status(502).json({success: false, msg: 'Unable to get category'})
+      console.error('Error in get_category:', error)
+      try {
+        await logger.logError(error, 'Category.get_category', null, id, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get category'})
     }
-
-    return res.status(200).json(category)
   },
 
   get_branches: async function (req, res) {
-    let branches
     try {
-      branches = await Branches.find({status: 'active'}).lean().exec()
+      const branches = await Branches.find({status: 'active'}).lean().exec()
+      console.log(`Fetched ${branches.length} active branches`)
+      return res.status(200).json(branches)
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Branches.get_branches', null, null, 'GET')
-
-      return res.status(502).json({success: false, msg: 'Unable to get Branches'})
+      console.error('Error in get_branches:', error)
+      try {
+        await logger.logError(error, 'Branches.get_branches', null, null, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get Branches'})
     }
-
-    // let branch = branches.map((item) => {
-    //   item.image = BUCKET_URL + item.image
-    //   return item
-    // })
-
-    return res.status(200).json(branches)
   },
   get_pickups: async function (req, res) {
-    let pickups
     try {
-      pickups = await Pickups.find().lean().exec()
-      console.log('🚀 ~ pickups:', pickups)
+      const pickups = await Pickups.find().lean().exec()
+      console.log(`Fecthed ${pickups.length} pickups`)
+      return res.status(200).json(pickups)
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Branches.get_pickups', null, null, 'GET')
-
-      return res.status(502).json({success: false, msg: 'Unable to get Pickups'})
+      console.error('Error in get_pickups:', error)
+      try {
+        await logger.logError(error, 'Pickups.get_pickups', null, null, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get Pickups'})
     }
-
-    // let branch = branches.map((item) => {
-    //   item.image = BUCKET_URL + item.image
-    //   return item
-    // })
-
-    return res.status(200).json(pickups)
   },
   get_categories: async function (req, res) {
-    let categories
     try {
-      categories = await Categories.find({status: 0}).lean().exec()
-      console.log("🚀 ~ categories:", categories)
+      const categories = await Categories.find({status: 0}).lean().exec()
+      console.log(`Fetched ${categories.length} categories`)
+      return res.status(200).json(categories)
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Categories.get_categories', null, null, 'GET')
-
-      return res.status(502).json({success: false, msg: 'Unable to get categories'})
+      console.error('Error in get_categories:', error)
+      try {
+        await logger.logError(error, 'Categories.get_categories', null, null, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get categories'})
     }
-
-    // let category = categories.map((item) => {
-    //   item.image = BUCKET_URL + item.image
-    //   return item
-    // })
-
-    return res.status(200).json(categories)
   },
 
   get_logs: async function (req, res) {
@@ -121,24 +116,26 @@ var controllers = {
       console.error(error)
       await logger.logError(error, 'LOGS.get_logs', null, null, 'GET')
 
-      return res.status(502).json({success: false, msg: 'Unable to get details'})
+      return res.status(500).json({success: false, msg: 'Unable to get details'})
     }
 
     return res.status(200).json(logs)
   },
 
   get_rates: async function (req, res) {
-    let rates
     try {
-      rates = await Rates.find({}).sort({city: 1}).exec()
+      const rates = await Rates.find({}).sort({city: 1}).exec()
+      console.log(`Fetched ${rates.length} rates`)
+      return res.status(200).json(rates)
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'LOGS.get_rates', null, null, 'GET')
-
-      return res.status(502).json({success: false, msg: 'Unable to get rates'})
+      console.error('Error in get_rates:', error)
+      try {
+        await logger.logError(error, 'Rates.get_rates', null, null, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get rates'})
     }
-
-    return res.status(200).json(rates)
   }
 }
 

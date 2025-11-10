@@ -767,10 +767,13 @@ var controllers = {
         }
       }
     } catch (error) {
-      console.error(error)
-      await logger.logError(error, 'Gigs.get_gigs_history', null, id, 'GET')
-
-      return res.status(502).json({success: false, msg: 'Unable to get history details'})
+      console.error('Error in get_gigs_history_status:', error)
+      try {
+        await logger.logError(error, 'Gigs.get_gigs_history', null, id, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get history details'})
     }
 
     return res.status(200).json(details)

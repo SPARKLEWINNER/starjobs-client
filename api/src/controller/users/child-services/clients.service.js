@@ -596,6 +596,129 @@ var controllers = {
       return res.status(500).json({success: false, msg: 'Failed to get client gigs'})
     }
   },
+
+  get_client_gigs_count: async function (req, res) {
+    const {id} = req.params
+
+    if (!id || id === 'undefined') {
+      return res.status(502).json({success: false, msg: 'User id missing'})
+    }
+
+    try {
+      const userId = mongoose.Types.ObjectId(id)
+
+      // === Fetch user + client in parallel ===
+      const [userData, clientData] = await Promise.all([
+        getSpecificData({_id: userId}, Users, 'User', id),
+        Clients.find({uid: userId}).lean()
+      ])
+
+      if (!clientData || clientData.length === 0) {
+        return res.status(404).json({success: false, msg: 'Client not found'})
+      }
+
+      // === Date window (7 days before & after today) ===
+      const today = new Date()
+      const endDate = new Date()
+      endDate.setDate(endDate.getDate() + 7) //
+      const format = (d) => d.toISOString().split('T')[0]
+      const startDateStr = format(new Date(today.getTime() - 7 * 864e5))
+      const endDateStr = format(new Date(today.getTime() + 7 * 864e5))
+
+      const statusGroups = {
+        current: ['Confirm-Arrived', 'End-Shift', 'Contracts'],
+        incoming: ['Accepted'],
+        pending: ['Applying', 'Waiting'],
+        billing: ['Confirm-End-Shift']
+      }
+
+      // === Count queries in parallel ===
+      const [current, incoming, pendingApplying, pendingWaiting, billing] = await Promise.all([
+        // 🟢 current
+        Gigs.countDocuments({
+          uid: userId,
+          status: {$in: statusGroups.current},
+          date: {$gte: startDateStr, $lte: endDateStr}
+        }),
+
+        // 🟢 incoming
+        Gigs.countDocuments({
+          uid: userId,
+          status: {$in: statusGroups.incoming},
+          date: {$gte: startDateStr, $lte: endDateStr}
+        }),
+
+        // 🟢 pending (Applying)
+        Gigs.countDocuments({
+          uid: userId,
+          status: 'Applying',
+          date: {$gte: startDateStr, $lte: endDateStr}
+        }),
+
+        // 🟢 pending (Waiting) — exclude gigs where "from" < today
+        Gigs.countDocuments({
+          uid: userId,
+          status: 'Waiting',
+          $expr: {
+            $and: [
+              {
+                $gte: [
+                  {
+                    $dateFromString: {
+                      dateString: '$from',
+                      onError: new Date(0), // fallback to epoch if invalid
+                      onNull: new Date(0)
+                    }
+                  },
+                  today
+                ]
+              },
+              {
+                $lte: [
+                  {
+                    $dateFromString: {
+                      dateString: '$from',
+                      onError: new Date(0),
+                      onNull: new Date(0)
+                    }
+                  },
+                  endDate
+                ]
+              }
+            ]
+          }
+        }),
+
+        // 🟢 billing
+        Gigs.countDocuments({
+          uid: userId,
+          status: {$in: statusGroups.billing},
+          date: {$gte: startDateStr, $lte: endDateStr}
+        })
+      ])
+
+      const reports = {
+        current,
+        incoming,
+        pending: pendingApplying + pendingWaiting,
+        billing
+      }
+      return res.status(200).json({
+        success: true,
+        client: userData || {},
+        reports
+      })
+    } catch (error) {
+      console.error('Error in get_client_gigs_count:', error)
+      try {
+        await logger.logError(error, 'Clients.get_client_gigs_count', null, id, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Failed to get client gig counts'})
+    }
+  },
+
   get_selected_gig: async function (req, res) {
     const {id} = req.params
 

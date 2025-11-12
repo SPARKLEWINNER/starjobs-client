@@ -97,6 +97,9 @@ module.exports = function (app) {
     .route(`${apiPath}${apiVersion}/clients/list/:id/:status`)
     .get(jwt.require_sign_in, ClientsController.get_client_status_gigs)
   app
+    .route(`${apiPath}${apiVersion}/clients/count/:id`)
+    .get(jwt.require_sign_in, ClientsController.get_client_gigs_count)
+  app
     .route(`${apiPath}${apiVersion}/clients/branches/:id`)
     .get(jwt.require_sign_in, ClientsController.get_client_branches)
   app.route(`${apiPath}${apiVersion}/clients/gig/:id/`).get(jwt.require_sign_in, ClientsController.get_selected_gig)

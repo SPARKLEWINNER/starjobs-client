@@ -626,7 +626,7 @@ var controllers = {
       const endDateStr = format(new Date(today.getTime() + 7 * 864e5))
 
       const statusGroups = {
-        current: ['Confirm-Arrived', 'End-Shift', 'Contracts'],
+        current: ['Confirm-Arrived', 'End-Shift', 'Contracts', 'End-Shift-Deducted'],
         incoming: ['Accepted'],
         pending: ['Applying', 'Waiting'],
         billing: ['Confirm-End-Shift']
@@ -638,21 +638,21 @@ var controllers = {
         Gigs.countDocuments({
           uid: userId,
           status: {$in: statusGroups.current},
-          date: {$gte: startDateStr, $lte: endDateStr}
+          from: {$gte: startDateStr, $lte: endDateStr}
         }),
 
         // 🟢 incoming
         Gigs.countDocuments({
           uid: userId,
           status: {$in: statusGroups.incoming},
-          date: {$gte: startDateStr, $lte: endDateStr}
+          from: {$gte: startDateStr, $lte: endDateStr}
         }),
 
         // 🟢 pending (Applying)
         Gigs.countDocuments({
           uid: userId,
           status: 'Applying',
-          date: {$gte: startDateStr, $lte: endDateStr}
+          from: {$gte: startDateStr, $lte: endDateStr}
         }),
 
         // 🟢 pending (Waiting) — exclude gigs where "from" < today
@@ -693,7 +693,7 @@ var controllers = {
         Gigs.countDocuments({
           uid: userId,
           status: {$in: statusGroups.billing},
-          date: {$gte: startDateStr, $lte: endDateStr}
+          from: {$gte: startDateStr, $lte: endDateStr}
         })
       ])
 

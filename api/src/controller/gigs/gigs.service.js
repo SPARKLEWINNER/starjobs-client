@@ -810,7 +810,7 @@ var controllers = {
 
       // 🧠 Define grouped statuses
       const statusGroups = {
-        current: ['Confirm-Arrived', 'End-Shift'],
+        current: ['Confirm-Arrived', 'End-Shift', 'Contracts', 'End-Shift-Deducted'],
         incoming: ['Accepted'],
         pending: ['Applying'],
         billing: ['Confirm-End-Shift']

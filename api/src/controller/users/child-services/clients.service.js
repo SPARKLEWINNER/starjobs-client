@@ -429,8 +429,8 @@ var controllers = {
       // Assuming `clientData[0].date` or any date field from client — adjust as needed
       const today = new Date()
       const format = (d) => d.toISOString().split('T')[0]
-      const startDateStr = format(new Date(today.getTime() - 20 * 864e5))
-      const endDateStr = format(new Date(today.getTime() + 20 * 864e5))
+      const startDateStr = format(new Date(today.getTime() - 7 * 864e5))
+      const endDateStr = format(new Date(today.getTime() + 7 * 864e5))
 
       // Contracts aggregation (kept but optimized)
       const contractsPromise = Contracts.aggregate([
@@ -451,7 +451,7 @@ var controllers = {
         $match: {
           uid: userId,
           status: {$in: statusArray},
-          date: {$gte: startDateStr, $lte: endDateStr} // <- added date filter
+          from: {$gte: startDateStr, $lte: endDateStr} // Always us 'from' date for filtering by shift date
         }
       }
 

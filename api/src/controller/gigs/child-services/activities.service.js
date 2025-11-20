@@ -73,10 +73,26 @@ var controllers = {
               .lean()
               .exec()
 
-            const editLogs = await GigEditLogs.find({gigId: mongoose.Types.ObjectId(obj._id)})
+            let editLogs = await GigEditLogs.find({gigId: mongoose.Types.ObjectId(obj._id)})
               .sort({createdAt: -1})
-              .limit(1)
+              .limit(5)
               .lean()
+
+            // Fetch the user info for each edit log
+            editLogs = await Promise.all(
+              editLogs.map(async (log) => {
+                if (log.performedBy) {
+                  const user = await Users.findById(log.performedBy, {firstName: 1, lastName: 1}).lean()
+                  console.log('🚀 ~ user:', user)
+                  return {
+                    ...log,
+                    editedByName: user ? `${user.firstName} ${user.lastName}` : 'Unknown'
+                  }
+                }
+                return log
+              })
+            )
+            console.log('🚀 ~ editLogs:', editLogs)
             // add applicant list since to prevent re-apply of jobsters
             if (obj.status === 'Applying' || obj.status === 'Waiting') {
               const history = await History.find(
@@ -91,7 +107,7 @@ var controllers = {
 
               return {
                 ...obj,
-                ...(editLogs.length > 0 && {editLogs: editLogs[0]}), // ✅ include only if exists
+                ...(editLogs.length > 0 && {editLogs}), // ✅ include only if exists
                 applicants: history,
                 account
               }

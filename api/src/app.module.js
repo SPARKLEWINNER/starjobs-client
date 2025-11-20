@@ -37,7 +37,8 @@ const allowedOrigins = [
   'https://save-gig-logs.starjobs-gatsby.pages.dev/',
   'https://sj.spos.site/',
   'https://staging-starjobs.onrender.com/api/internal/v1',
-  'https://api-sj.starjobs.com.ph/api/internal/v1'
+  'https://api-sj.starjobs.com.ph/api/internal/v1',
+  'https://starjobs-gatsby.vercel.app'
 ]
 
 app.use(

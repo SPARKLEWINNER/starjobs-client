@@ -633,9 +633,18 @@ var controllers = {
           .exec()
 
         if (status === 'Confirm-End-Shift') {
-          console.log('Confirm-End-Shift')
-          // Confirm-End-Shift
+          // Calculate date 30 days ago
+          const thirtyDaysAgo = new Date()
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
           reports = await Gigs.aggregate([
+            {
+              $match: {
+                auid: new mongoose.Types.ObjectId(id),
+                status: status,
+                createdAt: {$gte: thirtyDaysAgo} // ✅ filter last 30 days
+              }
+            },
             {
               $lookup: {
                 from: 'gigs-histories',
@@ -673,15 +682,13 @@ var controllers = {
                   }
                 }
               }
+            },
+            {
+              $sort: {createdAt: 1}
             }
-          ])
-            .match({
-              auid: mongoose.Types.ObjectId(id),
-              status: status
-            })
-            .sort({createdAt: 1})
-            .exec()
-          console.log('🚀 ~ Confirm End Shift reports:', reports)
+          ]).exec()
+
+          console.log('🚀 ~ Confirm End Shift reports:', reports.length)
         } else {
           console.log('Others')
           // Other Status
@@ -734,7 +741,6 @@ var controllers = {
             .exec()
         }
 
-        // console.log('🚀 ~ reports:', reports, '🚀 ~ reports:')
         let gigsData = reports.filter((obj) => {
           // console.log('🚀 ~ file: gigs.service.js:323 ~ gigsData ~ obj:', obj)
           //express as a duration
@@ -777,6 +783,76 @@ var controllers = {
     }
 
     return res.status(200).json(details)
+  },
+
+  get_jobster_gigs_count: async function (req, res) {
+    const token = req.headers.authorization?.split(' ')[1]
+    const {id} = jwt_decode(token)
+
+    try {
+      const check_user = await getSpecificData({_id: mongoose.Types.ObjectId(id)}, Users, 'User', id)
+
+      // 🛑 If user is inactive, return zeros
+      if (!check_user[0]?.isActive) {
+        return res.status(200).json({
+          reports: {
+            current: 0,
+            incoming: 0,
+            pending: 0,
+            billing: 0
+          }
+        })
+      }
+
+      // ✅ 30-day range
+      const thirtyDaysAgo = new Date()
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+      // 🧠 Define grouped statuses
+      const statusGroups = {
+        current: ['Confirm-Arrived', 'End-Shift', 'Contracts', 'End-Shift-Deducted'],
+        incoming: ['Accepted'],
+        pending: ['Applying'],
+        billing: ['Confirm-End-Shift']
+      }
+
+      // ✅ Aggregate counts only (no lookups or joins)
+      const results = await Gigs.aggregate([
+        {
+          $match: {
+            $or: [{auid: new mongoose.Types.ObjectId(id)}, {'records.auid': new mongoose.Types.ObjectId(id)}],
+            status: {
+              $in: [...statusGroups.current, ...statusGroups.incoming, ...statusGroups.pending, ...statusGroups.billing]
+            },
+            createdAt: {$gte: thirtyDaysAgo} // ✅ Only last 30 days
+          }
+        },
+        {
+          $group: {
+            _id: '$status',
+            count: {$sum: 1}
+          }
+        }
+      ])
+
+      // 🧩 Map counts into grouped categories
+      const reports = {
+        current: results.filter((r) => statusGroups.current.includes(r._id)).reduce((sum, r) => sum + r.count, 0),
+        incoming: results.filter((r) => statusGroups.incoming.includes(r._id)).reduce((sum, r) => sum + r.count, 0),
+        pending: results.filter((r) => statusGroups.pending.includes(r._id)).reduce((sum, r) => sum + r.count, 0),
+        billing: results.filter((r) => statusGroups.billing.includes(r._id)).reduce((sum, r) => sum + r.count, 0)
+      }
+
+      return res.status(200).json({reports})
+    } catch (error) {
+      console.error('Error in get_jobster_gigs_count:', error)
+      try {
+        await logger.logError(error, 'Gigs.get_jobster_gigs_count', null, id, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+      return res.status(500).json({success: false, msg: 'Unable to get gig counts'})
+    }
   },
 
   post_gig: async function (req, res, next) {

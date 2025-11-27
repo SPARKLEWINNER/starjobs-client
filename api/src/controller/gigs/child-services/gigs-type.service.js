@@ -220,9 +220,7 @@ const services = {
             })
           }
         })
-<<<<<<< Updated upstream
 
-=======
         // Save logs if edits exist
         if (req.body.feeEdit || req.body.volFeeEdit) {
           const bulkOps = []
@@ -268,7 +266,6 @@ const services = {
           }
         }
 
->>>>>>> Stashed changes
         // Handle repeatable gigs
         if (isRepeatable) {
           const jobsObj = new Jobs({

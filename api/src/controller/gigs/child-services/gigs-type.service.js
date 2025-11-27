@@ -11,6 +11,7 @@ const DropOffs = require('../models/gig-dropoffs.model')
 
 const logger = require('../../../common/loggers')
 const notification = require('../../../common/notifications')
+const GigEditLogs = require('../../gigs/models/gig-edit-logs.model')
 
 const services = {
   default: async function (req, res) {

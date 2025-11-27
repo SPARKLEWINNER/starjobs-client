@@ -73,18 +73,12 @@ var controllers = {
               .lean()
               .exec()
 
-<<<<<<< Updated upstream
-            const editLogs = await GigEditLogs.find({gigId: mongoose.Types.ObjectId(obj._id)})
-=======
             let editLogs = await GigEditLogs.find({
               gigId: mongoose.Types.ObjectId(obj._id)
             })
->>>>>>> Stashed changes
               .sort({createdAt: -1})
-              .limit(1)
+              .limit(5)
               .lean()
-<<<<<<< Updated upstream
-=======
 
             // Collect unique user IDs
             const userIds = [
@@ -115,8 +109,6 @@ var controllers = {
             }))
 
             console.log('🚀 ~ editLogs:', editLogs)
-
->>>>>>> Stashed changes
             // add applicant list since to prevent re-apply of jobsters
             if (obj.status === 'Applying' || obj.status === 'Waiting') {
               const history = await History.find(
@@ -131,7 +123,7 @@ var controllers = {
 
               return {
                 ...obj,
-                ...(editLogs.length > 0 && {editLogs: editLogs[0]}), // ✅ include only if exists
+                ...(editLogs.length > 0 && {editLogs}), // ✅ include only if exists
                 applicants: history,
                 account
               }

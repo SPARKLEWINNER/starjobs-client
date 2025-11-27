@@ -219,7 +219,55 @@ const services = {
             })
           }
         })
+<<<<<<< Updated upstream
 
+=======
+        // Save logs if edits exist
+        if (req.body.feeEdit || req.body.volFeeEdit) {
+          const bulkOps = []
+
+          postedGigs.forEach((gig) => {
+            if (req.body.feeEdit) {
+              bulkOps.push({
+                insertOne: {
+                  document: {
+                    gigId: gig._id,
+                    action: 'edited fee',
+                    status: 'edited',
+                    remarks: 'User edited gig fee before posting',
+                    performedBy: mongoose.Types.ObjectId(id),
+                    timestamp: new Date(),
+                    oldValue: req.body.feeEdit.oldValue,
+                    newValue: req.body.feeEdit.newValue
+                  }
+                }
+              })
+            }
+
+            if (req.body.volFeeEdit) {
+              bulkOps.push({
+                insertOne: {
+                  document: {
+                    gigId: gig._id,
+                    action: 'edited voluntary fee',
+                    status: 'edited',
+                    remarks: 'User edited voluntary fee before posting',
+                    performedBy: mongoose.Types.ObjectId(id),
+                    timestamp: new Date(),
+                    oldValue: req.body.volFeeEdit.oldValue,
+                    newValue: req.body.volFeeEdit.newValue
+                  }
+                }
+              })
+            }
+          })
+
+          if (bulkOps.length > 0) {
+            await GigEditLogs.bulkWrite(bulkOps)
+          }
+        }
+
+>>>>>>> Stashed changes
         // Handle repeatable gigs
         if (isRepeatable) {
           const jobsObj = new Jobs({

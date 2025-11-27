@@ -73,10 +73,50 @@ var controllers = {
               .lean()
               .exec()
 
+<<<<<<< Updated upstream
             const editLogs = await GigEditLogs.find({gigId: mongoose.Types.ObjectId(obj._id)})
+=======
+            let editLogs = await GigEditLogs.find({
+              gigId: mongoose.Types.ObjectId(obj._id)
+            })
+>>>>>>> Stashed changes
               .sort({createdAt: -1})
               .limit(1)
               .lean()
+<<<<<<< Updated upstream
+=======
+
+            // Collect unique user IDs
+            const userIds = [
+              ...new Set(
+                editLogs
+                  .map((log) => log.performedBy)
+                  .filter(Boolean)
+                  .map((id) => id.toString())
+              )
+            ]
+
+            let usersMap = {}
+
+            if (userIds.length > 0) {
+              // Fetch all users in one query
+              const users = await Users.find({_id: {$in: userIds}}, {firstName: 1, lastName: 1}).lean()
+
+              // Convert to map for fast lookup
+              users.forEach((u) => {
+                usersMap[u._id.toString()] = `${u.firstName} ${u.lastName}`
+              })
+            }
+
+            // Merge user name into logs
+            editLogs = editLogs.map((log) => ({
+              ...log,
+              editedByName: usersMap[log.performedBy?.toString()] || 'Unknown'
+            }))
+
+            console.log('🚀 ~ editLogs:', editLogs)
+
+>>>>>>> Stashed changes
             // add applicant list since to prevent re-apply of jobsters
             if (obj.status === 'Applying' || obj.status === 'Waiting') {
               const history = await History.find(

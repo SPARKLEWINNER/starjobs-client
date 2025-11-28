@@ -73,25 +73,41 @@ var controllers = {
               .lean()
               .exec()
 
-            let editLogs = await GigEditLogs.find({gigId: mongoose.Types.ObjectId(obj._id)})
+            let editLogs = await GigEditLogs.find({
+              gigId: mongoose.Types.ObjectId(obj._id)
+            })
               .sort({createdAt: -1})
               .limit(5)
               .lean()
 
-            // Fetch the user info for each edit log
-            editLogs = await Promise.all(
-              editLogs.map(async (log) => {
-                if (log.performedBy) {
-                  const user = await Users.findById(log.performedBy, {firstName: 1, lastName: 1}).lean()
-                  console.log('🚀 ~ user:', user)
-                  return {
-                    ...log,
-                    editedByName: user ? `${user.firstName} ${user.lastName}` : 'Unknown'
-                  }
-                }
-                return log
+            // Collect unique user IDs
+            const userIds = [
+              ...new Set(
+                editLogs
+                  .map((log) => log.performedBy)
+                  .filter(Boolean)
+                  .map((id) => id.toString())
+              )
+            ]
+
+            let usersMap = {}
+
+            if (userIds.length > 0) {
+              // Fetch all users in one query
+              const users = await Users.find({_id: {$in: userIds}}, {firstName: 1, lastName: 1}).lean()
+
+              // Convert to map for fast lookup
+              users.forEach((u) => {
+                usersMap[u._id.toString()] = `${u.firstName} ${u.lastName}`
               })
-            )
+            }
+
+            // Merge user name into logs
+            editLogs = editLogs.map((log) => ({
+              ...log,
+              editedByName: usersMap[log.performedBy?.toString()] || 'Unknown'
+            }))
+
             console.log('🚀 ~ editLogs:', editLogs)
             // add applicant list since to prevent re-apply of jobsters
             if (obj.status === 'Applying' || obj.status === 'Waiting') {

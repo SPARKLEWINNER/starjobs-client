@@ -220,43 +220,52 @@ const services = {
             })
           }
         })
+
         // Save logs if edits exist
         if (req.body.feeEdit || req.body.volFeeEdit) {
-          const logPromises = []
+          const bulkOps = []
 
           postedGigs.forEach((gig) => {
             if (req.body.feeEdit) {
-              logPromises.push(
-                GigEditLogs.create({
-                  gigId: gig._id,
-                  action: 'edited fee',
-                  status: 'edited',
-                  remarks: 'User edited gig fee before posting',
-                  performedBy: mongoose.Types.ObjectId(id),
-                  timestamp: new Date(),
-                  oldValue: req.body.feeEdit.oldValue,
-                  newValue: req.body.feeEdit.newValue
-                })
-              )
+              bulkOps.push({
+                insertOne: {
+                  document: {
+                    gigId: gig._id,
+                    action: 'edited fee',
+                    status: 'edited',
+                    remarks: 'User edited gig fee before posting',
+                    performedBy: mongoose.Types.ObjectId(id),
+                    timestamp: new Date(),
+                    oldValue: req.body.feeEdit.oldValue,
+                    newValue: req.body.feeEdit.newValue
+                  }
+                }
+              })
             }
 
             if (req.body.volFeeEdit) {
-              logPromises.push(
-                GigEditLogs.create({
-                  gigId: gig._id,
-                  action: 'edited voluntary fee',
-                  status: 'edited',
-                  remarks: 'User edited voluntary fee before posting',
-                  performedBy: mongoose.Types.ObjectId(id),
-                  timestamp: new Date(),
-                  oldValue: req.body.volFeeEdit.oldValue,
-                  newValue: req.body.volFeeEdit.newValue
-                })
-              )
+              bulkOps.push({
+                insertOne: {
+                  document: {
+                    gigId: gig._id,
+                    action: 'edited voluntary fee',
+                    status: 'edited',
+                    remarks: 'User edited voluntary fee before posting',
+                    performedBy: mongoose.Types.ObjectId(id),
+                    timestamp: new Date(),
+                    oldValue: req.body.volFeeEdit.oldValue,
+                    newValue: req.body.volFeeEdit.newValue
+                  }
+                }
+              })
             }
           })
-          await Promise.all(logPromises)
+
+          if (bulkOps.length > 0) {
+            await GigEditLogs.bulkWrite(bulkOps)
+          }
         }
+
         // Handle repeatable gigs
         if (isRepeatable) {
           const jobsObj = new Jobs({

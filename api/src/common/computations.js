@@ -37,7 +37,7 @@ var controller = {
     const lateDeduction = parseFloat(lateByHours * fee)
     const finalHours = hours - lateByHours
     let computedFeeByHr = parseFloat(finalHours * fee)
-    let voluntaryFee = parseFloat(volFee)
+    let voluntaryFee = parseFloat(volFee * hours)
 
     if (!holidayPercentage || holidayPercentage === '0.00' || holidayPercentage === 0 || holidayPercentage === '0') {
       holidaySurge = parseFloat(0)

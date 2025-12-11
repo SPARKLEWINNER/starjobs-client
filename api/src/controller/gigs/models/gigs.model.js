@@ -98,6 +98,7 @@ const gigsData = {
     jobsterTotal: String,
     proposedRate: String,
     proposedWorkTime: String,
+    voluntaryFeePerHour: String,
     proposedLateMin: String,
     proposedExtensionHr: String,
     proposedNightSurgeHr: String,

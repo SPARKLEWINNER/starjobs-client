@@ -314,7 +314,8 @@ var controllers = {
             'details.lastName': 1,
             'details.presentCity': 1,
             'details.photo': 1,
-            'details.expertise.skillOffer': 1
+            'details.expertise.skillOffer': 1,
+            'details.gigRatings': 1
           }
         }
       ])

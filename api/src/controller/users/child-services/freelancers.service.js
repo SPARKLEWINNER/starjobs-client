@@ -629,6 +629,24 @@ var controllers = {
         completeness,
         showRate
       }
+
+      const gigRatings = {
+        efficiency1: efficiency.gold || 0,
+        efficiency0: efficiency.black || 0,
+        recommendable1: recommendable.gold || 0,
+        recommendable0: recommendable.black || 0,
+        completeness1: completeness.gold || 0,
+        completeness0: completeness.black || 0,
+        showRate1: showRate.gold || 0,
+        showRate0: showRate.black || 0
+      }
+
+      await Freelancers.findOneAndUpdate(
+        {uuid: mongoose.Types.ObjectId(id)},
+        {gigRatings: gigRatings},
+        {new: true}
+      ).exec()
+
       // Fetch comments sorted by createdAt
       let comments = await GigRating.find({uid: mongoose.Types.ObjectId(id)})
         .sort({createdAt: -1})

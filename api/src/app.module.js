@@ -39,6 +39,7 @@ const allowedOrigins = [
   'https://persist-loc-rate.starjobs-gatsby.pages.dev', // staging
   'https://save-gig-logs.starjobs-gatsby.pages.dev', // staging
   'https://sj-2chat.pages.dev', //staging
+  'https://white-screen-profile.starjobs-gatsby.pages.dev', //staging
   'https://ui-adjustments.starjobs-gatsby.pages.dev', // staging
   'https://fix-contact-bug.starjobs-gatsby.pages.dev', // staging
   'https://white-screen-profile.starjobs-gatsby.pages.dev',

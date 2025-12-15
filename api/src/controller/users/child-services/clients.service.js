@@ -641,11 +641,38 @@ var controllers = {
           from: {$gte: startDateStr, $lte: endDateStr}
         }),
 
-        // 🟢 incoming
+        // 🟢 incoming — exclude gigs where "from" < today
         Gigs.countDocuments({
           uid: userId,
           status: {$in: statusGroups.incoming},
-          from: {$gte: startDateStr, $lte: endDateStr}
+          $expr: {
+            $and: [
+              {
+                $gte: [
+                  {
+                    $dateFromString: {
+                      dateString: '$from',
+                      onError: new Date(0),
+                      onNull: new Date(0)
+                    }
+                  },
+                  today
+                ]
+              },
+              {
+                $lte: [
+                  {
+                    $dateFromString: {
+                      dateString: '$from',
+                      onError: new Date(0),
+                      onNull: new Date(0)
+                    }
+                  },
+                  endDate
+                ]
+              }
+            ]
+          }
         }),
 
         // 🟢 pending (Applying)

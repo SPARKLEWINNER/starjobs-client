@@ -3,7 +3,7 @@ const AppSettings = require('./models/app-settings.model')
 const Categories = require('./models/categories.model')
 const Branches = require('./models/branches.model')
 const Pickups = require('./models/pickups.model')
-
+const Gigs = require('../gigs/models/gigs.model')
 const Logs = require('./models/loggers.model')
 const Rates = require('./models/rates.model')
 const logger = require('../../common/loggers')
@@ -100,6 +100,86 @@ var controllers = {
         console.error('Logger failed:', logErr)
       }
       return res.status(500).json({success: false, msg: 'Unable to get categories'})
+    }
+  },
+
+  get_trending_categories: async function (req, res) {
+    try {
+      const thirtyDaysAgo = new Date()
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+      const trending = await Gigs.aggregate([
+        // ✅ 1. Last 30 days only
+        {
+          $match: {
+            createdAt: {$gte: thirtyDaysAgo}
+          }
+        },
+
+        // ✅ 2. Group by category slug
+        {
+          $group: {
+            _id: '$category',
+            totalGigs: {$sum: 1}
+          }
+        },
+
+        // ✅ 3. Sort most gigs first
+        {
+          $sort: {totalGigs: -1}
+        },
+
+        // ✅ 4. Limit to top 4
+        {
+          $limit: 4
+        },
+
+        // ✅ 5. Join with Categories collection
+        {
+          $lookup: {
+            from: 'app-categories', // ✅ MongoDB collection name (important!)
+            localField: '_id', // from Gigs.category
+            foreignField: 'slug', // from Categories.slug
+            as: 'categoryInfo'
+          }
+        },
+
+        // ✅ 6. Flatten categoryInfo array
+        {
+          $unwind: {
+            path: '$categoryInfo',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+
+        // ✅ 7. Final clean response shape
+        {
+          $project: {
+            _id: 1,
+            totalGigs: 1,
+            categoryName: '$categoryInfo.name'
+          }
+        }
+      ])
+
+      console.log(`Fetched ${JSON.stringify(trending[0])} trending categories`)
+      return res.status(200).json({
+        success: true,
+        trending
+      })
+    } catch (error) {
+      console.error('Error in get_trending_categories:', error)
+
+      try {
+        await logger.logError(error, 'Gigs.get_trending_categories', null, null, 'GET')
+      } catch (logErr) {
+        console.error('Logger failed:', logErr)
+      }
+
+      return res.status(500).json({
+        success: false,
+        msg: 'Unable to get trending categories'
+      })
     }
   },
 

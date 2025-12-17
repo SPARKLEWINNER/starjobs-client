@@ -231,6 +231,16 @@ const freelancerSchema = new Schema(
       vaccinationCard: String,
       map: String
     },
+    gigRatings: {
+      completeness0: Number,
+      completeness1: Number,
+      efficiency0: Number,
+      efficiency1: Number,
+      recommendable0: Number,
+      recommendable1: Number,
+      showRate0: Number,
+      showRate1: Number
+    },
     selfie: {
       type: String
     },

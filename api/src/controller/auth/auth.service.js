@@ -23,21 +23,23 @@ var controllers = {
       return
     }
     try {
-      const userData = await Users.login(email, password)
-      if (!userData) {
-        res.status(400).json({success: false, msg: `Invalid credentials!`})
-        return
+      const loginResult = await Users.login(email, password)
+      if (!loginResult) {
+        return res.status(400).json({success: false, msg: 'Invalid credentials!'})
       }
+      const {user} = loginResult
 
-      userData.hashed_password = userData.salt = undefined
+      user.hashed_password = user.salt = undefined
 
-      let {accessToken: token, refreshToken} = requestToken.create_token(userData._id)
+      let {accessToken: token, refreshToken} = requestToken.create_token(user._id)
 
       res.cookie('jwt', token, {expire: new Date() + 9999})
-      if (userData.isActive) {
-        if (userData.accountType === 0) {
+      const mustChangePassword = user.mustChangePassword === true
+
+      if (user.isActive) {
+        if (user.accountType === 0) {
           const account = await Freelancers.find(
-            {uuid: mongoose.Types.ObjectId(userData._id)},
+            {uuid: mongoose.Types.ObjectId(user._id)},
             {photo: 1, isGcashUpdated: 1}
           )
             .lean()
@@ -46,28 +48,30 @@ var controllers = {
           return res.json({
             token,
             refreshToken,
-            ...userData,
+            ...user.toObject(),
+            mustChangePassword,
             photo: account[0]?.photo,
             isGcashUpdated: account[0]?.isGcashUpdated
           }) // freelancer
         } else {
-          const client = await Clients.find({uid: mongoose.Types.ObjectId(userData._id)}, {photo: 1})
+          const client = await Clients.find({uid: mongoose.Types.ObjectId(user._id)}, {photo: 1})
             .lean()
             .exec()
           return res.json({
             token,
             refreshToken,
-            ...userData,
+            ...user.toObject(),
+            mustChangePassword,
             photo: client[0]?.photo,
             isClient: true
           }) // client
         }
       }
 
-      if (userData.accountType === 0) {
-        return res.json({token, refreshToken, ...userData, photo: undefined}) // freelancer
+      if (user.accountType === 0) {
+        return res.json({token, refreshToken, mustChangePassword, ...user.toObject(), photo: undefined}) // freelancer
       } else {
-        return res.json({token, refreshToken, ...userData, isClient: true, photo: undefined}) // client
+        return res.json({token, refreshToken, mustChangePassword, ...user.toObject(), isClient: true, photo: undefined}) // client
       }
     } catch (err) {
       console.log(err)

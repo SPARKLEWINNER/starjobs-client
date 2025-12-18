@@ -39,11 +39,14 @@ const allowedOrigins = [
   'https://persist-loc-rate.starjobs-gatsby.pages.dev', // staging
   'https://save-gig-logs.starjobs-gatsby.pages.dev', // staging
   'https://sj-2chat.pages.dev', //staging
+  'https://white-screen-profile.starjobs-gatsby.pages.dev', //staging
   'https://ui-adjustments.starjobs-gatsby.pages.dev', // staging
   'https://fix-contact-bug.starjobs-gatsby.pages.dev', // staging
   'https://white-screen-profile.starjobs-gatsby.pages.dev',
   'https://fix-verification.starjobs-gatsby.pages.dev', // staging
   'https://jobster-tab.starjobs-gatsby.pages.dev', // staging
+  'https://temp-password.starjobs-gatsby.pages.dev', // staging
+  'https://jobster-3-gigs.starjobs-gatsby.pages.dev', // staging
   'https://sj.spos.site/',
   'https://staging-starjobs.onrender.com/api/internal/v1',
   'https://api-sj.starjobs.com.ph/api/internal/v1',

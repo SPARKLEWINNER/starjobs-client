@@ -667,6 +667,7 @@ var services = {
                   status: status,
                   fees: {
                     ...gigs.fees,
+                    voluntaryFeePerHour: gigs.fees.voluntaryFeePerHour ?? 0, // <-- KEEP IT SAFE
                     proposedWorkTime: actualTime,
                     proposedLateMin: late,
                     proposedExtensionHr: actualExtension,
@@ -897,6 +898,7 @@ var services = {
                 const {
                   computedFeeByHr,
                   voluntaryFee,
+                  voluntaryFeePerHour,
                   appFee,
                   transactionFee,
                   grossGigFee,
@@ -914,6 +916,7 @@ var services = {
                   actualTime,
                   gigs.fee,
                   gigs.fees.voluntaryFee,
+                  gigs.fees.voluntaryFeePerHour,
                   gigs.fees.premiumFee,
                   gigs.fees.holidaySurge,
                   holidayPercentage,
@@ -942,6 +945,7 @@ var services = {
                     fees: {
                       computedFeeByHr: computedFeeByHr,
                       voluntaryFee: voluntaryFee,
+                      voluntaryFeePerHour: voluntaryFeePerHour,
                       appFee: appFee,
                       transactionFee: transactionFee,
                       grossGigFee: grossGigFee,

@@ -192,7 +192,8 @@ const services = {
             fees: {
               ...fees,
               proposedWorkTime: 0,
-              proposedRate: 0
+              proposedRate: 0,
+              voluntaryFeePerHour: fees?.voluntaryFee && hours ? fees.voluntaryFee / hours : 0
             },
             location,
             contactNumber,

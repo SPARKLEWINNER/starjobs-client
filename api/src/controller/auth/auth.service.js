@@ -19,65 +19,75 @@ var controllers = {
     const {email, password} = req.body
 
     if (!email || !password) {
-      res.status(400).json({success: false, msg: `Missing email or password field!`})
-      return
+      return res.status(400).json({success: false, msg: 'Missing email or password field!'})
     }
+
     try {
       const loginResult = await Users.login(email, password)
       if (!loginResult) {
         return res.status(400).json({success: false, msg: 'Invalid credentials!'})
       }
-      const {user} = loginResult
 
-      user.hashed_password = user.salt = undefined
+      const {user, usedTempPassword} = loginResult
 
-      let {accessToken: token, refreshToken} = requestToken.create_token(user._id)
+      if (!usedTempPassword && user.mustChangePassword) {
+        user.mustChangePassword = false
+        user.tempPasswordHash = null
+        user.tempPasswordExpiresAt = null
+        user.tempPasswordUsed = false
+        await user.save()
+      }
 
+      const mustChangePassword = usedTempPassword === true
+
+      const userObj = user.toObject()
+      delete userObj.hashed_password
+      delete userObj.salt
+
+      const {accessToken: token, refreshToken} = requestToken.create_token(user._id)
       res.cookie('jwt', token, {expire: new Date() + 9999})
-      const mustChangePassword = user.mustChangePassword === true
 
       if (user.isActive) {
         if (user.accountType === 0) {
           const account = await Freelancers.find(
             {uuid: mongoose.Types.ObjectId(user._id)},
             {photo: 1, isGcashUpdated: 1}
-          )
-            .lean()
-            .exec()
+          ).lean()
 
           return res.json({
             token,
             refreshToken,
-            ...user.toObject(),
+            ...userObj,
             mustChangePassword,
             photo: account[0]?.photo,
             isGcashUpdated: account[0]?.isGcashUpdated
-          }) // freelancer
-        } else {
-          const client = await Clients.find({uid: mongoose.Types.ObjectId(user._id)}, {photo: 1})
-            .lean()
-            .exec()
-          return res.json({
-            token,
-            refreshToken,
-            ...user.toObject(),
-            mustChangePassword,
-            photo: client[0]?.photo,
-            isClient: true
-          }) // client
+          })
         }
+
+        const client = await Clients.find({uid: mongoose.Types.ObjectId(user._id)}, {photo: 1}).lean()
+
+        return res.json({
+          token,
+          refreshToken,
+          ...userObj,
+          mustChangePassword,
+          photo: client[0]?.photo,
+          isClient: true
+        })
       }
 
-      if (user.accountType === 0) {
-        return res.json({token, refreshToken, mustChangePassword, ...user.toObject(), photo: undefined}) // freelancer
-      } else {
-        return res.json({token, refreshToken, mustChangePassword, ...user.toObject(), isClient: true, photo: undefined}) // client
-      }
+      return res.json({
+        token,
+        refreshToken,
+        ...userObj,
+        mustChangePassword,
+        photo: undefined,
+        isClient: user.accountType === 1
+      })
     } catch (err) {
-      console.log(err)
+      console.error(err)
       await logger.logError(err, 'Auth.sign_in', null, null, 'POST')
-
-      res.status(400).json({success: false, msg: err})
+      return res.status(400).json({success: false, msg: err.message || err})
     }
   },
 

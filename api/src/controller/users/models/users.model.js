@@ -154,6 +154,8 @@ userSchema.methods.validateTempPassword = function (plainPassword) {
   if (!this.tempPasswordHash || this.tempPasswordUsed || this.tempPasswordExpiresAt < new Date()) {
     return false
   }
+  if (!this.tempPasswordHash || this.tempPasswordUsed) return false
+  if (!this.tempPasswordExpiresAt || this.tempPasswordExpiresAt < new Date()) return false
 
   const [salt, storedHash] = this.tempPasswordHash.split(':')
   const hash = crypto.createHmac('sha1', salt).update(plainPassword).digest('hex')
@@ -170,25 +172,25 @@ userSchema.methods.consumeTempPassword = function () {
 // static method to login user
 userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({email}).exec()
-  console.log('🚀 ~ user:', user)
   if (!user) return false
 
-  if (user.tempPasswordHash && user.tempPasswordExpiresAt && new Date() > user.tempPasswordExpiresAt) {
-    throw new Error('Temporary password expired')
-  }
-
+  // 1️⃣ Check normal password FIRST
   const normalHash = crypto.createHmac('sha1', user.salt).update(password).digest('hex')
-  if (normalHash === user.hashed_password) {
-    return {user, usedTempPassword: false}
-  }
-  console.log(user.tempPasswordHash)
-  if (user.tempPasswordHash && user.validateTempPassword(password)) {
-    user.hashed_password = crypto.createHmac('sha1', user.salt).update(password).digest('hex')
 
-    user.consumeTempPassword()
-    user.mustChangePassword = true
-    await user.save()
-    return {user, usedTempPassword: true}
+  if (normalHash === user.hashed_password) {
+    return {
+      user,
+      usedTempPassword: false // ✅ IMPORTANT
+    }
+  }
+
+  // 2️⃣ Check temp password
+  if (user.tempPasswordHash && user.validateTempPassword(password)) {
+    // ❗ DO NOT consume temp password here
+    return {
+      user,
+      usedTempPassword: true
+    }
   }
 
   return false

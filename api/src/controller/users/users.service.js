@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const jwt_decode = require('jwt-decode')
 const crypto = require('crypto')
-
+const {v4: uuidv4} = require('uuid')
 const Users = require('./models/users.model')
 const Freelancers = require('./models/freelancers.model')
 const Clients = require('./models/clients.model')
@@ -157,31 +157,58 @@ var controllers = {
         return res.status(404).json({success: false, msg: 'User not found'})
       }
 
+      let usedTempPassword = false
       let isOldPasswordValid = false
 
-      if (user.hashed_password) {
-        const oldHash = crypto.createHmac('sha1', user.salt).update(oldPassword).digest('hex')
-        if (oldHash === user.hashed_password) isOldPasswordValid = true
+      // 1️⃣ Check normal password
+      if (user.hashed_password && user.authenticate(oldPassword)) {
+        isOldPasswordValid = true
       }
 
-      if (!isOldPasswordValid && user.tempPasswordHash) {
-        isOldPasswordValid = user.validateTempPassword(oldPassword)
-        if (isOldPasswordValid) user.consumeTempPassword()
+      // 2️⃣ Check temp password (ONLY if mustChangePassword)
+      if (
+        !isOldPasswordValid &&
+        user.mustChangePassword &&
+        user.tempPasswordHash &&
+        user.validateTempPassword(oldPassword)
+      ) {
+        isOldPasswordValid = true
+        usedTempPassword = true
       }
-      console.log('🚀 ~ isOldPasswordValid:', isOldPasswordValid)
+
       if (!isOldPasswordValid) {
-        return res.status(400).json({success: false, msg: "Old password doesn't match."})
+        return res.status(400).json({
+          success: false,
+          msg: "Old password doesn't match."
+        })
       }
 
-      user.hashed_password = crypto.createHmac('sha1', user.salt).update(newPassword).digest('hex')
+      // 3️⃣ Generate NEW salt & hash
+      const newSalt = uuidv4()
+      const newHash = crypto.createHmac('sha1', newSalt).update(newPassword).digest('hex')
+
+      user.salt = newSalt
+      user.hashed_password = newHash
+
+      // 4️⃣ Cleanup temp password ONLY AFTER success
+      if (usedTempPassword) {
+        user.consumeTempPassword()
+      }
+
       user.mustChangePassword = false
       await user.save()
 
-      return res.status(200).json({success: true, msg: 'Password changed successfully'})
+      return res.status(200).json({
+        success: true,
+        msg: 'Password changed successfully'
+      })
     } catch (error) {
       console.error(error)
       await logger.logError(error, 'Users.patch_change_password', null, id, 'PATCH')
-      return res.status(500).json({success: false, msg: 'Unable to change password'})
+      return res.status(500).json({
+        success: false,
+        msg: 'Unable to change password'
+      })
     }
   },
   get_search_users: async function (req, res) {

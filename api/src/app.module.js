@@ -47,6 +47,7 @@ const allowedOrigins = [
   'https://jobster-tab.starjobs-gatsby.pages.dev', // staging
   'https://temp-password.starjobs-gatsby.pages.dev', // staging
   'https://jobster-3-gigs.starjobs-gatsby.pages.dev', // staging
+  'https://no-internet.starjobs-gatsby.pages.dev', // staging
   'https://sj.spos.site/',
   'https://staging-starjobs.onrender.com/api/internal/v1',
   'https://api-sj.starjobs.com.ph/api/internal/v1',

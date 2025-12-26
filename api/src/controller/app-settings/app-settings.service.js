@@ -60,7 +60,7 @@ var controllers = {
   get_branches: async function (req, res) {
     try {
       const branches = await Branches.find({status: 'active'}).lean().exec()
-      console.log(`Fetched ${branches.length} active branches`)
+      // console.log(`Fetched ${branches.length} active branches`)
       return res.status(200).json(branches)
     } catch (error) {
       console.error('Error in get_branches:', error)

@@ -635,7 +635,7 @@ var controllers = {
         if (status === 'Confirm-End-Shift') {
           // Calculate date 30 days ago
           const thirtyDaysAgo = new Date()
-          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 7)
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
           reports = await Gigs.aggregate([
             {
@@ -747,8 +747,8 @@ var controllers = {
           const timeDate = moment(obj.time)
           const date = moment(obj.date)
 
-          const previousDays = moment(date).subtract(30, 'days')
-          const aheadDays = moment(timeDate).add(30, 'days')
+          const previousDays = moment(date).subtract(7, 'days')
+          const aheadDays = moment(timeDate).add(7, 'days')
 
           const range = moment().range(previousDays, aheadDays)
 

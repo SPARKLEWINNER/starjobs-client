@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const jwt_decode = require('jwt-decode')
 const crypto = require('crypto')
-
+const {v4: uuidv4} = require('uuid')
 const Users = require('./models/users.model')
 const Freelancers = require('./models/freelancers.model')
 const Clients = require('./models/clients.model')
@@ -148,36 +148,69 @@ var controllers = {
   },
 
   patch_change_password: async function (req, res) {
-    let update_user = {}
     const {id} = req.params
-    let {oldPassword, newPassword} = req.body
+    const {oldPassword, newPassword} = req.body
 
-    const user = await Users.find({_id: mongoose.Types.ObjectId(id)})
-      .lean()
-      .exec()
-    if (!user) {
-      return res.status(502).json({success: false, msg: 'Unable to change password'})
-    }
-
-    let encryptPassword = crypto.createHmac('sha1', user[0].salt).update(oldPassword).digest('hex')
-    if (encryptPassword !== user[0].hashed_password) {
-      return res.status(402).json({success: false, msg: "Old password doesn't match."})
-    }
-
-    update_user['hashed_password'] = crypto.createHmac('sha1', user[0].salt).update(newPassword).digest('hex')
     try {
-      update_user = await Users.findByIdAndUpdate({_id: mongoose.Types.ObjectId(id)}, update_user)
-        .lean()
-        .exec()
+      const user = await Users.findById(id)
+      if (!user) {
+        return res.status(404).json({success: false, msg: 'User not found'})
+      }
+
+      let usedTempPassword = false
+      let isOldPasswordValid = false
+
+      // 1️⃣ Check normal password
+      if (user.hashed_password && user.authenticate(oldPassword)) {
+        isOldPasswordValid = true
+      }
+
+      // 2️⃣ Check temp password (ONLY if mustChangePassword)
+      if (
+        !isOldPasswordValid &&
+        user.mustChangePassword &&
+        user.tempPasswordHash &&
+        user.validateTempPassword(oldPassword)
+      ) {
+        isOldPasswordValid = true
+        usedTempPassword = true
+      }
+
+      if (!isOldPasswordValid) {
+        return res.status(400).json({
+          success: false,
+          msg: "Old password doesn't match."
+        })
+      }
+
+      // 3️⃣ Generate NEW salt & hash
+      const newSalt = uuidv4()
+      const newHash = crypto.createHmac('sha1', newSalt).update(newPassword).digest('hex')
+
+      user.salt = newSalt
+      user.hashed_password = newHash
+
+      // 4️⃣ Cleanup temp password ONLY AFTER success
+      if (usedTempPassword) {
+        user.consumeTempPassword()
+      }
+
+      user.mustChangePassword = false
+      await user.save()
+
+      return res.status(200).json({
+        success: true,
+        msg: 'Password changed successfully'
+      })
     } catch (error) {
       console.error(error)
-      await logger.logError(error, 'Users.get_user', null, id, 'GET')
-      return res.status(502).json({success: false, msg: 'Unable to get details'})
+      await logger.logError(error, 'Users.patch_change_password', null, id, 'PATCH')
+      return res.status(500).json({
+        success: false,
+        msg: 'Unable to change password'
+      })
     }
-
-    return res.status(200).json(update_user)
   },
-
   get_search_users: async function (req, res) {
     let query = Users.find({accountType: {$ne: 99}, name: {$regex: '.*' + req.query.keyword + '.*'}})
     const page = parseInt(req.query.page) || 1

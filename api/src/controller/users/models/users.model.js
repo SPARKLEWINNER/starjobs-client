@@ -106,6 +106,22 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
+    mustChangePassword: {
+      type: Boolean,
+      default: false
+    },
+    tempPasswordHash: {
+      type: String,
+      default: null
+    },
+    tempPasswordExpiresAt: {
+      type: Date,
+      default: null
+    },
+    tempPasswordUsed: {
+      type: Boolean,
+      default: false
+    },
     canPost: {type: Boolean, default: true}
   },
   {timestamps: true}
@@ -122,28 +138,62 @@ userSchema
     return this._password
   })
 
-userSchema.methods = {
-  authenticate: function (plainText) {
-    return this.encryptPassword(plainText) === this.hashed_password
-  },
-  encryptPassword: function (password) {
-    if (!password) return ''
-    try {
-      return crypto.createHmac('sha1', this.salt).update(password).digest('hex')
-    } catch (err) {
-      return ''
-    }
+userSchema.methods.authenticate = function (plainText) {
+  return this.encryptPassword(plainText) === this.hashed_password
+}
+
+userSchema.methods.encryptPassword = function (password) {
+  if (!password) return ''
+  try {
+    return crypto.createHmac('sha1', this.salt).update(password).digest('hex')
+  } catch (err) {
+    return ''
   }
+}
+userSchema.methods.validateTempPassword = function (plainPassword) {
+  if (!this.tempPasswordHash || this.tempPasswordUsed || this.tempPasswordExpiresAt < new Date()) {
+    return false
+  }
+  if (!this.tempPasswordHash || this.tempPasswordUsed) return false
+  if (!this.tempPasswordExpiresAt || this.tempPasswordExpiresAt < new Date()) return false
+
+  const [salt, storedHash] = this.tempPasswordHash.split(':')
+  const hash = crypto.createHmac('sha1', salt).update(plainPassword).digest('hex')
+
+  return hash === storedHash
+}
+
+userSchema.methods.consumeTempPassword = function () {
+  this.tempPasswordUsed = true
+  this.tempPasswordHash = null
+  this.tempPasswordExpiresAt = null
 }
 
 // static method to login user
 userSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({email}).lean().exec()
+  const user = await this.findOne({email}).exec()
   if (!user) return false
-  let encryptPassword = crypto.createHmac('sha1', user.salt).update(password).digest('hex')
-  if (encryptPassword !== user.hashed_password) return false
 
-  return user
+  // 1️⃣ Check normal password FIRST
+  const normalHash = crypto.createHmac('sha1', user.salt).update(password).digest('hex')
+
+  if (normalHash === user.hashed_password) {
+    return {
+      user,
+      usedTempPassword: false // ✅ IMPORTANT
+    }
+  }
+
+  // 2️⃣ Check temp password
+  if (user.tempPasswordHash && user.validateTempPassword(password)) {
+    // ❗ DO NOT consume temp password here
+    return {
+      user,
+      usedTempPassword: true
+    }
+  }
+
+  return false
 }
 
 module.exports = mongoose.model('User', userSchema, collectionName)

@@ -747,8 +747,8 @@ var controllers = {
           const timeDate = moment(obj.time)
           const date = moment(obj.date)
 
-          const previousDays = moment(date).subtract(30, 'days')
-          const aheadDays = moment(timeDate).add(30, 'days')
+          const previousDays = moment(date).subtract(7, 'days')
+          const aheadDays = moment(timeDate).add(7, 'days')
 
           const range = moment().range(previousDays, aheadDays)
 

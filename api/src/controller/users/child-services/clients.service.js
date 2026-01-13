@@ -641,11 +641,38 @@ var controllers = {
           from: {$gte: startDateStr, $lte: endDateStr}
         }),
 
-        // 🟢 incoming
+        // 🟢 incoming — exclude gigs where "from" < today
         Gigs.countDocuments({
           uid: userId,
           status: {$in: statusGroups.incoming},
-          from: {$gte: startDateStr, $lte: endDateStr}
+          $expr: {
+            $and: [
+              {
+                $gte: [
+                  {
+                    $dateFromString: {
+                      dateString: '$from',
+                      onError: new Date(0),
+                      onNull: new Date(0)
+                    }
+                  },
+                  today
+                ]
+              },
+              {
+                $lte: [
+                  {
+                    $dateFromString: {
+                      dateString: '$from',
+                      onError: new Date(0),
+                      onNull: new Date(0)
+                    }
+                  },
+                  endDate
+                ]
+              }
+            ]
+          }
         }),
 
         // 🟢 pending (Applying)
@@ -751,12 +778,10 @@ var controllers = {
   },
   get_client_branches: async function (req, res) {
     const {id} = req.params
-    console.log('🚀 ~ idxx:', id)
     try {
       const branches = await ClientBranches.find({clientId: mongoose.Types.ObjectId(id)})
         .lean()
         .exec()
-      console.log('🚀 ~ branchesbranches:', branches)
 
       res.status(200).json({success: true, branches})
     } catch (error) {
@@ -782,6 +807,44 @@ var controllers = {
       ...user,
       ...client
     })
+  },
+
+  get_client_recent_jobsters: async function (req, res) {
+    try {
+      const {id} = req.params
+      if (!id || id === 'undefined') {
+        return res.status(400).json({success: false, msg: 'User id missing'})
+      }
+
+      const recentJobsters = await Gigs.aggregate([
+        {
+          $match: {
+            uid: mongoose.Types.ObjectId(id),
+            auid: {$exists: true, $ne: null}
+          }
+        },
+        {$sort: {createdAt: -1}},
+        {$limit: 10},
+        {
+          $group: {
+            _id: '$auid'
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            auid: '$_id'
+          }
+        }
+      ])
+
+      return res.status(200).json({
+        success: true,
+        jobsters: recentJobsters
+      })
+    } catch (err) {
+      return res.status(500).json({success: false, msg: err.message})
+    }
   }
 }
 

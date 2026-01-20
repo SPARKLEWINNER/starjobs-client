@@ -806,7 +806,7 @@ var controllers = {
 
       // ✅ 30-day range
       const thirtyDaysAgo = new Date()
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 7)
 
       // 🧠 Define grouped statuses
       const statusGroups = {

@@ -34,6 +34,7 @@ const allowedOrigins = [
   'https://www.app.starjobs.com.ph',
   'http://localhost:7003', // dev
   'http://localhost:8000',
+  'http://192.168.1.6:8000'.
   'https://home-gig-count.starjobs-gatsby.pages.dev', // staging
   'https://vefirication-ui-revamp.starjobs-gatsby.pages.dev/', // staging
   'https://persist-loc-rate.starjobs-gatsby.pages.dev', // staging

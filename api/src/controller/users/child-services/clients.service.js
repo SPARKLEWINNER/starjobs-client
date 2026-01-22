@@ -404,7 +404,7 @@ var controllers = {
 
   get_client_status_gigs: async function (req, res) {
     const {id, status} = req.params
-    const {page = 1, limit = 20} = req.query
+    const {page = 1, limit = 30} = req.query
     const statusArray = status.split(',')
 
     if (!id || id === 'undefined') {

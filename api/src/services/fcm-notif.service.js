@@ -99,7 +99,8 @@ var controller = {
               apns: {
                 payload: {
                   aps: {
-                    sound: 'notification_sound.wav' // ✅ Correct format for iOS
+                    sound: 'notification_sound.wav', // ✅ Correct format for iOS
+                    badge: 0
                   }
                 }
               },

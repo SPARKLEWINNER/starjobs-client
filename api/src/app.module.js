@@ -43,9 +43,7 @@ const allowedOrigins = [
   'https://white-screen-profile.starjobs-gatsby.pages.dev', //staging
   'https://ui-adjustments.starjobs-gatsby.pages.dev', // staging
   'https://fix-contact-bug.starjobs-gatsby.pages.dev', // staging
-  'https://white-screen-profile.starjobs-gatsby.pages.dev',
-  'https://fix-verification.starjobs-gatsby.pages.dev', // staging
-  'https://jobster-tab.starjobs-gatsby.pages.dev', // staging
+  'https://browser-responsive.starjobs-gatsby.pages.dev',
   'https://remind-me-later.starjobs-gatsby.pages.dev', // stagin
   'https://merged-ui.starjobs-gatsby.pages.dev', // staging
   'https://holiday-label.starjobs-gatsby.pages.dev', // staging

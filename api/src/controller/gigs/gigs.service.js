@@ -218,6 +218,14 @@ var controllers = {
       }
 
       gigs = await Gigs.aggregate([
+        // 1️⃣ FILTER FIRST
+        {
+          $match: {
+            _id: mongoose.Types.ObjectId(id)
+          }
+        },
+
+        // 2️⃣ LOOKUPS ONLY ON MATCHED DOC
         {
           $lookup: {
             from: 'users-freelancers',
@@ -242,6 +250,7 @@ var controllers = {
             as: 'dropOffDetails'
           }
         },
+        // 3️⃣ REORDER dropOffDetails TO MATCH dropOffs ARRAY
         {
           $addFields: {
             dropOffDetails: {
@@ -264,12 +273,7 @@ var controllers = {
             }
           }
         }
-      ])
-        .match({
-          _id: mongoose.Types.ObjectId(id)
-        })
-        .sort({createdAt: -1})
-        .exec()
+      ]).exec()
 
       if (!gigs || gigs.length === 0) {
         return res.status(404).json({success: false, msg: 'Gig not found'})
